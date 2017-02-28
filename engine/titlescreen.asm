@@ -386,7 +386,7 @@ INCLUDE "data/title_mons.asm"
 
 ; prints version text (red, blue)
 PrintGameVersionOnTitleScreen:
-	coord hl, 5, 8
+	coord hl, 6, 8
 	ld de, VersionOnTitleScreenText
 	jp PlaceString
 
