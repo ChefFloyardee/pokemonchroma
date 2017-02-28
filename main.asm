@@ -887,7 +887,6 @@ INCLUDE "engine/game_corner_slots.asm"
 SECTION "bankE",ROMX,BANK[$E]
 
 INCLUDE "data/moves.asm"
-BaseStats: INCLUDE "data/base_stats.asm"
 INCLUDE "data/cries.asm"
 INCLUDE "engine/battle/unused_stats_functions.asm"
 INCLUDE "engine/battle/scroll_draw_trainer_pic.asm"
@@ -2094,3 +2093,7 @@ INCLUDE "engine/evolution.asm"
 INCLUDE "engine/overworld/elevator.asm"
 
 INCLUDE "engine/items/tm_prices.asm"
+
+SECTION "bank2D",ROMX,BANK[$2D]
+
+BaseStats: INCLUDE "data/base_stats.asm"
