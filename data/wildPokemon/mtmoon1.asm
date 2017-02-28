@@ -1,0 +1,13 @@
+MoonMons1:
+	db $0A
+	db 8,ZUBAT
+	db 7,ZUBAT
+	db 9,GEODUDE
+	db 8,GEODUDE
+	db 6,ZUBAT
+	db 10,ZUBAT
+	db 10,CLEFAIRY
+	db 8,CLEFAIRY
+	db 11,OMANYTE
+	db 8,OMANYTE
+	db $00
