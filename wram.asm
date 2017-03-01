@@ -2087,8 +2087,10 @@ wMonHGrowthRate:: ; d0cb
 
 wMonHLearnset:: ; d0cc
 ; bit field
-	flag_array 50 + 5
-	ds 1
+    flag_array 50 + 5
+
+wMonHPicBank:: ; d0d3
+    ds 1
 
 wSavedTilesetType:: ; d0d4
 ; saved at the start of a battle and then written back at the end of the battle
