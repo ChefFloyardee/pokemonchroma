@@ -3289,16 +3289,15 @@ GetName::
 	call CopyData
 .gotPtr ; $37cd
 	ld a,e
-	ld [wcf8d],a
+	ld [wUnusedCF8D],a
 	ld a,d
-	ld [wcf8e],a
+	ld [wUnusedCF8D + 1],a
 	pop de
 	pop bc
 	pop hl
 	pop af
 	ld [H_LOADEDROMBANK],a
-	ld [$2000],a
-	ret
+	ld [MBC1RomBank],a
 
 GetItemPrice::
 ; Stores item's price as BCD at hItemPrice (3 bytes)
