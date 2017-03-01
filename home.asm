@@ -3298,6 +3298,7 @@ GetName::
 	pop af
 	ld [H_LOADEDROMBANK],a
 	ld [MBC1RomBank],a
+	ret
 
 GetItemPrice::
 ; Stores item's price as BCD at hItemPrice (3 bytes)
