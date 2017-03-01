@@ -3220,14 +3220,16 @@ GetName::
 ; [wPredefBank] = bank of list
 ;
 ; returns pointer to name in de
+	ld a,[wNameListType]
+	cp ITEM_NAME
 	ld a,[wd0b5]
 	ld [wd11e],a
-
-	; TM names are separate from item names.
-	; BUG: This applies to all names instead of just items.
-	cp HM_01
-	jp nc, GetMachineName
-
+	jr nz, .noItem
+	
+	cp HM_01        ;it's TM/HM
+	jp nc,GetMachineName
+	
+.noItem          ; Return here if not an item
 	ld a,[H_LOADEDROMBANK]
 	push af
 	push hl
@@ -3238,16 +3240,16 @@ GetName::
 	jr nz,.otherEntries
 	;1 = MON_NAMES
 	call GetMonName
-	ld hl,NAME_LENGTH
+	ld hl,11
 	add hl,de
 	ld e,l
 	ld d,h
 	jr .gotPtr
-.otherEntries
+.otherEntries ; $378d
 	;2-7 = OTHER ENTRIES
 	ld a,[wPredefBank]
 	ld [H_LOADEDROMBANK],a
-	ld [MBC1RomBank],a
+	ld [$2000],a
 	ld a,[wNameListType]    ;VariousNames' entryID
 	dec a
 	add a
@@ -3255,7 +3257,7 @@ GetName::
 	ld e,a
 	jr nc,.skip
 	inc d
-.skip
+.skip ; $37a0
 	ld hl,NamePointers
 	add hl,de
 	ld a,[hli]
@@ -3274,7 +3276,7 @@ GetName::
 	ld e,l
 .nextChar
 	ld a,[hli]
-	cp "@"
+	cp a, "@"
 	jr nz,.nextChar
 	inc c           ;entry counter
 	ld a,b          ;wanted entry
@@ -3285,17 +3287,17 @@ GetName::
 	ld de,wcd6d
 	ld bc,$0014
 	call CopyData
-.gotPtr
+.gotPtr ; $37cd
 	ld a,e
-	ld [wUnusedCF8D],a
+	ld [wcf8d],a
 	ld a,d
-	ld [wUnusedCF8D + 1],a
+	ld [wcf8e],a
 	pop de
 	pop bc
 	pop hl
 	pop af
 	ld [H_LOADEDROMBANK],a
-	ld [MBC1RomBank],a
+	ld [$2000],a
 	ret
 
 GetItemPrice::

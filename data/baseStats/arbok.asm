@@ -14,8 +14,8 @@ dw ArbokPicBack
 ; attacks known at lvl 0
 db WRAP
 db LEER
-db 0
-db 0
+db POISON_STING
+db BITE
 db 0 ; growth rate
 ; learnset
 	tmlearn 6,8
@@ -25,4 +25,4 @@ db 0 ; growth rate
 	tmlearn 34,40
 	tmlearn 44,48
 	tmlearn 50,54
-db BANK(ArbokPicFront)
+db 0 ; padding
