@@ -13,9 +13,9 @@ dw ArcaninePicFront
 dw ArcaninePicBack
 ; attacks known at lvl 0
 db ROAR
+db BITE
 db EMBER
 db LEER
-db TAKE_DOWN
 db 5 ; growth rate
 ; learnset
 	tmlearn 6,8

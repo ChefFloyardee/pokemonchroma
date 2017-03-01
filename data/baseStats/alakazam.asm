@@ -13,8 +13,8 @@ dw AlakazamPicFront
 dw AlakazamPicBack
 ; attacks known at lvl 0
 db TELEPORT
-db CONFUSION
-db DISABLE
+db KINESIS
+db 0
 db 0
 db 3 ; growth rate
 ; learnset
