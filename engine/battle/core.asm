@@ -6416,7 +6416,10 @@ LoadPlayerBackPic:
 .next
 	ld a, BANK(RedPicBack)
 	call UncompressSpriteFromDE
-	predef ScaleSpriteByTwo
+	
+    ;predef ScaleSpriteByTwo
+    call LoadBackSpriteUnzoomed
+	
 	ld hl, wOAMBuffer
 	xor a
 	ld [hOAMTile], a ; initial tile number
@@ -6448,8 +6451,10 @@ LoadPlayerBackPic:
 	ld e, a
 	dec b
 	jr nz, .loop
-	ld de, vBackPic
-	call InterlaceMergeSpriteBuffers
+
+    ;ld de, vBackPic 
+ 	;call InterlaceMergeSpriteBuffers	
+	
 	ld a, $a
 	ld [$0], a
 	xor a
