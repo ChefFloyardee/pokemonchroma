@@ -29,7 +29,7 @@ EvosMovesPointerTable:
 	dw Mon009_EvosMoves
 	dw Mon127_EvosMoves
 	dw Mon114_EvosMoves
-	dw Mon152_EvosMoves ;MissingNo
+	dw Mon152_EvosMoves
 	dw Mon153_EvosMoves ;MissingNo
 	dw Mon058_EvosMoves
 	dw Mon095_EvosMoves
@@ -848,11 +848,23 @@ Mon114_EvosMoves:
 	db 0
 
 Mon152_EvosMoves:
-;MISSINGNO
+;CHIKORITA
 ;Evolutions
 	db 0
 ;Learnset
-	db 0
+	db 1,TACKLE
+	db 1,GROWL
+	db 6,RAZOR_LEAF
+	db 9,POISONPOWDER
+	db 14,LEECH_SEED
+	db 17,REFLECT
+	db 21,MEGA_DRAIN
+	db 26,IRON_TAIL
+	db 30,LIGHT_SCREEN
+	db 33,BODY_SLAM
+	db 36,GIGA_DRAIN
+	db 44,SOLARBEAM
+	db 50,LEAF_BLADE
 
 Mon153_EvosMoves:
 ;MISSINGNO
@@ -891,7 +903,7 @@ Mon095_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
-db 1,TACKLE
+    db 1,TACKLE
 	db 1,HARDEN
 	db 7,BIND
 	db 10,LEER
