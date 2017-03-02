@@ -75,4 +75,3 @@ MonPartyData:
 	dn SPRITE_SNAKE, SPRITE_SNAKE           ;Dratini/Dragonair
 	dn SPRITE_SNAKE, SPRITE_MON             ;Dragonite/Mewtwo
 	dn SPRITE_MON, SPRITE_GRASS             ;Mew/Chikorita
-	dn SPRITE_MON, SPRITE_MON               ;Cyndaquil/Totodile

@@ -51,7 +51,7 @@ const_value = 1
 	const GOLEM        ; $31
 	const MISSINGNO_32 ; $32
 	const MAGMAR       ; $33
-	const CYNDAQUIL    ; $34
+	const MISSINGNO_34 ; $34
 	const ELECTABUZZ   ; $35
 	const MAGNETON     ; $36
 	const KOFFING      ; $37
@@ -61,7 +61,7 @@ const_value = 1
 	const DIGLETT      ; $3B
 	const TAUROS       ; $3C
 	const MISSINGNO_3D ; $3D
-	const TOTODILE     ; $3E
+	const MISSINGNO_3E ; $3E
 	const MISSINGNO_3F ; $3F
 	const FARFETCHD    ; $40
 	const VENONAT      ; $41

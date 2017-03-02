@@ -51,7 +51,7 @@ CryData:
 	db $12, $E0, $40; Golem
 	db $00, $00, $00; MissingNo.
 	db $04, $FF, $30; Magmar
-	db $04, $C0, $20; Cyndaquil
+	db $00, $00, $00; MissingNo.
 	db $06, $8F, $FF; Electabuzz
 	db $1C, $20, $C0; Magneton
 	db $12, $E6, $DD; Koffing
@@ -61,7 +61,7 @@ CryData:
 	db $0B, $AA, $01; Diglett
 	db $1D, $11, $40; Tauros
 	db $00, $00, $00; MissingNo.
-	db $1D, $30, $30; Totodile
+	db $00, $00, $00; MissingNo.
 	db $00, $00, $00; MissingNo.
 	db $10, $DD, $01; Farfetch'd
 	db $1A, $44, $40; Venonat
