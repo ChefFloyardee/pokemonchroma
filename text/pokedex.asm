@@ -487,6 +487,16 @@ _MagmarDexEntry::
 	next "hide perfectly"
 	next "among flames"
 	dex
+	
+_CyndaquilDexEntry::
+	text "It is timid and"
+	next "always curls up"
+	next "into a ball."
+
+	page "If attacked, it"
+	next "flares up its"
+	next "back in defense"
+	dex
 
 _ElectabuzzDexEntry::
 	text "Normally found"
@@ -558,6 +568,16 @@ _TaurosDexEntry::
 	next "long tails"
 	dex
 
+_TotodileDexEntry::
+	text "It has the habit"
+	next "of biting"
+	next "anything with its"
+
+	page "developed jaws."
+	next "Even its Trainer"
+	next "must be careful"
+	dex
+	
 _FarfetchdDexEntry::
 	text "The sprig of"
 	next "green onions it"

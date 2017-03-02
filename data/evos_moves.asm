@@ -1286,11 +1286,21 @@ Mon126_EvosMoves:
 	db 0
 
 Mon155_EvosMoves:
-;MISSINGNO
+;CYNDAQUIL
 ;Evolutions
 	db 0
 ;Learnset
-	db 0
+	db 1,TACKLE
+	db 1,LEER
+	db 6,SMOKESCREEN
+	db 10,EMBER
+	db 13,QUICK_ATTACK
+	db 19,FLAME_WHEEL
+	db 22,DEFENSE_CURL
+	db 30,SWIFT
+	db 36,FLAMETHROWER
+	db 42,DOUBLE_EDGE
+	db 46,FLARE_BLITZ
 
 Mon125_EvosMoves:
 ;ELECTABUZZ
@@ -1464,11 +1474,22 @@ Mon157_EvosMoves:
 	db 0
 
 Mon158_EvosMoves:
-;MISSINGNO
+;TOTODILE
 ;Evolutions
 	db 0
 ;Learnset
-	db 0
+	db 1,SCRATCH
+	db 1,LEER
+	db 6,WATER_GUN
+	db 8,RAGE
+	db 13,BITE
+	db 20,ICE_FANG
+	db 27,CRUNCH
+	db 34,SLASH
+	db 36,SCREECH
+	db 41,THRASH
+	db 43,AQUA_TAIL
+	db 48,HYDRO_PUMP
 
 Mon159_EvosMoves:
 ;MISSINGNO

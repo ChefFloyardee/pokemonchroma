@@ -50,7 +50,7 @@ PokedexEntryPointers:
 	dw GolemDexEntry
 	dw MissingNoDexEntry
 	dw MagmarDexEntry
-	dw MissingNoDexEntry
+	dw CyndaquilDexEntry
 	dw ElectabuzzDexEntry
 	dw MagnetonDexEntry
 	dw KoffingDexEntry
@@ -60,7 +60,7 @@ PokedexEntryPointers:
 	dw DiglettDexEntry
 	dw TaurosDexEntry
 	dw MissingNoDexEntry
-	dw MissingNoDexEntry
+	dw TotodileDexEntry
 	dw MissingNoDexEntry
 	dw FarfetchdDexEntry
 	dw VenonatDexEntry
@@ -537,6 +537,13 @@ MagmarDexEntry:
 	dw 980
 	TX_FAR _MagmarDexEntry
 	db "@"
+	
+CyndaquilDexEntry:
+	db "Fire Mouse@"
+	db 1,8
+	dw 174
+	TX_FAR _CyndaquilDexEntry
+	db "@"
 
 ElectabuzzDexEntry:
 	db "Electric@"
@@ -585,6 +592,13 @@ TaurosDexEntry:
 	db 4,7
 	dw 1950
 	TX_FAR _TaurosDexEntry
+	db "@"
+	
+TotodileDexEntry:
+	db "Big Jaw@"
+	db 2,0
+	dw 209
+	TX_FAR _TotodileDexEntry
 	db "@"
 	
 FarfetchdDexEntry:
