@@ -65,26 +65,28 @@ _CeladonMart3Text5::
 	done
 
 _CeladonMart3Text6::
-	text "It's a SNES!"
+	text "It's a Nintendo"
+	line "Switch!"
 	done
 
 _CeladonMart3Text7::
-	text "An RPG! There's"
-	line "no time for that!"
+	text "It's Super Mario"
+	line "Odyssey! There's"
+	cont "no time for that!"
 	done
 
 _CeladonMart3Text9::
-	text "A sports game!"
+	text "1-2 Switch!"
 	line "Dad'll like that!"
 	done
 
 _CeladonMart3Text11::
-	text "A puzzle game!"
+	text "A new Zelda game!"
 	line "Looks addictive!"
 	done
 
 _CeladonMart3Text13::
-	text "A fighting game!"
+	text "It's ARMS!"
 	line "Looks tough!"
 	done
 
@@ -93,6 +95,7 @@ _CeladonMart3Text14::
 	done
 
 _CeladonMart3Text15::
-	text "Red and Blue!"
-	line "Both are #mon!"
+	text "New Nintendo"
+	line "Switch released!"
+	cont "Get one today!"
 	done

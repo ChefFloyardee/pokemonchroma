@@ -75,8 +75,8 @@ _CopycatsHouse2FText3::
 
 _CopycatsHouse2FText6::
 	text "A game with Mario"
-	line "wearing a bucket"
-	cont "on his head!"
+	line "wearing hat with"
+	cont "eyes on his head!"
 	done
 
 _CopycatsHouse2FText_5cd17::
@@ -88,7 +88,8 @@ _CopycatsHouse2FText_5cd17::
 	line "Hobby: Collecting"
 	cont "dolls!"
 	cont "Favorite #mon:"
-	cont "Clefairy!"
+	cont "Clefairy and"
+	cont "Mimikyu!"
 	done
 
 _CopycatsHouse2FText_5cd1c::

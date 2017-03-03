@@ -802,7 +802,8 @@ _IndigoPlateauHQText::
 
 _RedBedroomSNESText::
 	text "<PLAYER> is"
-	line "playing the SNES!"
+	line "playing the Nin-"
+	cont "tendo Switch!"
 	cont "...Okay!"
 	cont "It's time to go!"
 	done
