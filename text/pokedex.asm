@@ -307,6 +307,16 @@ _ChikoritaDexEntry::
 	next "seek out warm"
 	next "places"
 	dex
+	
+_BayleefDexEntry::
+	text "A spicy aroma"
+	next "emanates from"
+	next "around its neck."
+
+	page "The aroma acts as"
+	next "a stimulant to"
+	next "restore health"
+	dex
 
 _GrowlitheDexEntry::
 	text "Very protective"
@@ -477,6 +487,16 @@ _GolemDexEntry::
 	next "dynamite blasts"
 	next "without damage"
 	dex
+	
+_MeganiumDexEntry::
+	text "The aroma that"
+	next "rises from its"
+	next "petals contains"
+
+	page "a substance that"
+	next "calms aggressive"
+	next "feelings"
+	dex
 
 _MagmarDexEntry::
 	text "Its body always"
@@ -486,6 +506,16 @@ _MagmarDexEntry::
 	page "enables it to"
 	next "hide perfectly"
 	next "among flames"
+	dex
+	
+_CyndaquilDexEntry::
+	text "It is timid and"
+	next "always curls up"
+	next "into a ball."
+
+	page "If attacked, it"
+	next "flares up its"
+	next "back in defense"
 	dex
 
 _ElectabuzzDexEntry::
@@ -516,6 +546,16 @@ _KoffingDexEntry::
 	page "its body, it is"
 	next "prone to exploding"
 	next "without warning"
+	dex
+	
+_QuilavaDexEntry::
+	text "Before battle, it"
+	next "turns its back on"
+	next "its opponent to"
+
+	page "demonstrate how"
+	next "ferociously its"
+	next "fire blazes"
 	dex
 
 _MankeyDexEntry::
@@ -557,6 +597,36 @@ _TaurosDexEntry::
 	next "body with its"
 	next "long tails"
 	dex
+	
+_TyphlosionDexEntry::
+	text "If its rage peaks"
+	next "it becomes so hot"
+	next "that anything it"
+
+	page "touches it will"
+	next "instantly go up"
+	next "in flames"
+	dex
+
+_TotodileDexEntry::
+	text "It has the habit"
+	next "of biting"
+	next "anything with its"
+
+	page "developed jaws."
+	next "Even its Trainer"
+	next "must be careful"
+	dex
+
+_CroconawDexEntry::
+	text "Once it bites"
+	next "down, it won't let"
+	next "go until it loses"
+
+	page "its fangs. New"
+	next "fangs quickly"
+	next "grow into place"
+	dex
 
 _FarfetchdDexEntry::
 	text "The sprig of"
@@ -586,6 +656,16 @@ _DragoniteDexEntry::
 	page "Its intelligence"
 	next "is said to match"
 	next "that of humans"
+	dex
+	
+_FeraligatrDexEntry::
+	text "It usually moves"
+	next "slowly, but it"
+	next "goes at blinding"
+
+	page "speed when it"
+	next "attacks and bites"
+	next "its victim"
 	dex
 
 _DoduoDexEntry::

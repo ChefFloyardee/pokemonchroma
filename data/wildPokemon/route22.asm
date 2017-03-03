@@ -5,10 +5,10 @@ Route22Mons:
 		db 3,NIDORAN_M
 		db 4,NIDORAN_F
 		db 4,RATTATA
-		db 2,RATTATA
-		db 2,SPEAROW
+		db 4,MANKEY
+		db 4,SPEAROW
 		db 3,MANKEY
-		db 5,MANKEY
+		db 5,CYNDAQUIL
 		db 3,PONYTA
 		db 4,PONYTA
 	ENDC

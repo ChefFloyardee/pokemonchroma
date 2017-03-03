@@ -31,7 +31,7 @@ CryData:
 	db $14, $00, $80; Pinsir
 	db $12, $00, $80; Tangela
 	db $12, $80, $40; Chikorita
-	db $00, $00, $00; MissingNo.
+	db $12, $60, $80; Bayleef
 	db $1F, $20, $40; Growlithe
 	db $17, $FF, $C0; Onix
 	db $18, $40, $A0; Fearow
@@ -49,24 +49,24 @@ CryData:
 	db $21, $20, $60; Psyduck
 	db $0D, $88, $20; Drowzee
 	db $12, $E0, $40; Golem
-	db $00, $00, $00; MissingNo.
+	db $12, $40, $A0; Meganium
 	db $04, $FF, $30; Magmar
-	db $00, $00, $00; MissingNo.
+	db $04, $C0, $20; Cyndaquil
 	db $06, $8F, $FF; Electabuzz
 	db $1C, $20, $C0; Magneton
 	db $12, $E6, $DD; Koffing
-	db $00, $00, $00; MissingNo.
+	db $04, $B0, $30; Quilava
 	db $0A, $DD, $60; Mankey
 	db $0C, $88, $C0; Seel
 	db $0B, $AA, $01; Diglett
 	db $1D, $11, $40; Tauros
-	db $00, $00, $00; MissingNo.
-	db $00, $00, $00; MissingNo.
-	db $00, $00, $00; MissingNo.
+	db $04, $B0, $40; Typhlosion
+	db $1D, $30, $30; Totodile
+	db $1D, $20, $A0; Croconaw
 	db $10, $DD, $01; Farfetch'd
 	db $1A, $44, $40; Venonat
 	db $0F, $3C, $C0; Dragonite
-	db $00, $80, $10; MissingNo.
+	db $1D, $10, $D0; Feraligatr
 	db $00, $00, $00; MissingNo.
 	db $1D, $E0, $80; MissingNo.
 	db $0B, $BB, $01; Doduo
