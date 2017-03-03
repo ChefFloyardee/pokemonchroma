@@ -75,7 +75,4 @@ MonPartyData:
 	dn SPRITE_SNAKE, SPRITE_SNAKE           ;Dratini/Dragonair
 	dn SPRITE_SNAKE, SPRITE_MON             ;Dragonite/Mewtwo
 	dn SPRITE_MON, SPRITE_GRASS             ;Mew/Chikorita
-	dn SPRITE_GRASS, SPRITE_GRASS           ;Bayleef/Meganium
-	dn SPRITE_MON, SPRITE_MON               ;Cyndaquil/Quilava
-	dn SPRITE_MON, SPRITE_MON               ;Typhlosion/Totodile
-	dn SPRITE_MON, SPRITE_MON               ;Croconaw/Feraligatr
+	dn SPRITE_GRASS, 0                      ;Bayleef/Meganium

@@ -869,7 +869,7 @@ Mon152_EvosMoves:
 Mon153_EvosMoves:
 ;BAYLEEF
 ;Evolutions
-	db EV_LEVEL,32,MEGANIUM
+	db 0
 ;Learnset
 	db 1,TACKLE
 	db 1,GROWL
@@ -1272,26 +1272,11 @@ Mon076_EvosMoves:
 	db 0
 
 Mon154_EvosMoves:
-;MEGANIUM
+;MISSINGNO
 ;Evolutions
 	db 0
 ;Learnset
-	db 1,TACKLE
-	db 1,GROWL
-	db 1,RAZOR_LEAF
-	db 1,POISONPOWDER
-	db 6,RAZOR_LEAF
-	db 9,POISONPOWDER
-	db 14,LEECH_SEED
-	db 18,REFLECT
-	db 28,MEGA_DRAIN
-	db 32,PETAL_DANCE
-	db 34,IRON_TAIL
-	db 40,LIGHT_SCREEN
-	db 46,BODY_SLAM
-	db 51,GIGA_DRAIN
-	db 56,SOLARBEAM
-	db 60,PETALBLIZARD
+	db 0
 
 Mon126_EvosMoves:
 ;MAGMAR
@@ -1315,22 +1300,11 @@ Mon126_EvosMoves:
 	db 0
 
 Mon155_EvosMoves:
-;CYNDAQUIL
+;MISSINGNO
 ;Evolutions
-	db EV_LEVEL,14,QUILAVA
-;Learnset
-	db 1,TACKLE
-	db 1,LEER
-	db 6,SMOKESCREEN
-	db 10,EMBER
-	db 13,QUICK_ATTACK
-	db 19,FLAME_WHEEL
-	db 22,DEFENSE_CURL
-	db 28,SWIFT
-	db 31,FLAMETHROWER
-	db 36,DOUBLE_EDGE
-	db 40,FIRE_BLAST
 	db 0
+;Learnset
+    db 0
 
 Mon125_EvosMoves:
 ;ELECTABUZZ
@@ -1403,22 +1377,10 @@ Mon109_EvosMoves:
 	db 0
 
 Mon156_EvosMoves:
-;QUILAVA
+;MISSINGNO
 ;Evolutions
-	db EV_LEVEL,36,TYPHLOSION
+	db 0
 ;Learnset
-	db 1,TACKLE
-	db 1,LEER
-	db 1,SMOKESCREEN
-	db 6,SMOKESCREEN
-	db 10,EMBER
-	db 13,QUICK_ATTACK
-	db 20,FLAME_WHEEL
-	db 24,DEFENSE_CURL
-	db 31,SWIFT
-	db 36,FLAMETHROWER
-	db 44,DOUBLE_EDGE
-	db 50,FIRE_BLAST
 	db 0
 
 Mon056_EvosMoves:
@@ -1509,62 +1471,25 @@ Mon128_EvosMoves:
 	db 0
 
 Mon157_EvosMoves:
-;TYPHLOSION
+;MISSINGNO
 ;Evolutions
 	db 0
 ;Learnset
-	db 1,TACKLE
-	db 1,LEER
-	db 1,SMOKESCREEN
-	db 1,DOUBLE_EDGE
-	db 6,SMOKESCREEN
-	db 10,EMBER
-	db 13,QUICK_ATTACK
-	db 20,FLAME_WHEEL
-	db 24,DEFENSE_CURL
-	db 31,SWIFT
-	db 36,FLAMETHROWER
-	db 45,DOUBLE_EDGE
-	db 51,FIRE_BLAST
 	db 0
 
 Mon158_EvosMoves:
-;TOTODILE
+;MISSINGNO
 ;Evolutions
-	db EV_LEVEL,18,CROCONAW
+	db 0
 ;Learnset
-	db 1,SCRATCH
-	db 1,LEER
-	db 6,WATER_GUN
-	db 13,BITE
-	db 20,ICE_FANG
-	db 27,CRUNCH
-	db 34,SLASH
-	db 36,SCREECH
-	db 41,THRASH
-	db 43,AQUA_TAIL
-	db 50,HYDRO_PUMP
 	db 0
 
 Mon159_EvosMoves:
-;CROCONAW
+;MISSINGNO
 ;Evolutions
-	db EV_LEVEL,30,FERALIGATR
-;Learnset
-	db 1,SCRATCH
-	db 1,LEER
-	db 1,WATER_GUN
-	db 6,WATER_GUN
-	db 8,RAGE
-	db 13,BITE
-	db 21,ICE_FANG
-	db 30,CRUNCH
-	db 39,SLASH
-	db 42,SCREECH
-	db 46,THRASH
-	db 49,AQUA_TAIL
-	db 54,HYDRO_PUMP
 	db 0
+;Learnset
+    db 0
 
 Mon083_EvosMoves:
 ;FARFETCHD
@@ -1633,25 +1558,11 @@ Mon149_EvosMoves:
 	db 0
 
 Mon160_EvosMoves:
-;FERALIGATR
+;MISSINGNO
 ;Evolutions
 	db 0
 ;Learnset
-	db 1,SCRATCH
-	db 1,LEER
-	db 1,WATER_GUN
-	db 6,WATER_GUN
-	db 8,RAGE
-	db 13,BITE
-	db 21,ICE_FANG
-	db 30,AQUA_TAIL
-	db 32,CRUNCH
-	db 39,SLASH
-	db 42,SCREECH
-	db 46,THRASH
-	db 49,AQUA_TAIL
-	db 54,HYDRO_PUMP
-	db 0
+    db 0
 
 Mon161_EvosMoves:
 ;MISSINGNO
