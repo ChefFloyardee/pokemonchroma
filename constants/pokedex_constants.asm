@@ -160,5 +160,5 @@ const_value = 1
 	const DEX_TOTODILE   ; 158
 	const DEX_CROCONAW   ; 159
 	const DEX_FERALIGATR ; 160
-
+	
 NUM_POKEMON    EQU 160

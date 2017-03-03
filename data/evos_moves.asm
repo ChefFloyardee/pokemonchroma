@@ -1633,9 +1633,9 @@ Mon149_EvosMoves:
 	db 0
 
 Mon160_EvosMoves:
-;CROCONAW
+;FERALIGATR
 ;Evolutions
-	db EV_LEVEL,30,FERALIGATR
+	db 0
 ;Learnset
 	db 1,SCRATCH
 	db 1,LEER
