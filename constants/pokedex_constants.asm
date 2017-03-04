@@ -153,5 +153,12 @@ const_value = 1
 	const DEX_MEW        ; 151
 	const DEX_CHIKORITA  ; 152
 	const DEX_BAYLEEF    ; 153
+	const DEX_MEGANIUM   ; 154
+	const DEX_CYNDAQUIL  ; 155
+	const DEX_QUILAVA    ; 156
+	const DEX_TYPHLOSION ; 157
+	const DEX_TOTODILE   ; 158
+	const DEX_CROCONAW   ; 159
+	const DEX_FERALIGATR ; 160
 	
-NUM_POKEMON    EQU 153
+NUM_POKEMON    EQU 160

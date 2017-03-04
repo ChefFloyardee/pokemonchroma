@@ -48,24 +48,24 @@ PokedexEntryPointers:
 	dw PsyduckDexEntry
 	dw DrowzeeDexEntry
 	dw GolemDexEntry
-	dw MissingNoDexEntry
+	dw MeganiumDexEntry
 	dw MagmarDexEntry
-	dw MissingNoDexEntry
+	dw CyndaquilDexEntry
 	dw ElectabuzzDexEntry
 	dw MagnetonDexEntry
 	dw KoffingDexEntry
-	dw MissingNoDexEntry
+	dw QuilavaDexEntry
 	dw MankeyDexEntry
 	dw SeelDexEntry
 	dw DiglettDexEntry
 	dw TaurosDexEntry
-	dw MissingNoDexEntry
-	dw MissingNoDexEntry
-	dw MissingNoDexEntry
+	dw TyphlosionDexEntry
+	dw TotodileDexEntry
+	dw CroconawDexEntry
 	dw FarfetchdDexEntry
 	dw VenonatDexEntry
 	dw DragoniteDexEntry
-	dw MissingNoDexEntry
+	dw FeraligatrDexEntry
 	dw MissingNoDexEntry
 	dw MissingNoDexEntry
 	dw DoduoDexEntry
@@ -538,12 +538,26 @@ GolemDexEntry:
 	TX_FAR _GolemDexEntry
 	db "@"
 	
+MeganiumDexEntry:
+ 	db "Herb@"
+ 	db 5,11
+ 	dw 2216
+ 	TX_FAR _MeganiumDexEntry
+ 	db "@"
+	
 MagmarDexEntry:
 	db "Spitfire@"
 	db 4,3
 	dw 980
 	TX_FAR _MagmarDexEntry
 	db "@"
+	
+CyndaquilDexEntry:
+ 	db "Fire Mouse@"
+ 	db 1,8
+ 	dw 174
+ 	TX_FAR _CyndaquilDexEntry
+ 	db "@"
 
 ElectabuzzDexEntry:
 	db "Electric@"
@@ -565,6 +579,14 @@ KoffingDexEntry:
 	dw 20
 	TX_FAR _KoffingDexEntry
 	db "@"
+	
+QuilavaDexEntry:
+	db "Volcano@"
+ 	db 2,11
+ 	dw 419
+ 	TX_FAR _QuilavaDexEntry
+ 	db "@"	
+	
 MankeyDexEntry:
 	db "Pig Monkey@"
 	db 1,8
@@ -593,6 +615,27 @@ TaurosDexEntry:
 	TX_FAR _TaurosDexEntry
 	db "@"
 	
+TyphlosionDexEntry:
+ 	db "Volcano@"
+ 	db 5,7
+ 	dw 1753
+ 	TX_FAR _TyphlosionDexEntry
+ 	db "@"
+ 
+TotodileDexEntry:
+	db "Big Jaw@"
+ 	db 2,0
+ 	dw 209
+ 	TX_FAR _TotodileDexEntry
+ 	db "@"
+ 
+CroconawDexEntry:
+ 	db "Big Jaw@"
+ 	db 3,7
+ 	dw 551
+ 	TX_FAR _CroconawDexEntry
+	db "@"
+	
 FarfetchdDexEntry:
 	db "Wild Duck@"
 	db 2,7
@@ -613,6 +656,13 @@ DragoniteDexEntry:
 	dw 4630
 	TX_FAR _DragoniteDexEntry
 	db "@"
+	
+FeraligatrDexEntry:
+ 	db "Big Jaw@"
+ 	db 7,7
+ 	dw 1958
+ 	TX_FAR _FeraligatrDexEntry
+ 	db "@"
 
 DoduoDexEntry:
 	db "Twin Bird@"
