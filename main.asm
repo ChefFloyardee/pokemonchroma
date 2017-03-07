@@ -2127,7 +2127,7 @@ FurretPicBack::       INCBIN "pic/monback/furretb.pic"
 HoothootPicFront::    INCBIN "pic/bmon/hoothoot.pic"
 HoothootPicBack::     INCBIN "pic/monback/hoothootb.pic"
 
-SECTION "bank2F",ROMX,BANK[$2F]
+SECTION "bank30",ROMX,BANK[$30]
 
 NoctowlPicFront::     INCBIN "pic/bmon/noctowl.pic"
 NoctowlPicBack::      INCBIN "pic/monback/noctowlb.pic"

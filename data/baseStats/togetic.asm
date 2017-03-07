@@ -1,4 +1,3 @@
-TogeticBaseStats: ; 38582 (e:4582)
 db DEX_TOGETIC ; pokedex id
 db 55 ; base hp
 db 40 ; base attack
@@ -9,14 +8,14 @@ db FAIRY ; species type 1
 db FLYING ; species type 2
 db 75 ; catch rate
 db 114 ; base exp yield
-INCBIN "pic/bmon/togetic.pic",0,1 ; 55, sprite dimensions
+INCBIN "pic/bmon/togetic.pic",0,1 ; 77, sprite dimensions
 dw TogeticPicFront
 dw TogeticPicBack
-; move tutor compatibility flags
-	m_tutor 0
-	m_tutor 0
-	m_tutor 0
-	m_tutor 0
+; attacks known at lvl 0
+db POUND
+db 0
+db 0
+db 0
 db 3 ; growth rate
 ; learnset
 	tmlearn 4,6,8

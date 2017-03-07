@@ -12,8 +12,9 @@ TEXT_9  EQU TEXT_8 + 1
 TEXT_10 EQU TEXT_9 + 1
 TEXT_11 EQU TEXT_10 + 1
 
-POKEDEX_TEXT EQU TEXT_11 + 1
-MOVE_NAMES   EQU POKEDEX_TEXT + 1
+DEX1_TEXT    EQU TEXT_11 + 1
+DEX2_TEXT    EQU $32
+MOVE_NAMES   EQU DEX1_TEXT + 1
 
 INCLUDE "macros.asm"
 INCLUDE "hram.asm"
@@ -3193,10 +3194,13 @@ _UsedCutText::
 	prompt
 
 
-SECTION "Pokedex Text", ROMX, BANK[POKEDEX_TEXT]
+SECTION "Pokedex Text", ROMX, BANK[DEX1_TEXT]
 
 INCLUDE "text/pokedex.asm"
 
+SECTION "Pokedex Text 2", ROMX, BANK[DEX2_TEXT]
+
+INCLUDE "text/pokedex2.asm"
 
 SECTION "Move Names", ROMX, BANK[MOVE_NAMES]
 
