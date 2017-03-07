@@ -67,8 +67,8 @@ const_value = 1
 	const VENONAT      ; $41
 	const DRAGONITE    ; $42
 	const FERALIGATR   ; $43
-	const MISSINGNO_44 ; $44
-	const MISSINGNO_45 ; $45
+	const SENTRET      ; $44
+	const FURRET       ; $45
 	const DODUO        ; $46
 	const POLIWAG      ; $47
 	const JYNX         ; $48
@@ -78,23 +78,23 @@ const_value = 1
 	const DITTO        ; $4C
 	const MEOWTH       ; $4D
 	const KRABBY       ; $4E
-	const MISSINGNO_4F ; $4F
-	const MISSINGNO_50 ; $50
-	const MISSINGNO_51 ; $51
+	const HOOTHOOT     ; $4F
+	const NOCTOWL      ; $50
+	const LEDYBA       ; $51
 	const VULPIX       ; $52
 	const NINETALES    ; $53
 	const PIKACHU      ; $54
 	const RAICHU       ; $55
-	const MISSINGNO_56 ; $56
-	const MISSINGNO_57 ; $57
+	const LEDIAN       ; $56
+	const SPINARAK     ; $57
 	const DRATINI      ; $58
 	const DRAGONAIR    ; $59
 	const KABUTO       ; $5A
 	const KABUTOPS     ; $5B
 	const HORSEA       ; $5C
 	const SEADRA       ; $5D
-	const MISSINGNO_5E ; $5E
-	const MISSINGNO_5F ; $5F
+	const ARIADOS      ; $5E
+	const CROBAT       ; $5F
 	const SANDSHREW    ; $60
 	const SANDSLASH    ; $61
 	const OMANYTE      ; $62
@@ -114,29 +114,29 @@ const_value = 1
 	const WEEDLE       ; $70
 	const KAKUNA       ; $71
 	const BEEDRILL     ; $72
-	const MISSINGNO_73 ; $73
+	const CHINCHOU     ; $73
 	const DODRIO       ; $74
 	const PRIMEAPE     ; $75
 	const DUGTRIO      ; $76
 	const VENOMOTH     ; $77
 	const DEWGONG      ; $78
-	const MISSINGNO_79 ; $79
-	const MISSINGNO_7A ; $7A
+	const LANTURN      ; $79
+	const PICHU        ; $7A
 	const CATERPIE     ; $7B
 	const METAPOD      ; $7C
 	const BUTTERFREE   ; $7D
 	const MACHAMP      ; $7E
-	const MISSINGNO_7F ; $7F
+	const CLEFFA       ; $7F
 	const GOLDUCK      ; $80
 	const HYPNO        ; $81
 	const GOLBAT       ; $82
 	const MEWTWO       ; $83
 	const SNORLAX      ; $84
 	const MAGIKARP     ; $85
-	const MISSINGNO_86 ; $86
-	const MISSINGNO_87 ; $87
+	const IGGLYBUFF    ; $86
+	const TOGEPI       ; $87
 	const MUK          ; $88
-	const MISSINGNO_8A ; $8A
+	const TOGETIC      ; $89
 	const KINGLER      ; $8A
 	const CLOYSTER     ; $8B
 	const MISSINGNO_8C ; $8C

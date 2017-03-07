@@ -160,5 +160,21 @@ const_value = 1
 	const DEX_TOTODILE   ; 158
 	const DEX_CROCONAW   ; 159
 	const DEX_FERALIGATR ; 160
+	const DEX_SENTRET    ; 161
+	const DEX_FURRET     ; 162
+	const DEX_HOOTHOOT   ; 163
+	const DEX_NOCTOWL    ; 164
+	const DEX_LEDYBA     ; 165
+	const DEX_LEDIAN     ; 166
+	const DEX_SPINARAK   ; 167
+	const DEX_ARIADOS    ; 168
+	const DEX_CROBAT     ; 169
+	const DEX_CHINCHOU   ; 170
+	const DEX_LANTURN    ; 171
+	const DEX_PICHU      ; 172
+	const DEX_CLEFFA     ; 173
+	const DEX_IGGLYBUFF  ; 174
+	const DEX_TOGEPI     ; 175
+	const DEX_TOGETIC    ; 176
 	
 NUM_POKEMON    EQU 160

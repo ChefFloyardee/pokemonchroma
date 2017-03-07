@@ -66,8 +66,8 @@ PokedexEntryPointers:
 	dw VenonatDexEntry
 	dw DragoniteDexEntry
 	dw FeraligatrDexEntry
-	dw MissingNoDexEntry
-	dw MissingNoDexEntry
+	dw SentretDexEntry
+	dw FurretDexEntry
 	dw DoduoDexEntry
 	dw PoliwagDexEntry
 	dw JynxDexEntry
@@ -77,23 +77,23 @@ PokedexEntryPointers:
 	dw DittoDexEntry
 	dw MeowthDexEntry
 	dw KrabbyDexEntry
-	dw MissingNoDexEntry
-	dw MissingNoDexEntry
-	dw MissingNoDexEntry
+	dw HoothootDexEntry
+	dw NoctowlDexEntry
+	dw LedybaDexEntry
 	dw VulpixDexEntry
 	dw NinetalesDexEntry
 	dw PikachuDexEntry
 	dw RaichuDexEntry
-	dw MissingNoDexEntry
-	dw MissingNoDexEntry
+	dw LedianDexEntry
+	dw SpinarakDexEntry
 	dw DratiniDexEntry
 	dw DragonairDexEntry
 	dw KabutoDexEntry
 	dw KabutopsDexEntry
 	dw HorseaDexEntry
 	dw SeadraDexEntry
-	dw MissingNoDexEntry
-	dw MissingNoDexEntry
+	dw AriadosDexEntry
+	dw CrobatDexEntry
 	dw SandshrewDexEntry
 	dw SandslashDexEntry
 	dw OmanyteDexEntry
@@ -113,29 +113,29 @@ PokedexEntryPointers:
 	dw WeedleDexEntry
 	dw KakunaDexEntry
 	dw BeedrillDexEntry
-	dw MissingNoDexEntry
+	dw ChinchouDexEntry
 	dw DodrioDexEntry
 	dw PrimeapeDexEntry
 	dw DugtrioDexEntry
 	dw VenomothDexEntry
 	dw DewgongDexEntry
-	dw MissingNoDexEntry
-	dw MissingNoDexEntry
+	dw LanturnDexEntry
+	dw PichuDexEntry
 	dw CaterpieDexEntry
 	dw MetapodDexEntry
 	dw ButterfreeDexEntry
 	dw MachampDexEntry
-	dw MissingNoDexEntry
+	dw CleffaDexEntry
 	dw GolduckDexEntry
 	dw HypnoDexEntry
 	dw GolbatDexEntry
 	dw MewtwoDexEntry
 	dw SnorlaxDexEntry
 	dw MagikarpDexEntry
-	dw MissingNoDexEntry
-	dw MissingNoDexEntry
+	dw IgglybuffDexEntry
+	dw TogepiDexEntry
 	dw MukDexEntry
-	dw MissingNoDexEntry
+	dw TogeticDexEntry
 	dw KinglerDexEntry
 	dw CloysterDexEntry
 	dw MissingNoDexEntry
@@ -663,6 +663,20 @@ FeraligatrDexEntry:
  	dw 1958
  	TX_FAR _FeraligatrDexEntry
  	db "@"
+	
+SentretDexEntry:
+	db "Scout@"
+	db 2,7
+	dw 132
+	TX_FAR _SentretDexEntry
+	db "@"
+
+FurretDexEntry:
+	db "Long Body@"
+	db 5,11
+	dw 716
+	TX_FAR _FurretDexEntry
+	db "@"
 
 DoduoDexEntry:
 	db "Twin Bird@"
@@ -726,6 +740,27 @@ KrabbyDexEntry:
 	dw 140
 	TX_FAR _KrabbyDexEntry
 	db "@"
+	
+HoothootDexEntry:
+	db "Owl@"
+	db 2,4
+	dw 467
+	TX_FAR _HoothootDexEntry
+	db "@"
+	
+NoctowlDexEntry:
+	db "Owl@"
+	db 5,3
+	dw 899
+	TX_FAR _NoctowlDexEntry
+	db "@"
+
+LedybaDexEntry:
+	db "Five Star@"
+	db 3,3
+	dw 240
+	TX_FAR _LedybaDexEntry
+	db "@"
 
 VulpixDexEntry:
 	db "Fox@"
@@ -753,6 +788,20 @@ RaichuDexEntry:
 	db 2,7
 	dw 660
 	TX_FAR _RaichuDexEntry
+	db "@"
+	
+LedianDexEntry:
+	db "Five Star@"
+	db 4,7
+	dw 780
+	TX_FAR _LedianDexEntry
+	db "@"
+	
+SpinarakDexEntry:
+	db "StringSpit@"
+	db 1,8
+	dw 190
+	TX_FAR _SpinarakDexEntry
 	db "@"
 
 DratiniDexEntry:
@@ -795,6 +844,20 @@ SeadraDexEntry:
 	db 3,11
 	dw 550
 	TX_FAR _SeadraDexEntry
+	db "@"
+	
+AriadosDexEntry:
+	db "Long Leg@"
+	db 3,7
+	dw 740
+	TX_FAR _AriadosDexEntry
+	db "@"
+
+CrobatDexEntry:
+	db "Bat@"
+	db 5,11
+	dw 1653
+	TX_FAR _CrobatDexEntry
 	db "@"
 
 SandshrewDexEntry:
@@ -929,6 +992,13 @@ BeedrillDexEntry:
 	dw 650
 	TX_FAR _BeedrillDexEntry
 	db "@"
+	
+ChinchouDexEntry:
+	db "Angler@"
+	db 1,8
+	dw 265
+	TX_FAR _ChinchouDexEntry
+	db "@"
 
 DodrioDexEntry:
 	db "TripleBird@"
@@ -964,6 +1034,20 @@ DewgongDexEntry:
 	dw 2650
 	TX_FAR _DewgongDexEntry
 	db "@"
+	
+LanturnDexEntry:
+	db "Light@"
+	db 3,11
+	dw 496
+	TX_FAR _LanturnDexEntry
+	db "@"
+
+PichuDexEntry:
+	db "Tiny Mouse@"
+	db 1,0
+	dw 44
+	TX_FAR _PichuDexEntry
+	db "@"
 
 CaterpieDexEntry:
 	db "Worm@"
@@ -991,6 +1075,13 @@ MachampDexEntry:
 	db 5,3
 	dw 2870
 	TX_FAR _MachampDexEntry
+	db "@"
+	
+CleffaDexEntry:
+	db "Star Shape@"
+	db 1,0
+	dw 66
+	TX_FAR _CleffaDexEntry
 	db "@"
 
 GolduckDexEntry:
@@ -1034,12 +1125,33 @@ MagikarpDexEntry:
 	dw 220
 	TX_FAR _MagikarpDexEntry
 	db "@"
+	
+IgglybuffDexEntry:
+	db "Balloon@"
+	db 1,0
+	dw 22
+	TX_FAR _IgglybuffDexEntry
+	db "@"
+
+TogepiDexEntry:
+	db "Spike Ball@"
+	db 1,0
+	dw 33
+	TX_FAR _TogepiDexEntry
+	db "@
 
 MukDexEntry:
 	db "Sludge@"
 	db 3,11
 	dw 660
 	TX_FAR _MukDexEntry
+	db "@"
+	
+TogeticDexEntry:
+	db "Happiness@"
+	db 2,0
+	dw 71
+	TX_FAR _TogeticDexEntry
 	db "@"
 
 KinglerDexEntry:

@@ -79,3 +79,11 @@ MonPartyData:
  	dn SPRITE_MON, SPRITE_MON               ;Cyndaquil/Quilava
  	dn SPRITE_MON, SPRITE_MON               ;Typhlosion/Totodile
  	dn SPRITE_MON, SPRITE_MON               ;Croconaw/Feraligatr 
+	dn SPRITE_MON, SPRITE_MON               ;Sentret/Furret
+	dn SPRITE_BIRD_M, SPRITE_BIRD_M         ;Hoothoot/Noctowl
+	dn SPRITE_BUG, SPRITE_BUG               ;Ledyba/Ledian
+	dn SPRITE_BUG, SPRITE_BUG               ;Spinarak/Ariados
+	dn SPRITE_MON, SPRITE_WATER             ;Crobat/Chinchou
+	dn SPRITE_WATER, SPRITE_FAIRY           ;Lanturn/Pichu
+	dn SPRITE_FAIRY, SPRITE_FAIRY           ;Cleffa/Igglybuff
+	dn SPRITE_FAIRY, SPRITE_FAIRY           ;Togepi/Togetic
