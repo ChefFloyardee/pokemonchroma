@@ -546,7 +546,7 @@ TwoOptionMenuStrings:
 	db   "YES"
 	next "NO@"
 .BoyGirlMenu
-    db   "BOY",
+    db   "BOY"
 	next "GIRL@"
 .SouthEastMenu
 	db   "SOUTH"
