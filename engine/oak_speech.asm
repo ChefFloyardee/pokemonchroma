@@ -84,7 +84,7 @@ OakSpeech:
 	call MovePicLeft
 	ld hl,OakSpeechText2
     call PrintText      ; Prints text box
-    call GBFadeOut2
+    call GBFadeOutToWhite
     call ClearScreen
     ld de,RedPicFront
     ld bc,(Bank(RedPicFront) << 8) | $00
@@ -109,7 +109,7 @@ OakSpeech:
 	call PrintText
 	call ChooseRivalName
 .skipChoosingNames
-    call GBFadeOut2
+    call GBFadeOutToWhite
     call ClearScreen
     ld de,RedPicFront
     ld bc,(Bank(RedPicFront) << 8) | $00

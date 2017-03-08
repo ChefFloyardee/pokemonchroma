@@ -531,7 +531,7 @@ DrawTrainerInfo:
     ld de, LeafPicFront
     ld bc,(BANK(LeafPicFront) << 8) | $01
 .AreBoy
-    predef Predef3B
+    predef DisplayPicCenteredOrUpperRight
 	call DisableLCD
 	coord hl, 0, 2
 	ld a," "

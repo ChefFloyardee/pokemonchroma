@@ -283,6 +283,11 @@ DefaultNamesPlayerList:
 	db "RED@"
 	db "ASH@"
 	db "JACK@"
+DefaultNamesGirlList:
+    db "NEW NAME@"
+	db "SCARLET@"
+	db "LEAF@"
+	db "NICOLE@"
 DefaultNamesRivalList:
 	db "NEW NAME@"
 	db "BLUE@"

@@ -194,7 +194,7 @@ HoFLoadPlayerPics:
     ld a, BANK(LeafPicFront)
 .Routine ; resume original routine
     call UncompressSpriteFromDE
-    ld hl, S_SPRITEBUFFER1
+    ld hl, sSpriteBuffer1
     ld de, $a000
     ld bc, $310
     call CopyData
