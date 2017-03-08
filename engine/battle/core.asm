@@ -6408,12 +6408,18 @@ SwapPlayerAndEnemyLevels:
 ; also writes OAM data and loads tile patterns for the Red or Old Man back sprite's head
 ; (for use when scrolling the player sprite and enemy's silhouettes on screen)
 LoadPlayerBackPic:
-	ld a, [wBattleType]
-	dec a ; is it the old man tutorial?
-	ld de, RedPicBack
-	jr nz, .next
-	ld de, OldManPic
-.next
+   ld a, [W_BATTLETYPE] ; wd05a
+    dec a
+    ld de, OldManPic ; $7e0a
+    jr z, .asm_3ec9e
+    ld a, [wd798]
+    bit 2, a
+    jr z, .RedBack
+    ld de, LeafPicBack
+    jr .asm_3ec9e
+.RedBack
+    ld de, RedPicBack ; $7e9a
+.asm_3ec9e
 	ld a, BANK(RedPicBack)
 	call UncompressSpriteFromDE
 	

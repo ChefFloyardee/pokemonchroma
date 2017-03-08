@@ -3,7 +3,7 @@ Route5Mons:
 	IF DEF(_RED)
 		db 13,ODDISH
 		db 13,BELLSPROUT
-		db 15,PIDGEY
+		db 15,HOOTHOOT
 		db 10,MANKEY
 		db 12,MEOWTH
 		db 15,MANKEY

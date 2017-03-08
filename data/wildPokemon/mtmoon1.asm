@@ -7,7 +7,7 @@ MoonMons1:
 	db 6,ZUBAT
 	db 10,ZUBAT
 	db 10,CLEFAIRY
-	db 8,CLEFAIRY
+	db 8,CLEFFA
 	db 11,OMANYTE
 	db 8,OMANYTE
 	db $00

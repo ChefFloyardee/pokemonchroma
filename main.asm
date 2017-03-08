@@ -186,9 +186,10 @@ INCLUDE "engine/overworld/is_player_just_outside_map.asm"
 INCLUDE "engine/menu/status_screen.asm"
 INCLUDE "engine/menu/party_menu.asm"
 
-RedPicFront:: INCBIN "pic/trainer/red.pic"
-ShrinkPic1::  INCBIN "pic/trainer/shrink1.pic"
-ShrinkPic2::  INCBIN "pic/trainer/shrink2.pic"
+RedPicFront::  INCBIN "pic/trainer/red.pic"
+LeafPicFront:: INCBIN "pic/trainer/leaf.pic"
+ShrinkPic1::   INCBIN "pic/trainer/shrink1.pic"
+ShrinkPic2::   INCBIN "pic/trainer/shrink2.pic"
 
 INCLUDE "engine/turn_sprite.asm"
 INCLUDE "engine/menu/start_sub_menus.asm"
@@ -206,6 +207,8 @@ SECTION "NPC Sprites 2", ROMX, BANK[NPC_SPRITES_2]
 
 RedCyclingSprite:     INCBIN "gfx/sprites/cycling.2bpp"
 RedSprite:            INCBIN "gfx/sprites/red.2bpp"
+LeafSprite:           INCBIN "gfx/sprites/leaf.2bpp"
+LeafCyclingSprite:    INCBIN "gfx/sprites/leafcycling.2bpp"
 BlueSprite:           INCBIN "gfx/sprites/blue.2bpp"
 OakSprite:            INCBIN "gfx/sprites/oak.2bpp"
 BugCatcherSprite:     INCBIN "gfx/sprites/bug_catcher.2bpp"
@@ -242,8 +245,6 @@ GameboyKidSprite:     INCBIN "gfx/sprites/gameboy_kid.2bpp"
 ClefairySprite:       INCBIN "gfx/sprites/clefairy.2bpp"
 AgathaSprite:         INCBIN "gfx/sprites/agatha.2bpp"
 BrunoSprite:          INCBIN "gfx/sprites/bruno.2bpp"
-LoreleiSprite:        INCBIN "gfx/sprites/lorelei.2bpp"
-SeelSprite:           INCBIN "gfx/sprites/seel.2bpp"
 
 
 SECTION "Battle (bank 5)", ROMX, BANK[$5]
@@ -749,8 +750,12 @@ DrowzeePicBack::     INCBIN "pic/monback/drowzeeb.pic"
 HypnoPicFront::      INCBIN "pic/bmon/hypno.pic"
 HypnoPicBack::       INCBIN "pic/monback/hypnob.pic"
 
-RedPicBack::           INCBIN "pic/trainer/redb.pic"
-OldManPic::            INCBIN "pic/trainer/oldman.pic"
+RedPicBack::  INCBIN "pic/trainer/redb.pic"
+LeafPicBack::  INCBIN "pic/trainer/leafb.pic"
+OldManPic::  INCBIN "pic/trainer/oldman.pic"
+LeafFishingTilesFront: INCBIN "gfx/leaf_fishing_tile_front.2bpp"
+LeafFishingTilesBack:  INCBIN "gfx/leaf_fishing_tile_back.2bpp"
+LeafFishingTilesSide:  INCBIN "gfx/leaf_fishing_tile_side.2bpp"
 
 
 SECTION "Battle (bank C)", ROMX, BANK[$C]
@@ -2024,6 +2029,9 @@ INCLUDE "engine/items/tm_prices.asm"
 SECTION "bank2D",ROMX,BANK[$2D]
 
 BaseStats: INCLUDE "data/base_stats.asm"
+
+LoreleiSprite:        INCBIN "gfx/sprites/lorelei.2bpp"
+SeelSprite:           INCBIN "gfx/sprites/seel.2bpp"
 
 SECTION "bank2E",ROMX,BANK[$2E]
 

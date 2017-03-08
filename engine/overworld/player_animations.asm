@@ -382,17 +382,34 @@ IsPlayerStandingOnWarpPadOrHole:
 	db $FF
 
 FishingAnim:
-	ld c, 10
-	call DelayFrames
-	ld hl, wd736
-	set 6, [hl] ; reserve the last 4 OAM entries
-	ld de, RedSprite
-	ld hl, vNPCSprites
-	lb bc, BANK(RedSprite), $c
-	call CopyVideoData
-	ld a, $4
-	ld hl, RedFishingTiles
-	call LoadAnimSpriteGfx
+    ld c, $a
+    call DelayFrames
+    ld hl, wd736
+    set 6, [hl]
+    ld a, [wd798] ; added gender check
+    bit 2, a      ; added gender check
+    jr z, .BoySpriteLoad
+    ld de, LeafSprite
+    ld hl, vNPCSprites
+    ld bc, (BANK(LeafSprite) << 8) + $0c
+    jr .KeepLoadingSpriteStuff
+.BoySpriteLoad
+    ld de, RedSprite ; $4180
+    ld hl, vNPCSprites
+    ld bc, (BANK(RedSprite) << 8) + $0c
+.KeepLoadingSpriteStuff
+    call CopyVideoData
+    ld a, [wd798] ; added gender check
+    bit 2, a      ; added gender check
+    jr z, .BoyTiles ; skip loading Leaf's stuff if you're Red
+    ld a, $4
+    ld hl, LeafFishingTiles
+    jr .ContinueRoutine ; go back to main routine after loading Leaf's stuff
+.BoyTiles ; alternately, load Red's stuff
+    ld a, $4
+    ld hl, RedFishingTiles ; $4866
+.ContinueRoutine
+    call Func_71771
 	ld a, [wSpriteStateData1 + 2]
 	ld c, a
 	ld b, $0
@@ -501,6 +518,23 @@ RedFishingTiles:
 	dw RedFishingRodTiles
 	db 3, BANK(RedFishingRodTiles)
 	dw vNPCSprites2 + $7d0
+	
+LeafFishingTiles: ; newly added table of Leaf's sprites
+    dw LeafFishingTilesFront
+    db 2, BANK(LeafFishingTilesFront)
+    dw vNPCSprites + $20
+
+    dw LeafFishingTilesBack
+    db 2, BANK(LeafFishingTilesBack)
+    dw vNPCSprites + $60
+
+    dw LeafFishingTilesSide
+    db 2, BANK(LeafFishingTilesSide)
+    dw vNPCSprites + $a0
+
+    dw RedFishingRodTiles
+    db 3, BANK(RedFishingRodTiles)
+    dw vNPCSprites2 + $7d0
 
 _HandleMidJump:
 	ld a, [wPlayerJumpingYScreenCoordsIndex]

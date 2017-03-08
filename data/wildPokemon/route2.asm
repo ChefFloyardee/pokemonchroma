@@ -2,16 +2,16 @@ Route2Mons:
 	db $19
 	db 3,RATTATA
 	db 3,PIDGEY
-	db 4,PIDGEY
+	db 4,HOOTHOOT
 	db 4,CATERPIE
-	db 5,CATERPIE
+	db 5,LEDYBA
 	if DEF(_RED)
 		db 3,WEEDLE
 	ENDC
 	if DEF(_BLUE)
 		db 3,CATERPIE
 	ENDC
-	db 4,RATTATA
+	db 4,SPINARAK
 	db 5,CHIKORITA
 	if DEF(_RED)
 		db 4,WEEDLE

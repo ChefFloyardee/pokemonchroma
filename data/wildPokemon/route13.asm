@@ -7,7 +7,7 @@ Route13Mons:
 		db 24,VENONAT
 		db 22,WEEPINBELL
 		db 26,GLOOM
-		db 26,GLOOM
+		db 26,NOCTOWL
 		db 25,DITTO
 		db 28,FARFETCHD
 		db 30,FARFETCHD

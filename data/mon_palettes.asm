@@ -175,3 +175,4 @@ MonsterPalettes:
 	db PAL_PINKMON   ; IGGLYBUFF
 	db PAL_MEWMON    ; TOGEPI
 	db PAL_MEWMON    ; TOGETIC
+

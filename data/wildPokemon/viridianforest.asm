@@ -3,12 +3,12 @@ ForestMons:
 	IF DEF(_RED)
 		db 4,WEEDLE
 		db 5,CATERPIE
-		db 3,METAPOD
+		db 3,LEDYBA
 		db 5,KAKUNA
 		db 4,KAKUNA
-		db 6,METAPOD
-		db 6,PIKACHU
-		db 3,PIKACHU
+		db 6,SPINARAK
+		db 6,PICHU
+		db 3,PICHU
 	ENDC
 	IF DEF(_BLUE)
 		db 4,CATERPIE

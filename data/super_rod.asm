@@ -40,7 +40,7 @@ SuperRodData:
 ; number of monsters, followed by level/monster pairs
 FishingGroup1:
 	db 2
-	db 15,TENTACOOL
+	db 15,CHINCHOU
 	db 15,POLIWAG
 
 FishingGroup2:
@@ -55,9 +55,10 @@ FishingGroup3:
 	db 15,KRABBY
 
 FishingGroup4:
-	db 2
+	db 3
 	db 15,KRABBY
 	db 15,SHELLDER
+	db 15,CHINCHOU
 
 FishingGroup5:
 	db 2
@@ -83,7 +84,7 @@ FishingGroup8:
 	db 15,STARYU
 	db 15,HORSEA
 	db 15,SHELLDER
-	db 15,GOLDEEN
+	db 15,CHINCHOU
 
 FishingGroup9:
 	db 4

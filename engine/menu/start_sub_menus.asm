@@ -524,8 +524,14 @@ StartMenu_TrainerInfo:
 ; loads tile patterns and draws everything except for gym leader faces / badges
 DrawTrainerInfo:
 	ld de,RedPicFront
-	lb bc, BANK(RedPicFront), $01
-	predef DisplayPicCenteredOrUpperRight
+    ld bc,(BANK(RedPicFront) << 8) | $01
+    ld a, [wd798]
+    bit 2, a
+    jr z, .AreBoy
+    ld de, LeafPicFront
+    ld bc,(BANK(LeafPicFront) << 8) | $01
+.AreBoy
+    predef Predef3B
 	call DisableLCD
 	coord hl, 0, 2
 	ld a," "

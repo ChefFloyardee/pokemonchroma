@@ -183,23 +183,40 @@ HoFMonInfoText:
 	next "TYPE2/@"
 
 HoFLoadPlayerPics:
-	ld de, RedPicFront
-	ld a, BANK(RedPicFront)
-	call UncompressSpriteFromDE
-	ld hl, sSpriteBuffer1
-	ld de, sSpriteBuffer0
-	ld bc, $310
-	call CopyData
-	ld de, vFrontPic
-	call InterlaceMergeSpriteBuffers
-	ld de, RedPicBack
-	ld a, BANK(RedPicBack)
-	call UncompressSpriteFromDE
-
-    ;predef ScaleSpriteByTwo
-    ;ld de, vBackPic
-    ;call InterlaceMergeSpriteBuffers
-    ;ld c, $1
+    ld a, [wd798] ; New gender check
+    bit 2, a      ; New gender check
+    jr nz, .GirlStuff1
+    ld de, RedPicFront ; $6ede
+    ld a, BANK(RedPicFront)
+    jr .Routine ; skip the girl stuff and go to main routine
+.GirlStuff1
+    ld de, LeafPicFront
+    ld a, BANK(LeafPicFront)
+.Routine ; resume original routine
+    call UncompressSpriteFromDE
+    ld hl, S_SPRITEBUFFER1
+    ld de, $a000
+    ld bc, $310
+    call CopyData
+    ld de, vFrontPic
+    call InterlaceMergeSpriteBuffers
+    ld a, [wd798] ; new gender check
+    bit 2, a      ; new gender check
+    jr nz, .GirlStuff2
+    ld de, RedPicBack ; $7e0a
+    ld a, BANK(RedPicBack)
+    jr .routine2 ; skip the girl stuff and continue original routine if guy
+.GirlStuff2
+    ld de, LeafPicBack
+    ld a, BANK(LeafPicBack)
+.routine2 ; original routine
+    call UncompressSpriteFromDE
+    ld a, $66
+    ld de, vBackPic
+    push de
+    jp LoadUncompressedBackSprite
+    nop
+    ld c, $1
     callba LoadBackSpriteUnzoomed
 
 HoFLoadMonPlayerPicTileIDs:

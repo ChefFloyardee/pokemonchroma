@@ -1999,19 +1999,29 @@ RunMapScript::
 .return
 	ret
 
-LoadWalkingPlayerSpriteGraphics::
-	ld de,RedSprite
-	ld hl,vNPCSprites
-	jr LoadPlayerSpriteGraphicsCommon
+LoadWalkingPlayerSpriteGraphics:: ; 104d (0:104d)
+    ld de,RedSprite ; $4180
+    ld a, [wd798]
+    bit 2, a
+    jr z, .AreGuy1
+    ld de,LeafSprite
+.AreGuy1
+    ld hl,vNPCSprites
+    jr LoadPlayerSpriteGraphicsCommon
 
-LoadSurfingPlayerSpriteGraphics::
-	ld de,SeelSprite
-	ld hl,vNPCSprites
-	jr LoadPlayerSpriteGraphicsCommon
+LoadSurfingPlayerSpriteGraphics:: ; 1055 (0:1055)
+    ld de,SeelSprite
+    ld hl,vNPCSprites
+    jr LoadPlayerSpriteGraphicsCommon
 
-LoadBikePlayerSpriteGraphics::
-	ld de,RedCyclingSprite
-	ld hl,vNPCSprites
+LoadBikePlayerSpriteGraphics:: ; 105d (0:105d)
+    ld de,RedCyclingSprite
+    ld a, [wd798]
+    bit 2, a
+    jr z, .AreGuy2
+    ld de,LeafCyclingSprite
+.AreGuy2
+    ld hl,vNPCSprites
 
 LoadPlayerSpriteGraphicsCommon::
 	push de

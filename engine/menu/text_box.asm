@@ -525,7 +525,7 @@ TwoOptionMenuStrings:
 	db 4,3,0
 	dw .YesNoMenu
 	db 6,3,0
-	dw .NorthWestMenu
+	dw .BoyGirlMenu
 	db 6,3,0
 	dw .SouthEastMenu
 	db 6,3,0
@@ -545,9 +545,9 @@ TwoOptionMenuStrings:
 .YesNoMenu
 	db   "YES"
 	next "NO@"
-.NorthWestMenu
-	db   "NORTH"
-	next "WEST@"
+.BoyGirlMenu
+    db   "BOY",
+	next "GIRL@"
 .SouthEastMenu
 	db   "SOUTH"
 	next "EAST@"

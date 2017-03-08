@@ -1,31 +1,51 @@
 ChoosePlayerName:
-	call OakSpeechSlidePicRight
-	ld de, DefaultNamesPlayer
-	call DisplayIntroNameTextBox
-	ld a, [wCurrentMenuItem]
-	and a
-	jr z, .customName
-	ld hl, DefaultNamesPlayerList
-	call GetDefaultName
-	ld de, wPlayerName
-	call OakSpeechSlidePicLeft
-	jr .done
-.customName
-	ld hl, wPlayerName
-	xor a ; NAME_PLAYER_SCREEN
-	ld [wNamingScreenType], a
-	call DisplayNamingScreen
-	ld a, [wcf4b]
-	cp "@"
-	jr z, .customName
-	call ClearScreen
-	call Delay3
-	ld de, RedPicFront
-	ld b, BANK(RedPicFront)
-	call IntroDisplayPicCenteredOrUpperRight
-.done
-	ld hl, YourNameIsText
-	jp PrintText
+   call Func_6a12
+    ld a, [wd798]   ; Added gender check
+    bit 2, a        ; Added gender check
+    jr nz, .AreGirl ; Skip to girl names if you are a girl instead
+    ld de, DefaultNamesPlayer ; $6aa8
+    call DisplayIntroNameTextBox
+    ld a, [wCurrentMenuItem] ; wCurrentMenuItem
+    and a
+    jr z, .asm_697a
+    ld hl, DefaultNamesPlayerList ; $6af2
+    call Func_6ad6
+    ld de, wPlayerName ; wd158
+    call Func_69ec
+    jr .asm_6999
+.AreGirl ; Copy of the boy naming routine, just with girl's names
+    ld de, DefaultNamesGirl ; $6aa8
+    call DisplayIntroNameTextBox
+    ld a, [wCurrentMenuItem] ; wCurrentMenuItem
+    and a
+    jr z, .asm_697a
+    ld hl, DefaultNamesGirlList ; $6af2
+    call Func_6ad6
+    ld de, wPlayerName ; wd158
+    call Func_69ec
+    jr .asm_6999 ; End of new Girl Names routine
+.asm_697a
+    ld hl, wPlayerName ; wd158
+    xor a
+    ld [wd07d], a
+    call DisplayNamingScreen
+    ld a, [wcf4b]
+    cp $50
+    jr z, .asm_697a
+    call ClearScreen
+    call Delay3
+    ld de, RedPicFront ; $6ede
+    ld b, BANK(RedPicFront)
+    ld a, [wd798] ; Added gender check
+    bit 2, a      ; Added gender check
+    jr z, .AreBoy3
+    ld de, LeafPicFront
+    ld b, BANK(LeafPicFront)
+.AreBoy3
+    call IntroPredef3B
+.asm_6999
+    ld hl, YourNameIsText
+    jp PrintText
 
 YourNameIsText:
 	TX_FAR _YourNameIsText
@@ -194,6 +214,13 @@ DefaultNamesPlayer:
 	next "ASH"
 	next "JACK"
 	db   "@"
+	
+DefaultNamesGirl:
+    db   "NEW NAME"
+    next "SCARLET"
+    next "LEAF"
+    next "NICOLE"
+    db   "@"
 
 DefaultNamesRival:
 	db   "NEW NAME"
@@ -210,6 +237,13 @@ DefaultNamesPlayer:
 	next "GARY"
 	next "JOHN"
 	db   "@"
+	
+DefaultNamesGirl:
+    db   "NEW NAME"
+    next "SCARLET"
+    next "LEAF"
+    next "NICOLE"
+    db   "@"
 
 DefaultNamesRival:
 	db   "NEW NAME"
@@ -266,6 +300,11 @@ DefaultNamesRivalList:
 	db "RED@"
 	db "ASH@"
 	db "JACK@"
+DefaultNamesGirlList:
+    db "NEW NAME@"
+	db "SCARLET@"
+	db "LEAF@"
+	db "NICOLE@"
 ENDC
 
 TextTerminator_6b20:

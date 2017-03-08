@@ -5,7 +5,7 @@ Route15Mons:
 		db 26,DITTO
 		db 23,BELLSPROUT
 		db 26,VENONAT
-		db 22,VENONAT
+		db 22,NOCTOWL
 		db 28,VENONAT
 		db 26,WEEPINBELL
 		db 30,GLOOM
