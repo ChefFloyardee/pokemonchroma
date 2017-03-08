@@ -1,5 +1,5 @@
 ChoosePlayerName:
-   call Func_6a12
+   call OakSpeechSlidePicRight
     ld a, [wd798]   ; Added gender check
     bit 2, a        ; Added gender check
     jr nz, .AreGirl ; Skip to girl names if you are a girl instead
@@ -9,9 +9,9 @@ ChoosePlayerName:
     and a
     jr z, .asm_697a
     ld hl, DefaultNamesPlayerList ; $6af2
-    call Func_6ad6
+    call GetDefaultName
     ld de, wPlayerName ; wd158
-    call Func_69ec
+    call OakSpeechSlidePicLeft
     jr .asm_6999
 .AreGirl ; Copy of the boy naming routine, just with girl's names
     ld de, DefaultNamesGirl ; $6aa8
@@ -20,14 +20,14 @@ ChoosePlayerName:
     and a
     jr z, .asm_697a
     ld hl, DefaultNamesGirlList ; $6af2
-    call Func_6ad6
+    call GetDefaultName
     ld de, wPlayerName ; wd158
-    call Func_69ec
+    call OakSpeechSlidePicLeft
     jr .asm_6999 ; End of new Girl Names routine
 .asm_697a
     ld hl, wPlayerName ; wd158
     xor a
-    ld [wd07d], a
+    ld [wNamingScreenType], a
     call DisplayNamingScreen
     ld a, [wcf4b]
     cp $50
@@ -42,7 +42,7 @@ ChoosePlayerName:
     ld de, LeafPicFront
     ld b, BANK(LeafPicFront)
 .AreBoy3
-    call IntroPredef3B
+    call IntroDisplayPicCenteredOrUpperRight
 .asm_6999
     ld hl, YourNameIsText
     jp PrintText

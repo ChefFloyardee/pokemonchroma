@@ -3120,6 +3120,9 @@ wSecondLockTrashCanIndex:: ; d743
 	ds 2
 wEventFlags:: ; d747
 	ds 320
+	
+wd798:: ; d798
+    ds 1
 
 wLinkEnemyTrainerName:: ; d887
 ; linked game's trainer name

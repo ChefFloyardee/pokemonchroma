@@ -94,7 +94,7 @@ OakSpeech:
     ld de,LeafPicFront
     ld bc,(Bank(LeafPicFront) << 8) | $00
 .NotLeaf1:
-    call IntroPredef3B      ; displays player pic?
+    call IntroDisplayPicCenteredOrUpperRight      ; displays player pic?
 	call MovePicLeft
 	ld hl,IntroducePlayerText
 	call PrintText
@@ -119,7 +119,7 @@ OakSpeech:
     ld de,LeafPicFront
     ld bc,(Bank(LeafPicFront) << 8) | $00
 .NotLeaf2:
-    call IntroPredef3B
+    call IntroDisplayPicCenteredOrUpperRight
 	call GBFadeInFromWhite
 	ld a,[wd72d]
 	and a
@@ -148,7 +148,7 @@ OakSpeech:
     call CopyVideoData
     ld de,ShrinkPic1
     ld bc,(BANK(ShrinkPic1) << 8) | $00
-    call IntroPredef3B
+    call IntroDisplayPicCenteredOrUpperRight
 	ld c,4
 	call DelayFrames
 	ld de,ShrinkPic2
@@ -186,7 +186,7 @@ OakSpeechText1:
 	db "@"
 OakSpeechText2:
 	TX_FAR _OakSpeechText2A
-	TX_CRY_NIDORINO
+	TX_CRY_NIDORINA
 	TX_FAR _OakSpeechText2B
 	db "@"
 IntroducePlayerText:
@@ -273,7 +273,7 @@ BoyGirlChoice::
 InitBoyGirlTextBoxParameters::
     ld a, $1 ; loads the value for the unused North/West choice, that was changed to say Boy/Girl
     ld [wTwoOptionMenuID], a
-    hlCoord 11, 7 
+    coord hl, 11, 7 
     ld bc, $80c
     ret
     
