@@ -133,9 +133,9 @@ EvosMovesPointerTable:
 	dw Mon143_EvosMoves
 	dw Mon129_EvosMoves
 	dw Mon174_EvosMoves
-	dw Mon175_EvosMoves ;MissingNo
+	dw Mon175_EvosMoves
 	dw Mon089_EvosMoves
-	dw Mon176_EvosMoves ;MissingNo
+	dw Mon176_EvosMoves
 	dw Mon099_EvosMoves
 	dw Mon091_EvosMoves
 	dw Mon177_EvosMoves ;MissingNo
