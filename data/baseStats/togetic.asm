@@ -8,7 +8,7 @@ db FAIRY ; species type 1
 db FLYING ; species type 2
 db 75 ; catch rate
 db 114 ; base exp yield
-INCBIN "pic/bmon/togetic.pic",0,1 ; 55, sprite dimensions
+INCBIN "pic/bmon/togetic.pic",0,1 ; 77, sprite dimensions
 dw TogeticPicFront
 dw TogeticPicBack
 ; attacks known at lvl 0
