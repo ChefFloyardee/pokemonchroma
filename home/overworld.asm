@@ -274,20 +274,34 @@ OverworldLoopLessDelay::
 	call UpdateSprites
 
 .moveAhead2
-	ld hl,wFlags_0xcd60
-	res 2,[hl]
-	ld a,[wWalkBikeSurfState]
-	dec a ; riding a bike?
-	jr nz,.normalPlayerSpriteAdvancement
-	ld a,[wd736]
-	bit 6,a ; jumping a ledge?
-	jr nz,.normalPlayerSpriteAdvancement
-	call DoBikeSpeedup
+ld hl,wFlags_0xcd60
+    res 2,[hl]
+    ld a,[wWalkBikeSurfState]
+    dec a ; riding a bike?
+    jr nz,.normalPlayerSpriteAdvancement
+    ld a,[wd736]
+    bit 6,a ; jumping a ledge?
+    jr nz,.normalPlayerSpriteAdvancement
+    call BikeSpeedup ; if riding a bike and not jumping a ledge
+    call BikeSpeedup ; added
+    call BikeSpeedup ; added
+    jr .notRunning
 .normalPlayerSpriteAdvancement
-	call AdvancePlayerSprite
-	ld a,[wWalkCounter]
-	and a
-	jp nz,CheckMapConnections ; it seems like this check will never succeed (the other place where CheckMapConnections is run works)
+; Make you surf at bike speed
+    ld a,[wWalkBikeSurfState]
+    cp a, $02
+    jr z, .surfFaster
+; Add running shoes
+    ld a, [hJoyHeld] ; Check what buttons are being pressed
+    and B_BUTTON ; Are you holding B?
+    jr z, .notRunning ; If you aren't holding B, skip ahead to step normally.
+    .surfFaster
+    call BikeSpeedup ; Make you go faster if you were holding B
+    .notRunning ; Normal code resumes here
+    call AdvancePlayerSprite
+    ld a,[wWalkCounter]
+    and a
+    jp nz,CheckMapConnections ; it seems like this check will never succeed (the other place where CheckMapConnections is run works)
 ; walking animation finished
 	ld a,[wd730]
 	bit 7,a
