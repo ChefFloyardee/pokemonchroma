@@ -25,7 +25,7 @@ MoveEnd:
 	move GUILLOTINE,   OHKO_EFFECT,                  1, NORMAL,    30,  5
 	move RAZOR_WIND,   CHARGE_EFFECT,               80, NORMAL,   100, 10
 	move SWORDS_DANCE, ATTACK_UP2_EFFECT,            0, NORMAL,   100, 30
-	move CUT,          NO_ADDITIONAL_EFFECT,        50, NORMAL,    95, 30
+	move CUT,          NO_ADDITIONAL_EFFECT,        60, GRASS,    100, 25
 	move GUST,         NO_ADDITIONAL_EFFECT,        40, FLYING,   100, 35
 	move WING_ATTACK,  NO_ADDITIONAL_EFFECT,        60, FLYING,   100, 35
 	move WHIRLWIND,    SWITCH_AND_TELEPORT_EFFECT,   0, NORMAL,    85, 20
@@ -158,7 +158,7 @@ MoveEnd:
 	move BUBBLE,       SPEED_DOWN_SIDE_EFFECT,      40, WATER,    100, 30
 	move DIZZY_PUNCH,  CONFUSION_SIDE_EFFECT,       70, NORMAL,   100, 10
 	move SPORE,        SLEEP_EFFECT,                 0, GRASS,    100, 15
-	move FLASH,        ACCURACY_DOWN1_EFFECT,        0, NORMAL,    70, 20
+	move FLASH,        ACCURACY_DOWN1_EFFECT,        0, ELECTRIC, 100, 20
 	move PSYWAVE,      SPECIAL_DAMAGE_EFFECT,        1, PSYCHIC,  100, 15
 	move SPLASH,       SPLASH_EFFECT,                0, NORMAL,   100, 40
 	move ACID_ARMOR,   DEFENSE_UP2_EFFECT,           0, POISON,   100, 40
