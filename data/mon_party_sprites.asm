@@ -86,4 +86,5 @@ MonPartyData:
 	dn SPRITE_MON, SPRITE_WATER             ;Crobat/Chinchou
 	dn SPRITE_WATER, SPRITE_FAIRY           ;Lanturn/Pichu
 	dn SPRITE_FAIRY, SPRITE_FAIRY           ;Cleffa/Igglybuff
-	dn SPRITE_FAIRY, 0                      ;Togepi/Padding
+	dn SPRITE_FAIRY, SPRITE_FAIRY           ;Togepi/Togetic
+	dn SPRITE_BIRD_M, 0                     ;Natu/Padding

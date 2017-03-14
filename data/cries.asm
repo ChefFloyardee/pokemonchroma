@@ -139,7 +139,7 @@ CryData:
     db $19, $DD, $01; Togetic
 	db $20, $EE, $E0; Kingler
 	db $18, $6F, $E0; Cloyster
-	db $00, $00, $00; MissingNo.
+	db $21, $20, $60; Natu
 	db $06, $A8, $90; Electrode
 	db $19, $AA, $20; Clefable
 	db $12, $FF, $FF; Weezing

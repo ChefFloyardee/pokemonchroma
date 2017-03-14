@@ -175,5 +175,7 @@ const_value = 1
 	const DEX_CLEFFA     ; 173
 	const DEX_IGGLYBUFF  ; 174
 	const DEX_TOGEPI     ; 175
+	const DEX_TOGETIC    ; 176
+	const DEX_NATU       ; 177
 	
-NUM_POKEMON    EQU 176
+NUM_POKEMON    EQU 177

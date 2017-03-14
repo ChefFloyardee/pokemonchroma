@@ -229,3 +229,23 @@ _TogepiDexEntry::
 	next "it stores in its"
 	next "shell"
 	dex
+
+_TogeticDexEntry::
+	text "To shares its"
+	next "happiness, it"
+	next "flies around the"
+
+	page "world seeking"
+	next "kind-hearted"
+	next "people"
+	dex
+
+_NatuDexEntry::
+	text "Because its wings"
+	next "aren't yet fully"
+	next "grown, it has to"
+
+	page "hop to get around."
+	next "It is always star-"
+	next "ing at something"
+	dex

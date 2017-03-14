@@ -135,10 +135,10 @@ PokedexEntryPointers:
 	dw IgglybuffDexEntry
 	dw TogepiDexEntry
 	dw MukDexEntry
-	dw MissingnoDexEntry
+	dw TogeticDexEntry
 	dw KinglerDexEntry
 	dw CloysterDexEntry
-	dw MissingNoDexEntry
+	dw NatuDexEntry
 	dw ElectrodeDexEntry
 	dw ClefableDexEntry
 	dw WeezingDexEntry
@@ -1146,6 +1146,13 @@ MukDexEntry:
 	dw 660
 	TX_FAR _MukDexEntry
 	db "@"
+	
+TogeticDexEntry:
+	db "Happiness@"
+	db 2,0
+	dw 71
+	TX_FAR _TogeticDexEntry
+	db "@"
 
 KinglerDexEntry:
 	db "Pincer@"
@@ -1159,6 +1166,13 @@ CloysterDexEntry:
 	db 4,11
 	dw 2920
 	TX_FAR _CloysterDexEntry
+	db "@"
+	
+NatuDexEntry:
+	db "Tiny Bird@"
+	db 0,8
+	dw 44
+	TX_FAR _NatuDexEntry
 	db "@"
 
 ElectrodeDexEntry:

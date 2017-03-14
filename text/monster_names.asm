@@ -138,7 +138,7 @@ MonsterNames:
 	db "Togetic@@@"
 	db "Kingler@@@"
 	db "Cloyster@@"
-	db "MISSINGNO."
+	db "Natu@@@@@@"
 	db "Electrode@"
 	db "Clefable@@"
 	db "Weezing@@@"
