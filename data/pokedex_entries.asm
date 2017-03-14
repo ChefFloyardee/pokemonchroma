@@ -135,7 +135,7 @@ PokedexEntryPointers:
 	dw IgglybuffDexEntry
 	dw TogepiDexEntry
 	dw MukDexEntry
-	dw TogeticDexEntry
+	dw MissingnoDexEntry
 	dw KinglerDexEntry
 	dw CloysterDexEntry
 	dw MissingNoDexEntry
@@ -1145,13 +1145,6 @@ MukDexEntry:
 	db 3,11
 	dw 660
 	TX_FAR _MukDexEntry
-	db "@"
-	
-TogeticDexEntry:
-	db "Happiness@"
-	db 2,0
-	dw 71
-	TX_FAR _TogeticDexEntry
 	db "@"
 
 KinglerDexEntry:

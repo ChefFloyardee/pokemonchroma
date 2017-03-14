@@ -229,13 +229,3 @@ _TogepiDexEntry::
 	next "it stores in its"
 	next "shell"
 	dex
-	
-_TogeticDexEntry::
-	text "To shares its"
-	next "happiness, it"
-	next "flies around the"
-
-	page "world seeking"
-	next "kind-hearted"
-	next "people"
-	dex

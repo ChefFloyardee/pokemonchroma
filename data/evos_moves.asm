@@ -135,7 +135,7 @@ EvosMovesPointerTable:
 	dw Mon174_EvosMoves
 	dw Mon175_EvosMoves
 	dw Mon089_EvosMoves
-	dw Mon176_EvosMoves
+	dw Mon176_EvosMoves ;MissingNo
 	dw Mon099_EvosMoves
 	dw Mon091_EvosMoves
 	dw Mon177_EvosMoves ;MissingNo
@@ -2986,7 +2986,6 @@ Mon174_EvosMoves:
 Mon175_EvosMoves:
 ;TOGEPI
 ;Evolutions
-	db EV_LEVEL,15,TOGETIC
 	db 0
 ;Learnset
 	db 1,POUND
@@ -3028,24 +3027,10 @@ Mon089_EvosMoves:
 	db 0
 
 Mon176_EvosMoves:
-;TOGETIC
+;MISSINGNO
 ;Evolutions
 	db 0
 ;Learnset
-	db 1,POUND
-	db 5,GROWL
-	db 9,METRONOME
-	db 13,LOVELY_KISS
-	db 15,WING_ATTACK
-	db 17,WITHDRAW
-	db 21,BABYDOLLEYES
-	db 25,HYPER_VOICE
-	db 29,DOUBLE_TEAM
-	db 33,ANCIENTPOWER
-	db 37,MINIMIZE
-	db 41,DAZZLINGLEAM
-	db 45,DOUBLE_EDGE
-	db 49,GIGA_IMPACT
 	db 0
 
 Mon099_EvosMoves:

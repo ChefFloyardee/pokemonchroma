@@ -136,7 +136,7 @@ const_value = 1
 	const IGGLYBUFF    ; $86
 	const TOGEPI       ; $87
 	const MUK          ; $88
-	const TOGETIC      ; $89
+	const MISSINGNO_89 ; $89
 	const KINGLER      ; $8A
 	const CLOYSTER     ; $8B
 	const MISSINGNO_8C ; $8C
