@@ -10,7 +10,7 @@ RedsHouse1FText1: ; Mom
 	ld a, [wd72e]
 	bit 3, a
 	jr nz, .heal ; if player has received a Pokémon from Oak, heal team
-	ld a, [wPlayerGender]
+	ld a, [wd798]
 	and a
 	jr nz, .girl
 	ld hl, MomWakeUpText
@@ -66,11 +66,10 @@ RedsHouse1FText2: ; TV
 	cp SPRITE_FACING_UP
 	ld hl,TVWrongSideText
 	jr nz,.notUp
-	ld a, [wPlayerGender]
+	ld a, [wd798]
 	and a
 	jr nz, .girl
 	ld hl,StandByMeText
-	jr .done
 .girl
 	ld hl,WizardOfOzText
 .notUp
