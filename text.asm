@@ -2736,7 +2736,7 @@ _SetToBoxText::
 	TX_RAM wBoxMonNicks
 	text " was"
 	cont "sent to #mon"
-	cont "BOX @"
+	cont "Box @"
 	TX_RAM wcf4b
 	text " on PC!"
 	done
@@ -2750,7 +2750,7 @@ _BoxIsFullText::
 	cont "accept any more!"
 
 	para "Change the Box at"
-	line "a #mon CENTER!"
+	line "a #mon Center!"
 	done
 
 INCLUDE "text/maps/pallet_town.asm"
@@ -2933,7 +2933,7 @@ _TeachMachineMoveText::
 	para "Teach @"
 	TX_RAM wcf4b
 	text ""
-	line "to a #MON?"
+	line "to a #mon?"
 	done
 
 _MonCannotLearnMachineMoveText::

@@ -1003,6 +1003,7 @@ Mon064_EvosMoves:
 ;KADABRA
 ;Evolutions
 	db EV_ITEM,LINK_CABLE,1,ALAKAZAM
+	db EV_TRADE,1,ALAKAZAM
 	db 0
 ;Learnset
 	db 1,TELEPORT
@@ -1024,6 +1025,7 @@ Mon075_EvosMoves:
 ;GRAVELER
 ;Evolutions
 	db EV_ITEM,LINK_CABLE,1,GOLEM
+	db EV_TRADE,1,GOLEM
 	db 0
 ;Learnset
 	db 1,TACKLE
@@ -1073,6 +1075,7 @@ Mon067_EvosMoves:
 ;MACHOKE
 ;Evolutions
 	db EV_ITEM,LINK_CABLE,1,MACHAMP
+	db EV_TRADE,1,MACHAMP
 	db 0
 ;Learnset
 	db 1,LOW_KICK
@@ -3231,6 +3234,7 @@ Mon093_EvosMoves:
 ;HAUNTER
 ;Evolutions
 	db EV_ITEM,LINK_CABLE,1,GENGAR
+	db EV_TRADE,1,GENGAR
 	db 0
 ;Learnset
     db 1,LICK
