@@ -2165,3 +2165,7 @@ TogeticPicFront::     INCBIN "pic/bmon/togetic.pic"
 TogeticPicBack::      INCBIN "pic/monback/togeticb.pic"
 NatuPicFront::        INCBIN "pic/bmon/natu.pic"
 NatuPicBack::         INCBIN "pic/monback/natub.pic"
+
+SECTION "bank31",ROMX,BANK[$31]
+
+INCLUDE "engine/battle/physical_special_split.asm"

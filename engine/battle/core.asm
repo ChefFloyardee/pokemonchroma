@@ -2916,11 +2916,11 @@ SwapMovesInMenu:
 PrintMenuItem:
 	xor a
 	ld [H_AUTOBGTRANSFERENABLED], a
-	coord hl, 0, 8
-	ld b, 3
-	ld c, 9
+	hlCoord 0, 8
+	ld b, $3
+	ld c, $9
 	call TextBoxBorder
-	ld a, [wPlayerDisabledMove]
+	ld a, [W_PLAYERDISABLEDMOVE]
 	and a
 	jr z, .notDisabled
 	swap a
@@ -2929,10 +2929,10 @@ PrintMenuItem:
 	ld a, [wCurrentMenuItem]
 	cp b
 	jr nz, .notDisabled
-	coord hl, 1, 10
+	hlCoord 1, 10
 	ld de, DisabledText
 	call PlaceString
-	jr .moveDisabled
+	jp .moveDisabled
 .notDisabled
 	ld hl, wCurrentMenuItem
 	dec [hl]
@@ -2948,8 +2948,8 @@ PrintMenuItem:
 	                            ; isn't actually selected (just pointed to by the cursor)
 	ld a, [wPlayerMonNumber]
 	ld [wWhichPokemon], a
-	ld a, BATTLE_MON_DATA
-	ld [wMonDataLocation], a
+	ld a, $4
+	ld [wcc49], a
 	callab GetMaxPP
 	ld hl, wCurrentMenuItem
 	ld c, [hl]
@@ -2960,24 +2960,38 @@ PrintMenuItem:
 	ld a, [hl]
 	and $3f
 	ld [wcd6d], a
-; print TYPE/<type> and <curPP>/<maxPP>
-	coord hl, 1, 9
-	ld de, TypeText
+	ld a, [wPlayerSelectedMove]
+	call PhysicalSpecialSplit
+	cp a,$02
+	jp z, .OtherTextShow
+	cp a,$01
+	jp nz, .PhysicalTextShow
+	hlCoord 1, 9
+	ld de,SpecialText
 	call PlaceString
-	coord hl, 7, 11
+	jp .RestOfTheRoutineThing
+.PhysicalTextShow
+	hlCoord 1,9
+	ld de,PhysicalText
+	call PlaceString
+	jr .RestOfTheRoutineThing
+.OtherTextShow
+	hlCoord 1,9
+	ld de,OtherText
+	call PlaceString
+.RestOfTheRoutineThing
+	hlCoord 7, 11
 	ld [hl], "/"
-	coord hl, 5, 9
-	ld [hl], "/"
-	coord hl, 5, 11
+	hlCoord 5, 11
 	ld de, wcd6d
-	lb bc, 1, 2
+	ld bc, $102
 	call PrintNumber
-	coord hl, 8, 11
-	ld de, wMaxPP
-	lb bc, 1, 2
+	hlCoord 8, 11
+	ld de, wd11e
+	ld bc, $102
 	call PrintNumber
 	call GetCurrentMove
-	coord hl, 2, 10
+	hlCoord 2, 10
 	predef PrintMoveType
 .moveDisabled
 	ld a, $1
@@ -2985,11 +2999,17 @@ PrintMenuItem:
 	jp Delay3
 
 DisabledText:
-	db "disabled!@"
+	db "Disabled!@"
 
-TypeText:
-	db "TYPE@"
+OtherText:
+	db "Status@"
 
+PhysicalText:
+	db "Physical@"
+
+SpecialText:
+	db "Special@"
+	
 SelectEnemyMove:
 	ld a, [wLinkState]
 	sub LINK_STATE_BATTLING
@@ -4249,11 +4269,12 @@ GetDamageVarsForPlayerAttack:
 	ld hl, wPlayerMovePower
 	ld a, [hli]
 	and a
-	ld d, a ; d = move power
-	ret z ; return if move power is zero
-	ld a, [hl] ; a = [wPlayerMoveType]
-	cp FIRE ; types >= FIRE are all special
-	jr nc, .specialAttack
+	ld d, a         ;*D = attack base, used later
+	ret z           ;return if attack is zero
+	ld a,[wPlayerSelectedMove]
+	call PhysicalSpecialSplit
+	cp a, SPECIAL
+	jr z, .specialAttack
 .physicalAttack
 	ld hl, wEnemyMonDefense
 	ld a, [hli]
@@ -4265,6 +4286,7 @@ GetDamageVarsForPlayerAttack:
 ; if the enemy has used Reflect, double the enemy's defense
 	sla c
 	rl b
+	call CapBCAt1023
 .physicalAttackCritCheck
 	ld hl, wBattleMonAttack
 	ld a, [wCriticalHitOrOHKO]
@@ -4295,6 +4317,7 @@ GetDamageVarsForPlayerAttack:
 ; if the enemy has used Light Screen, double the enemy's special
 	sla c
 	rl b
+	call CapBCAt1023
 ; reflect and light screen boosts do not cap the stat at 999, so weird things will happen during stats scaling if
 ; a Pokemon with 512 or more Defense has ued Reflect, or if a Pokemon with 512 or more Special has used Light Screen
 .specialAttackCritCheck
@@ -4329,7 +4352,11 @@ GetDamageVarsForPlayerAttack:
 	rr c
 	srl b
 	rr c
-; defensive stat can actually end up as 0, leading to a division by 0 freeze during damage calculation
+	ld a, c
+	or b
+	jr nz, .next1
+	inc c
+.next1
 ; hl /= 4 (scale player's offensive stat)
 	srl h
 	rr l
@@ -4340,8 +4367,7 @@ GetDamageVarsForPlayerAttack:
 	jr nz, .next
 	inc l ; if the player's offensive stat is 0, bump it up to 1
 .next
-	ld b, l ; b = player's offensive stat (possibly scaled)
-	        ; (c already contains enemy's defensive stat (possibly scaled))
+	ld b, l ; b = player's offensive stat (possibly scaled) (c already contains enemy's defensive stat (possibly scaled))
 	ld a, [wBattleMonLevel]
 	ld e, a ; e = level
 	ld a, [wCriticalHitOrOHKO]
@@ -4351,6 +4377,13 @@ GetDamageVarsForPlayerAttack:
 .done
 	ld a, 1
 	and a
+	ret
+	
+CapBCAt1023:
+	ld a, b
+	cp 4
+	ret c
+	lb bc, 3, 255
 	ret
 
 ; sets b, c, d, and e for the CalculateDamage routine in the case of an attack by the enemy mon
@@ -4363,10 +4396,11 @@ GetDamageVarsForEnemyAttack:
 	ld a, [hli]
 	ld d, a ; d = move power
 	and a
-	ret z ; return if move power is zero
-	ld a, [hl] ; a = [wEnemyMoveType]
-	cp FIRE ; types >= FIRE are all special
-	jr nc, .specialAttack
+	ret z
+	ld a,[wEnemySelectedMove]
+	call PhysicalSpecialSplit
+	cp a, SPECIAL
+	jr z, .specialAttack
 .physicalAttack
 	ld hl, wBattleMonDefense
 	ld a, [hli]
@@ -4378,6 +4412,7 @@ GetDamageVarsForEnemyAttack:
 ; if the player has used Reflect, double the player's defense
 	sla c
 	rl b
+	call CapBCAt1023
 .physicalAttackCritCheck
 	ld hl, wEnemyMonAttack
 	ld a, [wCriticalHitOrOHKO]
@@ -4408,6 +4443,7 @@ GetDamageVarsForEnemyAttack:
 ; if the player has used Light Screen, double the player's special
 	sla c
 	rl b
+	call CapBCAt1023
 ; reflect and light screen boosts do not cap the stat at 999, so weird things will happen during stats scaling if
 ; a Pokemon with 512 or more Defense has ued Reflect, or if a Pokemon with 512 or more Special has used Light Screen
 .specialAttackCritCheck
@@ -4453,8 +4489,7 @@ GetDamageVarsForEnemyAttack:
 	jr nz, .next
 	inc l ; if the enemy's offensive stat is 0, bump it up to 1
 .next
-	ld b, l ; b = enemy's offensive stat (possibly scaled)
-	        ; (c already contains player's defensive stat (possibly scaled))
+	ld b, l ; b = enemy's offensive stat (possibly scaled) (c already contains player's defensive stat (possibly scaled))
 	ld a, [wEnemyMonLevel]
 	ld e, a
 	ld a, [wCriticalHitOrOHKO]
@@ -4685,8 +4720,6 @@ CriticalHitTest:
 	ld [wCriticalHitOrOHKO], a
 	ld a, [H_WHOSETURN]
 	and a
-	ld a, [wEnemyMonSpecies]
-	jr nz, .handleEnemy
 	ld a, [wBattleMonSpecies]
 	ld hl, wPlayerMovePower
 	ld de, wPlayerBattleStatus2
@@ -4783,12 +4816,10 @@ HandleCounterMove:
 	ld a,[de]
 	and a
 	ret z ; miss if the opponent's last selected move's Base Power is 0.
-; check if the move the target last selected was Normal or Fighting type
-	inc de
-	ld a,[de]
-	and a ; normal type
-	jr z,.counterableType
-	cp a,FIGHTING
+; check if the move the target last selected was Physical
+	ld a,[hl]
+	call PhysicalSpecialSplit
+	cp a, PHYSICAL
 	jr z,.counterableType
 ; if the move wasn't Normal or Fighting type, miss
 	xor a
@@ -4798,7 +4829,7 @@ HandleCounterMove:
 	ld a,[hli]
 	or [hl]
 	ret z ; If we made it here, Counter still misses if the last move used in battle did no damage to its target.
-	      ; wDamage is shared by both players, so Counter may strike back damage dealt by the Counter user itself
+	      ; W_DAMAGE is shared by both players, so Counter may strike back damage dealt by the Counter user itself
 	      ; if the conditions meet, even though 99% of the times damage will come from the target.
 ; if it did damage, double it
 	ld a,[hl]
@@ -5359,10 +5390,10 @@ AdjustDamageForMoveType:
  	jr c, .nve
  	set 1, [hl]
  	jr .multiply
-    .nve
+.nve
  	set 0, [hl]
 ; apply damage multiplier
-    .multiply
+.multiply
 	call Multiply
 	
 ; divide by 10
@@ -5384,7 +5415,7 @@ AdjustDamageForMoveType:
  	ld a, $7f
  	ld [wDamageMultipliers], a
  	inc a
- 	ld [W_MOVEMISSED], a
+ 	ld [wMoveMissed], a
  	pop bc
  	pop hl
  	ret
@@ -7552,7 +7583,7 @@ CheckDefrost:
 	and a
 	jr nz, .opponent
 	;player [attacker]
-	ld a, [W_PLAYERMOVETYPE]
+	ld a, [wPlayerMoveType]
 	sub a, FIRE
 	ret nz ; return if type of move used isn't fire
 	ld [wEnemyMonStatus], a	; set opponent status to 00 ["defrost" a frozen monster]
@@ -7565,7 +7596,7 @@ CheckDefrost:
 	ld hl, FireDefrostedText
 	jr .common
 .opponent
-	ld a, [W_ENEMYMOVETYPE]	; same as above with addresses swapped
+	ld a, [wEnemyMoveType]	; same as above with addresses swapped
 	sub a, FIRE
 	ret nz
 	ld [wBattleMonStatus], a
