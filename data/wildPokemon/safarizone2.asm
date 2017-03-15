@@ -24,5 +24,5 @@ ZoneMons2:
 	ENDC
 	db 32,VENOMOTH
 	db 26,CHANSEY
-	db 28,TAUROS
+	db 28,CHANSEY
 	db $00
