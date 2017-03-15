@@ -7978,12 +7978,12 @@ PrintStatText:
 	jp CopyData
 
 StatsTextStrings:
-	db "ATTACK@"
-	db "DEFENSE@"
-	db "SPEED@"
-	db "SPECIAL@"
-	db "ACCURACY@"
-	db "EVADE@"
+	db "Attack@"
+	db "Defense@"
+	db "Speed@"
+	db "Special@"
+	db "Accuracy@"
+	db "Evade@"
 
 StatModifierRatios:
 ; first byte is numerator, second byte is denominator
