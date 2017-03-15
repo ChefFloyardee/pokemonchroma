@@ -3141,7 +3141,6 @@ ExecutePlayerMove:
 	ld [wMoveMissed], a
 	ld [wMonIsDisobedient], a
 	ld [wMoveDidntMiss], a
-	ld a, $a
 	ld [wDamageMultipliers], a
 	ld a, [wActionResultOrTookBattleTurn]
 	and a ; has the player already used the turn (e.g. by using an item, trying to run or switching pokemon)
@@ -3421,6 +3420,17 @@ CheckPlayerStatusConditions:
 	ld [wPlayerUsedMove],a
 	ld hl,ExecutePlayerMoveDone ; player can't move this turn
 	jp .returnToHL
+	
+.defrostMon ; New routine to thaw Pokemon, called from FrozenCheck
+	ld hl, wBattleMonStatus
+	res FRZ, [hl]
+	xor a
+	inc a
+	ld [H_WHOSETURN],a
+	ld hl, FireDefrostedText
+	call PrintText
+	xor a
+	ld [H_WHOSETURN],a
 
 .HeldInPlaceCheck
 	ld a,[wEnemyBattleStatus1]
@@ -3928,7 +3938,7 @@ PrintMoveFailureText:
 .playersTurn
 	ld hl, DoesntAffectMonText
 	ld a, [wDamageMultipliers]
-	and $7f
+	cp $7f
 	jr z, .gotTextToPrint
 	ld hl, AttackMissedText
 	ld a, [wCriticalHitOrOHKO]
@@ -4669,16 +4679,7 @@ JumpToOHKOMoveEffect:
 	ret
 
 
-UnusedHighCriticalMoves:
-	db KARATE_CHOP
-	db RAZOR_LEAF
-	db CRABHAMMER
-	db SLASH
-	db $FF
-
 ; determines if attack is a critical hit
-; azure heights claims "the fastest pokémon (who are,not coincidentally,
-; among the most popular) tend to CH about 20 to 25% of the time."
 CriticalHitTest:
 	xor a
 	ld [wCriticalHitOrOHKO], a
@@ -4687,14 +4688,6 @@ CriticalHitTest:
 	ld a, [wEnemyMonSpecies]
 	jr nz, .handleEnemy
 	ld a, [wBattleMonSpecies]
-.handleEnemy
-	ld [wd0b5], a
-	call GetMonHeader
-	ld a, [wMonHBaseSpeed]
-	ld b, a
-	srl b                        ; (effective (base speed/2))
-	ld a, [H_WHOSETURN]
-	and a
 	ld hl, wPlayerMovePower
 	ld de, wPlayerBattleStatus2
 	jr z, .calcCriticalHitProbability
@@ -4704,54 +4697,60 @@ CriticalHitTest:
 	ld a, [hld]                  ; read base power from RAM
 	and a
 	ret z                        ; do nothing if zero
-	dec hl
-	ld c, [hl]                   ; read move id
-	ld a, [de]
-	bit GettingPumped, a         ; test for focus energy
-	jr nz, .focusEnergyUsed      ; bug: using focus energy causes a shift to the right instead of left,
-	                             ; resulting in 1/4 the usual crit chance
-	sla b                        ; (effective (base speed/2)*2)
-	jr nc, .noFocusEnergyUsed
-	ld b, $ff                    ; cap at 255/256
-	jr .noFocusEnergyUsed
-.focusEnergyUsed
-	srl b
-.noFocusEnergyUsed
-	ld hl, HighCriticalMoves     ; table of high critical hit moves
-.Loop
-	ld a, [hli]                  ; read move from move table
-	cp c                         ; does it match the move about to be used?
-	jr z, .HighCritical          ; if so, the move about to be used is a high critical hit ratio move
-	inc a                        ; move on to the next move, FF terminates loop
-	jr nz, .Loop                 ; check the next move in HighCriticalMoves
-	srl b                        ; /2 for regular move (effective (base speed / 2))
-	jr .SkipHighCritical         ; continue as a normal move
+
+	ld c, 0 ; Set default entry as 0
+	ld a,[de]
+	bit 2, a ; Check for Focus Energy
+	jr z, .CheckCritMove
+	inc c
+.CheckCritMove
+	ld hl, HighCriticalMoves
+	ld a, [H_WHOSETURN]
+	and a
+	jr z, .PlayersTurn
+.EnemyTurn
+	ld a, [wEnemySelectedMove]
+	ld b, a
+	jr .loop
+.PlayersTurn
+	ld a, [wPlayerSelectedMove]
+	ld b,a
+.loop
+	ld a, [hli]
+	cp b
+	jr z, .HighCritical
+	inc a
+	jr nz, .loop
+	jr .SkipHighCritical
 .HighCritical
-	sla b                        ; *2 for high critical hit moves
-	jr nc, .noCarry
-	ld b, $ff                    ; cap at 255/256
-.noCarry
-	sla b                        ; *4 for high critical move (effective (base speed/2)*8))
-	jr nc, .SkipHighCritical
-	ld b, $ff
+	inc c
+	inc c
 .SkipHighCritical
-	call BattleRandom            ; generates a random value, in "a"
-	rlc a
-	rlc a
-	rlc a
-	cp b                         ; check a against calculated crit rate
-	ret nc                       ; no critical hit if no borrow
-	ld a, $1
-	ld [wCriticalHitOrOHKO], a   ; set critical hit flag
+	; Add cheat for A + Left
+	ld a, [hJoyInput]
+	cp a, $21 ; A + Left
+	jr nz, .Calculate
+	inc c
+	inc c
+.Calculate
+	ld hl, .Chances
+	ld b, 0
+	add hl,bc
+	call BattleRandom
+	cp [hl]
+	ret nc
+	ld a,1
+	ld [wCriticalHitOrOHKO],a ; Critical Hit Flag
+	ret
+
+.Chances
+	; 6.25% 12.1% 24.6% 33.2% 49.6% 49.6% 49.6%
+	db $11,  $20,  $40,  $55,  $80,  $80,  $80
+	;   0     1     2     3     4     5     6
 	ret
 
 ; high critical hit moves
-HighCriticalMoves:
-	db KARATE_CHOP
-	db RAZOR_LEAF
-	db CRABHAMMER
-	db SLASH
-	db $FF
+INCLUDE "data/high_crit_moves.asm"
 
 
 ; function to determine if Counter hits and if so, how much damage it does
@@ -5317,22 +5316,16 @@ AdjustDamageForMoveType:
 	jr .skipSameTypeAttackBonus
 .sameTypeAttackBonus
 ; if the move type matches one of the attacker's types
-	ld hl,wDamage + 1
-	ld a,[hld]
-	ld h,[hl]
-	ld l,a    ; hl = damage
-	ld b,h
-	ld c,l    ; bc = damage
-	srl b
-	rr c      ; bc = floor(0.5 * damage)
-	add hl,bc ; hl = floor(1.5 * damage)
-; store damage
-	ld a,h
-	ld [wDamage],a
-	ld a,l
-	ld [wDamage + 1],a
+; multiply by 3/2
+ 	ld hl, H_MULTIPLIER
+ 	ld [hl], 3
+ 	call Multiply
+ 	
+ 	ld [hl], 2
+ 	ld b, 4
+ 	call Divide
 	ld hl,wDamageMultipliers
-	set 7,[hl]
+	set 7,[hl] ; STAB
 .skipSameTypeAttackBonus
 	ld a,[wMoveType]
 	ld b,a
@@ -5354,38 +5347,30 @@ AdjustDamageForMoveType:
 	push hl
 	push bc
 	inc hl
-	ld a,[wDamageMultipliers]
-	and a,$80
-	ld b,a
 	ld a,[hl] ; a = damage multiplier
 	ld [H_MULTIPLIER],a
-	add b
-	ld [wDamageMultipliers],a
-	xor a
-	ld [H_MULTIPLICAND],a
-	ld hl,wDamage
-	ld a,[hli]
-	ld [H_MULTIPLICAND + 1],a
-	ld a,[hld]
-	ld [H_MULTIPLICAND + 2],a
+; done if type immunity
+ 	and a
+ 	jr z, .typeImmunityDone
+ 	
+; update damage multipliers
+ 	cp $a
+ 	ld hl,wDamageMultipliers
+ 	jr c, .nve
+ 	set 1, [hl]
+ 	jr .multiply
+    .nve
+ 	set 0, [hl]
+; apply damage multiplier
+    .multiply
 	call Multiply
+	
+; divide by 10
 	ld a,10
-	ld [H_DIVISOR],a
+	ld [H_DIVISOR], a
 	ld b,$04
 	call Divide
-	ld a,[H_QUOTIENT + 2]
-	ld [hli],a
-	ld b,a
-	ld a,[H_QUOTIENT + 3]
-	ld [hl],a
-	or b ; is damage 0?
-	jr nz,.skipTypeImmunity
-.typeImmunity
-; if damage is 0, make the move miss
-; this only occurs if a move that would do 2 or 3 damage is 0.25x effective against the target
-	inc a
-	ld [wMoveMissed],a
-.skipTypeImmunity
+
 	pop bc
 	pop hl
 .nextTypePair
@@ -5394,6 +5379,15 @@ AdjustDamageForMoveType:
 	jp .loop
 .done
 	ret
+
+.typeImmunityDone
+ 	ld a, $7f
+ 	ld [wDamageMultipliers], a
+ 	inc a
+ 	ld [W_MOVEMISSED], a
+ 	pop bc
+ 	pop hl
+ 	ret
 
 ; function to tell how effective the type of an enemy attack is on the player's current pokemon
 ; this doesn't take into account the effects that dual types can have
@@ -5687,7 +5681,6 @@ ExecuteEnemyMove:
 	ld [wMoveMissed], a
 	ld [wMoveDidntMiss], a
 	ld a, $a
-	ld [wDamageMultipliers], a
 	call CheckEnemyStatusConditions
 	jr nz, .enemyHasNoSpecialConditions
 	jp [hl]
@@ -5911,12 +5904,33 @@ CheckEnemyStatusConditions:
 .checkIfFrozen
 	bit FRZ, [hl]
 	jr z, .checkIfTrapped
+	; Add check for Flame Wheel and Flare Blitz
+	ld a, [wEnemySelectedMove]
+	cp FLAME_WHEEL
+	jr z, .defrostMon
+	cp FLARE_BLITZ
+	jr z, .defrostMon
+	; Add chance to defrost naturally
+	call BattleRandom
+	cp $19
+	jr c, .defrostMon
+	; Original routine continues here
 	ld hl, IsFrozenText
 	call PrintText
 	xor a
 	ld [wEnemyUsedMove], a
-	ld hl, ExecuteEnemyMoveDone ; enemy can't move this turn
+	ld hl, ExecuteEnemyMoveDone
 	jp .enemyReturnToHL
+.defrostMon ; New routine to thaw mon
+	ld hl, wEnemyMonStatus
+	res FRZ, [hl]
+	xor a
+	ld [H_WHOSETURN],a
+	ld hl, FireDefrostedText
+	call PrintText
+	xor a
+	inc a
+	ld [H_WHOSETURN],a
 .checkIfTrapped
 	ld a, [wPlayerBattleStatus1]
 	bit UsingTrappingMove, a ; is the player using a multi-turn attack like warp
@@ -7532,16 +7546,16 @@ FrozenText:
 
 CheckDefrost:
 ; any fire-type move that has a chance inflict burn (all but Fire Spin) will defrost a frozen target
-	and a, 1 << FRZ ; are they frozen?
+	and a, 1 << FRZ	; are they frozen?
 	ret z ; return if so
-	ld a, [H_WHOSETURN]
+	ld a, [$fff3]
 	and a
 	jr nz, .opponent
 	;player [attacker]
-	ld a, [wPlayerMoveType]
+	ld a, [W_PLAYERMOVETYPE]
 	sub a, FIRE
 	ret nz ; return if type of move used isn't fire
-	ld [wEnemyMonStatus], a ; set opponent status to 00 ["defrost" a frozen monster]
+	ld [wEnemyMonStatus], a	; set opponent status to 00 ["defrost" a frozen monster]
 	ld hl, wEnemyMon1Status
 	ld a, [wEnemyMonPartyPos]
 	ld bc, wEnemyMon2 - wEnemyMon1
@@ -7551,7 +7565,7 @@ CheckDefrost:
 	ld hl, FireDefrostedText
 	jr .common
 .opponent
-	ld a, [wEnemyMoveType] ; same as above with addresses swapped
+	ld a, [W_ENEMYMOVETYPE]	; same as above with addresses swapped
 	sub a, FIRE
 	ret nz
 	ld [wBattleMonStatus], a
