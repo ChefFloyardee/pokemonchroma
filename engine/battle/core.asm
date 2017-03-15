@@ -2916,11 +2916,11 @@ SwapMovesInMenu:
 PrintMenuItem:
 	xor a
 	ld [H_AUTOBGTRANSFERENABLED], a
-	hlCoord 0, 8
+	coord hl, 0, 8
 	ld b, $3
 	ld c, $9
 	call TextBoxBorder
-	ld a, [W_PLAYERDISABLEDMOVE]
+	ld a, [wPlayerDisabledMove]
 	and a
 	jr z, .notDisabled
 	swap a
@@ -2929,7 +2929,7 @@ PrintMenuItem:
 	ld a, [wCurrentMenuItem]
 	cp b
 	jr nz, .notDisabled
-	hlCoord 1, 10
+	coord hl, 1, 10
 	ld de, DisabledText
 	call PlaceString
 	jp .moveDisabled
@@ -2949,7 +2949,7 @@ PrintMenuItem:
 	ld a, [wPlayerMonNumber]
 	ld [wWhichPokemon], a
 	ld a, $4
-	ld [wcc49], a
+	ld [wMonDataLocation], a
 	callab GetMaxPP
 	ld hl, wCurrentMenuItem
 	ld c, [hl]
@@ -2966,32 +2966,32 @@ PrintMenuItem:
 	jp z, .OtherTextShow
 	cp a,$01
 	jp nz, .PhysicalTextShow
-	hlCoord 1, 9
+	coord hl, 1, 9
 	ld de,SpecialText
 	call PlaceString
 	jp .RestOfTheRoutineThing
 .PhysicalTextShow
-	hlCoord 1,9
+	coord hl, 1,9
 	ld de,PhysicalText
 	call PlaceString
 	jr .RestOfTheRoutineThing
 .OtherTextShow
-	hlCoord 1,9
+	coord hl, 1,9
 	ld de,OtherText
 	call PlaceString
 .RestOfTheRoutineThing
-	hlCoord 7, 11
+	coord hl, 7, 11
 	ld [hl], "/"
-	hlCoord 5, 11
+	coord hl, 5, 11
 	ld de, wcd6d
 	ld bc, $102
 	call PrintNumber
-	hlCoord 8, 11
+	coord hl, 8, 11
 	ld de, wd11e
 	ld bc, $102
 	call PrintNumber
 	call GetCurrentMove
-	hlCoord 2, 10
+	coord hl, 2, 10
 	predef PrintMoveType
 .moveDisabled
 	ld a, $1
@@ -3422,14 +3422,19 @@ CheckPlayerStatusConditions:
 	ld hl,FastAsleepText
 	call PrintText
 	jr .sleepDone
-.WakeUp
-	ld hl,WokeUpText
-	call PrintText
+
 .sleepDone
 	xor a
 	ld [wPlayerUsedMove],a
 	ld hl,ExecutePlayerMoveDone ; player can't move this turn
 	jp .returnToHL
+	
+.WakeUp
+	ld hl,WokeUpText
+	call PrintText
+    call DrawHUDsAndHPBars
+	jr .HeldInPlaceCheck
+
 
 .FrozenCheck
 	bit FRZ,[hl] ; frozen?
@@ -3550,7 +3555,7 @@ CheckPlayerStatusConditions:
 	ld hl,wPlayerBattleStatus1
 	ld a,[hl]
 	; clear bide, thrashing, charging up, and trapping moves such as warp (already cleared for confusion damage)
-	and $ff ^ ((1 << StoringEnergy) | (1 << ThrashingAbout) | (1 << ChargingUp) | (1 << UsingTrappingMove))
+	and a, (1 << AttackingMultipleTimes) | (1 << Flinched) | (1 << Confused)
 	ld [hl],a
 	ld a,[wPlayerMoveEffect]
 	cp a,FLY_EFFECT
@@ -5923,15 +5928,19 @@ CheckEnemyStatusConditions:
 	ld [wAnimationType], a
 	ld a,SLP_ANIM
 	call PlayMoveAnimation
-	jr .sleepDone
+
+.next1
+	xor a
+	ld [wEnemyUsedMove], a
+	ld hl, ExecuteEnemyMoveDone
+	jp .enemyReturnToHL
+
 .wokeUp
 	ld hl, WokeUpText
 	call PrintText
-.sleepDone
-	xor a
-	ld [wEnemyUsedMove], a
-	ld hl, ExecuteEnemyMoveDone ; enemy can't move this turn
-	jp .enemyReturnToHL
+	call DrawHUDsAndHPBars
+	jr .checkIfTrapped
+
 .checkIfFrozen
 	bit FRZ, [hl]
 	jr z, .checkIfTrapped
@@ -6092,7 +6101,7 @@ CheckEnemyStatusConditions:
 	ld hl, wEnemyBattleStatus1
 	ld a, [hl]
 	; clear bide, thrashing about, charging up, and multi-turn moves such as warp
-	and $ff ^ ((1 << StoringEnergy) | (1 << ThrashingAbout) | (1 << ChargingUp) | (1 << UsingTrappingMove))
+	and (1 << AttackingMultipleTimes) | (1 << Flinched) | (1 << Confused)
 	ld [hl], a
 	ld a, [wEnemyMoveEffect]
 	cp FLY_EFFECT
@@ -7305,11 +7314,8 @@ SleepEffect:
 
 .sleepEffect
 	ld a, [bc]
-	bit NeedsToRecharge, a ; does the target need to recharge? (hyper beam)
 	res NeedsToRecharge, a ; target no longer needs to recharge
 	ld [bc], a
-	jr nz, .setSleepCounter ; if the target had to recharge, all hit tests will be skipped
-	                        ; including the event where the target already has another status
 	ld a, [de]
 	ld b, a
 	and $7
@@ -7330,7 +7336,7 @@ SleepEffect:
 ; set target's sleep counter to a random number between 1 and 7
 	call BattleRandom
 	and $7
-	jr z, .setSleepCounter
+	set 1, a ; always at least 2, since 1 is now functionally 0
 	ld [de], a
 	call PlayCurrentMoveAnimation2
 	ld hl, FellAsleepText
@@ -8781,4 +8787,13 @@ PlayBattleAnimationGotID:
 	pop bc
 	pop de
 	pop hl
+	ret
+
+; Determine if a move is Physical, Special, or Status
+; INPUT: Move ID in register a
+; OUTPUT: Move Physical/Special/Status type in register a
+PhysicalSpecialSplit:
+	ld [wTempMoveID], a
+	callba _PhysicalSpecialSplit
+	ld a, [wTempMoveID]
 	ret
