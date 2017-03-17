@@ -13,9 +13,9 @@ dw JolteonPicFront
 dw JolteonPicBack
 ; attacks known at lvl 0
 db TACKLE
-db SAND_ATTACK
-db QUICK_ATTACK
-db THUNDERSHOCK
+db GROWL
+db 0
+db 0
 db 0 ; growth rate
 ; learnset
 	tmlearn 6,8

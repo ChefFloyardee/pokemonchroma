@@ -14,7 +14,7 @@ dw DragonairPicBack
 ; attacks known at lvl 0
 db WRAP
 db LEER
-db THUNDER_WAVE
+db 0
 db 0
 db 5 ; growth rate
 ; learnset

@@ -12,9 +12,9 @@ INCBIN "pic/bmon/tentacruel.pic",0,1 ; 66, sprite dimensions
 dw TentacruelPicFront
 dw TentacruelPicBack
 ; attacks known at lvl 0
-db ACID
-db SUPERSONIC
-db WRAP
+db POISON_STING
+db 0
+db 0
 db 0
 db 5 ; growth rate
 ; learnset

@@ -12,10 +12,10 @@ INCBIN "pic/bmon/cloyster.pic",0,1 ; 77, sprite dimensions
 dw CloysterPicFront
 dw CloysterPicBack
 ; attacks known at lvl 0
-db WITHDRAW
-db SUPERSONIC
-db CLAMP
-db AURORA_BEAM
+db TACKLE
+db 0
+db 0
+db 0
 db 5 ; growth rate
 ; learnset
 	tmlearn 6

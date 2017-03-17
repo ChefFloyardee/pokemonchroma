@@ -13,7 +13,7 @@ dw SandslashPicFront
 dw SandslashPicBack
 ; attacks known at lvl 0
 db SCRATCH
-db SAND_ATTACK
+db DEFENSE_CURL
 db 0
 db 0
 db 0 ; growth rate

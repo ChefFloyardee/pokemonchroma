@@ -13,8 +13,8 @@ dw MukPicFront
 dw MukPicBack
 ; attacks known at lvl 0
 db POUND
-db DISABLE
 db POISON_GAS
+db 0
 db 0
 db 0 ; growth rate
 ; learnset

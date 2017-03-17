@@ -12,9 +12,9 @@ INCBIN "pic/bmon/pidgeot.pic",0,1 ; 77, sprite dimensions
 dw PidgeotPicFront
 dw PidgeotPicBack
 ; attacks known at lvl 0
-db GUST
-db SAND_ATTACK
-db QUICK_ATTACK
+db TACKLE
+db 0
+db 0
 db 0
 db 3 ; growth rate
 ; learnset

@@ -14,8 +14,8 @@ dw HypnoPicBack
 ; attacks known at lvl 0
 db POUND
 db HYPNOSIS
-db DISABLE
-db CONFUSION
+db 0
+db 0
 db 0 ; growth rate
 ; learnset
 	tmlearn 1,5,6,8

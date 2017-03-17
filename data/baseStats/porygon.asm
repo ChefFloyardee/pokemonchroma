@@ -15,7 +15,7 @@ dw PorygonPicBack
 db TACKLE
 db SHARPEN
 db CONVERSION
-db 0
+db HARDEN
 db 0 ; growth rate
 ; learnset
 	tmlearn 6

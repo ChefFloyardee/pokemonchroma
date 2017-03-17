@@ -14,8 +14,8 @@ dw ArcaninePicBack
 ; attacks known at lvl 0
 db ROAR
 db BITE
-db EMBER
-db LEER
+db 0
+db 0
 db 5 ; growth rate
 ; learnset
 	tmlearn 6,8

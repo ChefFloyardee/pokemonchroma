@@ -13,8 +13,8 @@ dw KinglerPicFront
 dw KinglerPicBack
 ; attacks known at lvl 0
 db BUBBLE
-db LEER
-db VICEGRIP
+db 0
+db 0
 db 0
 db 0 ; growth rate
 ; learnset

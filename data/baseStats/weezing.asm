@@ -13,8 +13,8 @@ dw WeezingPicFront
 dw WeezingPicBack
 ; attacks known at lvl 0
 db TACKLE
-db SMOG
-db SLUDGE
+db POISON_GAS
+db 0
 db 0
 db 0 ; growth rate
 ; learnset

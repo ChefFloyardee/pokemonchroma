@@ -5360,6 +5360,7 @@ AdjustDamageForMoveType:
  	ld [hl], 2
  	ld b, 4
  	call Divide
+
 	ld hl,wDamageMultipliers
 	set 7,[hl] ; STAB
 .skipSameTypeAttackBonus
@@ -5385,6 +5386,7 @@ AdjustDamageForMoveType:
 	inc hl
 	ld a,[hl] ; a = damage multiplier
 	ld [H_MULTIPLIER],a
+
 ; done if type immunity
  	and a
  	jr z, .typeImmunityDone
@@ -5716,7 +5718,6 @@ ExecuteEnemyMove:
 	xor a
 	ld [wMoveMissed], a
 	ld [wMoveDidntMiss], a
-	ld a, $a
 	call CheckEnemyStatusConditions
 	jr nz, .enemyHasNoSpecialConditions
 	jp [hl]

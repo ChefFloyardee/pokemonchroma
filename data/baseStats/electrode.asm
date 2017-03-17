@@ -13,8 +13,8 @@ dw ElectrodePicFront
 dw ElectrodePicBack
 ; attacks known at lvl 0
 db TACKLE
-db SCREECH
-db SONICBOOM
+db 0
+db 0
 db 0
 db 0 ; growth rate
 ; learnset

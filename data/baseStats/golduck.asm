@@ -13,8 +13,8 @@ dw GolduckPicFront
 dw GolduckPicBack
 ; attacks known at lvl 0
 db SCRATCH
-db TAIL_WHIP
-db DISABLE
+db 0
+db 0
 db 0
 db 0 ; growth rate
 ; learnset

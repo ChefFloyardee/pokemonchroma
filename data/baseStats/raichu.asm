@@ -13,8 +13,8 @@ dw RaichuPicFront
 dw RaichuPicBack
 ; attacks known at lvl 0
 db THUNDERSHOCK
-db GROWL
-db THUNDER_WAVE
+db TAIL_WHIP
+db 0
 db 0
 db 0 ; growth rate
 ; learnset

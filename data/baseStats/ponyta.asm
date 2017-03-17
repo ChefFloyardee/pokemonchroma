@@ -12,8 +12,8 @@ INCBIN "pic/bmon/ponyta.pic",0,1 ; 66, sprite dimensions
 dw PonytaPicFront
 dw PonytaPicBack
 ; attacks known at lvl 0
-db EMBER
-db 0
+db TACKLE
+db GROWL
 db 0
 db 0
 db 0 ; growth rate

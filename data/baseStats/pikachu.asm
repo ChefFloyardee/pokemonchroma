@@ -13,7 +13,7 @@ dw PikachuPicFront
 dw PikachuPicBack
 ; attacks known at lvl 0
 db THUNDERSHOCK
-db GROWL
+db TAIL_WHIP
 db 0
 db 0
 db 0 ; growth rate
