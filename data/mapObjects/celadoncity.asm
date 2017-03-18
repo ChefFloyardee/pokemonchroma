@@ -27,7 +27,7 @@ CeladonCityObject:
 	db $15, $21, $11 ; CeladonCityText17
 	db $15, $1b, $12 ; CeladonCityText18
 
-	db $10 ; objects
+	db $9 ; objects
 	object SPRITE_LITTLE_GIRL, $8, $11, WALK, $0, $1 ; person
 	object SPRITE_OLD_PERSON, $b, $1c, STAY, UP, $2 ; person
 	object SPRITE_GIRL, $e, $13, WALK, $1, $3 ; person
