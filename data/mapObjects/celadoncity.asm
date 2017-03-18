@@ -27,7 +27,7 @@ CeladonCityObject:
 	db $15, $21, $11 ; CeladonCityText17
 	db $15, $1b, $12 ; CeladonCityText18
 
-	db $9 ; objects
+	db $a ; objects
 	object SPRITE_LITTLE_GIRL, $8, $11, WALK, $0, $1 ; person
 	object SPRITE_OLD_PERSON, $b, $1c, STAY, UP, $2 ; person
 	object SPRITE_GIRL, $e, $13, WALK, $1, $3 ; person
@@ -37,6 +37,7 @@ CeladonCityObject:
 	object SPRITE_SLOWBRO, $1e, $c, STAY, RIGHT, $7 ; person
 	object SPRITE_ROCKET, $20, $1d, WALK, $2, $8 ; person
 	object SPRITE_ROCKET, $2a, $e, WALK, $2, $9 ; person
+	object SPRITE_OLD_PERSON, $2, $1, STAY, DOWN, $a ; person
 
 	; warp-to
 	EVENT_DISP CELADON_CITY_WIDTH, $d, $8 ; CELADON_MART_1

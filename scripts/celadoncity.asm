@@ -14,6 +14,7 @@ CeladonCityTextPointers:
 	dw CeladonCityText7
 	dw CeladonCityText8
 	dw CeladonCityText9
+	dw CeladonCashierText
 	dw CeladonCityText10
 	dw CeladonCityText11
 	dw PokeCenterSignText

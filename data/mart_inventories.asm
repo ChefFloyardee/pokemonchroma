@@ -19,6 +19,10 @@ CeruleanCashierText::
 ; Vermilion
 VermilionCashierText::
 	TX_MART POKE_BALL, SUPER_POTION, ICE_HEAL, AWAKENING, PARLYZ_HEAL, REPEL
+	
+; Celadon
+CeladonCashierText::
+	TX_MART SUN_STONE, KINGS_ROCK, METAL_COAT, DRAGON_SCALE, UPGRADE
 
 ; Lavender
 LavenderCashierText::
