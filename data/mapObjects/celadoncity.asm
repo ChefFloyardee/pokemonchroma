@@ -37,7 +37,6 @@ CeladonCityObject:
 	object SPRITE_SLOWBRO, $1e, $c, STAY, RIGHT, $7 ; person
 	object SPRITE_ROCKET, $20, $1d, WALK, $2, $8 ; person
 	object SPRITE_ROCKET, $2a, $e, WALK, $2, $9 ; person
-	object SPRITE_BLACK_HAIR_BOY_2, $28, $a, STAY, DOWN, $10 ; person
 
 	; warp-to
 	EVENT_DISP CELADON_CITY_WIDTH, $d, $8 ; CELADON_MART_1
