@@ -96,3 +96,8 @@ ItemNames:
 	db "10F@"
 	db "11F@"
 	db "B4F@"
+	db "Kings Rock@"
+	db "Sun Stone@"
+	db "Metal Coat@"
+	db "Up-Grade@"
+	db "Dragon Scale@"

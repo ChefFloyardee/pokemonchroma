@@ -40,14 +40,14 @@ _SilphCo5Text10::
 	text "It's a #mon"
 	line "Report!"
 
-	para "Over 160 #mon"
-	line "techniques have"
+	para "Over 200 #mon"
+	line "moves have"
 	cont "been confirmed."
 	done
 
 _SilphCo5Text11::
 	text "It's a #mon"
-	line "REPORT!"
+	line "Report!"
 
 	para "4 Pokemon evolve"
 	line "by an item"

@@ -1,6 +1,6 @@
 _Route1ViridianMartSampleText::
 	text "Hi! I work at a"
-	line "#mon MART."
+	line "#mon Mart."
 
 	para "It's a convenient"
 	line "shop, so please"

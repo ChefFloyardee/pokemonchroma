@@ -13,6 +13,15 @@ PewterCashierText::
 CeruleanCashierText::
 	TX_MART POKE_BALL, POTION, REPEL, ANTIDOTE, BURN_HEAL, AWAKENING, PARLYZ_HEAL
 
+; Celadon
+CeladonCashierText::
+    text "I sell"
+	line "evolution items"
+	cont "for certain"
+	cont "#mon if you"
+	cont "are interested."
+	TX_MART SUN_STONE, DRAGON_SCALE, KINGS_ROCK, METAL_COAT, UPGRADE
+	
 ; Bike shop
 	TX_MART BICYCLE
 

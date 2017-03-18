@@ -23,6 +23,7 @@ CeladonCityTextPointers:
 	dw CeladonCityText16
 	dw CeladonCityText17
 	dw CeladonCityText18
+    dw CeladonCashierText
 
 CeladonCityText1:
 	TX_FAR _CeladonCityText1

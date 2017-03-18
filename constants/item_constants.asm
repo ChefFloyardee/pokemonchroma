@@ -99,6 +99,12 @@ SAFARI_ROCK           EQU $16 ; overload
 	const FLOOR_10F     ; $5F
 	const FLOOR_11F     ; $60
 	const FLOOR_B4F     ; $61
+	const KINGS_ROCK    ; $62
+	const SUN_STONE     ; $63
+	const METAL_COAT    ; $64
+	const UPGRADE       ; $65
+	const DRAGON_SCALE  ; $66
+	
 
 const_value = $C4
 
