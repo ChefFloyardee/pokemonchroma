@@ -249,3 +249,233 @@ _NatuDexEntry::
 	next "It is always star-"
 	next "ing at something"
 	dex
+	
+_XatuDexEntry::
+	text "In South America,"
+	next "it is said that"
+	next "its right eye sees"
+
+	page "the future and its"
+	next "left eye views the"
+	next "past"
+	dex
+	
+_MareepDexEntry::
+	text "If static electri-"
+	next "city builds in"
+	next "its body, its"
+
+	page "fleece doubles in"
+	next "volume. Touching"
+	next "it will shock you"
+	dex
+	
+_FlaaffyDexEntry::
+	text "As a result of"
+	next "storing too much"
+	next "electricity, it"
+
+	page "developed patches"
+	next "where even downy"
+	next "wool won't grow"
+	dex
+
+_AmpharosDexEntry::
+	text "The bright light"
+	next "on its tail can be"
+	next "seen far away. It"
+
+	page "has been treasured"
+	next "since ancient"
+	next "times as a beacon"
+	dex
+	
+_BellossomDexEntry::
+	text "Plentiful in the"
+	next "tropics. When it"
+	next "dances, its petals"
+
+	page "rub together and"
+	next "make a pleasant"
+	next "ringing sound"
+	dex
+	
+_MarillDexEntry::
+	text "The end of its"
+	next "tail serves as a"
+	next "buoy that keeps it"
+
+	page "from drowning,"
+	next "even in a vicious"
+	next "current"
+	dex
+	
+_AzumarillDexEntry::
+	text "By keeping still"
+	next "and listening"
+	next "intently, it"
+
+	page "can tell what is"
+	next "in even wild, fast"
+	next "-moving rivers"
+	dex
+	
+_SudowoodoDexEntry::
+	text "Although it always"
+	next "pretends to be a"
+	next "tree, its compo-"
+
+	page "sition appears to"
+	next "be closer to a"
+	next "rock than a plant"
+	dex
+	
+_PolitoedDexEntry::
+	text "When it expands"
+	next "its throat to"
+	next "croak out a tune,"
+
+	page "nearby POLIWAG and"
+	next "POLIWHIRL gather"
+	next "immediately"
+	dex
+	
+_HoppipDexEntry::
+	text "To keep from being"
+	next "blown away by the"
+	next "wind, they gather"
+
+	page "in clusters. They"
+	next "do enjoy gentle"
+	next "breezes, though"
+	dex
+	
+_SkiploomDexEntry::
+	text "It spreads its"
+	next "petals to absorb"
+	next "sunlight. It also"
+
+	page "floats in the air"
+	next "to get closer to"
+	next "the sun"
+	dex
+
+_JumpluffDexEntry::
+	text "Once it catches"
+	next "the wind, it deft-"
+	next "ly controls its"
+
+	page "cotton-puff spores"
+	next "to float, even"
+	next "around the world"
+	dex
+	
+_AipomDexEntry::
+	text "It uses its tail"
+	next "to hang on to tree"
+	next "branches. It uses"
+
+	page "its momentum to"
+	next "swing from one"
+	next "branch to another"
+	dex
+
+_SunkernDexEntry::
+	text "It may plummet"
+	next "from the sky. If"
+	next "attacked by a"
+
+	page "SPEAROW, it will"
+	next "violently shake"
+	next "its leaves"
+	dex
+
+_SunfloraDexEntry::
+	text "As the hot season"
+	next "approaches, the"
+	next "petals on its"
+
+	page "face become much"
+	next "more vivid and"
+	next "lively"
+	dex
+	
+_YanmaDexEntry::
+	text "It can hover in"
+	next "one spot by"
+	next "flapping its"
+
+	page "wings at high"
+	next "speed. It can"
+	next "stop suddenly"
+	dex
+
+_WooperDexEntry::
+	text "When the temper-"
+	next "ature cools in"
+	next "the evening, they"
+
+	page "emerge from water"
+	next "to seek food"
+	next "along the shore"
+	dex
+
+_QuagsireDexEntry::
+	text "It has a sluggish"
+	next "nature. It lies"
+	next "at the bottom of"
+
+	page "the river waiting"
+	next "for prey to stray"
+	next "into its mouth"
+	dex
+	
+_EspeonDexEntry::
+	text "It uses the fine"
+	next "hair that covers"
+	next "its body to sense"
+
+	page "air currents and"
+	next "predict its"
+	next "enemy's actions"
+	dex
+	
+_UmbreonDexEntry::
+	text "When darkness"
+	next "falls, the rings"
+	next "on the body begin"
+
+	page "to glow, striking"
+	next "fear in the hearts"
+	next "of anyone nearby"
+	dex
+	
+_MurkrowDexEntry::
+	text "Feared and loathed"
+	next "by many, it is"
+	next "believed to bring"
+
+	page "misfortune to all"
+	next "those who see"
+	next "it at night"
+	dex
+	
+_SlowkingDexEntry::
+	text "Every time it"
+	next "yawns, SHELLDER"
+	next "injects more poi-"
+
+	page "son into it. The"
+	next "poison makes it"
+	next "more intelligent"
+	dex
+	
+_MisdreavusDexEntry::
+	text "It loves to bite"
+	next "and yank people's"
+	next "hair from behind"
+
+	page "without warning,"
+	next "just to see their"
+	next "shocked reactions"
+	dex

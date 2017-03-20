@@ -177,5 +177,28 @@ const_value = 1
 	const DEX_TOGEPI     ; 175
 	const DEX_TOGETIC    ; 176
 	const DEX_NATU       ; 177
-	
+	const DEX_XATU       ; 178
+	const DEX_MAREEP     ; 179
+	const DEX_FLAAFFY    ; 180
+	const DEX_AMPHAROS   ; 181
+	const DEX_BELLOSSOM  ; 182
+	const DEX_MARILL     ; 183
+	const DEX_AZUMARILL  ; 184
+	const DEX_SUDOWOODO  ; 185
+	const DEX_POLITOED   ; 186
+	const DEX_HOPPIP     ; 187
+	const DEX_SKIPLOOM   ; 188
+	const DEX_JUMPLUFF   ; 189
+	const DEX_AIPOM      ; 190
+	const DEX_SUNKERN    ; 191
+	const DEX_SUNFLORA   ; 192
+	const DEX_YANMA      ; 193
+	const DEX_WOOPER     ; 194
+	const DEX_QUAGSIRE   ; 195
+	const DEX_ESPEON     ; 196
+	const DEX_UMBREON    ; 197
+	const DEX_MURKROW    ; 198
+	const DEX_SLOWKING   ; 199
+	const DEX_MISDREAVUS ; 200
+
 NUM_POKEMON    EQU 177

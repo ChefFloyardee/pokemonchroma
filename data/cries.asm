@@ -145,7 +145,7 @@ CryData:
 	db $12, $FF, $FF; Weezing
 	db $19, $99, $FF; Persian
 	db $08, $4F, $60; Marowak
-	db $00, $00, $00; MissingNo.
+	db $21, $FF, $40; Xatu
 	db $1C, $30, $40; Haunter
 	db $1C, $C0, $01; Abra
 	db $1C, $98, $FF; Alakazam
@@ -155,13 +155,13 @@ CryData:
 	db $0F, $80, $01; Bulbasaur
 	db $0F, $00, $C0; Venusaur
 	db $1A, $EE, $FF; Tentacruel
-	db $00, $00, $00; MissingNo.
+	db $0F, $EE, $01; Mareep
 	db $16, $80, $40; Goldeen
 	db $16, $10, $FF; Seaking
-	db $00, $00, $00; MissingNo.
-	db $00, $00, $00; MissingNo.
-	db $00, $00, $00; MissingNo.
-	db $00, $00, $00; MissingNo.
+	db $0F, $EE, $01; Flaaffy
+	db $09, $EE, $08; Ampharos
+	db $23, $22, $FF; Bellossom
+	db $0E, $FF, $35; Marill
 	db $25, $00, $80; Ponyta
 	db $25, $20, $C0; Rapidash
 	db $22, $00, $80; Rattata
@@ -171,16 +171,16 @@ CryData:
 	db $24, $F0, $10; Geodude
 	db $25, $AA, $FF; Porygon
 	db $23, $20, $F0; Aerodactyl
-	db $00, $00, $00; MissingNo.
+	db $0E, $68, $60; Azumarill
 	db $1C, $80, $60; Magnemite
-	db $00, $00, $00; MissingNo.
-	db $00, $00, $00; MissingNo.
+	db $10, $DD, $01; Sudowoodo
+	db $0E, $00, $FF; Politoed
 	db $04, $60, $40; Charmander
 	db $1D, $60, $40; Squirtle
 	db $04, $20, $40; Charmeleon
 	db $1D, $20, $40; Wartortle
 	db $04, $00, $80; Charizard
-	db $1D, $00, $80; MissingNo.
+	db $08, $DD, $01; Hoppip
 	db $00, $00, $00; MissingNo.
 	db $00, $00, $00; MissingNo.
 	db $00, $00, $00; MissingNo.
@@ -190,3 +190,16 @@ CryData:
 	db $21, $55, $01; Bellsprout
 	db $25, $44, $20; Weepinbell
 	db $25, $66, $CC; Victreebel
+	db $08, $AA, $40; Skiploom
+	db $23, $22, $FF; Jumpluff
+	db $0A, $DD, $60; Aipom
+	db $08, $30, $30; Sunkern
+	db $08, $40, $40; Sunflora
+	db $1A, $C0, $20; Yanma
+	db $0E, $30, $40; Wooper
+	db $0E, $20, $80; Quagsire
+	db $1A, $88, $60; Espeon
+	db $1A, $88, $60; Umbreon
+	db $18, $40, $A0; Murkrow
+	db $1F, $00, $80; Slowking
+	db $1C, $00, $80; Misdreavus

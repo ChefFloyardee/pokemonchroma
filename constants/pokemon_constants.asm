@@ -145,7 +145,7 @@ const_value = 1
 	const WEEZING      ; $8F
 	const PERSIAN      ; $90
 	const MAROWAK      ; $91
-	const MISSINGNO_92 ; $92
+	const XATU         ; $92
 	const HAUNTER      ; $93
 	const ABRA         ; $94
 	const ALAKAZAM     ; $95
@@ -155,13 +155,13 @@ const_value = 1
 	const BULBASAUR    ; $99
 	const VENUSAUR     ; $9A
 	const TENTACRUEL   ; $9B
-	const MISSINGNO_9C ; $9C
+	const MAREEP       ; $9C
 	const GOLDEEN      ; $9D
 	const SEAKING      ; $9E
-	const MISSINGNO_9F ; $9F
-	const MISSINGNO_A0 ; $A0
-	const MISSINGNO_A1 ; $A1
-	const MISSINGNO_A2 ; $A2
+	const FLAAFFY      ; $9F
+	const AMPHAROS     ; $A0
+	const BELLOSSOM    ; $A1
+	const MARILL       ; $A2
 	const PONYTA       ; $A3
 	const RAPIDASH     ; $A4
 	const RATTATA      ; $A5
@@ -171,16 +171,16 @@ const_value = 1
 	const GEODUDE      ; $A9
 	const PORYGON      ; $AA
 	const AERODACTYL   ; $AB
-	const MISSINGNO_AC ; $AC
+	const AZUMARILL    ; $AC
 	const MAGNEMITE    ; $AD
-	const MISSINGNO_AE ; $AE
-	const MISSINGNO_AF ; $AF
+	const SUDOWOODO    ; $AE
+	const POLITOED     ; $AF
 	const CHARMANDER   ; $B0
 	const SQUIRTLE     ; $B1
 	const CHARMELEON   ; $B2
 	const WARTORTLE    ; $B3
 	const CHARIZARD    ; $B4
-	const MISSINGNO_B5 ; $B5
+	const HOPPIP       ; $B5
 	const FOSSIL_KABUTOPS   ; $B6
 	const FOSSIL_AERODACTYL ; $B7
 	const MON_GHOST    ; $B8
@@ -190,3 +190,16 @@ const_value = 1
 	const BELLSPROUT   ; $BC
 	const WEEPINBELL   ; $BD
 	const VICTREEBEL   ; $BE
+	const SKIPLOOM     ; $BF
+	const JUMPLUFF     ; $C0
+	const AIPOM        ; $C1
+	const SUNKERN      ; $C2
+	const SUNFLORA     ; $C3
+	const YANMA        ; $C4
+	const WOOPER       ; $C5
+	const QUAGSIRE     ; $C6
+	const ESPEON       ; $C7
+	const UMBREON      ; $C8
+	const MURKROW      ; $C9
+	const SLOWKING     ; $CA
+	const MISDREAVUS   ; $CB

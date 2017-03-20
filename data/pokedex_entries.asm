@@ -144,7 +144,7 @@ PokedexEntryPointers:
 	dw WeezingDexEntry
 	dw PersianDexEntry
 	dw MarowakDexEntry
-	dw MissingNoDexEntry
+	dw XatuDexEntry
 	dw HaunterDexEntry
 	dw AbraDexEntry
 	dw AlakazamDexEntry
@@ -154,13 +154,13 @@ PokedexEntryPointers:
 	dw BulbasaurDexEntry
 	dw VenusaurDexEntry
 	dw TentacruelDexEntry
-	dw MissingNoDexEntry
+	dw MareepDexEntry
 	dw GoldeenDexEntry
 	dw SeakingDexEntry
-	dw MissingNoDexEntry
-	dw MissingNoDexEntry
-	dw MissingNoDexEntry
-	dw MissingNoDexEntry
+	dw FlaaffyDexEntry
+	dw AmpharosDexEntry
+	dw BellossomDexEntry
+	dw MarillDexEntry
 	dw PonytaDexEntry
 	dw RapidashDexEntry
 	dw RattataDexEntry
@@ -170,16 +170,16 @@ PokedexEntryPointers:
 	dw GeodudeDexEntry
 	dw PorygonDexEntry
 	dw AerodactylDexEntry
-	dw MissingNoDexEntry
+	dw AzumarillDexEntry
 	dw MagnemiteDexEntry
-	dw MissingNoDexEntry
-	dw MissingNoDexEntry
+	dw SudowoodoDexEntry
+	dw PolitoedDexEntry
 	dw CharmanderDexEntry
 	dw SquirtleDexEntry
 	dw CharmeleonDexEntry
 	dw WartortleDexEntry
 	dw CharizardDexEntry
-	dw MissingNoDexEntry
+	dw HoppipDexEntry
 	dw MissingNoDexEntry
 	dw MissingNoDexEntry
 	dw MissingNoDexEntry
@@ -189,6 +189,19 @@ PokedexEntryPointers:
 	dw BellsproutDexEntry
 	dw WeepinbellDexEntry
 	dw VictreebelDexEntry
+	dw SkiploomDexEntry
+	dw JumpluffDexEntry
+	dw AipomDexEntry
+	dw SunkernDexEntry
+	dw SunfloraDexEntry
+	dw YanmaDexEntry
+	dw WooperDexEntry
+	dw QuagsireDexEntry
+	dw EspeonDexEntry
+	dw UmbreonDexEntry
+	dw MurkrowDexEntry
+	dw SlowkingDexEntry
+	dw MisdreavusDexEntry
 
 ; string: species name
 ; height in feet, inches
@@ -1209,6 +1222,13 @@ MarowakDexEntry:
 	dw 990
 	TX_FAR _MarowakDexEntry
 	db "@"
+	
+XatuDexEntry:
+	db "Mystic@"
+	db 4,11
+	dw 331
+	TX_FAR _XatuDexEntry
+	db "@"
 
 HaunterDexEntry:
 	db "Gas@"
@@ -1272,6 +1292,13 @@ TentacruelDexEntry:
 	dw 1210
 	TX_FAR _TentacruelDexEntry
 	db "@"
+	
+MareepDexEntry:
+	db "Wool@"
+	db 2,0
+	dw 172
+	TX_FAR _MareepDexEntry
+	db "@"
 
 GoldeenDexEntry:
 	db "Goldfish@"
@@ -1285,6 +1312,34 @@ SeakingDexEntry:
 	db 4,3
 	dw 860
 	TX_FAR _SeakingDexEntry
+	db "@"
+	
+FlaaffyDexEntry:
+	db "Wool@"
+	db 2,7
+	dw 293
+	TX_FAR _FlaaffyDexEntry
+	db "@"
+
+AmpharosDexEntry:
+	db "Light@"
+	db 4,7
+	dw 1356
+	TX_FAR _AmpharosDexEntry
+	db "@"
+	
+BellossomDexEntry:
+	db "Flower@"
+	db 1,4
+	dw 128
+	TX_FAR _BellossomDexEntry
+	db "@"
+	
+MarillDexEntry:
+	db "Aqua Mouse@"
+	db 1,4
+	dw 187
+	TX_FAR _MarillDexEntry
 	db "@"
 
 PonytaDexEntry:
@@ -1349,12 +1404,33 @@ AerodactylDexEntry:
 	dw 1300
 	TX_FAR _AerodactylDexEntry
 	db "@"
+	
+AzumarillDexEntry:
+	db "AquaRabbit@"
+	db 2,7
+	dw 628
+	TX_FAR _AzumarillDexEntry
+	db "@"
 
 MagnemiteDexEntry:
 	db "Magnet@"
 	db 1,0
 	dw 130
 	TX_FAR _MagnemiteDexEntry
+	db "@"
+	
+SudowoodoDexEntry:
+	db "Imitation@"
+	db 3,11
+	dw 838
+	TX_FAR _SudowoodoDexEntry
+	db "@"
+	
+PolitoedDexEntry:
+	db "Frog@"
+	db 3,7
+	dw 747
+	TX_FAR _PolitoedDexEntry
 	db "@"
 
 CharmanderDexEntry:
@@ -1390,6 +1466,13 @@ CharizardDexEntry:
 	db 5,7
 	dw 2000
 	TX_FAR _CharizardDexEntry
+	db "@"
+	
+HoppipDexEntry:
+	db "CottonWeed@"
+	db 1,4
+	dw 11
+	TX_FAR _HoppipDexEntry
 	db "@"
 
 OddishDexEntry:
@@ -1439,3 +1522,94 @@ MissingNoDexEntry:
 	db 1,0 ; 1.0 m
 	db 100 ; 10.0 kg
 	db 0,"コメント さくせいちゅう@" ; コメント作成中 (Comment to be written)
+	
+SkiploomDexEntry:
+	db "CottonWeed@"
+	db 2,0
+	dw 22
+	TX_FAR _SkiploomDexEntry
+	db "@"
+	
+JumpluffDexEntry:
+	db "CottonWeed@"
+	db 2,7
+	dw 66
+	TX_FAR _JumpluffDexEntry
+	db "@"
+	
+AipomDexEntry:
+	db "Long Tail@"
+	db 2,7
+	dw 254
+	TX_FAR _AipomDexEntry
+	db "@"
+
+SunkernDexEntry:
+	db "Seed@"
+	db 1,0
+	dw 40
+	TX_FAR _SunkernDexEntry
+	db "@"
+
+SunfloraDexEntry:
+	db "Sun@"
+	db 2,7
+	dw 187
+	TX_FAR _SunfloraDexEntry
+	db "@"
+	
+YanmaDexEntry:
+	db "Clear Wing@"
+	db 3,11
+	dw 838
+	TX_FAR _YanmaDexEntry
+	db "@"
+
+WooperDexEntry:
+	db "Water Fish@"
+	db 1,4
+	dw 187
+	TX_FAR _WooperDexEntry
+	db "@"
+
+QuagsireDexEntry:
+	db "Water Fish@"
+	db 4,7
+	dw 1653
+	TX_FAR _QuagsireDexEntry
+	db "@"
+	
+EspeonDexEntry:
+	db "Sun@"
+	db 2,11
+	dw 584
+	TX_FAR _EspeonDexEntry
+	db "@"
+	
+UmbreonDexEntry:
+	db "Moonlight@"
+	db 3,3
+	dw 595
+	TX_FAR _UmbreonDexEntry
+	db "@"
+	
+MurkrowDexEntry:
+	db "Darkness@"
+	db 1,8
+	dw 46
+	TX_FAR _MurkrowDexEntry
+	db "@"
+	
+SlowkingDexEntry:
+	db "Royal@"
+	db 6,7
+	dw 1753
+	TX_FAR _SlowkingDexEntry
+	db "@"
+	
+MisdreavusDexEntry:
+	db "Screech@"
+	db 2,4
+	dw 22
+	TX_FAR _MisdreavusDexEntry
+	db "@"
