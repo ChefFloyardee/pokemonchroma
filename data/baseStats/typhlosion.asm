@@ -13,9 +13,9 @@ dw TyphlosionPicFront
 dw TyphlosionPicBack
 ; attacks known at lvl 0
 db TACKLE
-db LEER
-db SAND_ATTACK
+db GROWL
 db EMBER
+db LEER
 db 3 ; growth rate
 ; learnset
 	tmlearn 6,8

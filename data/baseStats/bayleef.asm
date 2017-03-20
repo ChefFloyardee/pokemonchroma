@@ -14,8 +14,8 @@ dw BayleefPicBack
 ; attacks known at lvl 0
 db TACKLE
 db GROWL
-db RAZOR_LEAF
-db REFLECT
+db QUICK_ATTACK
+db VINE_WHIP
 db 3 ; growth rate
 ; learnset
 	tmlearn 3,6,8

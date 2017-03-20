@@ -202,6 +202,9 @@ INCLUDE "engine/battle/moveEffects/haze_effect.asm"
 INCLUDE "engine/battle/get_trainer_name.asm"
 INCLUDE "engine/random.asm"
 
+EXPBarGraphics: INCBIN "gfx/exp_bar.h8.2bpp"
+EXPBarShinySparkleGraphicsEnd:
+
 
 SECTION "NPC Sprites 2", ROMX, BANK[NPC_SPRITES_2]
 

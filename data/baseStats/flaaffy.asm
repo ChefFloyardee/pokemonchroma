@@ -15,7 +15,7 @@ dw FlaaffyPicBack
 db TACKLE
 db GROWL
 db THUNDERSHOCK
-db THUNDERWAVE
+db THUNDER_WAVE
 db 0 ; growth rate
 ; learnset
 	tmlearn 1,5,6,8

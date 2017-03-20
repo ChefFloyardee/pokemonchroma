@@ -14,7 +14,7 @@ dw QuilavaPicBack
 ; attacks known at lvl 0
 db TACKLE
 db LEER
-db SAND_ATTACK
+db GROWL
 db 0
 db 3 ; growth rate
 ; learnset

@@ -13,7 +13,7 @@ dw CyndaquilPicFront
 dw CyndaquilPicBack
 ; attacks known at lvl 0
 db TACKLE
-db LEER
+db GROWL
 db 0
 db 0
 db 3 ; growth rate
