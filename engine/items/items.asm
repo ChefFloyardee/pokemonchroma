@@ -118,7 +118,7 @@ ItemUsePtrTable:
 	dw ItemUseEvoStone   ; METAL_COAT
 	dw ItemUseEvoStone   ; UPGRADE
 	dw ItemUseEvoStone   ; DRAGON_SCALE
-	dw ItemUseCut        ; PKR_SCYTHER
+	dw UnusableItem      ; PKR_SCYTHER
 
 ItemUseBall:
 
@@ -683,20 +683,6 @@ ItemUseBicycle:
 	call PlayDefaultMusic ; play bike riding music
 .printText
 	jp PrintText
-	
-ItemUseCut:
-	predef UsedCut
-	ld a,[wActionResultOrTookBattleTurn]
-	and a
-	jp z,.loop
-	jp CloseTextDisplay
-	jp .goBackToMap
-	
-.loop
-	xor a
-	ld [wMenuItemToSwap],a
-	ld [wPartyMenuTypeOrMessageID],a
-	call GoBackToPartyMenu
 
 ; used for Surf out-of-battle effect
 ItemUseSurfboard:
