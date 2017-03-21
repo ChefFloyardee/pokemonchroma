@@ -693,6 +693,20 @@ ItemUseCut:
 	and a
 	jp z,.loop
 	jp CloseTextDisplay
+	
+.newBadgeRequired
+	ld hl,.newBadgeRequiredText
+	call PrintText
+	jp .loop
+.newBadgeRequiredText
+	TX_FAR _NewBadgeRequiredText
+	db "@"
+	
+.loop
+	xor a
+	ld [wMenuItemToSwap],a
+	ld [wPartyMenuTypeOrMessageID],a
+	call GoBackToPartyMenu
 
 ; used for Surf out-of-battle effect
 ItemUseSurfboard:
