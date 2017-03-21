@@ -685,22 +685,12 @@ ItemUseBicycle:
 	jp PrintText
 	
 ItemUseCut:
-.cut
-	bit 1,a ; does the player have the Cascade Badge?
-	jp z,.newBadgeRequired
 	predef UsedCut
 	ld a,[wActionResultOrTookBattleTurn]
 	and a
 	jp z,.loop
 	jp CloseTextDisplay
-	
-.newBadgeRequired
-	ld hl,.newBadgeRequiredText
-	call PrintText
-	jp .loop
-.newBadgeRequiredText
-	TX_FAR _NewBadgeRequiredText
-	db "@"
+	jp .goBackToMap
 	
 .loop
 	xor a
