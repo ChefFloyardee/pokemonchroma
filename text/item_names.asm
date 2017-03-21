@@ -101,3 +101,4 @@ ItemNames:
 	db "Metal Coat@"
 	db "Up-Grade@"
 	db "Dragon Scale@"
+	db "Pkr:Scyther@"

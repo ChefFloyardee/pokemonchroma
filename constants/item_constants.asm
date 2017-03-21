@@ -104,6 +104,7 @@ SAFARI_ROCK           EQU $16 ; overload
 	const METAL_COAT    ; $64
 	const UPGRADE       ; $65
 	const DRAGON_SCALE  ; $66
+	const PKR_SCYTHER   ; $67
 	
 
 const_value = $C4

@@ -101,3 +101,4 @@ ItemPrices:
 	money 3000  ; METAL_COAT
 	money 3000  ; UPGRADE
 	money 3000  ; DRAGON_SCALE
+	money 0     ; PKR_SCYTHER

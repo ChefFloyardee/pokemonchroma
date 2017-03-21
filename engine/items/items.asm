@@ -118,6 +118,7 @@ ItemUsePtrTable:
 	dw ItemUseEvoStone   ; METAL_COAT
 	dw ItemUseEvoStone   ; UPGRADE
 	dw ItemUseEvoStone   ; DRAGON_SCALE
+	dw ItemUseCut        ; PKR_SCYTHER
 
 ItemUseBall:
 
@@ -682,6 +683,16 @@ ItemUseBicycle:
 	call PlayDefaultMusic ; play bike riding music
 .printText
 	jp PrintText
+	
+ItemUseCut:
+.cut
+	bit 1,a ; does the player have the Cascade Badge?
+	jp z,.newBadgeRequired
+	predef UsedCut
+	ld a,[wActionResultOrTookBattleTurn]
+	and a
+	jp z,.loop
+	jp CloseTextDisplay
 
 ; used for Surf out-of-battle effect
 ItemUseSurfboard:
