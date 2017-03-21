@@ -3235,5 +3235,14 @@ SECTION "Stack", WRAMX[$dfff], BANK[1]
 wStack:: ; dfff
 	ds -$100
 
+wRelearnableMoves::
+; List of move ids that can be re-learend (Move Relearner)
+; First byte is the number of moves in this list.
+; List is terminated with $ff
+wDeletableMoves::
+; List of move ids that can be deleted (Move Deleter)
+; First byte is the number of moves in this list.
+; List is terminated with $ff
+	ds 1
 
 INCLUDE "sram.asm"
