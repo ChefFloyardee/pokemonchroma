@@ -3189,7 +3189,7 @@ _NothingToCutText::
 
 _UsedCutText::
 	TX_RAM wcd6d
-	text " hacked"
+	text "Scyther hacked"
 	line "away with Cut!"
 	prompt
 
