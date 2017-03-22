@@ -35,10 +35,23 @@ ReadTrainer:
 	dec b
 	jr z,.IterateTrainer
 .inner
-	ld a,[hli]
+	ld a, [hli]
+    cp $FF
+	jr z, .skipSpecialTrainer
+.skipNormalTrainerMon
+	ld a, [hli]
+	ld c, a
+	ld a, [hli]
+	or c
+	jr z, .outer
+	jr .skipNormalTrainerMon
+.skipSpecialTrainer
+	ld a, [hli]
 	and a
-	jr nz,.inner
-	jr .outer
+	jr z, .outer
+	inc hl
+	inc hl
+	jr .skipSpecialTrainer
 
 ; if the first byte of trainer data is FF,
 ; - each pokemon has a specific level

@@ -1224,7 +1224,7 @@ HandlePlayerBlackOut:
 	cp LINK_STATE_BATTLING
 	jr z, .notSony1Battle
 	ld a, [wCurOpponent]
-	cp OPP_SONY1
+	cp SONY1
 	jr nz, .notSony1Battle
 	coord hl, 0, 0  ; sony 1 battle
 	lb bc, 8, 21
