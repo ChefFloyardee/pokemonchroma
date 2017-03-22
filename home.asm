@@ -3099,9 +3099,8 @@ LoadHpBarAndStatusTilePatterns::
 	call GoodCopyVideoData
 	ld de,EXPBarGraphics
 	ld hl,vChars1 + $400
-	lb bc,BANK(EXPBarGraphics), (EXPBarShinySparkleGraphicsEnd - EXPBarGraphics) / $10
+	lb bc,BANK(EXPBarGraphics), (EXPBarGraphicsEnd - EXPBarGraphics) / $10
 	jp GoodCopyVideoData
-
 
 FillMemory::
 ; Fill bc bytes at hl with a.
@@ -4711,4 +4710,4 @@ GoodCopyVideoData:
 	ld c, l
 	pop hl
 	pop de
-	jp FarCopyData2 ; if LCD is off, transfer all at once
+	jp FarCopyData ; if LCD is off, transfer all at once
