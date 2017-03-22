@@ -1,4 +1,4 @@
-dw DEX_AZUMARILL ; pokedex id
+db DEX_AZUMARILL ; pokedex id
 db 100 ; base hp
 db 50 ; base attack
 db 80 ; base defense
