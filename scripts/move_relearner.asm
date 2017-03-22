@@ -25,7 +25,7 @@ MoveRelearnerText1:
 	call SaveScreenTilesToBuffer2
 	xor a
 	ld [wListScrollOffset], a
-	ld [wd07d], a
+	ld [wPartyMenuTypeOrMessageID], a
 	ld [wUpdateSpritesEnabled], a
 	ld [wMenuItemToSwap], a
 	call DisplayPartyMenu
@@ -57,12 +57,12 @@ MoveRelearnerText1:
 	ld a, MOVESLISTMENU
 	ld [wListMenuID], a
 	ld de, wRelearnableMoves
-	ld hl, wList
+	ld hl, wListPointer
 	ld [hl], e
 	inc hl
 	ld [hl], d
 	xor a
-	ld [wcf93], a ; don't print prices
+	ld [wPrintItemPrices], a ; don't print prices
 	call DisplayListMenuID
 	pop bc
 	jr c, .exit  ; exit if player chose cancel
@@ -70,19 +70,19 @@ MoveRelearnerText1:
 	; Save the selected move id.
 	ld a, [wcf91]
 	ld [wMoveNum], a
-	ld [wd11e],a
+	ld [wPokeBallCaptureCalcTemp],a
 	call GetMoveName
 	call CopyStringToCF4B ; copy name to wcf4b
 	pop bc
 	ld a, b
 	ld [wWhichPokemon], a
-	ld a, [wd358]
+	ld a, [wLetterPrintingDelayFlags]
 	push af
 	xor a
-	ld [wd358], a
+	ld [wLetterPrintingDelayFlags], a
 	predef LearnMove
 	pop af
-	ld [wd358], a
+	ld [wLetterPrintingDelayFlags], a
 	ld a, b
 	and a
 	jr z, .exit

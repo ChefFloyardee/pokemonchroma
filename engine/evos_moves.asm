@@ -613,5 +613,3 @@ PrepareRelearnableMoveList:
 	ret
 
 INCLUDE "data/evos_moves.asm"
-
-INCLUDE "data/evos_moves.asm"

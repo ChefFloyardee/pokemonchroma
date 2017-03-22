@@ -201,4 +201,4 @@ const_value = 1
 	const DEX_SLOWKING   ; 199
 	const DEX_MISDREAVUS ; 200
 
-NUM_POKEMON    EQU 177
+NUM_POKEMON    EQU 200

@@ -838,7 +838,6 @@ TradingAnimationGraphics2:
 	INCBIN "gfx/trade2.2bpp"
 TradingAnimationGraphics2End:
 
-INCLUDE "engine/evos_moves.asm"
 INCLUDE "engine/battle/moveEffects/heal_effect.asm"
 INCLUDE "engine/battle/moveEffects/transform_effect.asm"
 INCLUDE "engine/battle/moveEffects/reflect_light_screen_effect.asm"
@@ -2448,6 +2447,7 @@ SECTION "bank31",ROMX,BANK[$31]
 INCLUDE "engine/battle/physical_special_split.asm"
 INCLUDE "scripts/move_deleter.asm"
 INCLUDE "scripts/move_relearner.asm"
+INCLUDE "engine/evos_moves.asm"
 
 ;============================
 ; BANK $32 holds Pokedex text
