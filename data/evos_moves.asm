@@ -866,6 +866,8 @@ Mon152_EvosMoves:
 	db EV_LEVEL,16,BAYLEEF
 	db 0
 ;Learnset
+	db 1,TACKLE
+	db 1,GROWL
 	db 7,QUICK_ATTACK
 	db 9,VINE_WHIP
 	db 14,POISONPOWDER
@@ -888,6 +890,10 @@ Mon153_EvosMoves:
 	db EV_LEVEL,32,MEGANIUM
 	db 0
 ;Learnset
+	db 1,TACKLE
+	db 1,GROWL
+	db 1,VINE_WHIP
+	db 1,QUICK_ATTACK
 	db 7,QUICK_ATTACK
 	db 9,VINE_WHIP
 	db 14,POISONPOWDER
@@ -1297,6 +1303,10 @@ Mon154_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,TACKLE
+	db 1,POISONPOWDER
+	db 1,VINE_WHIP
+	db 1,QUICK_ATTACK
 	db 7,QUICK_ATTACK
 	db 9,VINE_WHIP
 	db 14,POISONPOWDER
@@ -1340,6 +1350,8 @@ Mon155_EvosMoves:
 	db EV_LEVEL,14,QUILAVA
 	db 0
 ;Learnset
+	db 1,TACKLE
+	db 1,GROWL
 	db 10,LEER
 	db 14,EMBER
 	db 18,SMOKESCREEN
@@ -1432,6 +1444,9 @@ Mon156_EvosMoves:
 	db EV_LEVEL,36,TYPHLOSION
 	db 0
 ;Learnset
+	db 1,TACKLE
+	db 1,LEER
+	db 1,GROWL
 	db 10,LEER
 	db 14,EMBER
 	db 19,SMOKESCREEN
@@ -1540,6 +1555,10 @@ Mon157_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,TACKLE
+	db 1,LEER
+	db 1,GROWL
+	db 1,EMBER
 	db 10,LEER
 	db 14,EMBER
 	db 19,SMOKESCREEN
@@ -1562,6 +1581,8 @@ Mon158_EvosMoves:
 	db EV_LEVEL,18,CROCONAW
 	db 0
 ;Learnset
+	db 1,SCRATCH
+	db 1,LEER
 	db 10,WATER_GUN
 	db 13,RAGE
 	db 19,BUBBLE
@@ -1584,6 +1605,9 @@ Mon159_EvosMoves:
 	db EV_LEVEL,30,FERALIGATR
 	db 0
 ;Learnset
+	db 1,SCRATCH
+	db 1,LEER
+	db 1,RAGE
 	db 10,WATER_GUN
 	db 13,RAGE
 	db 20,BUBBLE
@@ -1671,6 +1695,10 @@ Mon160_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,SCRATCH
+	db 1,LEER
+	db 1,RAGE
+	db 1,WATER_GUN
 	db 10,WATER_GUN
 	db 13,RAGE
 	db 20,BUBBLE
@@ -1694,6 +1722,7 @@ Mon161_EvosMoves:
 	db EV_LEVEL,15,FURRET
 	db 0
 ;Learnset
+	db 1,SCRATCH
 	db 7,TACKLE
 	db 11,QUICK_ATTACK
 	db 17,BITE
@@ -1715,6 +1744,10 @@ Mon162_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,TACKLE
+	db 1,DEFENSE_CURL
+	db 1,QUICK_ATTACK
+	db 1,AGILITY
 	db 7,TACKLE
 	db 11,QUICK_ATTACK
 	db 17,BITE
@@ -1906,6 +1939,8 @@ Mon163_EvosMoves:
 	db EV_LEVEL,20,NOCTOWL
 	db 0
 ;Learnset
+	db 1,TACKLE
+	db 1,GROWL
 	db 7,TACKLE
 	db 11,LEER
 	db 14,GUST
@@ -1927,6 +1962,10 @@ Mon164_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,TACKLE
+	db 1,GROWL
+	db 1,PECK
+	db 1,SKY_ATTACK
 	db 7,TACKLE
 	db 11,LEER
 	db 14,GUST
@@ -1949,6 +1988,7 @@ Mon165_EvosMoves:
 	db EV_LEVEL,18,LEDIAN
 	db 0
 ;Learnset
+	db 1,TACKLE
 	db 7,TACKLE
 	db 10,LEER
 	db 13,POISONPOWDER
@@ -2066,6 +2106,8 @@ Mon166_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,TACKLE
+	db 1,SUPERSONIC
 	db 7,TACKLE
 	db 10,LEER
 	db 13,POISONPOWDER
@@ -2088,6 +2130,8 @@ Mon167_EvosMoves:
 	db EV_LEVEL,22,ARIADOS
 	db 0
 ;Learnset
+	db 1,POISON_STING
+	db 1,STRING_SHOT
 	db 7,BITE
 	db 10,CONSTRICT
 	db 15,SCREECH
@@ -2233,6 +2277,9 @@ Mon168_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,POISON_STING
+	db 1,STRING_SHOT
+	db 1,CONSTRICT
 	db 7,BITE
 	db 10,CONSTRICT
 	db 15,SCREECH
@@ -2254,6 +2301,9 @@ Mon169_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,LEECH_LIFE
+	db 1,SCREECH
+	db 1,BITE
 	db 5,SUPERSONIC
 	db 7,GUST
 	db 11,BITE
@@ -2679,6 +2729,8 @@ Mon170_EvosMoves:
 	db EV_LEVEL,27,LANTURN
 	db 0
 ;Learnset
+	db 1,BUBBLE
+	db 1,THUNDER_WAVE
 	db 6,THUNDER_WAVE
 	db 9,ELECTRO_BALL
 	db 12,WATER_GUN
@@ -2799,6 +2851,9 @@ Mon171_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,BUBBLE
+	db 1,SUPERSONIC
+	db 1,THUNDER_WAVE
 	db 6,THUNDER_WAVE
 	db 9,ELECTRO_BALL
 	db 12,WATER_GUN
@@ -3149,6 +3204,9 @@ Mon177_EvosMoves:
 	db EV_LEVEL,25,XATU
 	db 0
 ;Learnset
+	db 1,TELEPORT
+	db 1,GROWL
+	db 1,TACKLE
 	db 7,LEER
 	db 10,PECK
 	db 14,FURY_ATTACK
@@ -3280,6 +3338,10 @@ Mon178_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,TELEPORT
+	db 1,GROWL
+	db 1,LEER
+	db 1,TACKLE
 	db 7,LEER
 	db 10,PECK
 	db 14,FURY_ATTACK
@@ -3490,6 +3552,8 @@ Mon179_EvosMoves:
 	db EV_LEVEL,15,FLAAFFY
 	db 0
 ;Learnset
+	db 1,GROWL
+	db 1,TACKLE
 	db 7,GROWL
 	db 10,TAIL_WHIP
 	db 14,QUICK_ATTACK
@@ -3553,6 +3617,10 @@ Mon180_EvosMoves:
 	db EV_LEVEL,30,AMPHAROS
 	db 0
 ;Learnset
+	db 1,THUNDERSHOCK
+	db 1,GROWL
+	db 1,THUNDER_WAVE
+	db 1,TACKLE
 	db 7,GROWL
 	db 10,TAIL_WHIP
 	db 14,QUICK_ATTACK
@@ -3574,6 +3642,10 @@ Mon181_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,THUNDERSHOCK
+	db 1,GROWL
+	db 1,THUNDER_WAVE
+	db 1,TACKLE
 	db 7,GROWL
 	db 10,TAIL_WHIP
 	db 14,QUICK_ATTACK
@@ -3595,6 +3667,10 @@ Mon182_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,ABSORB
+	db 1,STUN_SPORE
+	db 1,SLEEP_POWDER
+	db 1,PETAL_DANCE
 	db 5,MINIMIZE
 	db 9,ACID
 	db 13,POISONPOWDER
@@ -3617,6 +3693,8 @@ Mon183_EvosMoves:
 	db EV_LEVEL,18,AZUMARILL
 	db 0
 ;Learnset
+	db 1,WATER_GUN
+	db 1,TACKLE
 	db 7,BUBBLE
 	db 10,QUICK_ATTACK
 	db 13,WATER_GUN
@@ -3832,6 +3910,9 @@ Mon184_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,WATER_GUN
+	db 1,TAIL_WHIP
+	db 1,TACKLE
 	db 7,BUBBLE
 	db 10,QUICK_ATTACK
 	db 13,WATER_GUN
@@ -3878,6 +3959,9 @@ Mon185_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,ROCK_THROW
+	db 1,MIMIC
+	db 1,LOW_KICK
 	db 7,MIRROR_MOVE
 	db 10,LEECH_SEED
 	db 15,SLAM
@@ -3898,6 +3982,9 @@ Mon186_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,BUBBLEBEAM
+	db 1,DOUBLESLAP
+	db 1,HYPNOSIS
 	db 5,WATER_GUN
 	db 8,HYPNOSIS
 	db 11,BUBBLE
@@ -4022,6 +4109,7 @@ Mon187_EvosMoves:
 	db EV_LEVEL,18,SKIPLOOM
 	db 0
 ;Learnset
+	db 1,SPLASH
 	db 7,TACKLE
 	db 10,QUICK_ATTACK
 	db 16,LEECH_SEED
@@ -4185,6 +4273,9 @@ Mon188_EvosMoves:
 	db EV_LEVEL,27,JUMPLUFF
 	db 0
 ;Learnset
+	db 1,TACKLE
+	db 1,TAIL_WHIP
+	db 1,SPLASH
 	db 7,TACKLE
 	db 10,QUICK_ATTACK
 	db 16,LEECH_SEED
@@ -4205,6 +4296,9 @@ Mon189_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,TACKLE
+	db 1,TAIL_WHIP
+	db 1,SPLASH
 	db 7,TACKLE
 	db 10,QUICK_ATTACK
 	db 16,LEECH_SEED
@@ -4225,6 +4319,8 @@ Mon190_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,SCRATCH
+	db 1,TAIL_WHIP
     db 7,LOW_KICK
 	db 9,FURY_SWIPES
 	db 13,TAIL_WHIP
@@ -4246,6 +4342,8 @@ Mon191_EvosMoves:
 	db EV_ITEM,SUN_STONE,1,SUNFLORA
 	db 0
 ;Learnset
+	db 1,ABSORB
+	db 1,GROWTH
 	db 7,GROWTH
 	db 9,QUICK_ATTACK
 	db 12,MOONLIGHT
@@ -4267,6 +4365,9 @@ Mon192_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,ABSORB
+	db 1,GROWTH
+	db 1,POUND
 	db 7,GROWTH
 	db 9,QUICK_ATTACK
 	db 12,MOONLIGHT
@@ -4288,6 +4389,7 @@ Mon193_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,TACKLE
 	db 7,POISONPOWDER
 	db 14,STUN_SPORE
 	db 19,SONICBOOM
@@ -4309,6 +4411,8 @@ Mon194_EvosMoves:
 	db EV_LEVEL,20,QUAGSIRE
 	db 0
 ;Learnset
+	db 1,WATER_GUN
+	db 1,TAIL_WHIP
 	db 8,WATER_GUN
 	db 14,QUICK_ATTACK
 	db 18,LEER
@@ -4327,6 +4431,8 @@ Mon195_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,WATER_GUN
+	db 1,TAIL_WHIP
 	db 8,WATER_GUN
 	db 15,QUICK_ATTACK
 	db 18,LEER
@@ -4345,6 +4451,9 @@ Mon196_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,TACKLE
+	db 1,TAIL_WHIP
+	db 1,CONFUSION
 	db 5,SAND_ATTACK
 	db 9,CONFUSION
 	db 13,QUICK_ATTACK
@@ -4363,6 +4472,9 @@ Mon197_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,TACKLE
+	db 1,TAIL_WHIP
+	db 1,BITE
 	db 5,SAND_ATTACK
 	db 9,BITE
 	db 13,QUICK_ATTACK
@@ -4381,6 +4493,7 @@ Mon198_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,PECK
 	db 5,QUICK_ATTACK
 	db 11,LEER
 	db 15,WING_ATTACK
@@ -4401,6 +4514,7 @@ Mon199_EvosMoves:
 ;Evolutons
 	db 0
 ;Learnset
+	db 1,TACKLE
 	db 5,GROWL
 	db 9,WATER_GUN
 	db 14,CONFUSION
@@ -4421,6 +4535,8 @@ Mon200_EvosMoves:
 ;Evolutions
 	db 0
 ;Learnset
+	db 1,GROWL
+	db 1,PSYWAVE
 	db 5,LICK
 	db 10,LEER
 	db 14,CONFUSE_RAY
