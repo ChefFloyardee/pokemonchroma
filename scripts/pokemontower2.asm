@@ -142,7 +142,7 @@ PokemonTower2Text1:
 	ld hl, PokemonTower2Text_60632
 	ld de, PokemonTower2Text_60637
 	call SaveEndBattleTextPointers
-	ld a, OPP_SONY2
+	ld a, SONY2
 	ld [wCurOpponent], a
 
 	; select which team to use during the encounter
