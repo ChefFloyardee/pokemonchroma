@@ -2318,6 +2318,11 @@ wEvoStoneItemID:: ; d156
 
 wSavedNPCMovementDirections2Index:: ; d157
 	ds 1
+	
+wIsTrainerBattle::
+	ds 1
+wWasTrainerBattle::
+	ds 1
 
 wPlayerName:: ; d158
 	ds NAME_LENGTH
