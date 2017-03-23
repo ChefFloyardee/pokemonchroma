@@ -1221,7 +1221,11 @@ OaksLabText25:
 
 OaksLabText26:
 	TX_FAR _OaksLabText26
-	db "@"
+	TX_SFX_KEY_ITEM
+	jr nz, .asm_1d2e7
+	lb bc, POKE_BALL, 5
+	call GiveItem
+
 
 OaksLabText27:
 	TX_FAR _OaksLabText27
