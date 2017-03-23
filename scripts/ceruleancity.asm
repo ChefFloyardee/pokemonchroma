@@ -134,7 +134,7 @@ CeruleanCityScript1:
 	ld hl, CeruleanCityText_1966d
 	ld de, CeruleanCityText_19672
 	call SaveEndBattleTextPointers
-	ld a, SONY1
+	ld a, OPP_SONY1
 	ld [wCurOpponent], a
 
 	; select which team to use during the encounter
@@ -152,8 +152,6 @@ CeruleanCityScript1:
 	ld a, $9
 .done
 	ld [wTrainerNo], a
-	ld a, 1
-	ld [wIsTrainerBattle], a
 
 	xor a
 	ld [hJoyHeld], a
@@ -166,8 +164,6 @@ CeruleanCityScript2:
 	ld a, [wIsInBattle]
 	cp $ff
 	jp z, CeruleanCityScript_1948c
-	xor a
-	ld [wIsTrainerBattle], a
 	call CeruleanCityScript_1955d
 	ld a, $f0
 	ld [wJoyIgnore], a

@@ -9,7 +9,7 @@ LanceObject:
 	db $0 ; signs
 
 	db $1 ; objects
-	object SPRITE_LANCE, $6, $1, STAY, DOWN, $1, LANCE, $1
+	object SPRITE_LANCE, $6, $1, STAY, DOWN, $1, OPP_LANCE, $1
 
 	; warp-to
 	EVENT_DISP LANCES_ROOM_WIDTH, $10, $18 ; AGATHAS_ROOM

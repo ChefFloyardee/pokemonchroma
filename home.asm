@@ -2363,20 +2363,16 @@ EndTrainerBattle::
 	res 0, [hl]                  ; player is no longer engaged by any trainer
 	ld a, [wIsInBattle]
 	cp $ff
-	jr z, EndTrainerBattleWhiteout
+	jp z, ResetButtonPressedAndMapScript
 	ld a, $2
 	call ReadTrainerHeaderInfo
 	ld a, [wTrainerHeaderFlagBit]
 	ld c, a
 	ld b, FLAG_SET
 	call TrainerFlagAction   ; flag trainer as fought
-	ld a, [wWasTrainerBattle]
-	and a
-	jr nz, .skipRemoveSprite    ; test if trainer was fought (in that case skip removing the corresponding sprite)
-	ld a, [W_CURMAP]
-	cp POKEMONTOWER_7
-	jr z, .skipRemoveSprite ; the tower 7f scripts call EndTrainerBattle manually after
-	; wIsTrainerBattle has been unset
+	ld a, [wEnemyMonOrTrainerClass]
+	cp 200
+	jr nc, .skipRemoveSprite    ; test if trainer was fought (in that case skip removing the corresponding sprite)
 	ld hl, wMissableObjectList
 	ld de, $2
 	ld a, [wSpriteIndex]
@@ -2386,8 +2382,6 @@ EndTrainerBattle::
 	ld [wMissableObjectIndex], a               ; load corresponding missable object index and remove it
 	predef HideObject
 .skipRemoveSprite
-	xor a
-	ld [wWasTrainerBattle], a
 	ld hl, wd730
 	bit 4, [hl]
 	res 4, [hl]
@@ -2402,12 +2396,6 @@ ResetButtonPressedAndMapScript::
 	ld [wCurMapScript], a               ; reset battle status
 	ret
 
-EndTrainerBattleWhiteout:
-	xor a
-	ld [wIsTrainerBattle], a
-	ld [wWasTrainerBattle], a
-	jp ResetButtonPressedAndMapScript	
-	
 ; calls TrainerWalkUpToPlayer
 TrainerWalkUpToPlayer_Bank0::
 	jpba TrainerWalkUpToPlayer
@@ -2417,14 +2405,12 @@ InitBattleEnemyParameters::
 	ld a, [wEngagedTrainerClass]
 	ld [wCurOpponent], a
 	ld [wEnemyMonOrTrainerClass], a
-	ld a, [wIsTrainerBattle]
-	and a
-	jr z, .noTrainer
+	cp 200
 	ld a, [wEngagedTrainerSet]
+	jr c, .noTrainer
 	ld [wTrainerNo], a
 	ret
 .noTrainer
-	ld a, [wEngagedTrainerSet]
 	ld [wCurEnemyLVL], a
 	ret
 
@@ -2520,17 +2506,7 @@ EngageMapTrainer::
 	ld a, [hli]    ; load trainer class
 	ld [wEngagedTrainerClass], a
 	ld a, [hl]     ; load trainer mon set
-	bit 7, a
-	jr nz, .pokemon
 	ld [wEnemyMonAttackMod], a
-	ld a, 1
-	ld [wIsTrainerBattle], a
-	jp PlayTrainerMusic
-.pokemon
-	and $7F
-	ld [wEnemyMonAttackMod], a
-	xor a
-	ld [wIsTrainerBattle], a
 	jp PlayTrainerMusic
 
 PrintEndBattleText::
@@ -2593,11 +2569,11 @@ CheckIfAlreadyEngaged::
 
 PlayTrainerMusic::
 	ld a, [wEngagedTrainerClass]
-	cp SONY1
+	cp OPP_SONY1
 	ret z
-	cp SONY2
+	cp OPP_SONY2
 	ret z
-	cp SONY3
+	cp OPP_SONY3
 	ret z
 	ld a, [wGymLeaderNo]
 	and a
@@ -3123,8 +3099,9 @@ LoadHpBarAndStatusTilePatterns::
 	call GoodCopyVideoData
 	ld de,EXPBarGraphics
 	ld hl,vChars1 + $400
-	lb bc,BANK(EXPBarGraphics), (EXPBarGraphicsEnd - EXPBarGraphics) / $10
+	lb bc,BANK(EXPBarGraphics), (EXPBarShinySparkleGraphicsEnd - EXPBarGraphics) / $10
 	jp GoodCopyVideoData
+
 
 FillMemory::
 ; Fill bc bytes at hl with a.
@@ -4734,4 +4711,4 @@ GoodCopyVideoData:
 	ld c, l
 	pop hl
 	pop de
-	jp FarCopyData ; if LCD is off, transfer all at once
+	jp FarCopyData2 ; if LCD is off, transfer all at once

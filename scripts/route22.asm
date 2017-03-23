@@ -33,8 +33,6 @@ Route22Script_50ed6:
 .asm_50ee1
 	ld a, [hl]
 	ld [wTrainerNo], a
-	ld a, 1
-	ld [wIsTrainerBattle], a
 	ret
 
 Route22MoveRivalSprite:
@@ -133,7 +131,7 @@ Route22Script1:
 	ld hl, Route22RivalDefeatedText1
 	ld de, Route22Text_511bc
 	call SaveEndBattleTextPointers
-	ld a, SONY1
+	ld a, OPP_SONY1
 	ld [wCurOpponent], a
 	ld hl, StarterMons_50faf
 	call Route22Script_50ed6
@@ -151,8 +149,6 @@ Route22Script2:
 	ld a, [wIsInBattle]
 	cp $ff
 	jp z, Route22Script_50ece
-	xor a
-	ld [wIsTrainerBattle], a
 	ld a, [wSpriteStateData1 + 9]
 	and a ; cp SPRITE_FACING_DOWN
 	jr nz, .notDown
@@ -291,7 +287,7 @@ Route22Script4:
 	ld hl, Route22RivalDefeatedText2
 	ld de, Route22Text_511d0
 	call SaveEndBattleTextPointers
-	ld a, SONY2
+	ld a, OPP_SONY2
 	ld [wCurOpponent], a
 	ld hl, StarterMons_510d9
 	call Route22Script_50ed6
@@ -308,8 +304,6 @@ Route22Script5:
 	ld a, [wIsInBattle]
 	cp $ff
 	jp z, Route22Script_50ece
-	xor a
-	ld [wIsTrainerBattle], a
 	ld a, $2
 	ld [H_SPRITEINDEX], a
 	ld a, [wcf0d]

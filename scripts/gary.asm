@@ -64,7 +64,7 @@ GaryScript2:
 	ld hl, GaryDefeatedText
 	ld de, GaryVictoryText
 	call SaveEndBattleTextPointers
-	ld a, SONY3
+	ld a, OPP_SONY3
 	ld [wCurOpponent], a
 
 	; select which team to use during the encounter
@@ -82,8 +82,6 @@ GaryScript2:
 	ld a, $3
 .saveTrainerId
 	ld [wTrainerNo], a
-	ld a, 1
-	ld [wIsTrainerBattle], a
 
 	xor a
 	ld [hJoyHeld], a
@@ -95,8 +93,6 @@ GaryScript3:
 	ld a, [wIsInBattle]
 	cp $ff
 	jp z, ResetGaryScript
-	xor a
-	ld [wIsTrainerBattle], a
 	call UpdateSprites
 	SetEvent EVENT_BEAT_CHAMPION_RIVAL
 	ld a, $f0

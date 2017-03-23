@@ -381,9 +381,7 @@ OaksLabScript11:
 	ret nz
 
 	; define which team rival uses, and fight it
-	ld a, 1
-	ld [wIsTrainerBattle], a
-	ld a, SONY1
+	ld a, OPP_SONY1
 	ld [wCurOpponent], a
 	ld a, [wRivalStarter]
 	cp STARTER2
@@ -417,8 +415,6 @@ OaksLabScript11:
 	ret
 
 OaksLabScript12:
-	xor a
-	ld [wIsTrainerBattle], a
 	ld a, $f0
 	ld [wJoyIgnore], a
 	ld a, PLAYER_DIR_UP
@@ -1225,11 +1221,7 @@ OaksLabText25:
 
 OaksLabText26:
 	TX_FAR _OaksLabText26
-	TX_SFX_KEY_ITEM
-	TX_ASM
-	lb bc, POKE_BALL, 5
-	call GiveItem
-    jp TextScriptEnd
+	db "@"
 
 OaksLabText27:
 	TX_FAR _OaksLabText27
