@@ -45,7 +45,10 @@ Route16HouseText2:
 	TX_ASM
 	ld hl, Route16HouseText_1e652
 	call PrintText
-	ld a, FEAROW
+	ld a, (FEAROW & $FF)
+ 	ld c, a
+ 	ld a, (FEAROW >> 8)
+ 	ld b, a
 	call PlayCry
 	call WaitForSoundToFinish
 	jp TextScriptEnd

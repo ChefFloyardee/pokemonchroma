@@ -48,7 +48,10 @@ MewtwoText:
 MewtwoBattleText:
 	TX_FAR _MewtwoBattleText
 	TX_ASM
-	ld a, MEWTWO
+	ld a, (MEWTWO & $FF)
+ 	ld c, a
+ 	ld a, (MEWTWO >> 8)
+ 	ld b, a
 	call PlayCry
 	call WaitForSoundToFinish
 	jp TextScriptEnd
@@ -62,7 +65,10 @@ MewText:
 MewBattleText:
 	TX_FAR _MewBattleText
 	TX_ASM
-	ld a, MEW
+	ld a, (MEWTWO & $FF)
+ 	ld c, a
+ 	ld a, (MEWTWO >> 8)
+ 	ld b, a
 	call PlayCry
 	call WaitForSoundToFinish
 	jp TextScriptEnd

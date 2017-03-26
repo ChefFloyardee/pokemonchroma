@@ -1,3 +1,3 @@
 GoodRodMons:
-	db 10,CHINCHOU
-	db 10,POLIWAG
+	dbw 10,CHINCHOU
+	dbw 10,POLIWAG

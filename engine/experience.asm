@@ -2,6 +2,8 @@
 CalcLevelFromExperience:
 	ld a, [wLoadedMonSpecies]
 	ld [wd0b5], a
+	ld a, [wLoadedMonSpecies + 1]
+	ld [wd0b5 + 1], a
 	call GetMonHeader
 	ld d, $1 ; init level to 1
 .loop

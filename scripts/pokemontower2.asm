@@ -142,17 +142,28 @@ PokemonTower2Text1:
 	ld hl, PokemonTower2Text_60632
 	ld de, PokemonTower2Text_60637
 	call SaveEndBattleTextPointers
-	ld a, OPP_SONY2
+	ld a, SONY2
 	ld [wCurOpponent], a
+	ld a, $FF
+	ld [wCurOpponent + 1], a
 
 	; select which team to use during the encounter
-	ld a, [wRivalStarter]
-	cp STARTER2
-	jr nz, .NotSquirtle
-	ld a, $4
-	jr .done
+	ld a, [wRivalStarter + 1]
+ 	ld b, a
+  	ld a, [wRivalStarter]
+ 	ld c, a
+ 	ld de, STARTER2
+ 	call CompareTwoBytes
+  	jr nz, .NotSquirtle
+  	ld a, $4
+  	jr .done
 .NotSquirtle
-	cp STARTER3
+ 	ld a, [wRivalStarter + 1]
+ 	ld b, a
+ 	ld a, [wRivalStarter]
+ 	ld c, a
+ 	ld de, STARTER3
+ 	call CompareTwoBytes
 	jr nz, .Charmander
 	ld a, $5
 	jr .done

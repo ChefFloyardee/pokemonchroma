@@ -664,7 +664,7 @@ AnimationIdSpecialEffects:
 	dw AnimationFlashScreen
 
 	db TAIL_WHIP
-	dw TailWhipAnimationUnused
+	dw $0000
 
 	db GROWL
 	dw DoGrowlSpecialEffects
@@ -977,13 +977,6 @@ DoGrowlSpecialEffects:
 	dec a
 	call z,AnimationCleanOAM ; clean up at the end of the subanimation
 	ret
-
-; this is associated with Tail Whip, but Tail Whip doesn't use any subanimations
-TailWhipAnimationUnused:
-	ld a,1
-	ld [wSubAnimCounter],a
-	ld c,20
-	jp DelayFrames
 
 ; Format: Special Effect ID (1 byte), Address (2 bytes)
 SpecialEffectPointers:
@@ -2147,6 +2140,9 @@ ChangeMonPic:
 	ld a, [wChangeMonPicEnemyTurnSpecies]
 	ld [wcf91], a
 	ld [wd0b5], a
+	ld a, [wChangeMonPicEnemyTurnSpecies + 1]
+	ld [wcf91 + 1], a
+	ld [wd0b5 + 1], a
 	xor a
 	ld [wSpriteFlipped], a
 	call GetMonHeader
@@ -2159,6 +2155,9 @@ ChangeMonPic:
 	ld a, [wChangeMonPicPlayerTurnSpecies]
 	ld [wBattleMonSpecies2], a
 	ld [wd0b5], a
+	ld a, [wChangeMonPicPlayerTurnSpecies + 1]
+	ld [wBattleMonSpecies2 + 1], a
+	ld [wd0b5 + 1], a
 	call GetMonHeader
 	predef LoadMonBackPic
 	xor a
@@ -2324,9 +2323,15 @@ GetMoveSound:
 	and a
 	jr nz,.next
 	ld a,[wBattleMonSpecies] ; get number of current monster
+	ld c, a
+    ld a,[wBattleMonSpecies + 1]
+ 	ld b, a
 	jr .Continue
 .next
 	ld a,[wEnemyMonSpecies]
+	ld c, a
+ 	ld a,[wEnemyMonSpecies + 1]
+ 	ld b, a
 .Continue
 	push hl
 	call GetCryData

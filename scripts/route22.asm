@@ -23,14 +23,22 @@ Route22Script7:
 
 Route22Script_50ed6:
 	ld a, [wRivalStarter]
+	ld c, a
+	ld a, [wRivalStarter + 1]
 	ld b, a
 .asm_50eda
 	ld a, [hli]
+	cp c
+ 	jr nz, .different
+ 	ld a, [hl]
 	cp b
 	jr z, .asm_50ee1
+.different
+ 	inc hl
 	inc hl
 	jr .asm_50eda
 .asm_50ee1
+	inc hl
 	ld a, [hl]
 	ld [wTrainerNo], a
 	ret
@@ -131,8 +139,10 @@ Route22Script1:
 	ld hl, Route22RivalDefeatedText1
 	ld de, Route22Text_511bc
 	call SaveEndBattleTextPointers
-	ld a, OPP_SONY1
+	ld a, (SONY1 & $FF)
 	ld [wCurOpponent], a
+	ld a, $FF
+	ld [wCurOpponent + 1], a
 	ld hl, StarterMons_50faf
 	call Route22Script_50ed6
 	ld a, $2
@@ -141,9 +151,9 @@ Route22Script1:
 
 StarterMons_50faf:
 ; starter the rival picked, rival trainer number
-	db STARTER2,$04
-	db STARTER3,$05
-	db STARTER1,$06
+	dwb STARTER2,$04
+ 	dwb STARTER3,$05
+ 	dwb STARTER1,$06
 
 Route22Script2:
 	ld a, [wIsInBattle]
@@ -287,8 +297,10 @@ Route22Script4:
 	ld hl, Route22RivalDefeatedText2
 	ld de, Route22Text_511d0
 	call SaveEndBattleTextPointers
-	ld a, OPP_SONY2
+	ld a, (SONY2 & $FF)
 	ld [wCurOpponent], a
+	ld a, $FF
+	ld [wCurOpponent + 1], a
 	ld hl, StarterMons_510d9
 	call Route22Script_50ed6
 	ld a, $5
@@ -296,9 +308,9 @@ Route22Script4:
 	ret
 
 StarterMons_510d9:
-	db STARTER2,$0a
-	db STARTER3,$0b
-	db STARTER1,$0c
+	dwb STARTER2,$0a
+ 	dwb STARTER3,$0b
+ 	dwb STARTER1,$0c
 
 Route22Script5:
 	ld a, [wIsInBattle]

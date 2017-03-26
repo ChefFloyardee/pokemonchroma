@@ -333,7 +333,20 @@ _OaksLabText26::
 	para "This is a great"
 	line "undertaking in"
 	cont "#mon history!"
-	done
+
+	para "But you can't get"
+	line "detailed data on"
+	cont "#mon by just"
+	cont "seeing them."
+
+	para "You must catch"
+	line "them! Use these"
+	cont "to capture wild"
+	cont "#mon."
+
+	para "<PLAYER> got 5"
+	line "# Balls!@@"
+
 
 _OaksLabText27::
 	text "<RIVAL>: Alright"
@@ -363,10 +376,10 @@ _OaksLabText_441cc::
 	line "letion is:"
 
 	para "@"
-	TX_NUM hDexRatingNumMonsSeen, 1, 3
+	TX_NUM wDexRatingNumMonsSeen2, 2, 3
 	text " #dex seen"
 	line "@"
-	TX_NUM hDexRatingNumMonsOwned, 1, 3
+	TX_NUM wDexRatingNumMonsOwned2, 2, 3
 	text " #dex owned"
 
 	para "Prof.Oak's"

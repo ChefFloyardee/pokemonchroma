@@ -15,7 +15,10 @@ CeladonMansion1_486a1:
 CeladonMansion1Text1:
 	TX_FAR _CeladonMansion1Text1
 	TX_ASM
-	ld a, MEOWTH
+	ld a, (MEOWTH & $FF)
+	ld c, a
+	ld a, (MEOWTH >> 8)
+	ld b, a
 	jp CeladonMansion1_486a1
 
 CeladonMansion1Text2:
@@ -25,13 +28,19 @@ CeladonMansion1Text2:
 CeladonMansion1Text3:
 	TX_FAR _CeladonMansion1Text3
 	TX_ASM
-	ld a, CLEFAIRY
+	ld a, (CLEFAIRY & $FF)
+	ld c, a
+ 	ld a, (CLEFAIRY >> 8)
+	ld b, a
 	jp CeladonMansion1_486a1
 
 CeladonMansion1Text4:
 	TX_FAR _CeladonMansion1Text4
 	TX_ASM
-	ld a, NIDORAN_F
+	ld a, (NIDORAN_F & $FF)
+ 	ld c, a
+ 	ld a, (NIDORAN_F >> 8)
+ 	ld b, a
 	jp CeladonMansion1_486a1
 
 CeladonMansion1Text5:

@@ -2,7 +2,7 @@ FlagActionPredef:
 	call GetPredefRegisters
 
 FlagAction:
-; Perform action b on bit c
+; Perform action b on bit de
 ; in the bitfield at hl.
 ;  0: reset
 ;  1: set
@@ -14,27 +14,34 @@ FlagAction:
 	push bc
 
 	; bit
-	ld a, c
-	ld d, a
+	ld a, e
 	and 7
-	ld e, a
+	ld c, a ; c is the bit offset
 
 	; byte
-	ld a, d
-	srl a
-	srl a
-	srl a
-	add l
-	ld l, a
-	jr nc, .ok
-	inc h
-.ok
+	; divide de by 8
+ 	srl e
+ 	srl d
+ 	jr nc, .nocarry1
+ 	set 7, e
+.nocarry1
+ 	srl e
+ 	srl d
+ 	jr nc, .nocarry2
+ 	set 7, e
+.nocarry2
+ 	srl e
+ 	srl d
+ 	jr nc, .nocarry3
+ 	set 7, e
+.nocarry3
+	add hl, de
 
 	; d = 1 << e (bitmask)
-	inc e
+	inc c
 	ld d, 1
 .shift
-	dec e
+	dec c
 	jr z, .shifted
 	sla d
 	jr .shift

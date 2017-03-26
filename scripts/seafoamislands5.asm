@@ -159,7 +159,10 @@ ArticunoText:
 ArticunoBattleText:
 	TX_FAR _ArticunoBattleText
 	TX_ASM
-	ld a, ARTICUNO
+	ld a, (ARTICUNO & $FF)
+ 	ld c, a
+ 	ld a, (ARTICUNO >> 8)
+ 	ld b, a
 	call PlayCry
 	call WaitForSoundToFinish
 	jp TextScriptEnd

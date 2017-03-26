@@ -64,17 +64,28 @@ GaryScript2:
 	ld hl, GaryDefeatedText
 	ld de, GaryVictoryText
 	call SaveEndBattleTextPointers
-	ld a, OPP_SONY3
+	ld a, SONY3
 	ld [wCurOpponent], a
+	ld a, $FF
+	ld [wCurOpponent + 1], a
 
 	; select which team to use during the encounter
+	ld a, [wRivalStarter + 1]
+	ld b, a
 	ld a, [wRivalStarter]
-	cp STARTER2
+	ld c, a
+	ld de, STARTER2
+	call CompareTwoBytes
 	jr nz, .NotStarter2
 	ld a, $1
 	jr .saveTrainerId
 .NotStarter2
-	cp STARTER3
+	ld a, [wRivalStarter + 1]
+	ld b, a
+	ld a, [wRivalStarter]
+	ld c, a
+	ld de, STARTER3
+	call CompareTwoBytes
 	jr nz, .NotStarter3
 	ld a, $2
 	jr .saveTrainerId
@@ -280,6 +291,8 @@ GaryText3:
 	TX_ASM
 	ld a, [wPlayerStarter]
 	ld [wd11e], a
+	ld a, [wPlayerStarter + 1]
+ 	ld [wd11e + 1], a
 	call GetMonName
 	ld hl, GaryText_76120
 	call PrintText

@@ -591,26 +591,31 @@ TextCommand0B::
 	ld hl,TextCommandSounds
 .loop
 	ld a,[hli]
+	cp $14
+	jr nc, .cries
 	cp b
 	jr z,.matchFound
 	inc hl
 	jr .loop
 .matchFound
-	cp a,$14
-	jr z,.pokemonCry
-	cp a,$15
-	jr z,.pokemonCry
-	cp a,$16
-	jr z,.pokemonCry
 	ld a,[hl]
 	call PlaySound
 	call WaitForSoundToFinish
 	pop hl
 	pop bc
 	jp NextTextCommand
+.cries
+ 	cp b
+ 	jr z, .pokemonCry
+ 	inc hl
+ 	inc hl
+ 	jr .cries
 .pokemonCry
 	push de
-	ld a,[hl]
+	ld a,[hli]
+ 	ld c, a
+ 	ld a, [hl]
+ 	ld b, a
 	call PlayCry
 	pop de
 	pop hl
@@ -626,9 +631,9 @@ TextCommandSounds::
 	db $10, SFX_GET_ITEM_2
 	db $11, SFX_GET_KEY_ITEM
 	db $13, SFX_DEX_PAGE_ADDED
-	db $14, NIDORINA ; used in OakSpeech
-	db $15, PIDGEOT  ; used in SaffronCityText12
-	db $16, DEWGONG  ; unused?
+	dbw $14, NIDORINA ; used in OakSpeech
+	dbw $15, PIDGEOT  ; used in SaffronCityText12
+	dbw $16, DEWGONG  ; unused?
 
 ; draw ellipses
 ; 0CAA

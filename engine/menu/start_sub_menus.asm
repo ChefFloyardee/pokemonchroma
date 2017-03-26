@@ -578,20 +578,8 @@ DrawTrainerInfo:
 	ld de,vChars1 + $570
 	call TrainerInfo_FarCopyData
 	call EnableLCD
-	ld hl,wTrainerInfoTextBoxWidthPlus1
-	ld a,18 + 1
-	ld [hli],a
-	dec a
-	ld [hli],a
-	ld [hl],1
 	coord hl, 0, 0
 	call TrainerInfo_DrawTextBox
-	ld hl,wTrainerInfoTextBoxWidthPlus1
-	ld a,16 + 1
-	ld [hli],a
-	dec a
-	ld [hli],a
-	ld [hl],3
 	coord hl, 1, 10
 	call TrainerInfo_DrawTextBox
 	coord hl, 0, 10
@@ -627,9 +615,9 @@ TrainerInfo_FarCopyData:
 	jp FarCopyData2
 
 TrainerInfo_NameMoneyTimeText:
-	db   "NAME/"
-	next "MONEY/"
-	next "TIME/@"
+	db   "Name/"
+	next "Money/"
+	next "Time/@"
 
 ; $76 is a circle tile
 TrainerInfo_BadgesText:
@@ -639,15 +627,12 @@ TrainerInfo_BadgesText:
 ; height is always 6
 ; INPUT:
 ; hl = destination address
-; [wTrainerInfoTextBoxWidthPlus1] = width
-; [wTrainerInfoTextBoxWidth] = width - 1
-; [wTrainerInfoTextBoxNextRowOffset] = distance from the end of a text box row to the start of the next
 TrainerInfo_DrawTextBox:
 	ld a,$79 ; upper left corner tile ID
 	lb de, $7a, $7b ; top edge and upper right corner tile ID's
 	call TrainerInfo_DrawHorizontalEdge ; draw top edge
 	call TrainerInfo_NextTextBoxRow
-	ld a,[wTrainerInfoTextBoxWidthPlus1]
+	ld a,19
 	ld e,a
 	ld d,0
 	ld c,6 ; height of the text box
@@ -663,7 +648,7 @@ TrainerInfo_DrawTextBox:
 
 TrainerInfo_DrawHorizontalEdge:
 	ld [hli],a ; place left corner tile
-	ld a,[wTrainerInfoTextBoxWidth]
+	ld a,18
 	ld c,a
 	ld a,d
 .loop
@@ -675,7 +660,7 @@ TrainerInfo_DrawHorizontalEdge:
 	ret
 
 TrainerInfo_NextTextBoxRow:
-	ld a,[wTrainerInfoTextBoxNextRowOffset] ; distance to the start of the next row
+	ld a, 1 ; distance to the start of the next row
 .loop
 	inc hl
 	dec a
@@ -783,17 +768,33 @@ SwitchPartyMon_InitVarOrSwapData:
 	ld d, h
 	ld e, l
 	ld a, [wCurrentMenuItem]
-	add l
-	ld l, a
-	jr nc, .noCarry
-	inc h
-.noCarry
+	push bc
+ 	ld c, a
+ 	ld b, 0
+ 	add hl, bc
+ 	add hl, bc
+ 	pop bc
+ 	push hl
+ 	push bc
 	ld a, [wMenuItemToSwap]
-	add e
-	ld e, a
-	jr nc, .noCarry2
-	inc d
-.noCarry2
+	ld c, a
+ 	ld b, 0
+ 	ld h, d
+ 	ld l, e
+ 	add hl, bc
+ 	add hl, bc
+ 	ld d, h
+ 	ld e, l
+ 	pop bc
+ 	pop hl
+ 	ld a, [hl]
+ 	ld [hSwapTemp], a
+ 	ld a, [de]
+ 	ld [hl], a
+ 	ld a, [hSwapTemp]
+ 	ld [de], a
+ 	inc hl
+ 	inc de
 	ld a, [hl]
 	ld [hSwapTemp], a
 	ld a, [de]

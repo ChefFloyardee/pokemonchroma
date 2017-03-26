@@ -12,15 +12,26 @@ _RemovePokemon:
 	ld c, a
 	ld b, $0
 	add hl, bc
+	add hl, bc
 	ld e, l
 	ld d, h
 	inc de
-.asm_7b81
+	inc de
+.loop
 	ld a, [de]
 	inc de
 	ld [hli], a
-	inc a
-	jr nz, .asm_7b81
+	ld a, [de]
+ 	inc de
+ 	ld [hli], a
+ 	ld a, [hl]
+ 	cp $FF
+ 	jr nz, .loop
+ 	inc hl
+ 	ld a, [hl]
+ 	dec hl
+ 	cp $FF
+ 	jr nz, .loop
 	ld hl, wPartyMonOT
 	ld d, $5
 	ld a, [wRemoveMonFromBox]
@@ -93,3 +104,18 @@ _RemovePokemon:
 	ld bc, wBoxMonNicksEnd
 .asm_7c15
 	jp CopyDataUntil
+
+; Copies [hl, bc) to [de, bc - hl).
+; In other words, the source data is from hl up to but not including bc,
+; and the destination is de.
+CopyDataUntil::
+ 	ld a,[hli]
+ 	ld [de],a
+ 	inc de
+ 	ld a,h
+ 	cp b
+ 	jr nz,CopyDataUntil
+ 	ld a,l
+ 	cp c
+ 	jr nz,CopyDataUntil
+ 	ret

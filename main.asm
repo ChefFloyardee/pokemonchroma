@@ -123,6 +123,131 @@ INCLUDE "engine/pathfinding.asm"
 INCLUDE "engine/hp_bar.asm"
 INCLUDE "engine/hidden_object_functions3.asm"
 
+Set16BitFlag:
+ ; Input: de = flag index
+ ;        hl = flag data
+ 	ld bc, $20
+ 	ld a, d
+.hi
+ 	and a
+ 	jr z, .next
+ 	add hl, bc
+ 	dec a
+ 	jr .hi
+.next
+ 	ld a, e
+ 	srl a
+ 	srl a
+ 	srl a
+ 	ld b, 0
+ 	ld c, a
+ 	add hl, bc
+ 	ld a, e
+ 	and a, %00000111
+ 	cp 7
+ 	jr nz, .check6
+ 	set 7, [hl]
+ 	ret
+.check6
+ 	cp 6
+ 	jr nz, .check5
+ 	set 6, [hl]
+ 	ret
+.check5
+ 	cp 5
+ 	jr nz, .check4
+ 	set 5, [hl]
+ 	ret
+.check4
+ 	cp 4
+ 	jr nz, .check3
+ 	set 3, [hl]
+ 	ret
+.check3
+ 	cp 3
+ 	jr nz, .check2
+ 	set 3, [hl]
+ 	ret
+.check2
+ 	cp 2
+ 	jr nz, .check1
+ 	set 2, [hl]
+ 	ret
+.check1
+ 	cp 1
+ 	jr nz, .zero
+ 	set 1, [hl]
+ 	ret
+.zero
+ 	set 0, [hl]
+ 	ret
+
+Test16BitFlag:
+ ; Input: de = flag index
+ ;        hl = flag data
+ 	ld bc, $20
+ 	ld a, d
+.hi
+ 	and a
+ 	jr z, .next
+ 	add hl, bc
+ 	dec a
+ 	jr .hi
+.next
+ 	ld a, e
+ 	srl a
+ 	srl a
+ 	srl a
+ 	ld b, 0
+    ld c, a
+ 	add hl, bc
+ 	ld a, e
+ 	and a, %00000111
+ 	cp 7
+ 	jr nz, .check6
+ 	bit 7, [hl]
+ 	jr .end
+.check6
+ 	cp 6
+ 	jr nz, .check5
+	bit 6, [hl]
+ 	jr .end
+.check5
+ 	cp 5
+ 	jr nz, .check4
+ 	bit 5, [hl]
+	jr .end
+.check4
+ 	cp 4
+ 	jr nz, .check3
+ 	bit 3, [hl]
+ 	jr .end
+.check3
+ 	cp 3
+ 	jr nz, .check2
+ 	bit 3, [hl]
+ 	jr .end
+.check2
+ 	cp 2
+ 	jr nz, .check1
+ 	bit 2, [hl]
+ 	jr .end
+.check1
+ 	cp 1
+ 	jr nz, .zero
+ 	bit 1, [hl]
+ 	jr .end
+.zero
+ 	bit 0, [hl]
+.end
+ 	jr z, .flagNotSet
+ 	ld c, 1
+ 	ret
+.flagNotSet
+ 	ld c, 0
+ 	ret
+ 
+
 SECTION "NPC Sprites 1", ROMX, BANK[NPC_SPRITES_1]
 
 OakAideSprite:         INCBIN "gfx/sprites/oak_aide.2bpp"
@@ -203,7 +328,7 @@ INCLUDE "engine/battle/get_trainer_name.asm"
 INCLUDE "engine/random.asm"
 
 EXPBarGraphics: INCBIN "gfx/exp_bar.h8.2bpp"
-EXPBarShinySparkleGraphicsEnd:
+EXPBarGraphicsEnd:
 
 
 SECTION "NPC Sprites 2", ROMX, BANK[NPC_SPRITES_2]
@@ -847,190 +972,6 @@ SECTION "bankF",ROMX,BANK[$F]
 
 INCLUDE "engine/battle/core.asm"
 
-PrintEXPBar:
-	call CalcEXPBarPixelLength
-	ld a, [H_QUOTIENT + 3] ; pixel length
-	ld [wEXPBarPixelLength], a
-	ld b, a
-	ld c, $08
-	ld d, $08
-	coord hl, 17, 11
-.loop
-	ld a, b
-	sub c
-	jr nc, .skip
-	ld c, b
-	jr .loop
-.skip
-	ld b, a
-	ld a, $c0
-	add c
-.loop2
-	ld [hld], a
-	dec d
-	ret z
-	ld a, b
-	and a
-	jr nz, .loop
-	ld a, $c0
-	jr .loop2
-
-CalcEXPBarPixelLength:
-	ld hl, wEXPBarKeepFullFlag
-	bit 0, [hl]
-	jr z, .start
-	res 0, [hl]
-	ld a, $40
-	ld [H_QUOTIENT + 3], a
-	ret
-
-.start
-	; get the base exp needed for the current level
-	ld a, [wPlayerBattleStatus3]
-	ld hl, wBattleMonSpecies
-	bit 3, a
-	jr z, .skip
-	ld hl, wPartyMon1
-	call BattleMonPartyAttr
-.skip
-	ld a, [hl]
-	ld [wd0b5], a
-	call GetMonHeader
-	ld a, [wBattleMonLevel]
-	ld d, a
-	ld hl, CalcExperience
-	ld b, BANK(CalcExperience)
-	call Bankswitch
-	ld hl, H_MULTIPLICAND
-	ld de, wEXPBarBaseEXP
-	ld a, [hli]
-	ld [de], a
-	inc de
-	ld a, [hli]
-	ld [de], a
-	inc de
-	ld a, [hl]
-	ld [de], a
-	
-	; get the exp needed to gain a level
-	ld a, [wBattleMonLevel]
-	ld d, a
-	inc d
-	ld hl, CalcExperience
-	ld b, BANK(CalcExperience)
-	call Bankswitch
-	
-	; get the address of the active Pokemon's current experience
-	ld hl, wPartyMon1Exp
-	call BattleMonPartyAttr
-	
-	; current exp - base exp
-	ld b, h
-	ld c, l
-	ld hl, wEXPBarBaseEXP
-	ld de, wEXPBarCurEXP
-	call SubThreeByteNum
-	
-	; exp needed - base exp
-	ld bc, H_MULTIPLICAND
-	ld hl, wEXPBarBaseEXP
-	ld de, wEXPBarNeededEXP
-	call SubThreeByteNum
-	
-	; make the divisor an 8-bit number
-	ld hl, wEXPBarNeededEXP
-	ld de, wEXPBarCurEXP + 1
-	ld a, [hli]
-	and a
-	jr z, .twoBytes
-	ld a, [hli]
-	ld [hld], a
-	dec hl
-	ld a, [hli]
-	ld [hld], a
-	ld a, [de]
-	inc de
-	ld [de], a
-	dec de
-	dec de
-	ld a, [de]
-	inc de
-	ld [de], a
-	dec de
-	xor a
-	ld [hli], a
-	ld [de], a
-	inc de
-.twoBytes
-	ld a, [hl]
-	and a
-	jr z, .oneByte
-	srl a
-	ld [hli], a
-	ld a, [hl]
-	rr a
-	ld [hld], a
-	ld a, [de]
-	srl a
-	ld [de], a
-	inc de
-	ld a, [de]
-	rr a
-	ld [de], a
-	dec de
-	jr .twoBytes
-.oneByte
-
-	; current exp * (8 tiles * 8 pixels)
-	ld hl, H_MULTIPLICAND
-	ld de, wEXPBarCurEXP
-	ld a, [de]
-	inc de
-	ld [hli], a
-	ld a, [de]
-	inc de
-	ld [hli], a
-	ld a, [de]
-	ld [hl], a
-	ld a, $40
-	ld [H_MULTIPLIER], a
-	call Multiply
-	
-	; product / needed exp = pixel length
-	ld a, [wEXPBarNeededEXP + 2]
-	ld [H_DIVISOR], a
-	ld b, $04
-	jp Divide
-	
-; calculates the three byte number starting at [bc]
-; minus the three byte number starting at [hl]
-; and stores it into the three bytes starting at [de]
-; assumes that [hl] is smaller than [bc]
-SubThreeByteNum:
-	call .subByte
-	call .subByte
-.subByte
-	ld a, [bc]
-	inc bc
-	sub [hl]
-	inc hl
-	ld [de], a
-	jr nc, .noCarry
-	dec de
-	ld a, [de]
-	dec a
-	ld [de], a
-	inc de
-.noCarry
-	inc de
-	ret
-
-; return the address of the BattleMon's party struct attribute in hl
-BattleMonPartyAttr:
-	ld a, [wPlayerMonNumber]
-	ld bc, wPartyMon2 - wPartyMon1
-	jp AddNTimes
-
 SECTION "bank10",ROMX,BANK[$10]
 
 INCLUDE "engine/menu/pokedex.asm"
@@ -1423,8 +1364,6 @@ INCLUDE "scripts/colosseum.asm"
 INCLUDE "data/mapObjects/colosseum.asm"
 ColosseumBlocks: INCBIN "maps/colosseum.blk"
 
-INCLUDE "engine/give_pokemon.asm"
-
 INCLUDE "engine/predefs.asm"
 
 
@@ -1596,78 +1535,6 @@ SilphCo8Blocks: INCBIN "maps/silphco8.blk"
 INCLUDE "engine/menu/diploma.asm"
 
 INCLUDE "engine/overworld/trainers.asm"
-
-AnimateEXPBarAgain:
-	call LoadMonData
-	call IsCurrentMonBattleMon
-	ret nz
-	xor a
-	ld [wEXPBarPixelLength], a
-	coord hl, 17, 11
-	ld a, $c0
-	ld c, $08
-.loop
-	ld [hld], a
-	dec c
-	jr nz, .loop
-AnimateEXPBar:
-	call LoadMonData
-	call IsCurrentMonBattleMon
-	ret nz
-	ld a, SFX_HEAL_HP
-	call PlaySoundWaitForCurrent
-	ld hl, CalcEXPBarPixelLength
-	ld b, BANK(CalcEXPBarPixelLength)
-	call Bankswitch
-	ld hl, wEXPBarPixelLength
-	ld a, [hl]
-	ld b, a
-	ld a, [H_QUOTIENT + 3]
-	ld [hl], a
-	sub b
-	jr z, .done
-	ld b, a
-	ld c, $08
-	coord hl, 17, 11
-.loop1
-	ld a, [hl]
-	cp $c8
-	jr nz, .loop2
-	dec hl
-	dec c
-	jr z, .done
-	jr .loop1
-.loop2
-	inc a
-	ld [hl], a
-	call DelayFrame
-	dec b
-	jr z, .done
-	jr .loop1
-.done
-	ld bc, $08
-	coord hl, 10, 11
-	ld de, wTileMapBackup + 10 + 11 * 20
-	call CopyData
-	ld c, $20
-	jp DelayFrames
-
-KeepEXPBarFull:
-	call IsCurrentMonBattleMon
-	ret nz
-	ld a, [wEXPBarKeepFullFlag]
-	set 0, a
-	ld [wEXPBarKeepFullFlag], a
-	ld a, [wCurEnemyLVL]
-	ret
-
-IsCurrentMonBattleMon:
-	ld a, [wPlayerMonNumber]
-	ld b, a
-	ld a, [wWhichPokemon]
-	cp b
-	ret
-
 
 SECTION "bank16",ROMX,BANK[$16]
 
@@ -2258,6 +2125,8 @@ AgathaBlocks: INCBIN "maps/agatha.blk"
 
 INCLUDE "engine/menu/league_pc.asm"
 
+INCLUDE "engine/give_pokemon.asm"
+
 INCLUDE "engine/overworld/hidden_items.asm"
 
 
@@ -2444,6 +2313,9 @@ HoppipPicBack::       INCBIN "pic/monback/hoppipb.pic"
 
 SECTION "bank31",ROMX,BANK[$31]
 
+INCLUDE "engine/battle/read_trainer_party.asm"
+INCLUDE "data/trainer_parties.asm"
+INCLUDE "data/trainer_moves.asm"
 INCLUDE "engine/battle/physical_special_split.asm"
 INCLUDE "scripts/move_deleter.asm"
 INCLUDE "scripts/move_relearner.asm"
@@ -2481,3 +2353,272 @@ SlowkingPicFront::    INCBIN "pic/bmon/slowking.pic"
 SlowkingPicBack::     INCBIN "pic/monback/slowkingb.pic"
 MisdreavusPicFront::  INCBIN "pic/bmon/misdreavus.pic"
 MisdreavusPicBack::   INCBIN "pic/monback/misdreavusb.pic"
+
+SECTION "bank34",ROMX,BANK[$34]
+
+INCLUDE "data/baseStats/bulbasaur.asm"
+INCLUDE "data/baseStats/ivysaur.asm"
+INCLUDE "data/baseStats/venusaur.asm"
+INCLUDE "data/baseStats/charmander.asm"
+INCLUDE "data/baseStats/charmeleon.asm"
+INCLUDE "data/baseStats/charizard.asm"
+INCLUDE "data/baseStats/squirtle.asm"
+INCLUDE "data/baseStats/wartortle.asm"
+INCLUDE "data/baseStats/blastoise.asm"
+INCLUDE "data/baseStats/caterpie.asm"
+INCLUDE "data/baseStats/metapod.asm"
+INCLUDE "data/baseStats/butterfree.asm"
+INCLUDE "data/baseStats/weedle.asm"
+INCLUDE "data/baseStats/kakuna.asm"
+INCLUDE "data/baseStats/beedrill.asm"
+INCLUDE "data/baseStats/pidgey.asm"
+INCLUDE "data/baseStats/pidgeotto.asm"
+INCLUDE "data/baseStats/pidgeot.asm"
+INCLUDE "data/baseStats/rattata.asm"
+INCLUDE "data/baseStats/raticate.asm"
+INCLUDE "data/baseStats/spearow.asm"
+INCLUDE "data/baseStats/fearow.asm"
+INCLUDE "data/baseStats/ekans.asm"
+INCLUDE "data/baseStats/arbok.asm"
+INCLUDE "data/baseStats/pikachu.asm"
+INCLUDE "data/baseStats/raichu.asm"
+INCLUDE "data/baseStats/sandshrew.asm"
+INCLUDE "data/baseStats/sandslash.asm"
+INCLUDE "data/baseStats/nidoranf.asm"
+INCLUDE "data/baseStats/nidorina.asm"
+INCLUDE "data/baseStats/nidoqueen.asm"
+INCLUDE "data/baseStats/nidoranm.asm"
+INCLUDE "data/baseStats/nidorino.asm"
+INCLUDE "data/baseStats/nidoking.asm"
+INCLUDE "data/baseStats/clefairy.asm"
+INCLUDE "data/baseStats/clefable.asm"
+INCLUDE "data/baseStats/vulpix.asm"
+INCLUDE "data/baseStats/ninetales.asm"
+INCLUDE "data/baseStats/jigglypuff.asm"
+INCLUDE "data/baseStats/wigglytuff.asm"
+INCLUDE "data/baseStats/zubat.asm"
+INCLUDE "data/baseStats/golbat.asm"
+INCLUDE "data/baseStats/oddish.asm"
+INCLUDE "data/baseStats/gloom.asm"
+INCLUDE "data/baseStats/vileplume.asm"
+INCLUDE "data/baseStats/paras.asm"
+INCLUDE "data/baseStats/parasect.asm"
+INCLUDE "data/baseStats/venonat.asm"
+INCLUDE "data/baseStats/venomoth.asm"
+INCLUDE "data/baseStats/diglett.asm"
+INCLUDE "data/baseStats/dugtrio.asm"
+INCLUDE "data/baseStats/meowth.asm"
+INCLUDE "data/baseStats/persian.asm"
+INCLUDE "data/baseStats/psyduck.asm"
+INCLUDE "data/baseStats/golduck.asm"
+INCLUDE "data/baseStats/mankey.asm"
+INCLUDE "data/baseStats/primeape.asm"
+INCLUDE "data/baseStats/growlithe.asm"
+INCLUDE "data/baseStats/arcanine.asm"
+INCLUDE "data/baseStats/poliwag.asm"
+INCLUDE "data/baseStats/poliwhirl.asm"
+INCLUDE "data/baseStats/poliwrath.asm"
+INCLUDE "data/baseStats/abra.asm"
+INCLUDE "data/baseStats/kadabra.asm"
+INCLUDE "data/baseStats/alakazam.asm"
+INCLUDE "data/baseStats/machop.asm"
+INCLUDE "data/baseStats/machoke.asm"
+INCLUDE "data/baseStats/machamp.asm"
+INCLUDE "data/baseStats/bellsprout.asm"
+INCLUDE "data/baseStats/weepinbell.asm"
+INCLUDE "data/baseStats/victreebel.asm"
+INCLUDE "data/baseStats/tentacool.asm"
+INCLUDE "data/baseStats/tentacruel.asm"
+INCLUDE "data/baseStats/geodude.asm"
+INCLUDE "data/baseStats/graveler.asm"
+INCLUDE "data/baseStats/golem.asm"
+INCLUDE "data/baseStats/ponyta.asm"
+INCLUDE "data/baseStats/rapidash.asm"
+INCLUDE "data/baseStats/slowpoke.asm"
+INCLUDE "data/baseStats/slowbro.asm"
+INCLUDE "data/baseStats/magnemite.asm"
+INCLUDE "data/baseStats/magneton.asm"
+INCLUDE "data/baseStats/farfetchd.asm"
+INCLUDE "data/baseStats/doduo.asm"
+INCLUDE "data/baseStats/dodrio.asm"
+INCLUDE "data/baseStats/seel.asm"
+INCLUDE "data/baseStats/dewgong.asm"
+INCLUDE "data/baseStats/grimer.asm"
+INCLUDE "data/baseStats/muk.asm"
+INCLUDE "data/baseStats/shellder.asm"
+INCLUDE "data/baseStats/cloyster.asm"
+INCLUDE "data/baseStats/gastly.asm"
+INCLUDE "data/baseStats/haunter.asm"
+INCLUDE "data/baseStats/gengar.asm"
+INCLUDE "data/baseStats/onix.asm"
+INCLUDE "data/baseStats/drowzee.asm"
+INCLUDE "data/baseStats/hypno.asm"
+INCLUDE "data/baseStats/krabby.asm"
+INCLUDE "data/baseStats/kingler.asm"
+INCLUDE "data/baseStats/voltorb.asm"
+INCLUDE "data/baseStats/electrode.asm"
+INCLUDE "data/baseStats/exeggcute.asm"
+INCLUDE "data/baseStats/exeggutor.asm"
+INCLUDE "data/baseStats/cubone.asm"
+INCLUDE "data/baseStats/marowak.asm"
+INCLUDE "data/baseStats/hitmonlee.asm"
+INCLUDE "data/baseStats/hitmonchan.asm"
+INCLUDE "data/baseStats/lickitung.asm"
+INCLUDE "data/baseStats/koffing.asm"
+INCLUDE "data/baseStats/weezing.asm"
+INCLUDE "data/baseStats/rhyhorn.asm"
+INCLUDE "data/baseStats/rhydon.asm"
+INCLUDE "data/baseStats/chansey.asm"
+INCLUDE "data/baseStats/tangela.asm"
+INCLUDE "data/baseStats/kangaskhan.asm"
+INCLUDE "data/baseStats/horsea.asm"
+INCLUDE "data/baseStats/seadra.asm"
+INCLUDE "data/baseStats/goldeen.asm"
+INCLUDE "data/baseStats/seaking.asm"
+INCLUDE "data/baseStats/staryu.asm"
+INCLUDE "data/baseStats/starmie.asm"
+INCLUDE "data/baseStats/mrmime.asm"
+INCLUDE "data/baseStats/scyther.asm"
+INCLUDE "data/baseStats/jynx.asm"
+INCLUDE "data/baseStats/electabuzz.asm"
+INCLUDE "data/baseStats/magmar.asm"
+INCLUDE "data/baseStats/pinsir.asm"
+INCLUDE "data/baseStats/tauros.asm"
+INCLUDE "data/baseStats/magikarp.asm"
+INCLUDE "data/baseStats/gyarados.asm"
+INCLUDE "data/baseStats/lapras.asm"
+INCLUDE "data/baseStats/ditto.asm"
+INCLUDE "data/baseStats/eevee.asm"
+INCLUDE "data/baseStats/vaporeon.asm"
+INCLUDE "data/baseStats/jolteon.asm"
+INCLUDE "data/baseStats/flareon.asm"
+INCLUDE "data/baseStats/porygon.asm"
+INCLUDE "data/baseStats/omanyte.asm"
+INCLUDE "data/baseStats/omastar.asm"
+INCLUDE "data/baseStats/kabuto.asm"
+INCLUDE "data/baseStats/kabutops.asm"
+INCLUDE "data/baseStats/aerodactyl.asm"
+INCLUDE "data/baseStats/snorlax.asm"
+INCLUDE "data/baseStats/articuno.asm"
+INCLUDE "data/baseStats/zapdos.asm"
+INCLUDE "data/baseStats/moltres.asm"
+INCLUDE "data/baseStats/dratini.asm"
+INCLUDE "data/baseStats/dragonair.asm"
+INCLUDE "data/baseStats/dragonite.asm"
+INCLUDE "data/baseStats/mewtwo.asm"
+INCLUDE "data/baseStats/mew.asm"
+INCLUDE "data/baseStats/chikorita.asm"
+INCLUDE "data/baseStats/bayleef.asm"
+INCLUDE "data/baseStats/meganium.asm"
+INCLUDE "data/baseStats/cyndaquil.asm"
+INCLUDE "data/baseStats/quilava.asm"
+INCLUDE "data/baseStats/typhlosion.asm"
+INCLUDE "data/baseStats/totodile.asm"
+INCLUDE "data/baseStats/croconaw.asm"
+INCLUDE "data/baseStats/feraligatr.asm"
+INCLUDE "data/baseStats/sentret.asm"
+INCLUDE "data/baseStats/furret.asm"
+INCLUDE "data/baseStats/hoothoot.asm"
+INCLUDE "data/baseStats/noctowl.asm"
+INCLUDE "data/baseStats/ledyba.asm"
+INCLUDE "data/baseStats/ledian.asm"
+INCLUDE "data/baseStats/spinarak.asm"
+INCLUDE "data/baseStats/ariados.asm"
+INCLUDE "data/baseStats/crobat.asm"
+INCLUDE "data/baseStats/chinchou.asm"
+INCLUDE "data/baseStats/lanturn.asm"
+INCLUDE "data/baseStats/pichu.asm"
+INCLUDE "data/baseStats/cleffa.asm"
+INCLUDE "data/baseStats/igglybuff.asm"
+INCLUDE "data/baseStats/togepi.asm"
+INCLUDE "data/baseStats/togetic.asm"
+INCLUDE "data/baseStats/natu.asm"
+INCLUDE "data/baseStats/xatu.asm"
+INCLUDE "data/baseStats/mareep.asm"
+INCLUDE "data/baseStats/flaaffy.asm"
+INCLUDE "data/baseStats/ampharos.asm"
+INCLUDE "data/baseStats/bellossom.asm"
+INCLUDE "data/baseStats/marill.asm"
+INCLUDE "data/baseStats/azumarill.asm"
+INCLUDE "data/baseStats/sudowoodo.asm"
+INCLUDE "data/baseStats/politoed.asm"
+INCLUDE "data/baseStats/hoppip.asm"
+INCLUDE "data/baseStats/skiploom.asm"
+INCLUDE "data/baseStats/jumpluff.asm"
+INCLUDE "data/baseStats/aipom.asm"
+INCLUDE "data/baseStats/sunkern.asm"
+INCLUDE "data/baseStats/sunflora.asm"
+INCLUDE "data/baseStats/yanma.asm"
+INCLUDE "data/baseStats/wooper.asm"
+INCLUDE "data/baseStats/quagsire.asm"
+INCLUDE "data/baseStats/espeon.asm"
+INCLUDE "data/baseStats/umbreon.asm"
+INCLUDE "data/baseStats/murkrow.asm"
+INCLUDE "data/baseStats/slowking.asm"
+INCLUDE "data/baseStats/misdreavus.asm"
+
+SECTION "bank34",ROMX,BANK[$34]
+
+; Wait for sound to finish playing
+WaitForSoundToFinish_:: ; 3748 (0:3748)
+ 	ld a, [wLowHealthAlarm]
+ 	and $80
+ 	ret nz
+ 	push hl
+.waitLoop
+ 	ld hl, wChannelSoundIDs + CH4
+ 	xor a
+ 	or [hl]
+ 	inc hl
+ 	or [hl]
+ 	inc hl
+ 	inc hl
+ 	or [hl]
+ 	jr nz, .waitLoop
+ 	pop hl
+ 	ret
+ 
+_PlayTrainerMusic:: ; 33e8 (0:33e8)
+ 	ld a, [wEngagedTrainerClass]
+ 	cp SONY1
+ 	ret z
+ 	cp SONY2
+ 	ret z
+ 	cp SONY3
+ 	ret z
+ 	ld a, [wGymLeaderNo]
+ 	and a
+ 	ret nz
+ 	xor a
+ 	ld [wAudioFadeOutControl], a
+ 	ld a, $ff
+ 	call PlaySound
+ 	ld a, BANK(Music_MeetEvilTrainer)
+ 	ld [wAudioROMBank], a
+ 	ld [wAudioSavedROMBank], a
+ 	ld a, [wEngagedTrainerClass]
+ 	ld b, a
+ 	ld hl, EvilTrainerList
+.evilTrainerListLoop
+ 	ld a, [hli]
+ 	cp $ff
+ 	jr z, .noEvilTrainer
+ 	cp b
+ 	jr nz, .evilTrainerListLoop
+ 	ld a, MUSIC_MEET_EVIL_TRAINER
+ 	jr .PlaySound
+.noEvilTrainer
+ 	ld hl, FemaleTrainerList
+.femaleTrainerListLoop
+ 	ld a, [hli]
+ 	cp $ff
+ 	jr z, .maleTrainer
+ 	cp b
+ 	jr nz, .femaleTrainerListLoop
+ 	ld a, MUSIC_MEET_FEMALE_TRAINER
+ 	jr .PlaySound
+.maleTrainer
+ 	ld a, MUSIC_MEET_MALE_TRAINER
+.PlaySound
+ 	ld [wNewSoundID], a
+ 	jp PlaySound

@@ -54,6 +54,9 @@ DayCareMText1:
 	ld [wRemoveMonFromBox], a
 	call RemovePokemon
 	ld a, [wcf91]
+	ld c, a
+	ld a, [wcf91 + 1]
+ 	ld b, a
 	call PlayCry
 	ld hl, DayCareComeSeeMeInAWhileText
 	jp .done
@@ -169,6 +172,8 @@ DayCareMText1:
 	call MoveMon
 	ld a, [wDayCareMonSpecies]
 	ld [wcf91], a
+	ld a, [wDayCareMonSpecies + 1]
+	ld [wcf91 + 1], a
 	ld a, [wPartyCount]
 	dec a
 	push af
@@ -198,6 +203,9 @@ DayCareMText1:
 	ld [de], a
 
 	ld a, [wcf91]
+	ld c, a
+ 	ld a, [wcf91 + 1]
+ 	ld b, a
 	call PlayCry
 	ld hl, DayCareGotMonBackText
 	jr .done

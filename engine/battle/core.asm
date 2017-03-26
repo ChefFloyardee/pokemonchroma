@@ -313,26 +313,32 @@ StartBattle:
 .foundFirstAliveMon
 	ld a, [wWhichPokemon]
 	ld [wPlayerMonNumber], a
-	inc a
-	ld hl, wPartySpecies - 1
+	ld hl, wPartySpecies
 	ld c, a
 	ld b, 0
 	add hl, bc
-	ld a, [hl] ; species
+	add hl, bc
+	ld a, [hli] ; species
 	ld [wcf91], a
 	ld [wBattleMonSpecies2], a
+	ld a, [hl] ; species
+ 	ld [wcf91 + 1], a
+ 	ld [wBattleMonSpecies2 + 1], a
 	call LoadScreenTilesFromBuffer1
 	coord hl, 1, 5
 	ld a, $9
 	call SlideTrainerPicOffScreen
 	call SaveScreenTilesToBuffer1
 	ld a, [wWhichPokemon]
-	ld c, a
+	ld e, a
+ 	ld d, 0
 	ld b, FLAG_SET
 	push bc
+	push de
 	ld hl, wPartyGainExpFlags
 	predef FlagActionPredef
 	ld hl, wPartyFoughtCurrentEnemyFlags
+	pop de
 	pop bc
 	predef FlagActionPredef
 	call LoadBattleMonFromParty
@@ -981,7 +987,7 @@ AnyEnemyPokemonAliveCheck:
 ; stores whether enemy ran in Z flag
 ReplaceFaintedEnemyMon:
 	ld hl, wEnemyHPBarColor
-	ld e, $30
+	ld e, $00
 	call GetBattleHealthBarColor
 	callab DrawEnemyPokeballs
 	ld a, [wLinkState]
@@ -1092,7 +1098,8 @@ HandlePlayerMonFainted:
 ; resets flags, slides mon's pic down, plays cry, and prints fainted message
 RemoveFaintedPlayerMon:
 	ld a, [wPlayerMonNumber]
-	ld c, a
+	ld e, a
+ 	ld d, 0
 	ld hl, wPartyGainExpFlags
 	ld b, FLAG_RESET
 	predef FlagActionPredef ; clear gain exp flag for fainted mon
@@ -1129,6 +1136,9 @@ RemoveFaintedPlayerMon:
 	ret z ; if so, return
 
 	ld a, [wBattleMonSpecies]
+	ld c, a
+	ld a, [wBattleMonSpecies + 1]
+	ld b, a
 	call PlayCry
 	ld hl, PlayerMonFaintedText
 	jp PrintText
@@ -1197,11 +1207,14 @@ ChooseNextMon:
 	call ClearSprites
 	ld a, [wWhichPokemon]
 	ld [wPlayerMonNumber], a
-	ld c, a
+	ld e, a
+	ld d, 0
 	ld hl, wPartyGainExpFlags
 	ld b, FLAG_SET
 	push bc
+	push de
 	predef FlagActionPredef
+	pop de
 	pop bc
 	ld hl, wPartyFoughtCurrentEnemyFlags
 	predef FlagActionPredef
@@ -1224,7 +1237,10 @@ HandlePlayerBlackOut:
 	cp LINK_STATE_BATTLING
 	jr z, .notSony1Battle
 	ld a, [wCurOpponent]
-	cp OPP_SONY1
+	cp SONY1
+ 	jr nz, .notSony1Battle
+ 	ld a, [wCurOpponent + 1]
+ 	cp $FF
 	jr nz, .notSony1Battle
 	coord hl, 0, 0  ; sony 1 battle
 	lb bc, 8, 21
@@ -1367,13 +1383,16 @@ EnemySendOut:
 	xor a
 	ld [hl],a
 	ld a,[wPlayerMonNumber]
-	ld c,a
+	ld e, a
+	ld d, 0
 	ld b,FLAG_SET
 	push bc
+	push de
 	predef FlagActionPredef
 	ld hl,wPartyFoughtCurrentEnemyFlags
 	xor a
 	ld [hl],a
+	pop de
 	pop bc
 	predef FlagActionPredef
 
@@ -1423,6 +1442,7 @@ EnemySendOutFirstMon:
 	call AddNTimes
 	pop bc
 	inc hl
+	inc hl
 	ld a,[hli]
 	ld c,a
 	ld a,[hl]
@@ -1436,14 +1456,17 @@ EnemySendOutFirstMon:
 	ld a,[hl]
 	ld [wCurEnemyLVL],a
 	ld a,[wWhichPokemon]
-	inc a
-	ld hl,wEnemyPartyCount
+	ld hl,wEnemyPartyCount + 1
 	ld c,a
 	ld b,0
 	add hl,bc
-	ld a,[hl]
+	add hl,bc
+	ld a,[hli]
 	ld [wEnemyMonSpecies2],a
 	ld [wcf91],a
+	ld a,[hl]
+ 	ld [wEnemyMonSpecies2 + 1],a
+ 	ld [wcf91 + 1],a
 	call LoadEnemyMonData
 	ld hl,wEnemyMonHP
 	ld a,[hli]
@@ -1512,6 +1535,9 @@ EnemySendOutFirstMon:
 	ld a,[wEnemyMonSpecies2]
 	ld [wcf91],a
 	ld [wd0b5],a
+	ld a,[wEnemyMonSpecies2 + 1]
+ 	ld [wcf91 + 1],a
+ 	ld [wd0b5 + 1],a
 	call GetMonHeader
 	ld de,vFrontPic
 	call LoadMonFrontSprite
@@ -1520,6 +1546,9 @@ EnemySendOutFirstMon:
 	coord hl, 15, 6
 	predef AnimateSendingOutMon
 	ld a,[wEnemyMonSpecies2]
+	ld c, a
+ 	ld a,[wEnemyMonSpecies2 + 1]
+ 	ld b, a
 	call PlayCry
 	call DrawEnemyHUDAndHPBar
 	ld a,[wCurrentMenuItem]
@@ -1733,6 +1762,8 @@ LoadBattleMonFromParty:
 	call CopyData
 	ld a, [wBattleMonSpecies2]
 	ld [wd0b5], a
+	ld a, [wBattleMonSpecies2 + 1]
+	ld [wd0b5 + 1], a
 	call GetMonHeader
 	ld hl, wPartyMonNicks
 	ld a, [wPlayerMonNumber]
@@ -1777,6 +1808,8 @@ LoadEnemyMonFromParty:
 	call CopyData
 	ld a, [wEnemyMonSpecies]
 	ld [wd0b5], a
+	ld a, [wEnemyMonSpecies + 1]
+ 	ld [wd0b5 + 1], a
 	call GetMonHeader
 	ld hl, wEnemyMonNicks
 	ld a, [wWhichPokemon]
@@ -1850,6 +1883,9 @@ SendOutMon:
 	coord hl, 4, 11
 	predef AnimateSendingOutMon
 	ld a, [wcf91]
+	ld c, a
+ 	ld a, [wcf91 + 1]
+ 	ld b, a
 	call PlayCry
 	call PrintEmptyString
 	jp SaveScreenTilesToBuffer1
@@ -1916,7 +1952,7 @@ DrawPlayerHUDAndHPBar:
 	call PrintEXPBar
 	ld hl, wBattleMonSpecies
 	ld de, wLoadedMon
-	ld bc, wBattleMonDVs - wBattleMonSpecies
+	ld bc, $e
 	call CopyData
 	ld hl, wBattleMonLevel
 	ld de, wLoadedMonLevel
@@ -1933,6 +1969,8 @@ DrawPlayerHUDAndHPBar:
 .doNotPrintLevel
 	ld a, [wLoadedMonSpecies]
 	ld [wcf91], a
+	ld a, [wLoadedMonSpecies + 1]
+	ld [wcf91 + 1], a
 	coord hl, 10, 9
 	predef DrawHP
 	ld a, $1
@@ -1973,7 +2011,7 @@ DrawEnemyHUDAndHPBar:
 	coord hl, 1, 0
 	call CenterMonName
 	call PlaceString
-	coord hl, 4, 1
+	coord hl, 6, 1
 	push hl
 	inc hl
 	ld de, wEnemyMonStatus
@@ -2356,6 +2394,9 @@ UseBagItem:
 	ld a, [wCapturedMonSpecies]
 	and a ; was the enemy mon captured with a ball?
 	jr nz, .returnAfterCapturingMon
+	ld a, [wCapturedMonSpecies + 1]
+ 	and a ; was the enemy mon captured with a ball?
+ 	jr nz, .returnAfterCapturingMon
 
 	ld a, [wBattleType]
 	cp BATTLE_TYPE_SAFARI
@@ -2374,6 +2415,7 @@ UseBagItem:
 	call GBPalNormal
 	xor a
 	ld [wCapturedMonSpecies], a
+	ld [wCapturedMonSpecies + 1], a
 	ld a, $2
 	ld [wBattleResult], a
 	scf ; set carry
@@ -2469,6 +2511,9 @@ PartyMenuOrRockOrRun:
 	ld a, [wEnemyMonSpecies]
 	ld [wcf91], a
 	ld [wd0b5], a
+	ld a, [wEnemyMonSpecies + 1]
+ 	ld [wcf91 + 1], a
+ 	ld [wd0b5 + 1], a
 	call GetMonHeader
 	ld de, vFrontPic
 	call LoadMonFrontSprite
@@ -2508,11 +2553,14 @@ SwitchPlayerMon:
 	call AnimateRetreatingPlayerMon
 	ld a, [wWhichPokemon]
 	ld [wPlayerMonNumber], a
-	ld c, a
+	ld e, a
+ 	ld d, 0
 	ld b, FLAG_SET
 	push bc
+	push de
 	ld hl, wPartyGainExpFlags
 	predef FlagActionPredef
+	pop de
 	pop bc
 	ld hl, wPartyFoughtCurrentEnemyFlags
 	predef FlagActionPredef
@@ -4536,6 +4584,8 @@ GetEnemyMonStat:
 	ld [wCurEnemyLVL], a
 	ld a, [wEnemyMonSpecies]
 	ld [wd0b5], a
+	ld a, [wEnemyMonSpecies + 1]
+ 	ld [wd0b5 + 1], a
 	call GetMonHeader
 	ld hl, wEnemyMonDVs
 	ld de, wLoadedMonSpeedExp
@@ -4727,6 +4777,7 @@ CriticalHitTest:
 	ld a, [H_WHOSETURN]
 	and a
 	ld a, [wBattleMonSpecies]
+	ld a, [wBattleMonSpecies + 1]
 	ld hl, wPlayerMovePower
 	ld de, wPlayerBattleStatus2
 	jr z, .calcCriticalHitProbability
@@ -6260,6 +6311,9 @@ LoadEnemyMonData:
 	ld a, [wEnemyMonSpecies2]
 	ld [wEnemyMonSpecies], a
 	ld [wd0b5], a
+	ld a, [wEnemyMonSpecies2 + 1]
+ 	ld [wEnemyMonSpecies + 1], a
+ 	ld [wd0b5 + 1], a
 	call GetMonHeader
 	ld a, [wEnemyBattleStatus3]
 	bit Transformed, a ; is enemy mon transformed?
@@ -6385,6 +6439,8 @@ LoadEnemyMonData:
 	ld [de], a
 	ld a, [wEnemyMonSpecies2]
 	ld [wd11e], a
+	ld a, [wEnemyMonSpecies2 + 1]
+ 	ld [wd11e + 1], a
 	call GetMonName
 	ld hl, wcd6d
 	ld de, wEnemyMonNick
@@ -6392,10 +6448,14 @@ LoadEnemyMonData:
 	call CopyData
 	ld a, [wEnemyMonSpecies2]
 	ld [wd11e], a
+	ld a, [wEnemyMonSpecies2 + 1]
+	ld [wd11e + 1], a
 	predef IndexToPokedex
 	ld a, [wd11e]
-	dec a
-	ld c, a
+	ld e, a
+ 	ld a, [wd11e + 1]
+ 	ld d, a
+ 	dec de
 	ld b, FLAG_SET
 	ld hl, wPokedexSeen
 	predef FlagActionPredef ; mark this mon as seen in the pokedex
@@ -6904,12 +6964,17 @@ PlayMoveAnimation:
 InitBattle:
 	ld a, [wCurOpponent]
 	and a
+	jr nz, InitOpponent
+	ld a, [wCurOpponent + 1]
 	jr z, DetermineWildOpponent
 
 InitOpponent:
 	ld a, [wCurOpponent]
 	ld [wcf91], a
 	ld [wEnemyMonSpecies2], a
+	ld a, [wCurOpponent + 1]
+ 	ld [wcf91 + 1], a
+ 	ld [wEnemyMonSpecies2 + 1], a
 	jr InitBattleCommon
 
 DetermineWildOpponent:
@@ -6933,9 +6998,10 @@ InitBattleCommon:
 	push af
 	res 1, [hl]
 	callab InitBattleVariables
+	ld a, [wEnemyMonSpecies2 + 1]
+ 	cp $FF
+ 	jp nz, InitWildBattle
 	ld a, [wEnemyMonSpecies2]
-	sub 200
-	jp c, InitWildBattle
 	ld [wTrainerClass], a
 	call GetTrainerInformation
 	callab ReadTrainer
@@ -6943,6 +7009,7 @@ InitBattleCommon:
 	call _LoadTrainerPic
 	xor a
 	ld [wEnemyMonSpecies2], a
+	ld [wEnemyMonSpecies2 + 1], a
 	ld [hStartTileID], a
 	dec a
 	ld [wAICount], a
@@ -6960,8 +7027,12 @@ InitWildBattle:
 	call LoadEnemyMonData
 	call DoBattleTransitionAndInitBattleVariables
 	ld a, [wCurOpponent]
-	cp MAROWAK
+	cp (MAROWAK & $FF)
+ 	jr nz, .notMarowak
+ 	ld a, [wCurOpponent + 1]
+ 	cp (MAROWAK >> 8)
 	jr z, .isGhost
+.notMarowak
 	call IsGhostBattle
 	jr nz, .isNoGhost
 .isGhost
@@ -6985,13 +7056,21 @@ InitWildBattle:
 	ld [hli], a
 	ld [hl], "@"
 	ld a, [wcf91]
-	push af
-	ld a, MON_GHOST
+	ld c, a
+ 	ld a, [wcf91 + 1]
+ 	ld b, a
+ 	push bc
+ 	ld a, (MON_GHOST & $FF)
 	ld [wcf91], a
+	ld a, (MON_GHOST >> 8)
+	ld [wcf91 + 1], a
 	ld de, vFrontPic
 	call LoadMonFrontSprite ; load ghost sprite
-	pop af
+	pop bc
+	ld a, c
 	ld [wcf91], a
+	ld a, b
+	ld [wcf91 + 1], a
 	jr .spriteLoaded
 .isNoGhost
 	ld de, vFrontPic
@@ -7169,6 +7248,8 @@ LoadMonBackPic:
 ; been loaded with GetMonHeader.
 	ld a, [wBattleMonSpecies2]
 	ld [wcf91], a
+	ld a, [wBattleMonSpecies2 + 1]
+	ld [wcf91 + 1], a
 	coord hl, 1, 5
 	ld b, 7
 	ld c, 8
@@ -7193,6 +7274,190 @@ LoadBackSpriteUnzoomed:
     ld de, vBackPic
     push de
     jp LoadUncompressedBackSprite
+	
+PrintEXPBar:
+	call CalcEXPBarPixelLength
+	ld a, [H_QUOTIENT + 3] ; pixel length
+	ld [wEXPBarPixelLength], a
+	ld b, a
+	ld c, $08
+	ld d, $08
+	coord hl, 17, 11
+.loop
+	ld a, b
+	sub c
+	jr nc, .skip
+	ld c, b
+	jr .loop
+.skip
+	ld b, a
+	ld a, $c0
+	add c
+.loop2
+	ld [hld], a
+	dec d
+	ret z
+	ld a, b
+	and a
+	jr nz, .loop
+	ld a, $c0
+	jr .loop2
+
+CalcEXPBarPixelLength:
+	ld hl, wEXPBarKeepFullFlag
+	bit 0, [hl]
+	jr z, .start
+	res 0, [hl]
+	ld a, $40
+	ld [H_QUOTIENT + 3], a
+	ret
+
+.start
+	; get the base exp needed for the current level
+	ld a, [wPlayerBattleStatus3]
+	ld hl, wBattleMonSpecies
+	bit 3, a
+	jr z, .skip
+	ld hl, wPartyMon1
+	call BattleMonPartyAttr
+.skip
+	ld a, [hl]
+ 	ld [wd0b5], a
+	call GetMonHeader
+	ld a, [wBattleMonLevel]
+	ld d, a
+	ld hl, CalcExperience
+	ld b, BANK(CalcExperience)
+	call Bankswitch
+	ld hl, H_MULTIPLICAND
+	ld de, wEXPBarBaseEXP
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hli]
+	ld [de], a
+	inc de
+	ld a, [hl]
+	ld [de], a
+	
+ 	; get the exp needed to gain a level
+ 	ld a, [wBattleMonLevel]
+ 	ld d, a
+	inc d
+	ld hl, CalcExperience
+	ld b, BANK(CalcExperience)
+	call Bankswitch
+	
+	; get the address of the active Pokemon's current experience
+	ld hl, wPartyMon1Exp
+	call BattleMonPartyAttr
+	
+	; current exp - base exp
+	ld b, h
+	ld c, l
+	ld hl, wEXPBarBaseEXP
+	ld de, wEXPBarCurEXP
+	call SubThreeByteNum
+	
+	; exp needed - base exp
+	ld bc, H_MULTIPLICAND
+	ld hl, wEXPBarBaseEXP
+	ld de, wEXPBarNeededEXP
+	call SubThreeByteNum
+	
+	; make the divisor an 8-bit number
+	ld hl, wEXPBarNeededEXP
+	ld de, wEXPBarCurEXP + 1
+	ld a, [hli]
+	and a
+	jr z, .twoBytes
+	ld a, [hli]
+	ld [hld], a
+	dec hl
+	ld a, [hli]
+	ld [hld], a
+	ld a, [de]
+	inc de
+	ld [de], a
+	dec de
+	dec de
+	ld a, [de]
+	inc de
+	ld [de], a
+	dec de
+	xor a
+	ld [hli], a
+	ld [de], a
+	inc de
+.twoBytes
+	ld a, [hl]
+	and a
+	jr z, .oneByte
+	srl a
+	ld [hli], a
+	ld a, [hl]
+	rr a
+	ld [hld], a
+ 	ld a, [de]
+	srl a
+ 	ld [de], a
+	inc de
+	ld a, [de]
+	rr a
+	ld [de], a
+	dec de
+	jr .twoBytes
+.oneByte
+
+	; current exp * (8 tiles * 8 pixels)
+	ld hl, H_MULTIPLICAND
+	ld de, wEXPBarCurEXP
+	ld a, [de]
+	inc de
+	ld [hli], a
+	ld a, [de]
+	inc de
+	ld [hli], a
+	ld a, [de]
+	ld [hl], a
+	ld a, $40
+	ld [H_MULTIPLIER], a
+	call Multiply
+	
+	; product / needed exp = pixel length
+	ld a, [wEXPBarNeededEXP + 2]
+	ld [H_DIVISOR], a
+	ld b, $04
+	jp Divide
+	
+; calculates the three byte number starting at [bc]
+; minus the three byte number starting at [hl]
+; and stores it into the three bytes starting at [de]
+; assumes that [hl] is smaller than [bc]
+SubThreeByteNum:
+	call .subByte
+ 	call .subByte
+.subByte
+	ld a, [bc]
+	inc bc
+	sub [hl]
+	inc hl
+	ld [de], a
+	jr nc, .noCarry
+	dec de
+	ld a, [de]
+	dec a
+	ld [de], a
+	inc de
+.noCarry
+	inc de
+	ret
+
+; return the address of the BattleMon's party struct attribute in hl
+BattleMonPartyAttr:
+	ld a, [wPlayerMonNumber]
+	ld bc, wPartyMon2 - wPartyMon1
+	jp AddNTimes
 
 JumpMoveEffect:
 	call _JumpMoveEffect

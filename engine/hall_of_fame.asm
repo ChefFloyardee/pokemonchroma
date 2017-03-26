@@ -41,11 +41,22 @@ AnimateHallOfFame:
 .partyMonLoop
 	ld a, [hli]
 	cp $ff
+	jr nz, .notDoneShowingParty
+	ld a, [hli]
+	cp $ff
 	jr z, .doneShowingParty
+	dec hl
+.notDoneShowingParty
+	inc hl
 	inc c
 	push hl
 	push bc
+	dec hl
+ 	dec hl
+ 	ld a, [hli]
 	ld [wHoFMonSpecies], a
+	ld a, [hli]
+	ld [wHoFMonSpecies + 1], a
 	ld a, c
 	ld [wHoFPartyMonIndex], a
 	ld hl, wPartyMon1Level
@@ -80,6 +91,7 @@ AnimateHallOfFame:
 	call SaveHallOfFameTeams
 	xor a
 	ld [wHoFMonSpecies], a
+	ld [wHoFMonSpecies + 1], a
 	inc a
 	ld [wHoFMonOrPlayer], a ; player
 	call HoFShowMonOrPlayer
@@ -92,7 +104,7 @@ AnimateHallOfFame:
 	ret
 
 HallOfFameText:
-	db "HALL OF FAME@"
+	db "Hall Of Fame@"
 
 HoFShowMonOrPlayer:
 	call ClearScreen
@@ -105,6 +117,11 @@ HoFShowMonOrPlayer:
 	ld [wd0b5], a
 	ld [wBattleMonSpecies2], a
 	ld [wWholeScreenPaletteMonSpecies], a
+	ld a, [wHoFMonSpecies + 1]
+ 	ld [wcf91 + 1], a
+ 	ld [wd0b5 + 1], a
+ 	ld [wBattleMonSpecies2 + 1], a
+ 	ld [wWholeScreenPaletteMonSpecies + 1], a
 	ld a, [wHoFMonOrPlayer]
 	and a
 	jr z, .showMon
@@ -172,15 +189,20 @@ HoFDisplayMonInfo:
 	call PrintLevelCommon
 	ld a, [wHoFMonSpecies]
 	ld [wd0b5], a
+	ld a, [wHoFMonSpecies + 1]
+	ld [wd0b5 + 1], a
 	coord hl, 3, 9
 	predef PrintMonType
 	ld a, [wHoFMonSpecies]
+	ld c, a
+	ld a, [wHoFMonSpecies + 1]
+ 	ld b, a
 	jp PlayCry
 
 HoFMonInfoText:
-	db   "LEVEL/"
-	next "TYPE1/"
-	next "TYPE2/@"
+	db   "Level/"
+	next "Type1/"
+	next "Type2/@"
 
 HoFLoadPlayerPics:
     ld a, [wd798] ; New gender check

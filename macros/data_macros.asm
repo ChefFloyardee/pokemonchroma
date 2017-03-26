@@ -106,7 +106,7 @@ object: MACRO
 	db \5
 	IF (_NARG > 7)
 		db TRAINER | \6
-		db \7
+		db \7, $FF
 		db \8
 	ELSE
 		IF (_NARG > 6)
@@ -117,6 +117,26 @@ object: MACRO
 		ENDC
 	ENDC
 ENDM
+
+;\1 sprite id
+;\2 x position
+;\3 y position
+;\4 movement (WALK/STAY)
+;\5 range or direction
+;\6 text id
+;\7 pokemon id
+;\8 pokemon level
+pokemon_object: MACRO
+ 	db \1
+ 	db \3 + 4
+ 	db \2 + 4
+ 	db \4
+ 	db \5
+ 	db TRAINER | \6
+ 	dw \7
+ 	db \8
+ENDM
+
 
 ;\1 (byte) = current map id
 ;\2 (byte) = connected map id

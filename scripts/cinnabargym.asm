@@ -23,9 +23,9 @@ CinnabarGymScript_75772:
 	jp LoadGymLeaderAndCityName
 
 Gym7CityName:
-	db "CINNABAR ISLAND@"
+	db "Cinnabar Island@"
 Gym7LeaderName:
-	db "BLAINE@"
+	db "Blaine@"
 
 CinnabarGymScript_75792:
 	xor a
@@ -98,7 +98,8 @@ CinnabarGymScript2:
 	ld a, [wTrainerHeaderFlagBit]
 	ld [$ffdb], a
 	AdjustEventBit EVENT_BEAT_CINNABAR_GYM_TRAINER_0, 2
-	ld c, a
+	ld e, a
+	ld d, 0
 	ld b, FLAG_TEST
 	EventFlagAddress hl, EVENT_BEAT_CINNABAR_GYM_TRAINER_0
 	call CinnabarGymFlagAction
@@ -113,14 +114,16 @@ CinnabarGymScript2:
 	ld a, [wTrainerHeaderFlagBit]
 	ld [$ffdb], a
 	AdjustEventBit EVENT_BEAT_CINNABAR_GYM_TRAINER_0, 2
-	ld c, a
+	ld e, a
+ 	ld d, 0
 	ld b, FLAG_SET
 	EventFlagAddress hl, EVENT_BEAT_CINNABAR_GYM_TRAINER_0
 	call CinnabarGymFlagAction
 	ld a, [wTrainerHeaderFlagBit]
 	sub $2
 	AdjustEventBit EVENT_CINNABAR_GYM_GATE0_UNLOCKED, 0
-	ld c, a
+	ld e, a
+	ld d, 0
 	ld b, FLAG_SET
 	EventFlagAddress hl, EVENT_CINNABAR_GYM_GATE0_UNLOCKED
 	call CinnabarGymFlagAction

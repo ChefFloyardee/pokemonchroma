@@ -178,7 +178,10 @@ MoltresText:
 MoltresBattleText:
 	TX_FAR _MoltresBattleText
 	TX_ASM
-	ld a, MOLTRES
+	ld a, (MOLTRES & $FF)
+ 	ld c, a
+ 	ld a, (MOLTRES >> 8)
+ 	ld b, a
 	call PlayCry
 	call WaitForSoundToFinish
 	jp TextScriptEnd

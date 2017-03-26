@@ -90,7 +90,10 @@ SSAnne8Text4:
 SSAnne8Text8:
 	TX_FAR _SSAnne8Text8
 	TX_ASM
-	ld a, WIGGLYTUFF
+	ld a, (WIGGLYTUFF & $FF)
+ 	ld c, a
+ 	ld a, (WIGGLYTUFF >> 8)
+ 	ld b, a
 	call PlayCry
 	jp TextScriptEnd
 

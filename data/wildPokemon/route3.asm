@@ -1,13 +1,13 @@
 Route3Mons:
 	db $14
-	db 6,PIDGEY
-	db 5,SPEAROW
-	db 7,PIDGEY
-	db 6,SPEAROW
-	db 7,MANKEY
-	db 8,MANKEY
-	db 8,IGGLYBUFF
-	db 3,IGGLYBUFF
-	db 5,CHARMANDER
-	db 7,CHARMANDER
+	dbw 6,PIDGEY
+	dbw 5,SPEAROW
+	dbw 7,PIDGEY
+	dbw 6,SPEAROW
+	dbw 7,MANKEY
+	dbw 8,MANKEY
+	dbw 8,IGGLYBUFF
+	dbw 3,IGGLYBUFF
+	dbw 5,CHARMANDER
+	dbw 7,CHARMANDER
 	db $00

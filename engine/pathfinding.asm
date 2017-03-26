@@ -1,78 +1,78 @@
-FindPathToPlayer:
-	xor a
-	ld hl, hFindPathNumSteps
-	ld [hli], a ; hFindPathNumSteps
-	ld [hli], a ; hFindPathFlags
-	ld [hli], a ; hFindPathYProgress
-	ld [hl], a  ; hFindPathXProgress
-	ld hl, wNPCMovementDirections2
-	ld de, $0
+FindPathToPlayer: ; f8ba (3:78ba)
+ 	xor a
+ 	ld hl, hFindPathNumSteps
+ 	ld [hli], a ; hFindPathNumSteps
+ 	ld [hli], a ; hFindPathFlags
+ 	ld [hli], a ; hFindPathYProgress
+ 	ld [hl], a  ; hFindPathXProgress
+ 	ld hl, wNPCMovementDirections2
+ 	ld de, $0
 .loop
-	ld a, [hFindPathYProgress]
-	ld b, a
-	ld a, [hNPCPlayerYDistance] ; Y distance in steps
-	call CalcDifference
-	ld d, a
-	and a
-	jr nz, .asm_f8da
-	ld a, [hFindPathFlags]
-	set 0, a ; current end of path matches the player's Y coordinate
-	ld [hFindPathFlags], a
+ 	ld a, [hFindPathYProgress]
+ 	ld b, a
+ 	ld a, [hNPCPlayerYDistance] ; Y distance in steps
+ 	call CalcDifference
+ 	ld d, a
+ 	and a
+ 	jr nz, .asm_f8da
+ 	ld a, [hFindPathFlags]
+ 	set 0, a ; current end of path matches the player's Y coordinate
+ 	ld [hFindPathFlags], a
 .asm_f8da
-	ld a, [hFindPathXProgress]
-	ld b, a
-	ld a, [hNPCPlayerXDistance] ; X distance in steps
-	call CalcDifference
-	ld e, a
-	and a
-	jr nz, .asm_f8ec
-	ld a, [hFindPathFlags]
-	set 1, a ; current end of path matches the player's X coordinate
-	ld [hFindPathFlags], a
+ 	ld a, [hFindPathXProgress]
+ 	ld b, a
+ 	ld a, [hNPCPlayerXDistance] ; X distance in steps
+ 	call CalcDifference
+ 	ld e, a
+ 	and a
+ 	jr nz, .asm_f8ec
+ 	ld a, [hFindPathFlags]
+ 	set 1, a ; current end of path matches the player's X coordinate
+ 	ld [hFindPathFlags], a
 .asm_f8ec
 	ld a, [hFindPathFlags]
 	cp $3 ; has the end of the path reached the player's position?
 	jr z, .done
 ; Compare whether the X distance between the player and the current of the path
 ; is greater or if the Y distance is. Then, try to reduce whichever is greater.
-	ld a, e
-	cp d
-	jr c, .yDistanceGreater
+ 	ld a, e
+ 	cp d
+ 	jr c, .yDistanceGreater
 ; x distance is greater
-	ld a, [hNPCPlayerRelativePosFlags]
-	bit 1, a
-	jr nz, .playerIsLeftOfNPC
-	ld d, NPC_MOVEMENT_RIGHT
-	jr .next1
+ 	ld a, [hNPCPlayerRelativePosFlags]
+ 	bit 1, a
+ 	jr nz, .playerIsLeftOfNPC
+ 	ld d, NPC_MOVEMENT_RIGHT
+ 	jr .next1
 .playerIsLeftOfNPC
-	ld d, NPC_MOVEMENT_LEFT
+ 	ld d, NPC_MOVEMENT_LEFT
 .next1
-	ld a, [hFindPathXProgress]
-	add 1
-	ld [hFindPathXProgress], a
-	jr .storeDirection
+ 	ld a, [hFindPathXProgress]
+ 	add 1
+ 	ld [hFindPathXProgress], a
+ 	jr .storeDirection
 .yDistanceGreater
-	ld a, [hNPCPlayerRelativePosFlags]
-	bit 0, a
-	jr nz, .playerIsAboveNPC
-	ld d, NPC_MOVEMENT_DOWN
-	jr .next2
+ 	ld a, [hNPCPlayerRelativePosFlags]
+ 	bit 0, a
+ 	jr nz, .playerIsAboveNPC
+ 	ld d, NPC_MOVEMENT_DOWN
+ 	jr .next2
 .playerIsAboveNPC
-	ld d, NPC_MOVEMENT_UP
+ 	ld d, NPC_MOVEMENT_UP
 .next2
-	ld a, [hFindPathYProgress]
-	add 1
-	ld [hFindPathYProgress], a
+ 	ld a, [hFindPathYProgress]
+ 	add 1
+ 	ld [hFindPathYProgress], a
 .storeDirection
-	ld a, d
-	ld [hli], a
-	ld a, [hFindPathNumSteps]
-	inc a
-	ld [hFindPathNumSteps], a
-	jp .loop
+ 	ld a, d
+ 	ld [hli], a
+ 	ld a, [hFindPathNumSteps]
+ 	inc a
+ 	ld [hFindPathNumSteps], a
+ 	jp .loop
 .done
-	ld [hl], $ff
-	ret
+ 	ld [hl], $ff
+ 	ret
 
 CalcPositionOfPlayerRelativeToNPC:
 	xor a

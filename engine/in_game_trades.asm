@@ -3,17 +3,21 @@ DoInGameTradeDialogue:
 	call SaveScreenTilesToBuffer2
 	ld hl,TradeMons
 	ld a,[wWhichTrade]
-	ld b,a
-	swap a
-	sub b
-	sub b
-	ld c,a
-	ld b,0
-	add hl,bc
+	add a
+ 	add a
+	add a
+ 	add a
+ 	ld c, a
+ 	ld b, 0
+ 	add hl, bc
 	ld a,[hli]
 	ld [wInGameTradeGiveMonSpecies],a
 	ld a,[hli]
+	ld [wInGameTradeGiveMonSpecies + 1],a
+	ld a,[hli]
 	ld [wInGameTradeReceiveMonSpecies],a
+	ld a,[hli]
+	ld [wInGameTradeReceiveMonSpecies + 1],a
 	ld a,[hli]
 	push af
 	ld de,wInGameTradeMonNick
@@ -30,14 +34,21 @@ DoInGameTradeDialogue:
 	ld a,[hl]
 	ld [wInGameTradeTextPointerTablePointer + 1],a
 	ld a,[wInGameTradeGiveMonSpecies]
+	ld c, a
+ 	ld a,[wInGameTradeGiveMonSpecies + 1]
+ 	ld b, a
 	ld de,wInGameTradeGiveMonName
 	call InGameTrade_GetMonName
 	ld a,[wInGameTradeReceiveMonSpecies]
+	ld c, a
+ 	ld a,[wInGameTradeReceiveMonSpecies + 1]
+	ld b, a
 	ld de,wInGameTradeReceiveMonName
 	call InGameTrade_GetMonName
 	ld hl,wCompletedInGameTradeFlags
 	ld a,[wWhichTrade]
-	ld c,a
+	ld e, a
+	ld d, 0
 	ld b,FLAG_TEST
 	predef FlagActionPredef
 	ld a,c
@@ -74,10 +85,13 @@ DoInGameTradeDialogue:
 	ld l,a
 	jp PrintText
 
-; copies name of species a to hl
+; copies name of species bc to hl
 InGameTrade_GetMonName:
 	push de
+	ld a, c
 	ld [wd11e],a
+	ld a, b
+	ld [wd11e + 1],a
 	call GetMonName
 	ld hl,wcd6d
 	pop de
@@ -102,7 +116,13 @@ InGameTrade_DoTrade:
 	ld a,[wcf91]
 	cp b
 	ld a,$2
-	jr nz,.tradeFailed ; jump if the selected mon's species is not the required one
+	jp nz,.tradeFailed ; jump if the selected mon's species is not the required one
+ 	ld a,[wInGameTradeGiveMonSpecies + 1]
+ 	ld b,a
+ 	ld a,[wcf91 + 1]
+ 	cp b
+ 	ld a,$2
+ 	jr nz,.tradeFailed
 	ld a,[wWhichPokemon]
 	ld hl,wPartyMon1Level
 	ld bc, wPartyMon2 - wPartyMon1
@@ -111,7 +131,8 @@ InGameTrade_DoTrade:
 	ld [wCurEnemyLVL],a
 	ld hl,wCompletedInGameTradeFlags
 	ld a,[wWhichTrade]
-	ld c,a
+	ld e, a
+	ld d, 0
 	ld b,FLAG_SET
 	predef FlagActionPredef
 	ld hl, ConnectCableText
@@ -129,6 +150,8 @@ InGameTrade_DoTrade:
 	ld [wWhichPokemon],a
 	ld a,[wInGameTradeReceiveMonSpecies]
 	ld [wcf91],a
+	ld a,[wInGameTradeReceiveMonSpecies + 1]
+	ld [wcf91 + 1],a
 	xor a
 	ld [wMonDataLocation],a ; not used
 	ld [wRemoveMonFromBox],a
@@ -165,8 +188,12 @@ InGameTrade_PrepareTradeData:
 	ld hl, wTradedPlayerMonSpecies
 	ld a, [wInGameTradeGiveMonSpecies]
 	ld [hli], a ; wTradedPlayerMonSpecies
+	ld a, [wInGameTradeGiveMonSpecies + 1]
+	ld [hli], a ; wTradedPlayerMonSpecies + 1
 	ld a, [wInGameTradeReceiveMonSpecies]
-	ld [hl], a ; wTradedEnemyMonSpecies
+	ld [hli], a ; wTradedEnemyMonSpecies
+	ld a, [wInGameTradeReceiveMonSpecies + 1]
+	ld [hl], a ; wTradedEnemyMonSpecies + 1
 	ld hl, wPartyMonOT
 	ld bc, NAME_LENGTH
 	ld a, [wWhichPokemon]

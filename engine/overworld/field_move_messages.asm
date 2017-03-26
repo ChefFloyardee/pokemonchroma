@@ -10,6 +10,9 @@ UsedStrengthText:
 	TX_FAR _UsedStrengthText
 	TX_ASM
 	ld a, [wcf91]
+	ld c, a
+	ld a, [wcf91 + 1]
+	ld b, a
 	call PlayCry
 	call Delay3
 	jp TextScriptEnd

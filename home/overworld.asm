@@ -64,6 +64,9 @@ OverworldLoopLessDelay::
 	ld a,[wCurOpponent]
 	and a
 	jp nz,.newBattle
+	ld a,[wCurOpponent + 1]
+ 	and a
+	jp nz,.newBattle
 	ld a,[wd730]
 	bit 7,a ; are we simulating button presses?
 	jr z,.notSimulating
@@ -128,6 +131,9 @@ OverworldLoopLessDelay::
 	ld a,[wCurOpponent]
 	and a
 	jp nz,.newBattle
+	ld a,[wCurOpponent + 1]
+ 	and a
+ 	jp nz,.newBattle
 	jp OverworldLoop
 .noDirectionButtonsPressed
 	ld hl,wFlags_0xcd60
@@ -2261,14 +2267,20 @@ LoadMapHeader::
 	ld a,[hli]
 	ld [hLoadSpriteTemp1],a ; save trainer class
 	ld a,[hli]
+	ld [wLoadSpriteTemp2],a ; save trainer class
+	ld a,[hli]
 	ld [hLoadSpriteTemp2],a ; save trainer number (within class)
 	push hl
 	ld hl,wMapSpriteExtraData
+	add hl, bc
+	srl c
 	add hl,bc
 	ld a,[hLoadSpriteTemp1]
 	ld [hli],a ; store trainer class in byte 0 of the entry
+	ld a,[wLoadSpriteTemp2]
+	ld [hli],a ; store trainer class in byte 1 of the entry
 	ld a,[hLoadSpriteTemp2]
-	ld [hl],a ; store trainer number in byte 1 of the entry
+	ld [hl],a ; store trainer number in byte 2 of the entry
 	pop hl
 	jr .nextSprite
 .itemBallSprite
@@ -2276,6 +2288,8 @@ LoadMapHeader::
 	ld [hLoadSpriteTemp1],a ; save item number
 	push hl
 	ld hl,wMapSpriteExtraData
+	add hl, bc
+	srl c
 	add hl,bc
 	ld a,[hLoadSpriteTemp1]
 	ld [hli],a ; store item number in byte 0 of the entry
@@ -2286,11 +2300,14 @@ LoadMapHeader::
 .regularSprite
 	push hl
 	ld hl,wMapSpriteExtraData
+	add hl, bc
+	srl c
 	add hl,bc
 ; zero both bytes, since regular sprites don't use this extra space
 	xor a
 	ld [hli],a
-	ld [hl],a
+	ld [hli],a
+	ld [hl], a
 	pop hl
 .nextSprite
 	pop bc

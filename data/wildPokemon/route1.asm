@@ -1,13 +1,13 @@
 Route1Mons:
 	db $19
-	db 3,PIDGEY
-	db 3,RATTATA
-	db 3,SENTRET
-	db 2,SENTRET
-	db 2,HOOTHOOT
-	db 3,HOOTHOOT
-	db 3,PIDGEY
-	db 5,TOTODILE
-	db 4,PIDGEY
-	db 5,RATTATA
+	dbw 3,PIDGEY
+	dbw 3,RATTATA
+	dbw 3,SENTRET
+	dbw 2,SENTRET
+	dbw 2,HOOTHOOT
+	dbw 3,HOOTHOOT
+	dbw 3,PIDGEY
+	dbw 5,TOTODILE
+	dbw 4,PIDGEY
+	dbw 5,RATTATA
 	db $00

@@ -120,7 +120,10 @@ SSAnne10Text6:
 SSAnne10Text8:
 	TX_FAR _SSAnne10Text8
 	TX_ASM
-	ld a, MACHOKE
+	ld a, (MACHOKE & $FF)
+ 	ld c, a
+ 	ld a, (MACHOKE >> 8)
+ 	ld b, a
 	call PlayCry
 	jp TextScriptEnd
 

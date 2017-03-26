@@ -9,6 +9,8 @@ LoadMonData_:
 
 	ld a, [wDayCareMonSpecies]
 	ld [wcf91], a
+	ld a, [wDayCareMonSpecies + 1]
+	ld [wcf91 + 1], a
 	ld a, [wMonDataLocation]
 	cp DAYCARE_DATA
 	jr z, .GetMonHeader
@@ -20,6 +22,8 @@ LoadMonData_:
 .GetMonHeader
 	ld a, [wcf91]
 	ld [wd0b5], a ; input for GetMonHeader
+	ld a, [wcf91 + 1]
+ 	ld [wd0b5 + 1], a ; input for GetMonHeader
 	call GetMonHeader
 
 	ld hl, wPartyMons

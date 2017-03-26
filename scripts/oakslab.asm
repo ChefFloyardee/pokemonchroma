@@ -191,10 +191,15 @@ OaksLabScript7:
 	ret
 
 OaksLabScript8:
+	ld a, [wPlayerStarter + 1]
+ 	ld b, a
 	ld a, [wPlayerStarter]
-	cp STARTER1
+	ld c, a
+ 	ld de, STARTER1
+ 	call CompareTwoBytes
 	jr z, .Charmander
-	cp STARTER2
+	ld de, STARTER2
+ 	call CompareTwoBytes
 	jr z, .Squirtle
 	jr .Bulbasaur
 .Charmander
@@ -322,6 +327,10 @@ OaksLabScript9:
 	ld [wRivalStarter], a
 	ld [wcf91], a
 	ld [wd11e], a
+	ld a, [wRivalStarterTemp + 1]
+	ld [wRivalStarter + 1], a
+	ld [wcf91 + 1], a
+	ld [wd11e + 1], a
 	call GetMonName
 	ld a, $1
 	ld [H_SPRITEINDEX], a
@@ -381,15 +390,26 @@ OaksLabScript11:
 	ret nz
 
 	; define which team rival uses, and fight it
-	ld a, OPP_SONY1
+	ld a, SONY1
 	ld [wCurOpponent], a
+	ld a, $FF
+	ld [wCurOpponent + 1], a
+	ld a, [wRivalStarter + 1]
+	ld b, a
 	ld a, [wRivalStarter]
-	cp STARTER2
+	ld c, a
+	ld de, STARTER2
+	call CompareTwoBytes
 	jr nz, .NotSquirtle
 	ld a, $1
 	jr .done
 .NotSquirtle
-	cp STARTER3
+	ld a, [wRivalStarter + 1]
+ 	ld b, a
+ 	ld a, [wRivalStarter]
+ 	ld c, a
+ 	ld de, STARTER3
+ 	call CompareTwoBytes
 	jr nz, .Charmander
 	ld a, $2
 	jr .done
@@ -794,38 +814,48 @@ OaksLabText41:
 OaksLabText29:
 OaksLabText2:
 	TX_ASM
-	ld a, STARTER2
+	ld a, (STARTER2 & $FF)
 	ld [wRivalStarterTemp], a
+	ld a, (STARTER2 >> 8)
+	ld [wRivalStarterTemp + 1], a
 	ld a, $3
 	ld [wRivalStarterBallSpriteIndex], a
-	ld a, STARTER1
+	ld de, STARTER1
 	ld b, $2
 	jr OaksLabScript_1d133
 
 OaksLabText30:
 OaksLabText3:
 	TX_ASM
-	ld a, STARTER3
+	ld a, (STARTER3 & $ff)
 	ld [wRivalStarterTemp], a
+	ld a, (STARTER3 >> 8)
+	ld [wRivalStarterTemp + 1], a
 	ld a, $4
 	ld [wRivalStarterBallSpriteIndex], a
-	ld a, STARTER2
+	ld de, STARTER2
 	ld b, $3
 	jr OaksLabScript_1d133
 
 OaksLabText31:
 OaksLabText4:
 	TX_ASM
-	ld a, STARTER1
+	ld a, (STARTER1 & $ff)
 	ld [wRivalStarterTemp], a
+	ld a, (STARTER1 >> 8)
+	ld [wRivalStarterTemp + 1], a
 	ld a, $2
 	ld [wRivalStarterBallSpriteIndex], a
-	ld a, STARTER3
+	ld de, STARTER3
 	ld b, $4
 
 OaksLabScript_1d133:
+	ld a, e
 	ld [wcf91], a
 	ld [wd11e], a
+	ld a, d
+	ld [wcf91 + 1], a
+	ld [wd11e + 1], a
 	ld a, b
 	ld [wSpriteIndex], a
 	CheckEvent EVENT_GOT_STARTER
@@ -900,6 +930,9 @@ OaksLabMonChoiceMenu:
 	ld a, [wcf91]
 	ld [wPlayerStarter], a
 	ld [wd11e], a
+	ld a, [wcf91 + 1]
+	ld [wPlayerStarter + 1], a
+	ld [wd11e + 1], a
 	call GetMonName
 	ld a, [wSpriteIndex]
 	cp $2
@@ -928,6 +961,8 @@ OaksLabMonChoiceMenu:
 	ld [wCurEnemyLVL], a
 	ld a, [wcf91]
 	ld [wd11e], a
+	ld a, [wcf91 + 1]
+ 	ld [wd11e + 1], a
 	call AddPartyMon
 	ld hl, wd72e
 	set 3, [hl]
@@ -970,9 +1005,19 @@ OaksLabText5:
 	ld hl, wPokedexOwned
 	ld b, wPokedexOwnedEnd - wPokedexOwned
 	call CountSetBits
+
 	ld a, [wNumSetBits]
-	cp 2
+	ld c, a
+ 	ld a, [wNumSetBits + 1]
+ 	ld b, a
+ 	ld a, b
+ 	cp (2 >> 8)
+ 	jr c, .asm_1d279
+ 	jr nz, .complete
+ 	ld a, c
+ 	cp (2 & $FF)
 	jr c, .asm_1d279
+.complete
 	CheckEvent EVENT_GOT_POKEDEX
 	jr z, .asm_1d279
 .asm_1d266
@@ -1221,7 +1266,11 @@ OaksLabText25:
 
 OaksLabText26:
 	TX_FAR _OaksLabText26
-	db "@"
+	TX_SFX_KEY_ITEM
+	TX_ASM
+	lb bc, POKE_BALL, 5
+	call GiveItem
+    jp TextScriptEnd
 
 OaksLabText27:
 	TX_FAR _OaksLabText27

@@ -39,7 +39,13 @@ RedrawPartyMenu_:
 .loop
 	ld a,[de]
 	cp a,$FF ; reached the terminator?
+	jr nz, .notTheEnd
+ 	inc de
+ 	ld a, [de]
+ 	cp a, $FF ; reach the terminator?
+ 	dec de
 	jp z,.afterDrawingMonEntries
+.notTheEnd
 	push bc
 	push de
 	push hl
@@ -121,6 +127,7 @@ RedrawPartyMenu_:
 	pop hl
 	pop de
 	inc de
+	inc de
 	ld bc,2 * 20
 	add hl,bc
 	pop bc
@@ -133,23 +140,26 @@ RedrawPartyMenu_:
 .evolutionStoneMenu
 	push hl
 	ld hl,EvosMovesPointerTable
-	ld b,0
 	ld a,[wLoadedMonSpecies]
-	dec a
-	add a
-	rl b
-	ld c,a
-	add hl,bc
+	ld c, a
+ 	ld a,[wLoadedMonSpecies + 1]
+ 	ld b, a
+ 	dec bc
+ 	add hl, bc
+ 	add hl, bc
+ 	add hl, bc
 	ld de,wcd6d
 	ld a,BANK(EvosMovesPointerTable)
-	ld bc,2
+	ld bc,3
 	call FarCopyData
 	ld hl,wcd6d
 	ld a,[hli]
+	ld b, a  ; Bank of mon's EvosMoves data
+	ld a, [hli]
 	ld h,[hl]
-	ld l,a
+	ld l,a  ; hl is pointer to mon's EvosMoves data
+	ld a, b
 	ld de,wcd6d
-	ld a,BANK(EvosMovesPointerTable)
 	ld bc,Mon133_EvosEnd - Mon133_EvosMoves
 	call FarCopyData
 	ld hl,wcd6d
@@ -161,13 +171,16 @@ RedrawPartyMenu_:
 	jr z,.placeEvolutionStoneString ; if so, place the "NOT ABLE" string
 	inc hl
 	inc hl
+	inc hl
 	cp a,EV_ITEM
 	jr nz,.checkEvolutionsLoop
 ; if it's a stone evolution entry
 	dec hl
 	dec hl
+	dec hl
 	ld b,[hl]
 	ld a,[wEvoStoneItemID] ; the stone the player used
+	inc hl
 	inc hl
 	inc hl
 	inc hl
@@ -184,9 +197,9 @@ RedrawPartyMenu_:
 	pop hl
 	jr .printLevel
 .ableToEvolveText
-	db "ABLE@"
+	db "Able@"
 .notAbleToEvolveText
-	db "NOT ABLE@"
+	db "Not Able@"
 .afterDrawingMonEntries
 	ld b, SET_PAL_PARTY_MENU
 	call RunPaletteCommand

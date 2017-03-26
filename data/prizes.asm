@@ -12,13 +12,13 @@ NoThanksText:
 	db "NO THANKS@"
 
 PrizeMenuMon1Entries:
-	db ABRA
-	db CLEFAIRY
+	dw ABRA
+	dw CLEFAIRY
 IF DEF(_RED)
-	db NIDORINA
+	dw NIDORINA
 ENDC
 IF DEF(_BLUE)
-	db NIDORINO
+	dw NIDORINO
 ENDC
 	db "@"
 
@@ -36,15 +36,15 @@ ENDC
 
 PrizeMenuMon2Entries:
 IF DEF(_RED)
-	db DRATINI
-	db SCYTHER
+	dw DRATINI
+	dw SCYTHER
 ENDC
 IF DEF(_BLUE)
-	db PINSIR
-	db DRATINI
+	dw PINSIR
+	dw DRATINI
 ENDC
-	db PORYGON
-	db "@"
+	dw PORYGON
+	dw "@"
 
 PrizeMenuMon2Cost:
 IF DEF(_RED)
@@ -60,9 +60,9 @@ ENDC
 	db "@"
 
 PrizeMenuTMsEntries:
-	db TM_23
-	db TM_15
-	db TM_50
+	dw TM_23
+	dw TM_15
+	dw TM_50
 	db "@"
 
 PrizeMenuTMsCost:

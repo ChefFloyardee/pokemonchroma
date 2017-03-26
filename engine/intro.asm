@@ -313,6 +313,7 @@ PlayShootingStar:
 	call DisableLCD
 	xor a
 	ld [wCurOpponent], a
+	ld [wCurOpponent + 1], a
 	call IntroDrawBlackBars
 	call LoadIntroGraphics
 	call EnableLCD

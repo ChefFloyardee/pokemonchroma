@@ -254,16 +254,6 @@ DrawHPBar::
 LoadMonData::
 	jpab LoadMonData_
 
-OverwritewMoves::
-; Write c to [wMoves + b]. Unused.
-	ld hl, wMoves
-	ld e, b
-	ld d, 0
-	add hl, de
-	ld a, c
-	ld [hl], a
-	ret
-
 LoadFlippedFrontSpriteByMonIndex::
 	ld a, 1
 	ld [wSpriteFlipped], a
@@ -271,21 +261,43 @@ LoadFlippedFrontSpriteByMonIndex::
 LoadFrontSpriteByMonIndex::
 	push hl
 	ld a, [wd11e]
-	push af
+	ld c, a
+ 	ld a, [wd11e + 1]
+ 	ld b, a
+ 	push bc
 	ld a, [wcf91]
 	ld [wd11e], a
+	ld a, [wcf91 + 1]
+ 	ld [wd11e + 1], a
 	predef IndexToPokedex
 	ld hl, wd11e
+	ld a, [hli]
+ 	ld e, a
 	ld a, [hl]
+	ld d, a
 	pop bc
 	ld [hl], b
-	and a
+	dec hl
+ 	ld [hl], c
 	pop hl
+	; de = mon id
+ 	ld a, e
+ 	and a
+ 	jr nz, .notZero
+ 	ld a, d
+ 	and a
 	jr z, .invalidDexNumber ; dex #0 invalid
-	cp NUM_POKEMON + 1
+.notZero
+ 	ld a, d
+ 	cp ((NUM_POKEMON + 1) >> 8)
+ 	jr c, .validDexNumber
+ 	ld a, e
+ 	cp ((NUM_POKEMON + 1) & $FF)
 	jr c, .validDexNumber   ; dex >#151 invalid
 .invalidDexNumber
-	ld a, RHYDON ; $1
+	ld a, (RHYDON >> 8) ; $0
+ 	ld [wcf91 + 1], a
+ 	ld a, (RHYDON & $FF) ; $1
 	ld [wcf91], a
 	ret
 .validDexNumber
@@ -316,10 +328,8 @@ PlayCry::
 	jp WaitForSoundToFinish
 
 GetCryData::
-; Load cry data for monster a.
-	dec a
-	ld c, a
-	ld b, 0
+; Load cry data for monster bc.
+	dec bc
 	ld hl, CryData
 	add hl, bc
 	add hl, bc
@@ -434,9 +444,13 @@ HandlePartyMenuInput::
 	ld b,0
 	ld c,a
 	add hl,bc
-	ld a,[hl]
+	add hl, bc
+	ld a,[hli]
 	ld [wcf91],a
 	ld [wBattleMonSpecies2],a
+	ld a,[hl]
+ 	ld [wcf91 + 1],a
+ 	ld [wBattleMonSpecies2 + 1],a
 	call BankswitchBack
 	and a
 	ret
@@ -458,7 +472,7 @@ HandlePartyMenuInput::
 	ld a,[wCurrentMenuItem]
 	ld [wWhichPokemon],a
 	callba SwitchPartyMon
-	jr HandlePartyMenuInput
+	jp HandlePartyMenuInput
 
 DrawPartyMenu::
 	ld hl, DrawPartyMenu_
@@ -540,53 +554,66 @@ PrintLevelCommon::
 	ld b,LEFT_ALIGN | 1 ; 1 byte
 	jp PrintNumber
 
-GetwMoves::
-; Unused. Returns the move at index a from wMoves in a
-	ld hl,wMoves
-	ld c,a
-	ld b,0
-	add hl,bc
-	ld a,[hl]
-	ret
-
 ; copies the base stat data of a pokemon to wMonHeader
 ; INPUT:
-; [wd0b5] = pokemon ID
+; [wd0b5] = 2-byte pokemon ID
 GetMonHeader::
 	ld a,[H_LOADEDROMBANK]
 	push af
-	ld a,BANK(BaseStats)
+	ld a,BANK(BaseStatsPointers)
 	ld [H_LOADEDROMBANK],a
 	ld [MBC1RomBank],a
 	push bc
 	push de
 	push hl
 	ld a,[wd11e]
-	push af
+	ld c, a
+ 	ld a,[wd11e + 1]
+ 	ld b, a
+ 	push bc
 	ld a,[wd0b5]
 	ld [wd11e],a
+	ld a,[wd0b5 + 1]
+ 	ld [wd11e + 1],a
+ 	ld de, FOSSIL_KABUTOPS
+ 	call LoadBCWith_wd0b5
+ 	call CompareTwoBytes
 	ld de,FossilKabutopsPic
 	ld b,$66 ; size of Kabutops fossil and Ghost sprites
-	cp FOSSIL_KABUTOPS ; Kabutops fossil
+	ld c, Bank(FossilKabutopsPic)
 	jr z,.specialID
+	ld de, MON_GHOST
+ 	call LoadBCWith_wd0b5
+ 	call CompareTwoBytes
 	ld de,GhostPic
-	cp MON_GHOST ; Ghost
+	ld c, Bank(GhostPic)
 	jr z,.specialID
+	ld de, FOSSIL_AERODACTYL
+ 	call LoadBCWith_wd0b5
+ 	call CompareTwoBytes
 	ld de,FossilAerodactylPic
 	ld b,$77 ; size of Aerodactyl fossil sprite
-	cp FOSSIL_AERODACTYL ; Aerodactyl fossil
+	ld c, Bank(FossilAerodactylPic)
 	jr z,.specialID
-	cp a,MEW
-	jr z,.mew
-	predef IndexToPokedex   ; convert pokemon ID in [wd11e] to pokedex number
-	ld a,[wd11e]
-	dec a
-	ld bc, MonBaseStatsEnd - MonBaseStats
-	ld hl,BaseStats
-	call AddNTimes
+	predef IndexToPokedex
+ 	ld a, [wd11e]
+ 	ld e, a
+ 	ld a, [wd11e + 1]
+ 	ld d, a
+ 	dec de
+ 	ld hl, BaseStatsPointers
+ 	add hl, de
+ 	add hl, de
+ 	add hl, de
+ 	ld a, [hli]
+ 	ld b, a
+ 	ld a, [hli]
+ 	ld h, [hl]
+ 	ld l, a
 	ld de,wMonHeader
+	ld a, b
 	ld bc, MonBaseStatsEnd - MonBaseStats
-	call CopyData
+	call FarCopyData
 	jr .done
 .specialID
 	ld hl,wMonHSpriteDim
@@ -595,18 +622,18 @@ GetMonHeader::
 	ld [hl],e ; write front sprite pointer
 	inc hl
 	ld [hl],d
-	jr .done
-.mew
-	ld hl,MewBaseStats
-	ld de,wMonHeader
-	ld bc,MonBaseStatsEnd - MonBaseStats
-	ld a,BANK(MewBaseStats)
-	call FarCopyData
+	ld hl,wMonSpritesBank
+	ld [hl], c
 .done
-	ld a,[wd0b5]
-	ld [wMonHIndex],a
-	pop af
+	ld a, [wd0b5]
+ 	ld [wMonHIndex], a
+ 	ld a, [wd0b5 + 1]
+ 	ld [wMonHIndex + 1], a
+	pop bc
+ 	ld a, c
 	ld [wd11e],a
+	ld a, b
+	ld [wd11e + 1],a
 	pop hl
 	pop de
 	pop bc
@@ -1269,6 +1296,8 @@ INCLUDE "engine/menu/start_menu.asm"
 ; OUTPUT:
 ; [wNumSetBits] = number of set bits
 CountSetBits::
+	xor a
+	ld [wNumSetBits + 1], a
 	ld c,0
 .loop
 	ld a,[hli]
@@ -1278,6 +1307,13 @@ CountSetBits::
 	srl e
 	ld a,0
 	adc c
+	jr nc, .ok
+ 	push af
+ 	ld a, [wNumSetBits + 1]
+ 	inc a
+ 	ld [wNumSetBits + 1], a
+ 	pop af
+.ok
 	ld c,a
 	dec d
 	jr nz,.innerLoop
@@ -1457,8 +1493,11 @@ DisplayListMenuIDLoop::
 	ld [wWhichPokemon],a
 	ld a,[wListMenuID]
 	cp ITEMLISTMENU
-	jr nz,.skipMultiplying
+	jr z,.multiply
+ 	cp a,PCPOKEMONLISTMENU
+ 	jr nz, .skipMultiplying
 ; if it's an item menu
+.multiply
 	sla c ; item entries are 2 bytes long, so multiply by 2
 .skipMultiplying
 	ld a,[wListPointer]
@@ -1468,8 +1507,11 @@ DisplayListMenuIDLoop::
 	inc hl ; hl = beginning of list entries
 	ld b,0
 	add hl,bc
-	ld a,[hl]
+	ld a,[hli]
 	ld [wcf91],a
+	ld a,[hl]
+ 	ld [wcf91 + 1],a
+ 	dec hl
 	ld a,[wListMenuID]
 	and a ; is it a PC pokemon list?
 	jr z,.pokemonList
@@ -1692,13 +1734,17 @@ PrintListMenuEntries::
 	ld c,a
 	ld a,[wListMenuID]
 	cp ITEMLISTMENU
-	ld a,c
+	jr z,.multiply
+ 	cp a,PCPOKEMONLISTMENU
 	jr nz,.skipMultiplying
 ; if it's an item menu
 ; item entries are 2 bytes long, so multiply by 2
+.multiply
+ 	ld a,c
 	sla a
 	sla c
 .skipMultiplying
+	ld a,c
 	add e
 	ld e,a
 	jr nc,.noCarry
@@ -1712,7 +1758,21 @@ PrintListMenuEntries::
 	ld a,[de]
 	ld [wd11e],a
 	cp $ff
+	inc de
+ 	jp nz,.notDone
+ 	ld a,[wListMenuID]
+ 	cp a,PCPOKEMONLISTMENU
+ 	jp nz,.printCancelMenuItem
+ 	ld a,[de]
+ 	ld [wd11e + 1], a
+ 	cp a,$ff
 	jp z,.printCancelMenuItem
+	jr .ok
+.notDone
+ 	ld a,[de]
+ 	ld [wd11e + 1], a
+.ok
+ 	dec de
 	push bc
 	push de
 	push hl
@@ -1809,6 +1869,10 @@ PrintListMenuEntries::
 	pop de
 	inc de
 	ld a,[wListMenuID]
+	cp a,PCPOKEMONLISTMENU
+ 	jr nz, .notpc
+ 	inc de
+.notpc
 	cp ITEMLISTMENU
 	jr nz,.nextListEntry
 .printItemQuantity
@@ -1877,12 +1941,25 @@ GetMonName::
 	ld a,BANK(MonsterNames)
 	ld [H_LOADEDROMBANK],a
 	ld [MBC1RomBank],a
-	ld a,[wd11e]
-	dec a
+	ld a, [wd11e]
+ 	ld c, a
+ 	ld a, [wd11e + 1]
+ 	ld b, a
+ 	; bc = mon id
+ 	dec bc
 	ld hl,MonsterNames
-	ld c,10
-	ld b,0
-	call AddNTimes
+	ld de, 10
+.loop
+ 	xor a
+ 	or b
+ 	jr nz, .notZero
+	or c
+ 	jr z, .done
+.notZero
+ 	add hl, de
+ 	dec bc
+	jr .loop
+.done
 	ld de,wcd6d
 	push de
 	ld bc,10
@@ -1922,7 +1999,6 @@ GetItemName::
 	ret
 
 GetMachineName::
-; copies the name of the TM/HM in [wd11e] to wcd6d
 	push hl
 	push de
 	push bc
@@ -2272,7 +2348,8 @@ TalkToTrainer::
 	ld a, $2
 	call ReadTrainerHeaderInfo     ; read flag's byte ptr
 	ld a, [wTrainerHeaderFlagBit]
-	ld c, a
+	ld e, a
+	ld d, 0
 	ld b, FLAG_TEST
 	call TrainerFlagAction      ; read trainer's flag
 	ld a, c
@@ -2367,12 +2444,13 @@ EndTrainerBattle::
 	ld a, $2
 	call ReadTrainerHeaderInfo
 	ld a, [wTrainerHeaderFlagBit]
-	ld c, a
+	ld e, a
+	ld d, 0
 	ld b, FLAG_SET
 	call TrainerFlagAction   ; flag trainer as fought
-	ld a, [wEnemyMonOrTrainerClass]
-	cp 200
-	jr nc, .skipRemoveSprite    ; test if trainer was fought (in that case skip removing the corresponding sprite)
+	ld a, [wEnemyMonOrTrainerClass + 1]
+	cp $FF
+	jr z, .skipRemoveSprite    ; test if trainer was fought (in that case skip removing the corresponding sprite)
 	ld hl, wMissableObjectList
 	ld de, $2
 	ld a, [wSpriteIndex]
@@ -2402,15 +2480,14 @@ TrainerWalkUpToPlayer_Bank0::
 
 ; sets opponent type and mon set/lvl based on the engaging trainer data
 InitBattleEnemyParameters::
+	ld a, [wEngagedTrainerClass + 1]
+ 	ld [wCurOpponent + 1], a
+ 	ld [wEnemyMonOrTrainerClass + 1], a
 	ld a, [wEngagedTrainerClass]
 	ld [wCurOpponent], a
 	ld [wEnemyMonOrTrainerClass], a
-	cp 200
 	ld a, [wEngagedTrainerSet]
-	jr c, .noTrainer
 	ld [wTrainerNo], a
-	ret
-.noTrainer
 	ld [wCurEnemyLVL], a
 	ret
 
@@ -2448,8 +2525,11 @@ CheckForEngagingTrainers::
 	call ReadTrainerHeaderInfo       ; read trainer flag's byte ptr
 	ld b, FLAG_TEST
 	ld a, [wTrainerHeaderFlagBit]
-	ld c, a
+	push de
+	ld e, a
+	ld d, 0
 	call TrainerFlagAction        ; read trainer flag
+	pop de
 	ld a, c
 	and a ; has the trainer already been defeated?
 	jr nz, .continue
@@ -2500,11 +2580,15 @@ EngageMapTrainer::
 	ld d, $0
 	ld a, [wSpriteIndex]
 	dec a
+	ld b, a
 	add a
+	add b
 	ld e, a
 	add hl, de     ; seek to engaged trainer data
 	ld a, [hli]    ; load trainer class
 	ld [wEngagedTrainerClass], a
+	ld a, [hli]    ; load trainer class
+	ld [wEngagedTrainerClass + 1], a
 	ld a, [hl]     ; load trainer mon set
 	ld [wEnemyMonAttackMod], a
 	jp PlayTrainerMusic
@@ -2556,61 +2640,13 @@ TrainerEndBattleText::
 	call TextCommandProcessor
 	jp TextScriptEnd
 
-; only engage withe trainer if the player is not already
-; engaged with another trainer
-; XXX unused?
-CheckIfAlreadyEngaged::
-	ld a, [wFlags_0xcd60]
-	bit 0, a
-	ret nz
-	call EngageMapTrainer
-	xor a
-	ret
-
 PlayTrainerMusic::
-	ld a, [wEngagedTrainerClass]
-	cp OPP_SONY1
-	ret z
-	cp OPP_SONY2
-	ret z
-	cp OPP_SONY3
-	ret z
-	ld a, [wGymLeaderNo]
-	and a
-	ret nz
-	xor a
-	ld [wAudioFadeOutControl], a
-	ld a, $ff
-	call PlaySound
-	ld a, BANK(Music_MeetEvilTrainer)
-	ld [wAudioROMBank], a
-	ld [wAudioSavedROMBank], a
-	ld a, [wEngagedTrainerClass]
-	ld b, a
-	ld hl, EvilTrainerList
-.evilTrainerListLoop
-	ld a, [hli]
-	cp $ff
-	jr z, .noEvilTrainer
-	cp b
-	jr nz, .evilTrainerListLoop
-	ld a, MUSIC_MEET_EVIL_TRAINER
-	jr .PlaySound
-.noEvilTrainer
-	ld hl, FemaleTrainerList
-.femaleTrainerListLoop
-	ld a, [hli]
-	cp $ff
-	jr z, .maleTrainer
-	cp b
-	jr nz, .femaleTrainerListLoop
-	ld a, MUSIC_MEET_FEMALE_TRAINER
-	jr .PlaySound
-.maleTrainer
-	ld a, MUSIC_MEET_MALE_TRAINER
-.PlaySound
-	ld [wNewSoundID], a
-	jp PlaySound
+	push hl
+ 	push bc
+ 	callab _PlayTrainerMusic
+ 	pop hl
+ 	pop bc
+ 	ret
 
 INCLUDE "data/trainer_types.asm"
 
@@ -2687,7 +2723,11 @@ IsItemInBag::
 	ret
 
 DisplayPokedex::
+; bc = mon id
+ 	ld a, c
 	ld [wd11e], a
+	ld a, b
+	ld [wd11e + 1], a
 	jpba _DisplayPokedex
 
 SetSpriteFacingDirectionAndDelay::
@@ -3099,9 +3139,8 @@ LoadHpBarAndStatusTilePatterns::
 	call GoodCopyVideoData
 	ld de,EXPBarGraphics
 	ld hl,vChars1 + $400
-	lb bc,BANK(EXPBarGraphics), (EXPBarShinySparkleGraphicsEnd - EXPBarGraphics) / $10
+	lb bc,BANK(EXPBarGraphics), (EXPBarGraphicsEnd - EXPBarGraphics) / $10
 	jp GoodCopyVideoData
-
 
 FillMemory::
 ; Fill bc bytes at hl with a.
@@ -3181,20 +3220,8 @@ PlaySoundWaitForCurrent::
 
 ; Wait for sound to finish playing
 WaitForSoundToFinish::
-	ld a, [wLowHealthAlarm]
-	and $80
-	ret nz
 	push hl
-.waitLoop
-	ld hl, wChannelSoundIDs + Ch4
-	xor a
-	or [hl]
-	inc hl
-	or [hl]
-	inc hl
-	inc hl
-	or [hl]
-	jr nz, .waitLoop
+	callab WaitForSoundToFinish_
 	pop hl
 	ret
 
@@ -3218,11 +3245,10 @@ GetName::
 	cp ITEM_NAME
 	ld a,[wd0b5]
 	ld [wd11e],a
+	ld a,[wd0b5 + 1]
+	ld [wd11e + 1],a
 	jr nz, .noItem
-	
-	cp HM_01        ;it's TM/HM
-	jp nc,GetMachineName
-	
+
 .noItem          ; Return here if not an item
 	ld a,[H_LOADEDROMBANK]
 	push af
@@ -3240,6 +3266,15 @@ GetName::
 	ld d,h
 	jr .gotPtr
 .otherEntries ; $378d
+	; TM names are separate from item names.
+ 	; BUG: This applies to all names instead of just items.
+ 	ld a,[wd0b5]
+ 	cp HM_01
+	jr c, .notMachine
+ 	add sp, 8
+ 	jp GetMachineName
+ 
+.notMachine
 	;2-7 = OTHER ENTRIES
 	ld a,[wPredefBank]
 	ld [H_LOADEDROMBANK],a
@@ -3537,21 +3572,6 @@ PrintLetterDelay::
 	pop hl
 	ret
 
-; Copies [hl, bc) to [de, bc - hl).
-; In other words, the source data is from hl up to but not including bc,
-; and the destination is de.
-CopyDataUntil::
-	ld a,[hli]
-	ld [de],a
-	inc de
-	ld a,h
-	cp b
-	jr nz,CopyDataUntil
-	ld a,l
-	cp c
-	jr nz,CopyDataUntil
-	ret
-
 ; Function to remove a pokemon from the party or the current box.
 ; wWhichPokemon determines the pokemon.
 ; [wRemoveMonFromBox] == 0 specifies the party.
@@ -3597,7 +3617,7 @@ CalcStat::
 	ld a, b
 	ld d, a
 	push hl
-	ld hl, wMonHeader
+	ld hl, wMonHeader + (wMonHBaseStats - wMonHeader - 1)
 	ld b, $0
 	add hl, bc
 	ld a, [hl]          ; read base value of stat
@@ -4530,8 +4550,10 @@ GiveItem::
 	ret
 
 GivePokemon::
-; Give the player monster b at level c.
-	ld a, b
+; Give the player monster de at level c.
+ 	ld a, d
+ 	ld [wcf91 + 1], a
+ 	ld a, e
 	ld [wcf91], a
 	ld a, c
 	ld [wCurEnemyLVL], a
@@ -4559,6 +4581,7 @@ INCLUDE "home/predef.asm"
 
 UpdateCinnabarGymGateTileBlocks::
 	jpba UpdateCinnabarGymGateTileBlocks_
+
 
 CheckForHiddenObjectOrBookshelfOrCardKeyDoor::
 	ld a, [H_LOADEDROMBANK]
@@ -4694,6 +4717,23 @@ const_value = 1
 	add_tx_pre ElevatorText                         ; 41
 	add_tx_pre PokemonStuffText                     ; 42
 	
+LoadBCWith_wd0b5::
+ 	ld a,[wd0b5]
+ 	ld c, a
+ 	ld a,[wd0b5 + 1]
+ 	ld b, a
+ 	ret
+	
+CompareTwoBytes::
+; Input: bc and de
+; Output: Set Zero flag if they're equal
+ 	ld a, b
+ 	cp d
+ 	ret nz
+ 	ld a, c
+ 	cp e
+ 	ret
+	
 GoodCopyVideoData:
 	ld a,[rLCDC]
 	bit 7,a ; is the LCD enabled?
@@ -4711,4 +4751,4 @@ GoodCopyVideoData:
 	ld c, l
 	pop hl
 	pop de
-	jp FarCopyData2 ; if LCD is off, transfer all at once
+	jp FarCopyData ; if LCD is off, transfer all at once

@@ -109,16 +109,22 @@ GetPrizeMenuId:
 .putMonName
 	ld a,[wPrize1]
 	ld [wd11e],a
+	ld a,[wPrize1 + 1]
+	ld [wd11e + 1],a
 	call GetMonName
 	coord hl, 2, 4
 	call PlaceString
 	ld a,[wPrize2]
 	ld [wd11e],a
+	ld a,[wPrize2 + 1]
+	ld [wd11e + 1],a
 	call GetMonName
 	coord hl, 2, 6
 	call PlaceString
 	ld a,[wPrize3]
 	ld [wd11e],a
+	ld a,[wPrize3 + 1]
+	ld [wd11e + 1],a
 	call GetMonName
 	coord hl, 2, 8
 	call PlaceString
@@ -193,8 +199,11 @@ HandlePrizeChoice:
 	ld e,a
 	ld hl,wPrize1
 	add hl,de
-	ld a,[hl]
+	add hl,de
+	ld a,[hli]
 	ld [wd11e],a
+	ld a,[hl]
+	ld [wd11e + 1],a
 	ld a,[wWhichPrizeWindow]
 	cp 2 ; is prize a TM?
 	jr nz, .getMonName
@@ -224,12 +233,17 @@ HandlePrizeChoice:
 	jr .subtractCoins
 .giveMon
 	ld a,[wd11e]
+	ld e, a
 	ld [wcf91],a
-	push af
+	ld a,[wd11e + 1]
+ 	ld d, a
+ 	ld [wcf91 + 1],a
+ 	push de
 	call GetPrizeMonLevel
 	ld c,a
 	pop af
 	ld b,a
+	pop de
 	call GivePokemon
 
 ; If either the party or box was full, wait after displaying message.
@@ -289,15 +303,24 @@ OhFineThenTextPtr:
 	db "@"
 
 GetPrizeMonLevel:
+	ld c,a
+	ld a,[wcf91 + 1]
 	ld a,[wcf91]
 	ld b,a
 	ld hl,PrizeMonLevelDictionary
 .loop
 	ld a,[hli]
+	cp c
+	jr nz,.noMatchFound1
+	ld a, [hli]
 	cp b
-	jr z,.matchFound
+	jr z, .matchFound
+.noMatchFound2
 	inc hl
 	jr .loop
+.noMatchFound1
+ 	inc hl
+ 	jr .noMatchFound2
 .matchFound
 	ld a,[hl]
 	ld [wCurEnemyLVL],a

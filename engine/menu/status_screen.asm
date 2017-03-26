@@ -141,6 +141,9 @@ StatusScreen:
 	ld a, [wMonHIndex]
 	ld [wd11e], a
 	ld [wd0b5], a
+	ld a, [wMonHIndex + 1]
+ 	ld [wd11e + 1], a
+ 	ld [wd0b5 + 1], a
 	predef IndexToPokedex
 	coord hl, 3, 7
 	ld de, wd11e
@@ -171,6 +174,9 @@ StatusScreen:
 	coord hl, 1, 0
 	call LoadFlippedFrontSpriteByMonIndex ; draw Pokémon picture
 	ld a, [wcf91]
+	ld c, a
+	ld a, [wcf91 + 1]
+	ld b, a
 	call PlayCry ; play Pokémon cry
 	call WaitForTextScrollButtonPress ; wait for button
 	pop af
@@ -420,6 +426,8 @@ StatusScreen2:
 	call StatusScreen_ClearName
 	ld a, [wMonHIndex]
 	ld [wd11e], a
+	ld a, [wMonHIndex + 1]
+	ld [wd11e + 1], a
 	call GetMonName
 	coord hl, 9, 1
 	call PlaceString

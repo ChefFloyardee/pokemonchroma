@@ -208,7 +208,8 @@ CinnabarGymQuiz_1ea92:
 	call PrintText
 	ld a, [$ffe0]
 	AdjustEventBit EVENT_CINNABAR_GYM_GATE0_UNLOCKED, 0
-	ld c, a
+	ld e, a
+	ld d, 0
 	ld b, FLAG_SET
 	call CinnabarGymGateFlagAction
 	jp UpdateCinnabarGymGateTileBlocks_
@@ -222,7 +223,8 @@ CinnabarGymQuiz_1ea92:
 	ld a, [hGymGateIndex]
 	add $2
 	AdjustEventBit EVENT_BEAT_CINNABAR_GYM_TRAINER_0, 2
-	ld c, a
+	ld e, a
+	ld d, 0
 	ld b, FLAG_TEST
 	EventFlagAddress hl, EVENT_BEAT_CINNABAR_GYM_TRAINER_0
 	predef FlagActionPredef
@@ -242,7 +244,8 @@ CinnabarGymQuizCorrectText:
 
 	ld a, [$ffe0]
 	AdjustEventBit EVENT_CINNABAR_GYM_GATE0_UNLOCKED, 0
-	ld c, a
+	ld e, a
+	ld d, 0
 	ld b, FLAG_TEST
 	call CinnabarGymGateFlagAction
 	ld a, c
@@ -282,7 +285,8 @@ UpdateCinnabarGymGateTileBlocks_:
 	ld a, [hGymGateIndex]
 	ld [$ffe0], a
 	AdjustEventBit EVENT_CINNABAR_GYM_GATE0_UNLOCKED, 0
-	ld c, a
+	ld e, a
+	ld d, 0
 	ld b, FLAG_TEST
 	call CinnabarGymGateFlagAction
 	ld a, c
@@ -420,17 +424,14 @@ BillsHousePokemonList:
 	bit 1, a ; pressed b
 	jr nz, .cancel
 	ld a, [wCurrentMenuItem]
-	add EEVEE
-	cp EEVEE
-	jr z, .displayPokedex
-	cp FLAREON
-	jr z, .displayPokedex
-	cp JOLTEON
-	jr z, .displayPokedex
-	cp VAPOREON
-	jr z, .displayPokedex
-	jr .cancel
-.displayPokedex
+	cp 4
+ 	jr nc, .cancel
+ 	ld c, a
+	ld b, 0
+ 	ld hl, EEVEE
+ 	add hl, bc
+ 	ld c, l
+ 	ld b, h
 	call DisplayPokedex
 	call LoadScreenTilesFromBuffer2
 	jr .billsPokemonLoop

@@ -69,11 +69,16 @@ SetPal_StatusScreen:
 	ld de, wPalPacket
 	ld bc, $10
 	call CopyData
+	ld a, [wcf91 + 1]
+	cp $FF
+	jr z, .notpokemon
+	ld d, a
 	ld a, [wcf91]
-	cp VICTREEBEL + 1
-	jr c, .pokemon
-	ld a, $1 ; not pokemon
-.pokemon
+ 	ld e, a
+ 	jr .ok
+.notpokemon
+ 	ld de, $1
+.ok
 	call DeterminePaletteIDOutOfBattle
 	push af
 	ld hl, wPalPacket + 1
@@ -98,6 +103,9 @@ SetPal_Pokedex:
 	ld bc, $10
 	call CopyData
 	ld a, [wcf91]
+	ld e, a
+ 	ld a, [wcf91 + 1]
+ 	ld d, a
 	call DeterminePaletteIDOutOfBattle
 	ld hl, wPalPacket + 3
 	ld [hl], a
@@ -193,6 +201,9 @@ SetPal_PokemonWholeScreen:
 	ld a, PAL_BLACK
 	jr nz, .next
 	ld a, [wWholeScreenPaletteMonSpecies]
+	ld e, a
+ 	ld a, [wWholeScreenPaletteMonSpecies + 1]
+	ld d, a
 	call DeterminePaletteIDOutOfBattle
 .next
 	ld [wPalPacket + 1], a
@@ -272,18 +283,29 @@ DeterminePaletteID:
 	bit Transformed, a ; a is battle status 3
 	ld a, PAL_GREYMON  ; if the mon has used Transform, use Ditto's palette
 	ret nz
+	ld a, [hli]
+	ld e, a
 	ld a, [hl]
+	ld d, a
 DeterminePaletteIDOutOfBattle:
+	ld a, e
 	ld [wd11e], a
-	and a ; is the mon index 0?
+	ld a, d
+ 	ld [wd11e + 1], a
+ 	and a
+ 	jr nz, .notZero
+ 	ld a, e
+ 	and a
 	jr z, .skipDexNumConversion
+.notZero
 	push bc
 	predef IndexToPokedex
 	pop bc
 	ld a, [wd11e]
-.skipDexNumConversion
 	ld e, a
-	ld d, 0
+	ld a, [wd11e + 1]
+ 	ld d, a
+.skipDexNumConversion
 	ld hl, MonsterPalettes ; not just for Pokemon, Trainers use it too
 	add hl, de
 	ld a, [hl]

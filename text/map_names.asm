@@ -92,7 +92,7 @@ SeafoamIslandsName:
 VictoryRoadName:
 	db "Victory Road"
 DiglettsCaveName:
-	db "Diglett's Cave@"
+	db "Digletts Cave@"
 RocketHQName:
 	db "Rocket HQ@"
 SilphCoName:

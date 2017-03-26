@@ -134,17 +134,28 @@ CeruleanCityScript1:
 	ld hl, CeruleanCityText_1966d
 	ld de, CeruleanCityText_19672
 	call SaveEndBattleTextPointers
-	ld a, OPP_SONY1
+	ld a, SONY1
 	ld [wCurOpponent], a
+	ld a, $FF
+	ld [wCurOpponent + 1], a
 
 	; select which team to use during the encounter
+	ld a, [wRivalStarter + 1]
+	ld b, a
 	ld a, [wRivalStarter]
-	cp STARTER2
+	ld c, a
+	ld de, STARTER2
+	call CompareTwoBytes
 	jr nz, .NotSquirtle
 	ld a, $7
 	jr .done
 .NotSquirtle
-	cp STARTER3
+	ld a, [wRivalStarter + 1]
+	ld b, a
+	ld a, [wRivalStarter]
+	ld c, a
+ 	ld de, STARTER3
+ 	call CompareTwoBytes
 	jr nz, .Charmander
 	ld a, $8
 	jr .done

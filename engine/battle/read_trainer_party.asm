@@ -16,7 +16,7 @@ ReadTrainer:
 
 ; get the pointer to trainer data for this class
 	ld a,[wCurOpponent]
-	sub $C9 ; convert value from pokemon to trainer
+	dec a
 	add a,a
 	ld hl,TrainerDataPointers
 	ld c,a
@@ -35,11 +35,24 @@ ReadTrainer:
 	dec b
 	jr z,.IterateTrainer
 .inner
-	ld a,[hli]
+	ld a, [hli]
+ 	cp $FF
+ 	jr z, .skipSpecialTrainer
+.skipNormalTrainerMon
+ 	ld a, [hli]
+ 	ld c, a
+ 	ld a, [hli]
+ 	or c
+ 	jr z, .outer
+ 	jr .skipNormalTrainerMon
+.skipSpecialTrainer
+ 	ld a, [hli]
 	and a
-	jr nz,.inner
-	jr .outer
-
+	jr z, .outer
+ 	inc hl
+ 	inc hl
+ 	jr .skipSpecialTrainer
+ 
 ; if the first byte of trainer data is FF,
 ; - each pokemon has a specific level
 ;      (as opposed to the whole team being of the same level)
@@ -53,8 +66,17 @@ ReadTrainer:
 .LoopTrainerData
 	ld a,[hli]
 	and a ; have we reached the end of the trainer data?
-	jr z,.FinishUp
+	jr nz, .monNotZero
+ 	ld a,[hli]
+ 	and a
+	jp z,.FinishUp
+	dec hl
+.monNotZero
+ 	dec hl
+ 	ld a, [hli]
 	ld [wcf91],a ; write species somewhere (XXX why?)
+	ld a, [hli]
+	ld [wcf91 + 1], a
 	ld a,ENEMY_PARTY_DATA
 	ld [wMonDataLocation],a
 	push hl
@@ -72,6 +94,8 @@ ReadTrainer:
 	ld [wCurEnemyLVL],a
 	ld a,[hli]
 	ld [wcf91],a
+	ld a,[hli]
+	ld [wcf91 + 1],a
 	ld a,ENEMY_PARTY_DATA
 	ld [wMonDataLocation],a
 	push hl
@@ -101,7 +125,7 @@ ReadTrainer:
 
 ; get trainer class number
 	ld a,[wCurOpponent]
-	sub 200
+	dec a
 	ld b,a
 	ld hl,TeamMoves
 
@@ -130,14 +154,23 @@ ReadTrainer:
 	ld [wEnemyMon1Moves + 2],a
 
 ; starter
-	ld a,[wRivalStarter]
-	cp STARTER3
+	ld a, [wRivalStarter + 1]
+	ld b, a
+	ld a, [wRivalStarter]
+	ld c, a
+	ld de, STARTER3
+	call CompareTwoBytes
 	ld b,MEGA_DRAIN
 	jr z,.GiveStarterMove
-	cp STARTER1
+	ld a, [wRivalStarter + 1]
+ 	ld b, a
+ 	ld a, [wRivalStarter]
+ 	ld c, a
+ 	ld de, STARTER1
+ 	call CompareTwoBytes
 	ld b,FIRE_BLAST
 	jr z,.GiveStarterMove
-	ld b,BLIZZARD ; must be squirtle
+	ld b,BLIZZARD ; must be STARTER2
 .GiveStarterMove
 	ld a,b
 	ld [wEnemyMon6Moves + 2],a

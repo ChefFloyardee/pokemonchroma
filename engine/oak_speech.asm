@@ -75,9 +75,12 @@ OakSpeech:
 	call PrintText
 	call GBFadeOutToWhite
 	call ClearScreen
-	ld a,NIDORINO
+	ld a,(NIDORINO & $FF)
 	ld [wd0b5],a
 	ld [wcf91],a
+	ld a,(NIDORINO >> 8)
+ 	ld [wd0b5 + 1],a
+ 	ld [wcf91 + 1],a
 	call GetMonHeader
 	coord hl, 6, 4
 	call LoadFlippedFrontSpriteByMonIndex

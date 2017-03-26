@@ -88,7 +88,10 @@ CeladonCityText6:
 CeladonCityText7:
 	TX_FAR _CeladonCityText7
 	TX_ASM
-	ld a, POLIWRATH
+	ld a, (POLIWRATH & $FF)
+	ld c, a
+	ld a, (POLIWRATH >> 8)
+	ld b, a
 	call PlayCry
 	jp TextScriptEnd
 

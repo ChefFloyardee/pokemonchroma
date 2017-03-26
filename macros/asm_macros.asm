@@ -118,6 +118,12 @@ dbw: MACRO
 	dw \2
 ENDM
 
+; macro for putting a word then a byte
+dwb: MACRO
+	dw \1
+	db \2
+	ENDM
+
 dba: MACRO
 	dbw BANK(\1), \1
 ENDM

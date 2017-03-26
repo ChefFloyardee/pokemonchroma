@@ -85,12 +85,12 @@ DisplayPCMainMenu::
 	ld [H_AUTOBGTRANSFERENABLED], a
 	ret
 
-SomeonesPCText:   db "SOMEONE's PC@"
-BillsPCText:      db "BILL's PC@"
+SomeonesPCText:   db "Someone's PC@"
+BillsPCText:      db "Bill's PC@"
 PlayersPCText:    db "'s PC@"
-OaksPCText:       db "PROF.OAK's PC@"
-PKMNLeaguePCText: db $4a, "LEAGUE@"
-LogOffPCText:     db "LOG OFF@"
+OaksPCText:       db "Prof.Oak's PC@"
+PKMNLeaguePCText: db $4a, "League@"
+LogOffPCText:     db "Log Off@"
 
 BillsPC_::
 	ld hl, wd730
@@ -225,6 +225,9 @@ BillsPCDeposit:
 	call DisplayDepositWithdrawMenu
 	jp nc, BillsPCMenu
 	ld a, [wcf91]
+	ld c, a
+	ld a, [wcf91 + 1]
+	ld b, a
 	call GetCryData
 	call PlaySoundWaitForCurrent
 	ld a, PARTY_TO_BOX
@@ -277,6 +280,9 @@ BillsPCWithdraw:
 	ld hl, wBoxMonNicks
 	call GetPartyMonName
 	ld a, [wcf91]
+	ld c, a
+	ld a, [wcf91 + 1]
+	ld b, a
 	call GetCryData
 	call PlaySoundWaitForCurrent
 	xor a ; BOX_TO_PARTY
@@ -312,6 +318,9 @@ BillsPCRelease:
 	call RemovePokemon
 	call WaitForSoundToFinish
 	ld a, [wcf91]
+	ld c, a
+	ld a, [wcf91 + 1]
+	ld b, a
 	call PlayCry
 	ld hl, MonWasReleasedText
 	call PrintText

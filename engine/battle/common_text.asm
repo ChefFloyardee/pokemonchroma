@@ -9,6 +9,9 @@ PrintBeginningBattleText:
 	jr c, .pokemonTower
 .notPokemonTower
 	ld a, [wEnemyMonSpecies2]
+	ld c, a
+ 	ld a, [wEnemyMonSpecies2 + 1]
+ 	ld b, a
 	call PlayCry
 	ld hl, WildMonAppearedText
 	ld a, [wMoveMissed]
@@ -33,8 +36,15 @@ PrintBeginningBattleText:
 	call IsItemInBag
 	ld a, [wEnemyMonSpecies2]
 	ld [wcf91], a
-	cp MAROWAK
+	ld a, [wEnemyMonSpecies2 + 1]
+	ld [wcf91 + 1], a
+ 	ld a, [wEnemyMonSpecies2]
+ 	cp (MAROWAK & $FF)
+ 	jr nz, .notMarowak
+ 	ld a, [wEnemyMonSpecies2 + 1]
+ 	cp (MAROWAK >> 8)
 	jr z, .isMarowak
+.notMarowak
 	ld a, b
 	and a
 	jr z, .noSilphScope

@@ -1205,9 +1205,7 @@ ShrinkingSquareBlackAnim:
 	db $FF
 
 UnusedAnim:
-	db SE_LIGHT_SCREEN_PALETTE, $FF
 	db SE_SHOOT_MANY_BALLS_UPWARD, $FF
-	db SE_RESET_SCREEN_PALETTE, $FF
 	db $FF
 
 ParalyzeAnim:
