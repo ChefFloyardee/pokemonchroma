@@ -2633,3 +2633,33 @@ CompareTwoBytes::
  	ld a, c
  	cp e
  	ret
+
+	
+GoodCopyVideoData:
+	ld a,[rLCDC]
+	bit 7,a ; is the LCD enabled?
+	jp nz, CopyVideoData ; if LCD is on, transfer during V-blank
+	ld a, b
+	push hl
+	push de
+	ld h, 0
+	ld l, c
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	add hl, hl
+	ld b, h
+	ld c, l
+	pop hl
+	pop de
+	jp FarCopyData ; if LCD is off, transfer all at once
+
+	
+LoadBCWith_wd0b5::
+ 	ld a,[wd0b5]
+ 	ld c, a
+ 	ld a,[wd0b5 + 1]
+ 	ld b, a
+ 	ret
+
+INCLUDE "data/mart_inventories.asm"
