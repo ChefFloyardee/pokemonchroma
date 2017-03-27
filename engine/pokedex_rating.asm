@@ -30,7 +30,7 @@ DisplayDexRating:
  	ld a, d
  	cp c
 	jr c, .foundRating
- .next
+.next
 	inc hl
 	inc hl
 	jr .findRating

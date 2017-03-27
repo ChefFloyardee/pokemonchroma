@@ -128,11 +128,6 @@ dba: MACRO
 	dbw BANK(\1), \1
 ENDM
 
-dwb: MACRO
-	dw \1
-	db \2
-ENDM
-
 dab: MACRO
 	dwb \1, BANK(\1)
 ENDM

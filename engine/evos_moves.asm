@@ -473,7 +473,8 @@ WriteMonMoves:
 	push bc
 	push de
 	ld a, [wcf91]  ; cur mon ID
-	ld c, a	ld a, [wcf91 + 1]  ; cur mon ID
+	ld c, a
+	ld a, [wcf91 + 1]  ; cur mon ID
  	ld b, a
  	dec bc
  	ld hl, EvosMovesPointerTable

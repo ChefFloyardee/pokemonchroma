@@ -82,13 +82,10 @@ HideSprites::
 
 INCLUDE "home/copy.asm"
 
-
-
 SECTION "Entry", ROM0 [$100]
 
 	nop
 	jp Start
-
 
 SECTION "Header", ROM0 [$104]
 
@@ -96,8 +93,6 @@ SECTION "Header", ROM0 [$104]
 	; The space here is allocated to prevent code from being overwritten.
 
 	ds $150 - $104
-
-
 
 SECTION "Main", ROM0
 
@@ -111,7 +106,6 @@ Start::
 .ok
 	ld [wGBC], a
 	jp Init
-
 
 INCLUDE "home/joypad.asm"
 INCLUDE "data/map_header_pointers.asm"
@@ -262,42 +256,42 @@ LoadFrontSpriteByMonIndex::
 	push hl
 	ld a, [wd11e]
 	ld c, a
- 	ld a, [wd11e + 1]
- 	ld b, a
- 	push bc
+	ld a, [wd11e + 1]
+	ld b, a
+	push bc
 	ld a, [wcf91]
 	ld [wd11e], a
 	ld a, [wcf91 + 1]
- 	ld [wd11e + 1], a
+	ld [wd11e + 1], a
 	predef IndexToPokedex
 	ld hl, wd11e
 	ld a, [hli]
- 	ld e, a
+	ld e, a
 	ld a, [hl]
 	ld d, a
 	pop bc
 	ld [hl], b
 	dec hl
- 	ld [hl], c
+	ld [hl], c
 	pop hl
 	; de = mon id
- 	ld a, e
- 	and a
+	ld a, e
+	and a
  	jr nz, .notZero
- 	ld a, d
- 	and a
+	ld a, d
+	and a
 	jr z, .invalidDexNumber ; dex #0 invalid
 .notZero
- 	ld a, d
- 	cp ((NUM_POKEMON + 1) >> 8)
- 	jr c, .validDexNumber
- 	ld a, e
- 	cp ((NUM_POKEMON + 1) & $FF)
+	ld a, d
+	cp ((NUM_POKEMON + 1) >> 8)
+	jr c, .validDexNumber
+	ld a, e
+	cp ((NUM_POKEMON + 1) & $FF)
 	jr c, .validDexNumber   ; dex >#151 invalid
 .invalidDexNumber
 	ld a, (RHYDON >> 8) ; $0
- 	ld [wcf91 + 1], a
- 	ld a, (RHYDON & $FF) ; $1
+	ld [wcf91 + 1], a
+	ld a, (RHYDON & $FF) ; $1
 	ld [wcf91], a
 	ret
 .validDexNumber
@@ -449,8 +443,8 @@ HandlePartyMenuInput::
 	ld [wcf91],a
 	ld [wBattleMonSpecies2],a
 	ld a,[hl]
- 	ld [wcf91 + 1],a
- 	ld [wBattleMonSpecies2 + 1],a
+	ld [wcf91 + 1],a
+	ld [wBattleMonSpecies2 + 1],a
 	call BankswitchBack
 	and a
 	ret
@@ -568,29 +562,29 @@ GetMonHeader::
 	push hl
 	ld a,[wd11e]
 	ld c, a
- 	ld a,[wd11e + 1]
- 	ld b, a
- 	push bc
+	ld a,[wd11e + 1]
+	ld b, a
+	push bc
 	ld a,[wd0b5]
 	ld [wd11e],a
 	ld a,[wd0b5 + 1]
- 	ld [wd11e + 1],a
- 	ld de, FOSSIL_KABUTOPS
- 	call LoadBCWith_wd0b5
- 	call CompareTwoBytes
+	ld [wd11e + 1],a
+	ld de, FOSSIL_KABUTOPS
+	call LoadBCWith_wd0b5
+	call CompareTwoBytes
 	ld de,FossilKabutopsPic
 	ld b,$66 ; size of Kabutops fossil and Ghost sprites
 	ld c, Bank(FossilKabutopsPic)
 	jr z,.specialID
 	ld de, MON_GHOST
- 	call LoadBCWith_wd0b5
- 	call CompareTwoBytes
+	call LoadBCWith_wd0b5
+	call CompareTwoBytes
 	ld de,GhostPic
 	ld c, Bank(GhostPic)
 	jr z,.specialID
 	ld de, FOSSIL_AERODACTYL
  	call LoadBCWith_wd0b5
- 	call CompareTwoBytes
+	call CompareTwoBytes
 	ld de,FossilAerodactylPic
 	ld b,$77 ; size of Aerodactyl fossil sprite
 	ld c, Bank(FossilAerodactylPic)
@@ -612,7 +606,7 @@ GetMonHeader::
  	ld l, a
 	ld de,wMonHeader
 	ld a, b
-	ld bc, MonBaseStatsEnd - MonBaseStats
+	ld bc,MonBaseStatsEnd - MonBaseStats
 	call FarCopyData
 	jr .done
 .specialID
@@ -622,7 +616,7 @@ GetMonHeader::
 	ld [hl],e ; write front sprite pointer
 	inc hl
 	ld [hl],d
-	ld hl,wMonSpritesBank
+	ld hl,wMonHPicBank
 	ld [hl], c
 .done
 	ld a, [wd0b5]
@@ -3115,6 +3109,18 @@ LoadFontTilePatterns::
 	ld hl, vFont
 	lb bc, BANK(FontGraphics), (FontGraphicsEnd - FontGraphics) / $8
 	jp CopyVideoDataDouble ; if LCD is on, transfer during V-blank
+	
+
+LoadHpBarAndStatusTilePatterns::
+	ld de,HpBarAndStatusGraphics
+	ld hl,vChars2 + $620
+	lb bc,BANK(HpBarAndStatusGraphics), (HpBarAndStatusGraphicsEnd - HpBarAndStatusGraphics) / $10
+	call GoodCopyVideoData
+	ld de,EXPBarGraphics
+	ld hl,vChars1 + $400
+	lb bc,BANK(EXPBarGraphics), (EXPBarGraphicsEnd - EXPBarGraphics) / $10
+	jp GoodCopyVideoData
+
 
 LoadTextBoxTilePatterns::
 	ld a, [rLCDC]
@@ -3131,16 +3137,6 @@ LoadTextBoxTilePatterns::
 	ld hl, vChars2 + $600
 	lb bc, BANK(TextBoxGraphics), (TextBoxGraphicsEnd - TextBoxGraphics) / $10
 	jp CopyVideoData ; if LCD is on, transfer during V-blank
-
-LoadHpBarAndStatusTilePatterns::
-	ld de,HpBarAndStatusGraphics
-	ld hl,vChars2 + $620
-	lb bc,BANK(HpBarAndStatusGraphics), (HpBarAndStatusGraphicsEnd - HpBarAndStatusGraphics) / $10
-	call GoodCopyVideoData
-	ld de,EXPBarGraphics
-	ld hl,vChars1 + $400
-	lb bc,BANK(EXPBarGraphics), (EXPBarGraphicsEnd - EXPBarGraphics) / $10
-	jp GoodCopyVideoData
 
 FillMemory::
 ; Fill bc bytes at hl with a.
@@ -4561,7 +4557,6 @@ GivePokemon::
 	ld [wMonDataLocation], a
 	jpba _GivePokemon
 
-
 Random::
 ; Return a random number in a.
 ; For battles, use BattleRandom.
@@ -4717,23 +4712,6 @@ const_value = 1
 	add_tx_pre ElevatorText                         ; 41
 	add_tx_pre PokemonStuffText                     ; 42
 	
-LoadBCWith_wd0b5::
- 	ld a,[wd0b5]
- 	ld c, a
- 	ld a,[wd0b5 + 1]
- 	ld b, a
- 	ret
-	
-CompareTwoBytes::
-; Input: bc and de
-; Output: Set Zero flag if they're equal
- 	ld a, b
- 	cp d
- 	ret nz
- 	ld a, c
- 	cp e
- 	ret
-	
 GoodCopyVideoData:
 	ld a,[rLCDC]
 	bit 7,a ; is the LCD enabled?
@@ -4752,3 +4730,11 @@ GoodCopyVideoData:
 	pop hl
 	pop de
 	jp FarCopyData ; if LCD is off, transfer all at once
+
+	
+LoadBCWith_wd0b5::
+ 	ld a,[wd0b5]
+ 	ld c, a
+ 	ld a,[wd0b5 + 1]
+ 	ld b, a
+ 	ret

@@ -15,5 +15,5 @@ Route9Object:
 	object SPRITE_HIKER, $2b, $3, STAY, LEFT, $6, HIKER, $6
 	object SPRITE_BUG_CATCHER, $16, $2, STAY, DOWN, $7, BUG_CATCHER, $d
 	object SPRITE_HIKER, $2d, $f, STAY, RIGHT, $8, HIKER, $5
-	object SPRITE_BUG_CATCHER, $28, $8, STAY, RIGHT, $9, OBUG_CATCHER, $e
+	object SPRITE_BUG_CATCHER, $28, $8, STAY, RIGHT, $9, BUG_CATCHER, $e
 	object SPRITE_BALL, $a, $f, STAY, NONE, $a, TM_30

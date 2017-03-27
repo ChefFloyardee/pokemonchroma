@@ -123,131 +123,6 @@ INCLUDE "engine/pathfinding.asm"
 INCLUDE "engine/hp_bar.asm"
 INCLUDE "engine/hidden_object_functions3.asm"
 
-Set16BitFlag:
- ; Input: de = flag index
- ;        hl = flag data
- 	ld bc, $20
- 	ld a, d
-.hi
- 	and a
- 	jr z, .next
- 	add hl, bc
- 	dec a
- 	jr .hi
-.next
- 	ld a, e
- 	srl a
- 	srl a
- 	srl a
- 	ld b, 0
- 	ld c, a
- 	add hl, bc
- 	ld a, e
- 	and a, %00000111
- 	cp 7
- 	jr nz, .check6
- 	set 7, [hl]
- 	ret
-.check6
- 	cp 6
- 	jr nz, .check5
- 	set 6, [hl]
- 	ret
-.check5
- 	cp 5
- 	jr nz, .check4
- 	set 5, [hl]
- 	ret
-.check4
- 	cp 4
- 	jr nz, .check3
- 	set 3, [hl]
- 	ret
-.check3
- 	cp 3
- 	jr nz, .check2
- 	set 3, [hl]
- 	ret
-.check2
- 	cp 2
- 	jr nz, .check1
- 	set 2, [hl]
- 	ret
-.check1
- 	cp 1
- 	jr nz, .zero
- 	set 1, [hl]
- 	ret
-.zero
- 	set 0, [hl]
- 	ret
-
-Test16BitFlag:
- ; Input: de = flag index
- ;        hl = flag data
- 	ld bc, $20
- 	ld a, d
-.hi
- 	and a
- 	jr z, .next
- 	add hl, bc
- 	dec a
- 	jr .hi
-.next
- 	ld a, e
- 	srl a
- 	srl a
- 	srl a
- 	ld b, 0
-    ld c, a
- 	add hl, bc
- 	ld a, e
- 	and a, %00000111
- 	cp 7
- 	jr nz, .check6
- 	bit 7, [hl]
- 	jr .end
-.check6
- 	cp 6
- 	jr nz, .check5
-	bit 6, [hl]
- 	jr .end
-.check5
- 	cp 5
- 	jr nz, .check4
- 	bit 5, [hl]
-	jr .end
-.check4
- 	cp 4
- 	jr nz, .check3
- 	bit 3, [hl]
- 	jr .end
-.check3
- 	cp 3
- 	jr nz, .check2
- 	bit 3, [hl]
- 	jr .end
-.check2
- 	cp 2
- 	jr nz, .check1
- 	bit 2, [hl]
- 	jr .end
-.check1
- 	cp 1
- 	jr nz, .zero
- 	bit 1, [hl]
- 	jr .end
-.zero
- 	bit 0, [hl]
-.end
- 	jr z, .flagNotSet
- 	ld c, 1
- 	ret
-.flagNotSet
- 	ld c, 0
- 	ret
- 
-
 SECTION "NPC Sprites 1", ROMX, BANK[NPC_SPRITES_1]
 
 OakAideSprite:         INCBIN "gfx/sprites/oak_aide.2bpp"
@@ -2143,14 +2018,6 @@ RedFishingTilesBack:  INCBIN "gfx/red_fishing_tile_back.2bpp"
 RedFishingTilesSide:  INCBIN "gfx/red_fishing_tile_side.2bpp"
 RedFishingRodTiles:   INCBIN "gfx/red_fishingrod_tiles.2bpp"
 
-INCLUDE "data/animations.asm"
-
-INCLUDE "engine/evolution.asm"
-
-INCLUDE "engine/overworld/elevator.asm"
-
-INCLUDE "engine/items/tm_prices.asm"
-
 SECTION "bank2D",ROMX,BANK[$2D]
 
 BaseStats: INCLUDE "data/base_stats.asm"
@@ -2557,16 +2424,26 @@ INCLUDE "data/baseStats/murkrow.asm"
 INCLUDE "data/baseStats/slowking.asm"
 INCLUDE "data/baseStats/misdreavus.asm"
 
-SECTION "bank34",ROMX,BANK[$34]
+	
+SECTION "bank35",ROMX,BANK[$35]
 
-; Wait for sound to finish playing
+INCLUDE "data/animations.asm"
+
+INCLUDE "engine/evolution.asm"
+
+INCLUDE "engine/overworld/elevator.asm"
+
+INCLUDE "engine/items/tm_prices.asm"
+
+SECTION "bank36",ROMX,BANK[$36]
+	
 WaitForSoundToFinish_:: ; 3748 (0:3748)
  	ld a, [wLowHealthAlarm]
  	and $80
  	ret nz
  	push hl
 .waitLoop
- 	ld hl, wChannelSoundIDs + CH4
+ 	ld hl, wChannelSoundIDs + Ch4
  	xor a
  	or [hl]
  	inc hl
@@ -2577,7 +2454,7 @@ WaitForSoundToFinish_:: ; 3748 (0:3748)
  	jr nz, .waitLoop
  	pop hl
  	ret
- 
+
 _PlayTrainerMusic:: ; 33e8 (0:33e8)
  	ld a, [wEngagedTrainerClass]
  	cp SONY1
@@ -2622,3 +2499,137 @@ _PlayTrainerMusic:: ; 33e8 (0:33e8)
 .PlaySound
  	ld [wNewSoundID], a
  	jp PlaySound
+
+Set16BitFlag:
+ ; Input: de = flag index
+ ;        hl = flag data
+ 	ld bc, $20
+ 	ld a, d
+.hi
+ 	and a
+ 	jr z, .next
+ 	add hl, bc
+ 	dec a
+ 	jr .hi
+.next
+ 	ld a, e
+ 	srl a
+ 	srl a
+ 	srl a
+ 	ld b, 0
+ 	ld c, a
+ 	add hl, bc
+ 	ld a, e
+ 	and a, %00000111
+ 	cp 7
+ 	jr nz, .check6
+ 	set 7, [hl]
+ 	ret
+.check6
+ 	cp 6
+ 	jr nz, .check5
+ 	set 6, [hl]
+ 	ret
+.check5
+ 	cp 5
+ 	jr nz, .check4
+ 	set 5, [hl]
+ 	ret
+.check4
+ 	cp 4
+ 	jr nz, .check3
+ 	set 3, [hl]
+ 	ret
+.check3
+ 	cp 3
+ 	jr nz, .check2
+ 	set 3, [hl]
+ 	ret
+.check2
+ 	cp 2
+ 	jr nz, .check1
+ 	set 2, [hl]
+ 	ret
+.check1
+ 	cp 1
+ 	jr nz, .zero
+ 	set 1, [hl]
+ 	ret
+.zero
+ 	set 0, [hl]
+ 	ret
+
+Test16BitFlag:
+ ; Input: de = flag index
+ ;        hl = flag data
+ 	ld bc, $20
+ 	ld a, d
+.hi
+ 	and a
+ 	jr z, .next
+ 	add hl, bc
+ 	dec a
+ 	jr .hi
+.next
+ 	ld a, e
+ 	srl a
+ 	srl a
+ 	srl a
+ 	ld b, 0
+    ld c, a
+ 	add hl, bc
+ 	ld a, e
+ 	and a, %00000111
+ 	cp 7
+ 	jr nz, .check6
+ 	bit 7, [hl]
+ 	jr .end
+.check6
+ 	cp 6
+ 	jr nz, .check5
+	bit 6, [hl]
+ 	jr .end
+.check5
+ 	cp 5
+ 	jr nz, .check4
+ 	bit 5, [hl]
+	jr .end
+.check4
+ 	cp 4
+ 	jr nz, .check3
+ 	bit 3, [hl]
+ 	jr .end
+.check3
+ 	cp 3
+ 	jr nz, .check2
+ 	bit 3, [hl]
+ 	jr .end
+.check2
+ 	cp 2
+ 	jr nz, .check1
+ 	bit 2, [hl]
+ 	jr .end
+.check1
+ 	cp 1
+ 	jr nz, .zero
+ 	bit 1, [hl]
+ 	jr .end
+.zero
+ 	bit 0, [hl]
+.end
+ 	jr z, .flagNotSet
+ 	ld c, 1
+ 	ret
+.flagNotSet
+ 	ld c, 0
+ 	ret	
+	
+CompareTwoBytes::
+; Input: bc and de
+; Output: Set Zero flag if they're equal
+ 	ld a, b
+ 	cp d
+ 	ret nz
+ 	ld a, c
+ 	cp e
+ 	ret
