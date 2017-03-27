@@ -277,7 +277,7 @@ LoadFrontSpriteByMonIndex::
 	; de = mon id
 	ld a, e
 	and a
- 	jr nz, .notZero
+	jr nz, .notZero
 	ld a, d
 	and a
 	jr z, .invalidDexNumber ; dex #0 invalid
@@ -3111,16 +3111,6 @@ LoadFontTilePatterns::
 	jp CopyVideoDataDouble ; if LCD is on, transfer during V-blank
 	
 
-LoadHpBarAndStatusTilePatterns::
-	ld de,HpBarAndStatusGraphics
-	ld hl,vChars2 + $620
-	lb bc,BANK(HpBarAndStatusGraphics), (HpBarAndStatusGraphicsEnd - HpBarAndStatusGraphics) / $10
-	call GoodCopyVideoData
-	ld de,EXPBarGraphics
-	ld hl,vChars1 + $400
-	lb bc,BANK(EXPBarGraphics), (EXPBarGraphicsEnd - EXPBarGraphics) / $10
-	jp GoodCopyVideoData
-
 
 LoadTextBoxTilePatterns::
 	ld a, [rLCDC]
@@ -3137,6 +3127,16 @@ LoadTextBoxTilePatterns::
 	ld hl, vChars2 + $600
 	lb bc, BANK(TextBoxGraphics), (TextBoxGraphicsEnd - TextBoxGraphics) / $10
 	jp CopyVideoData ; if LCD is on, transfer during V-blank
+
+LoadHpBarAndStatusTilePatterns::
+	ld de,HpBarAndStatusGraphics
+	ld hl,vChars2 + $620
+	lb bc,BANK(HpBarAndStatusGraphics), (HpBarAndStatusGraphicsEnd - HpBarAndStatusGraphics) / $10
+	call GoodCopyVideoData
+	ld de,EXPBarGraphics
+	ld hl,vChars1 + $400
+	lb bc,BANK(EXPBarGraphics), (EXPBarGraphicsEnd - EXPBarGraphics) / $10
+	jp GoodCopyVideoData
 
 FillMemory::
 ; Fill bc bytes at hl with a.
@@ -3237,15 +3237,11 @@ GetName::
 ; [wPredefBank] = bank of list
 ;
 ; returns pointer to name in de
-	ld a,[wNameListType]
-	cp ITEM_NAME
 	ld a,[wd0b5]
 	ld [wd11e],a
 	ld a,[wd0b5 + 1]
 	ld [wd11e + 1],a
-	jr nz, .noItem
 
-.noItem          ; Return here if not an item
 	ld a,[H_LOADEDROMBANK]
 	push af
 	push hl
@@ -3261,7 +3257,7 @@ GetName::
 	ld e,l
 	ld d,h
 	jr .gotPtr
-.otherEntries ; $378d
+.otherEntries 
 	; TM names are separate from item names.
  	; BUG: This applies to all names instead of just items.
  	ld a,[wd0b5]
@@ -4711,131 +4707,7 @@ const_value = 1
 	add_tx_pre BookOrSculptureText                  ; 40
 	add_tx_pre ElevatorText                         ; 41
 	add_tx_pre PokemonStuffText                     ; 42
-	
-Set16BitFlag:
- ; Input: de = flag index
- ;        hl = flag data
- 	ld bc, $20
- 	ld a, d
-.hi
- 	and a
- 	jr z, .next
- 	add hl, bc
- 	dec a
- 	jr .hi
-.next
- 	ld a, e
- 	srl a
- 	srl a
- 	srl a
- 	ld b, 0
- 	ld c, a
- 	add hl, bc
- 	ld a, e
- 	and a, %00000111
- 	cp 7
- 	jr nz, .check6
- 	set 7, [hl]
- 	ret
-.check6
- 	cp 6
- 	jr nz, .check5
- 	set 6, [hl]
- 	ret
-.check5
- 	cp 5
- 	jr nz, .check4
- 	set 5, [hl]
- 	ret
-.check4
- 	cp 4
- 	jr nz, .check3
- 	set 3, [hl]
- 	ret
-.check3
- 	cp 3
- 	jr nz, .check2
- 	set 3, [hl]
- 	ret
-.check2
- 	cp 2
- 	jr nz, .check1
- 	set 2, [hl]
- 	ret
-.check1
- 	cp 1
- 	jr nz, .zero
- 	set 1, [hl]
- 	ret
-.zero
- 	set 0, [hl]
- 	ret
 
-Test16BitFlag:
- ; Input: de = flag index
- ;        hl = flag data
- 	ld bc, $20
- 	ld a, d
-.hi
- 	and a
- 	jr z, .next
- 	add hl, bc
- 	dec a
- 	jr .hi
-.next
- 	ld a, e
- 	srl a
- 	srl a
- 	srl a
- 	ld b, 0
-    ld c, a
- 	add hl, bc
- 	ld a, e
- 	and a, %00000111
- 	cp 7
- 	jr nz, .check6
- 	bit 7, [hl]
- 	jr .end
-.check6
- 	cp 6
- 	jr nz, .check5
-	bit 6, [hl]
- 	jr .end
-.check5
- 	cp 5
- 	jr nz, .check4
- 	bit 5, [hl]
-	jr .end
-.check4
- 	cp 4
- 	jr nz, .check3
- 	bit 3, [hl]
- 	jr .end
-.check3
- 	cp 3
- 	jr nz, .check2
- 	bit 3, [hl]
- 	jr .end
-.check2
- 	cp 2
- 	jr nz, .check1
- 	bit 2, [hl]
- 	jr .end
-.check1
- 	cp 1
- 	jr nz, .zero
- 	bit 1, [hl]
- 	jr .end
-.zero
- 	bit 0, [hl]
-.end
- 	jr z, .flagNotSet
- 	ld c, 1
- 	ret
-.flagNotSet
- 	ld c, 0
- 	ret	
-	
 CompareTwoBytes::
 ; Input: bc and de
 ; Output: Set Zero flag if they're equal
@@ -4846,27 +4718,6 @@ CompareTwoBytes::
  	cp e
  	ret
 
-	
-GoodCopyVideoData:
-	ld a,[rLCDC]
-	bit 7,a ; is the LCD enabled?
-	jp nz, CopyVideoData ; if LCD is on, transfer during V-blank
-	ld a, b
-	push hl
-	push de
-	ld h, 0
-	ld l, c
-	add hl, hl
-	add hl, hl
-	add hl, hl
-	add hl, hl
-	ld b, h
-	ld c, l
-	pop hl
-	pop de
-	jp FarCopyData ; if LCD is off, transfer all at once
-
-	
 LoadBCWith_wd0b5::
  	ld a,[wd0b5]
  	ld c, a
