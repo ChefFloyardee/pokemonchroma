@@ -1,86 +1,71 @@
-OaksAideScript:
-	ld hl, wOaksAideRequirement
- 	ld a, [hli]
- 	ld d, a
- 	ld a , [hl]
- 	ld [wOaksAideRequirement], a
- 	ld [hl], d
+OaksAideScript ; 0x59035
 	ld hl, OaksAideHiText
 	call PrintText
 	call YesNoChoice
 	ld a, [wCurrentMenuItem]
 	and a
-	jr nz, .choseNo
+	jr nz, .asm_59086 ; 0x59042 $42
 	ld hl, wPokedexOwned
 	ld b, wPokedexOwnedEnd - wPokedexOwned
 	call CountSetBits
-	ld a, [wNumSetBits]
-	ld [wOaksAideNumMonsOwned + 1], a
- 	ld a, [wNumSetBits + 1]
- 	ld [wOaksAideNumMonsOwned], a
- 	ld a, [wOaksAideNumMonsOwned]
+	ld a, [wd11e]
+	ld [$ffdd], a
 	ld b, a
-	ld a, [wOaksAideRequirement]
- 	cp b
- 	jr c, .giveItem
- 	jr nz, .notEnoughOwnedMons
- 	ld a, [wOaksAideNumMonsOwned + 1]
- 	ld b, a
- 	ld a, [wOaksAideRequirement + 1]
+	ld a, [$ffdb]
 	cp b
-	jr z, .giveItem
-	jr nc, .notEnoughOwnedMons
-.giveItem
+	jr z, .asm_59059 ; 0x59055 $2
+	jr nc, .asm_5907c ; 0x59057 $23
+.asm_59059
 	ld hl, OaksAideHereYouGoText
 	call PrintText
-	ld a, [hOaksAideRewardItem]
+	ld a, [$ffdc]
 	ld b, a
 	ld c, 1
 	call GiveItem
-	jr nc, .bagFull
+	jr nc, .BagFull
 	ld hl, OaksAideGotItemText
 	call PrintText
 	ld a, $1
-	jr .done
-.bagFull
+	jr .asm_5908e ; 0x59071 $1b
+.BagFull
 	ld hl, OaksAideNoRoomText
 	call PrintText
 	xor a
-	jr .done
-.notEnoughOwnedMons
+	jr .asm_5908e ; 0x5907a $12
+.asm_5907c
 	ld hl, OaksAideUhOhText
 	call PrintText
 	ld a, $80
-	jr .done
-.choseNo
+	jr .asm_5908e ; 0x59084 $8
+.asm_59086
 	ld hl, OaksAideComeBackText
 	call PrintText
 	ld a, $ff
-.done
-	ld [hOaksAideResult], a
+.asm_5908e
+	ld [$ffdb], a
 	ret
 
-OaksAideHiText:
+OaksAideHiText: ; 59091 (16:5091)
 	TX_FAR _OaksAideHiText
 	db "@"
 
-OaksAideUhOhText:
+OaksAideUhOhText: ; 59096 (16:5096)
 	TX_FAR _OaksAideUhOhText
 	db "@"
 
-OaksAideComeBackText:
+OaksAideComeBackText: ; 5909b (16:509b)
 	TX_FAR _OaksAideComeBackText
 	db "@"
 
-OaksAideHereYouGoText:
+OaksAideHereYouGoText: ; 590a0 (16:50a0)
 	TX_FAR _OaksAideHereYouGoText
 	db "@"
 
-OaksAideGotItemText:
+OaksAideGotItemText: ; 590a5 (16:50a5)
 	TX_FAR _OaksAideGotItemText
-	TX_SFX_ITEM_1
+	db $0b
 	db "@"
 
-OaksAideNoRoomText:
+OaksAideNoRoomText: ; 590ab (16:50ab)
 	TX_FAR _OaksAideNoRoomText
 	db "@"

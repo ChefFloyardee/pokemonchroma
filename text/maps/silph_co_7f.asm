@@ -1,16 +1,16 @@
 _MeetLaprasGuyText::
 	text "Oh! Hi! You're"
-	line "not a Rocket! You"
+	line "not a ROCKET! You"
 	cont "came to save us?"
 	cont "Why, thank you!"
 
 	para "I want you to"
-	line "have this #mon"
+	line "have this #MON"
 	cont "for saving us."
 	prompt
 
 _HeresYourLaprasText::
-	text "It's Lapras. It's"
+	text "It's LAPRAS. It's"
 	line "very intelligent."
 
 	para "We kept it in our"
@@ -20,7 +20,7 @@ _HeresYourLaprasText::
 
 	para "I think you will"
 	line "be a good trainer"
-	cont "for Lapras!"
+	cont "for LAPRAS!"
 
 	para "It's a good"
 	line "swimmer. It'll"
@@ -28,10 +28,10 @@ _HeresYourLaprasText::
 	done
 
 _LaprasGuyText::
-	text "Team Rocket's"
-	line "Boss went to the"
+	text "TEAM ROCKET's"
+	line "BOSS went to the"
 	cont "boardroom! Is our"
-	cont "President OK?"
+	cont "PRESIDENT OK?"
 	done
 
 _LaprasGuySavedText::
@@ -40,29 +40,29 @@ _LaprasGuySavedText::
 	done
 
 _SilphCo7Text_51e00::
-	text "Team Rocket was"
-	line "after the Master"
-	cont "Ball which will"
-	cont "catch any #mon!"
+	text "TEAM ROCKET was"
+	line "after the MASTER"
+	cont "BALL which will"
+	cont "catch any #MON!"
 	done
 
 _CanceledMasterBallText::
 	text "We canceled the"
-	line "Master Ball"
+	line "MASTER BALL"
 	cont "project because"
-	cont "of Team Rocket."
+	cont "of TEAM ROCKET."
 	done
 
 _SilphCo7Text_51e23::
 	text "It would be bad"
-	line "if Team Rocket"
-	cont "took over Silph"
-	cont "or our #mon!"
+	line "if TEAM ROCKET"
+	cont "took over SILPH"
+	cont "or our #MON!"
 	done
 
 _SilphCo7Text_51e28::
 	text "Wow! You chased"
-	line "off Team Rocket"
+	line "off TEAM ROCKET"
 	cont "all by yourself?"
 	done
 
@@ -78,101 +78,101 @@ _SilphCo7Text_51e4b::
 	line "Oh thank you!"
 	done
 
-_SilphCo7BattleText1::
+_SilphCo7BattleText1:: ; 846ff (21:46ff)
 	text "Oh ho! I smell a"
 	line "little rat!"
 	done
 
-_SilphCo7EndBattleText1::
+_SilphCo7EndBattleText1:: ; 8471d (21:471d)
 	text "Lights"
 	line "out!"
 	prompt
 
-_SilphCo7AfterBattleText1::
+_SilphCo7AfterBattleText1:: ; 8472a (21:472a)
 	text "You won't find my"
-	line "Boss by just"
+	line "BOSS by just"
 	cont "scurrying around!"
 	done
 
-_SilphCo7BattleText2::
+_SilphCo7BattleText2:: ; 8475b (21:475b)
 	text "Heheh!"
 
 	para "You mistook me for"
-	line "a Silph worker?"
+	line "a SILPH worker?"
 	done
 
-_SilphCo7EndBattleText2::
+_SilphCo7EndBattleText2:: ; 84786 (21:4786)
 	text "I'm"
 	line "done!"
 	prompt
 
-_SilphCo7AfterBattleText2::
+_SilphCo7AfterBattleText2:: ; 84790 (21:4790)
 	text "Despite your age,"
 	line "you are a skilled"
 	cont "trainer!"
 	done
 
-_SilphCo7BattleText3::
+_SilphCo7BattleText3:: ; 847be (21:47be)
 	text "I am one of the 4"
-	line "Rocket Brothers!"
+	line "ROCKET BROTHERS!"
 	done
 
-_SilphCo7EndBattleText3::
+_SilphCo7EndBattleText3:: ; 847e2 (21:47e2)
 	text "Aack!"
 	line "Brothers, I lost!"
 	prompt
 
-_SilphCo7AfterBattleText3::
+_SilphCo7AfterBattleText3:: ; 847fb (21:47fb)
 	text "Doesn't matter."
 	line "My brothers will"
 	cont "repay the favor!"
 	done
 
-_SilphCo7BattleText4::
+_SilphCo7BattleText4:: ; 8482d (21:482d)
 	text "A child intruder?"
 	line "That must be you!"
 	done
 
-_SilphCo7EndBattleText4::
+_SilphCo7EndBattleText4:: ; 84852 (21:4852)
 	text "Fine!"
 	line "I lost!"
 	prompt
 
-_SilphCo7AfterBattleText4::
+_SilphCo7AfterBattleText4:: ; 84861 (21:4861)
 	text "Go on home"
-	line "before my Boss"
+	line "before my BOSS"
 	cont "gets ticked off!"
 	done
 
-_SilphCo7Text_51ebe::
+_SilphCo7Text_51ebe:: ; 8488d (21:488d)
 	text $53, ": What"
 	line "kept you ", $52, "?"
 	done
 
-_SilphCo7Text_51ec3::
+_SilphCo7Text_51ec3:: ; 848a2 (21:48a2)
 	text $53, ": Hahaha!"
 	line "I thought you'd"
 	cont "turn up if I"
 	cont "waited here!"
 
-	para "I guess Team"
-	line "Rocket slowed you"
+	para "I guess TEAM"
+	line "ROCKET slowed you"
 	cont "down! Not that I"
 	cont "care!"
 
 	para "I saw you in"
-	line "Saffron, so I"
+	line "SAFFRON, so I"
 	cont "decided to see if"
 	cont "you got better!"
 	done
 
-_SilphCo7Text_51ec8::
+_SilphCo7Text_51ec8:: ; 8494a (21:494a)
 	text "Oh ho!"
 	line "So, you are ready"
-	cont "for Boss Rocket!"
+	cont "for BOSS ROCKET!"
 	prompt
 
-_SilphCo7Text_51ecd::
+_SilphCo7Text_51ecd:: ; 84975 (21:4975)
 	text $53, ": How can"
 	line "I put this?"
 
@@ -181,22 +181,22 @@ _SilphCo7Text_51ecd::
 	cont "with us big boys!"
 	prompt
 
-_SilphCo7Text_51ed2::
+_SilphCo7Text_51ed2:: ; 849bd (21:49bd)
 	text "Well, ", $52, "!"
 
 	para "I'm moving on up"
 	line "and ahead!"
 
 	para "By checking my"
-	line "#dex, I'm"
+	line "#DEX, I'm"
 	cont "starting to see"
 	cont "what's strong and"
 	cont "how they evolve!"
 
 	para "I'm going to the"
-	line "#mon League"
+	line "#MON LEAGUE"
 	cont "to boot out the"
-	cont "Elite Four!"
+	cont "ELITE FOUR!"
 
 	para "I'll become the"
 	line "world's most"
@@ -207,3 +207,4 @@ _SilphCo7Text_51ed2::
 	cont "Don't sweat it!"
 	cont "Smell ya!"
 	done
+

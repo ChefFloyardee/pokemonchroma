@@ -1,84 +1,75 @@
-PewterPokecenterScript:
-	call Serial_TryEstablishingExternallyClockedConnection
+PewterPokecenterScript: ; 5c587 (17:4587)
+	call Func_22fa
 	jp EnableAutoTextBoxDrawing
 
-PewterPokecenterTextPointers:
-	dw PewterHealNurseText
+PewterPokecenterTextPointers: ; 5c58d (17:458d)
+	dw PewterPokecenterText1
 	dw PewterPokecenterText2
-	dw PewterJigglypuffText
-	dw PewterTradeNurseText
+	dw PewterPokecenterText3
+	dw PewterPokecenterText4
 
-PewterHealNurseText:
-	TX_POKECENTER_NURSE
+PewterPokecenterText1: ; 5c595 (17:4595)
+	db $ff
 
-PewterPokecenterText2:
-	TX_FAR _PewterPokecenterText2
+PewterPokecenterText2: ; 5c596 (17:4596)
+	TX_FAR _PewterPokecenterText1
 	db "@"
 
-PewterJigglypuffText:
-	TX_ASM
+PewterPokecenterText3: ; 5c59b (17:459b)
+	db $8
 	ld a, $1
 	ld [wDoNotWaitForButtonPressAfterDisplayingText], a
-	ld hl, .Text
+	ld hl, PewterPokecenterText5
 	call PrintText
-	StopAllMusic
-	ld c, 32
+	ld a, $ff
+	call PlaySound
+	ld c, $20
 	call DelayFrames
-	ld hl, JigglypuffFacingDirections
-	ld de, wJigglypuffFacingDirections
-	ld bc, JigglypuffFacingDirectionsEnd - JigglypuffFacingDirections
+	ld hl, Unknown_5c608 ; $4608
+	ld de, wTrainerFacingDirection
+	ld bc, $0004
 	call CopyData
-
-	ld a, [Sprite03SpriteImageIdx]
-	ld hl, wJigglypuffFacingDirections
-.findMatchingFacingDirectionLoop
+	ld a, [wSpriteStateData1 + $32]
+	ld hl, wTrainerFacingDirection
+.asm_5c5c3
 	cp [hl]
 	inc hl
-	jr nz, .findMatchingFacingDirectionLoop
+	jr nz, .asm_5c5c3 ; 0x5c5c5 $fc
 	dec hl
 	push hl
-	ld c, BANK(Music_JigglypuffSong)
+	ld c, 0 ; BANK(Music_JigglypuffSong)
 	ld a, MUSIC_JIGGLYPUFF_SONG
 	call PlayMusic
 	pop hl
-.loop
+.asm_5c5d1
 	ld a, [hl]
-	ld [Sprite03SpriteImageIdx], a
-
-; rotate the array
+	ld [wSpriteStateData1 + $32], a
 	push hl
-	ld hl, wJigglypuffFacingDirections
-	ld de, wJigglypuffFacingDirections - 1
-	ld bc, JigglypuffFacingDirectionsEnd - JigglypuffFacingDirections
+	ld hl, wTrainerFacingDirection
+	ld de, wTrainerEngageDistance
+	ld bc, $0004
 	call CopyData
-	ld a, [wJigglypuffFacingDirections - 1]
-	ld [wJigglypuffFacingDirections + 3], a
+	ld a, [wTrainerEngageDistance]
+	ld [wcd42], a
 	pop hl
-
-	ld c, 24
+	ld c, $18
 	call DelayFrames
-
-	ld a, [wChannelSoundIDs]
+	ld a, [wc026]
 	ld b, a
-	ld a, [wChannelSoundIDs + Ch1]
+	ld a, [wc027]
 	or b
-	jr nz, .loop
-
-	ld c, 48
+	jr nz, .asm_5c5d1 ; 0x5c5f6 $d9
+	ld c, $30
 	call DelayFrames
 	call PlayDefaultMusic
 	jp TextScriptEnd
 
-.Text
-	TX_FAR _PewterJigglypuffText
+PewterPokecenterText5: ; 5c603 (17:4603)
+	TX_FAR _PewterPokecenterText5
 	db "@"
 
-JigglypuffFacingDirections:
-	db $30 | SPRITE_FACING_DOWN
-	db $30 | SPRITE_FACING_LEFT
-	db $30 | SPRITE_FACING_UP
-	db $30 | SPRITE_FACING_RIGHT
-JigglypuffFacingDirectionsEnd:
+Unknown_5c608: ; 5c608 (17:4608)
+	db $30, $38, $34, $3c
 
-PewterTradeNurseText:
-	TX_CABLE_CLUB_RECEPTIONIST
+PewterPokecenterText4: ; 5c60c (17:460c)
+	db $f6

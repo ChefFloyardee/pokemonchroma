@@ -1,28 +1,29 @@
-_HallofFameRoomText1::
-	text "Oak: Er-hem!"
+_HallofFameRoomText1:: ; 85fb5 (21:5fb5)
+	text "OAK: Er-hem!"
 	line "Congratulations"
-	cont "<PLAYER>!"
+	cont $52, "!"
 
 	para "This floor is the"
-	line "#mon Hall Of"
-	cont "Fame!"
+	line "#MON HALL OF"
+	cont "FAME!"
 
-	para "#mon League"
+	para "#MON LEAGUE"
 	line "champions are"
 	cont "honored for their"
 	cont "exploits here!"
 
-	para "Their #mon are"
+	para "Their #MON are"
 	line "also recorded in"
-	cont "the Hall Of Fame!"
+	cont "the HALL OF FAME!"
 
-	para "<PLAYER>! You have"
+	para $52, "! You have"
 	line "endeavored hard"
 	cont "to become the new"
-	cont "League champion!"
+	cont "LEAGUE champion!"
 
 	para "Congratulations,"
-	line "<PLAYER>, you and"
-	cont "your #mon are"
-	cont "Hall Of Famers!"
+	line $52, ", you and"
+	cont "your #MON are"
+	cont "HALL OF FAMERs!"
 	done
+

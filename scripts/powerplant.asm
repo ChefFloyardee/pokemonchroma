@@ -1,109 +1,110 @@
-PowerPlantScript:
+PowerPlantScript: ; 1e2c6 (7:62c6)
 	call EnableAutoTextBoxDrawing
-	ld hl, Voltorb0TrainerHeader
-	ld de, .ScriptPointers
-	ld a, [wPowerPlantCurScript]
+	ld hl, PowerPlantTrainerHeaders
+	ld de, PowerPlantScriptPointers
+	ld a, [W_POWERPLANTCURSCRIPT]
 	call ExecuteCurMapScriptInTable
-	ld [wPowerPlantCurScript], a
+	ld [W_POWERPLANTCURSCRIPT], a
 	ret
 
-.ScriptPointers
+PowerPlantScriptPointers: ; 1e2d9 (7:62d9)
 	dw CheckFightingMapTrainers
 	dw DisplayEnemyTrainerTextAndStartBattle
 	dw EndTrainerBattle
 
-PowerPlantTextPointers:
-	dw Voltorb0Text
-	dw Voltorb1Text
-	dw Voltorb2Text
-	dw Voltorb3Text
-	dw Voltorb4Text
-	dw Voltorb5Text
-	dw Voltorb6Text
-	dw Voltorb7Text
-	dw ZapdosText
-	dw PickUpItemText
-	dw PickUpItemText
-	dw PickUpItemText
-	dw PickUpItemText
-	dw PickUpItemText
+PowerPlantTextPointers: ; 1e2df (7:62df)
+	dw PowerPlantText1
+	dw PowerPlantText2
+	dw PowerPlantText3
+	dw PowerPlantText4
+	dw PowerPlantText5
+	dw PowerPlantText6
+	dw PowerPlantText7
+	dw PowerPlantText8
+	dw PowerPlantText9
+	dw Predef5CText
+	dw Predef5CText
+	dw Predef5CText
+	dw Predef5CText
+	dw Predef5CText
 
-Voltorb0TrainerHeader:
-	dbEventFlagBit EVENT_BEAT_POWER_PLANT_VOLTORB_0
+PowerPlantTrainerHeaders: ; 1e2fb (7:62fb)
+PowerPlantTrainerHeader0: ; 1e2fb (7:62fb)
+	db 1 ; flag's bit
 	db 0 ; view range
-	dwEventFlagAddress EVENT_BEAT_POWER_PLANT_VOLTORB_0
+	dw wd7d3 ; flag's byte
 	dw VoltorbBattleText ; TextBeforeBattle
 	dw VoltorbBattleText ; TextAfterBattle
 	dw VoltorbBattleText ; TextEndBattle
 	dw VoltorbBattleText ; TextEndBattle
 
-Voltorb1TrainerHeader:
-	dbEventFlagBit EVENT_BEAT_POWER_PLANT_VOLTORB_1
+PowerPlantTrainerHeader1: ; 1e307 (7:6307)
+	db 2 ; flag's bit
 	db 0 ; view range
-	dwEventFlagAddress EVENT_BEAT_POWER_PLANT_VOLTORB_1
+	dw wd7d3 ; flag's byte
 	dw VoltorbBattleText ; TextBeforeBattle
 	dw VoltorbBattleText ; TextAfterBattle
 	dw VoltorbBattleText ; TextEndBattle
 	dw VoltorbBattleText ; TextEndBattle
 
-Voltorb2TrainerHeader:
-	dbEventFlagBit EVENT_BEAT_POWER_PLANT_VOLTORB_2
+PowerPlantTrainerHeader2: ; 1e313 (7:6313)
+	db 3 ; flag's bit
 	db 0 ; view range
-	dwEventFlagAddress EVENT_BEAT_POWER_PLANT_VOLTORB_2
+	dw wd7d3 ; flag's byte
 	dw VoltorbBattleText ; TextBeforeBattle
 	dw VoltorbBattleText ; TextAfterBattle
 	dw VoltorbBattleText ; TextEndBattle
 	dw VoltorbBattleText ; TextEndBattle
 
-Voltorb3TrainerHeader:
-	dbEventFlagBit EVENT_BEAT_POWER_PLANT_VOLTORB_3
+PowerPlantTrainerHeader3: ; 1e31f (7:631f)
+	db 4 ; flag's bit
 	db 0 ; view range
-	dwEventFlagAddress EVENT_BEAT_POWER_PLANT_VOLTORB_3
+	dw wd7d3 ; flag's byte
 	dw VoltorbBattleText ; TextBeforeBattle
 	dw VoltorbBattleText ; TextAfterBattle
 	dw VoltorbBattleText ; TextEndBattle
 	dw VoltorbBattleText ; TextEndBattle
 
-Voltorb4TrainerHeader:
-	dbEventFlagBit EVENT_BEAT_POWER_PLANT_VOLTORB_4
+PowerPlantTrainerHeader4: ; 1e32b (7:632b)
+	db 5 ; flag's bit
 	db 0 ; view range
-	dwEventFlagAddress EVENT_BEAT_POWER_PLANT_VOLTORB_4
+	dw wd7d3 ; flag's byte
 	dw VoltorbBattleText ; TextBeforeBattle
 	dw VoltorbBattleText ; TextAfterBattle
 	dw VoltorbBattleText ; TextEndBattle
 	dw VoltorbBattleText ; TextEndBattle
 
-Voltorb5TrainerHeader:
-	dbEventFlagBit EVENT_BEAT_POWER_PLANT_VOLTORB_5
+PowerPlantTrainerHeader5: ; 1e337 (7:6337)
+	db 6 ; flag's bit
 	db 0 ; view range
-	dwEventFlagAddress EVENT_BEAT_POWER_PLANT_VOLTORB_5
+	dw wd7d3 ; flag's byte
 	dw VoltorbBattleText ; TextBeforeBattle
 	dw VoltorbBattleText ; TextAfterBattle
 	dw VoltorbBattleText ; TextEndBattle
 	dw VoltorbBattleText ; TextEndBattle
 
-Voltorb6TrainerHeader:
-	dbEventFlagBit EVENT_BEAT_POWER_PLANT_VOLTORB_6
+PowerPlantTrainerHeader6: ; 1e343 (7:6343)
+	db 7 ; flag's bit
 	db 0 ; view range
-	dwEventFlagAddress EVENT_BEAT_POWER_PLANT_VOLTORB_6
+	dw wd7d3 ; flag's byte
 	dw VoltorbBattleText ; TextBeforeBattle
 	dw VoltorbBattleText ; TextAfterBattle
 	dw VoltorbBattleText ; TextEndBattle
 	dw VoltorbBattleText ; TextEndBattle
 
-Voltorb7TrainerHeader:
-	dbEventFlagBit EVENT_BEAT_POWER_PLANT_VOLTORB_7, 1
+PowerPlantTrainerHeader7: ; 1e34f (7:634f)
+	db 8 ; flag's bit
 	db 0 ; view range
-	dwEventFlagAddress EVENT_BEAT_POWER_PLANT_VOLTORB_7, 1
+	dw wd7d3 ; flag's byte
 	dw VoltorbBattleText ; TextBeforeBattle
 	dw VoltorbBattleText ; TextAfterBattle
 	dw VoltorbBattleText ; TextEndBattle
 	dw VoltorbBattleText ; TextEndBattle
 
-ZapdosTrainerHeader:
-	dbEventFlagBit EVENT_BEAT_ZAPDOS, 1
+PowerPlantTrainerHeader8: ; 1e35b (7:635b)
+	db 9 ; flag's bit
 	db 0 ; view range
-	dwEventFlagAddress EVENT_BEAT_ZAPDOS, 1
+	dw wd7d3 ; flag's byte
 	dw ZapdosBattleText ; TextBeforeBattle
 	dw ZapdosBattleText ; TextAfterBattle
 	dw ZapdosBattleText ; TextEndBattle
@@ -111,68 +112,65 @@ ZapdosTrainerHeader:
 
 	db $ff
 
-InitVoltorbBattle:
+asm_234cc: ; 1e368 (7:6368)
 	call TalkToTrainer
-	ld a, [wCurMapScript]
-	ld [wPowerPlantCurScript], a
+	ld a, [W_CURMAPSCRIPT]
+	ld [W_POWERPLANTCURSCRIPT], a
 	jp TextScriptEnd
 
-Voltorb0Text:
-	TX_ASM
-	ld hl, Voltorb0TrainerHeader
-	jr InitVoltorbBattle
+PowerPlantText1: ; 1e374 (7:6374)
+	db $8 ; asm
+	ld hl, PowerPlantTrainerHeader0 ; $62fb
+	jr asm_234cc ; 0x1e378 $ee
 
-Voltorb1Text:
-	TX_ASM
-	ld hl, Voltorb1TrainerHeader
-	jr InitVoltorbBattle
+PowerPlantText2: ; 1e37a (7:637a)
+	db $8 ; asm
+	ld hl, PowerPlantTrainerHeader1 ; $6307
+	jr asm_234cc ; 0x1e37e $e8
 
-Voltorb2Text:
-	TX_ASM
-	ld hl, Voltorb2TrainerHeader
-	jr InitVoltorbBattle
+PowerPlantText3: ; 1e380 (7:6380)
+	db $8 ; asm
+	ld hl, PowerPlantTrainerHeader2 ; $6313
+	jr asm_234cc ; 0x1e384 $e2
 
-Voltorb3Text:
-	TX_ASM
-	ld hl, Voltorb3TrainerHeader
-	jr InitVoltorbBattle
+PowerPlantText4: ; 1e386 (7:6386)
+	db $8 ; asm
+	ld hl, PowerPlantTrainerHeader3 ; $631f
+	jr asm_234cc ; 0x1e38a $dc
 
-Voltorb4Text:
-	TX_ASM
-	ld hl, Voltorb4TrainerHeader
-	jr InitVoltorbBattle
+PowerPlantText5: ; 1e38c (7:638c)
+	db $8 ; asm
+	ld hl, PowerPlantTrainerHeader4 ; $632b
+	jr asm_234cc ; 0x1e390 $d6
 
-Voltorb5Text:
-	TX_ASM
-	ld hl, Voltorb5TrainerHeader
-	jr InitVoltorbBattle
+PowerPlantText6: ; 1e392 (7:6392)
+	db $8 ; asm
+	ld hl, PowerPlantTrainerHeader5 ; $6337
+	jr asm_234cc ; 0x1e396 $d0
 
-Voltorb6Text:
-	TX_ASM
-	ld hl, Voltorb6TrainerHeader
-	jr InitVoltorbBattle
+PowerPlantText7: ; 1e398 (7:6398)
+	db $8 ; asm
+	ld hl, PowerPlantTrainerHeader6 ; $6343
+	jr asm_234cc ; 0x1e39c $ca
 
-Voltorb7Text:
-	TX_ASM
-	ld hl, Voltorb7TrainerHeader
-	jr InitVoltorbBattle
+PowerPlantText8: ; 1e39e (7:639e)
+	db $8 ; asm
+	ld hl, PowerPlantTrainerHeader7 ; $634f
+	jr asm_234cc ; 0x1e3a2 $c4
 
-ZapdosText:
-	TX_ASM
-	ld hl, ZapdosTrainerHeader
-	jr InitVoltorbBattle
+PowerPlantText9: ; 1e3a4 (7:63a4)
+	db $8 ; asm
+	ld hl, PowerPlantTrainerHeader8 ; $635b
+	jr asm_234cc ; 0x1e3a8 $be
 
-VoltorbBattleText:
+VoltorbBattleText: ; 1e3aa (7:63aa)
 	TX_FAR _VoltorbBattleText
 	db "@"
 
-ZapdosBattleText:
+ZapdosBattleText: ; 1e3af (7:63af)
 	TX_FAR _ZapdosBattleText
-	TX_ASM
-	ld a, (ZAPDOS & $FF)
- 	ld c, a
- 	ld a, (ZAPDOS >> 8)
- 	ld b, a
+	db $8
+	ld a, ZAPDOS
 	call PlayCry
 	call WaitForSoundToFinish
 	jp TextScriptEnd

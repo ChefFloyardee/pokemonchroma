@@ -1,43 +1,36 @@
-#!/bin/python
 # coding: utf-8
 
 """
-Recursively scan an asm file for dependencies.
+Recursively scan an asm file for rgbasm INCLUDEs and INCBINs.
+Used to generate dependencies for each rgbasm object.
 """
 
+import os
 import sys
-import argparse
-import os.path
 
-includes = set()
+import configuration
+conf = configuration.Config()
 
-def scan_file(filename):
-	for line in open(filename):
-		if 'INC' not in line:
-			continue
-		line = line.split(';')[0]
-		if 'INCLUDE' in line:
-			include = line.split('"')[1]
-			if os.path.exists("src/"):
-				includes.add("src/" + include)
-				scan_file("src/" + include)
-			else:
-				includes.add(include)
-				scan_file(include)
-		elif 'INCBIN' in line:
-			include = line.split('"')[1]
-			if 'baserom.gbc' not in line and os.path.exists("src/"):
-				includes.add("src/" + include)
-			else:
-				includes.add(include)
-
-def main():
-	ap = argparse.ArgumentParser()
-	ap.add_argument('filenames', nargs='*')
-	args = ap.parse_args()
-	for filename in set(args.filenames):
-		scan_file(filename)
-	sys.stdout.write(' '.join(includes))
+def recursive_scan(filename, includes = []):
+	if (filename[-4:] == '.asm' or filename[-3] == '.tx') and os.path.exists(filename):
+		lines = open(filename).readlines()
+		for line in lines:
+			for directive in ('INCLUDE', 'INCBIN'):
+				if directive in line:
+					line = line[:line.find(';')]
+					if directive in line:
+						include = line.split('"')[1]
+						if include not in includes:
+							includes += [include]
+							includes = recursive_scan(os.path.join(conf.path, include), includes)
+						break
+	return includes
 
 if __name__ == '__main__':
-	main()
+	filenames = sys.argv[1:]
+	dependencies = []
+	for filename in filenames:
+		dependencies += recursive_scan(os.path.join(conf.path, filename))
+	dependencies = list(set(dependencies))
+	sys.stdout.write(' '.join(dependencies))
+

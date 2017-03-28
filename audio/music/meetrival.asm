@@ -2,7 +2,7 @@ Music_MeetRival_branch_b119::
 	tempo 100
 	loopchannel 0, Music_MeetRival_branch_b123
 
-Music_MeetRival_Ch0::
+Music_MeetRival_Ch1:: ; b120 (2:7120)
 	tempo 112
 
 Music_MeetRival_branch_b123::
@@ -143,7 +143,7 @@ Music_MeetRival_branch_b1a5::
 	loopchannel 0, Music_MeetRival_branch_b140
 
 
-Music_MeetRival_Ch1::
+Music_MeetRival_Ch2:: ; b1bb (2:71bb)
 	duty 3
 	vibrato 10, 2, 6
 	notetype 12, 12, 7
@@ -248,7 +248,7 @@ Music_MeetRival_branch_b21d::
 	loopchannel 0, Music_MeetRival_branch_b1d8
 
 
-Music_MeetRival_Ch2::
+Music_MeetRival_Ch3:: ; b233 (2:7233)
 	notetype 12, 1, 4
 	octave 5
 	D_ 2
@@ -394,3 +394,4 @@ Music_MeetRival_branch_b2b5::
 	G_ 1
 	rest 1
 	loopchannel 0, Music_MeetRival_branch_b24b
+; 0xb2c8

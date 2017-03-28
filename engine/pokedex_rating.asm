@@ -1,36 +1,21 @@
-DisplayDexRating:
+DisplayDexRating: ; 44169 (11:4169)
 	ld hl, wPokedexSeen
 	ld b, wPokedexSeenEnd - wPokedexSeen
 	call CountSetBits
-	ld a, [wNumSetBits]
-	ld [wDexRatingNumMonsSeen2 + 1], a
- 	ld a, [wNumSetBits + 1]
- 	ld [wDexRatingNumMonsSeen2], a
+	ld a, [wd11e] ; result of CountSetBits (seen count)
+	ld [$FFDB], a
 	ld hl, wPokedexOwned
 	ld b, wPokedexOwnedEnd - wPokedexOwned
 	call CountSetBits
-	ld a, [wNumSetBits]
-    ld [wDexRatingNumMonsOwned2 + 1], a
-	ld a, [wNumSetBits + 1]
-	ld [wDexRatingNumMonsOwned2], a
+	ld a, [wd11e] ; result of CountSetBits (own count)
+	ld [$FFDC], a
 	ld hl, DexRatingsTable
 .findRating
 	ld a, [hli]
-	ld c, a
- 	ld a, [hli]
- 	ld b, a  ; bc = num owned in table
- 	ld a, [wDexRatingNumMonsOwned2 + 1]
- 	ld d, a
- 	ld a, [wDexRatingNumMonsOwned2]
- 	ld e, a
+	ld b, a
+	ld a, [$FFDC] ; number of pokemon owned
 	cp b
 	jr c, .foundRating
-	jr nz, .next
- 	; equal high bytes
- 	ld a, d
- 	cp c
-	jr c, .foundRating
-.next
 	inc hl
 	inc hl
 	jr .findRating
@@ -38,138 +23,135 @@ DisplayDexRating:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a ; load text pointer into hl
-	CheckAndResetEventA EVENT_HALL_OF_FAME_DEX_RATING
-	jr nz, .hallOfFame
+	ld a, [wd747]
+	bit 3, a
+	res 3, a
+	ld [wd747], a
+	jr nz, .label3
 	push hl
 	ld hl, PokedexRatingText_441cc
 	call PrintText
 	pop hl
 	call PrintText
-	callba PlayPokedexRatingSfx
-	jp WaitForTextScrollButtonPress
-.hallOfFame
-	ld de, wDexRatingNumMonsSeen
-	ld a, [wDexRatingNumMonsSeen2]
- 	ld [de], a
- 	inc de
- 	ld a, [wDexRatingNumMonsSeen2 + 1]
- 	ld [de], a
- 	inc de
- 	ld a, [wDexRatingNumMonsOwned2]
+	callba Func_7d13b
+	jp WaitForTextScrollButtonPress ; wait for button press
+.label3
+	ld de, wcc5b
+	ld a, [$FFDB]
 	ld [de], a
 	inc de
-	ld a, [wDexRatingNumMonsOwned2 + 1]
+	ld a, [$FFDC]
 	ld [de], a
 	inc de
-.copyRatingTextLoop
+.label4
 	ld a, [hli]
-	cp a, "@"
-	jr z, .doneCopying
+	cp a, $50
+	jr z, .label5
 	ld [de], a
 	inc de
-	jr .copyRatingTextLoop
-.doneCopying
+	jr .label4
+.label5
 	ld [de], a
 	ret
 
-PokedexRatingText_441cc:
+PokedexRatingText_441cc: ; 441cc (11:41cc)
 	TX_FAR _OaksLabText_441cc
 	db "@"
 
-DexRatingsTable:
-	dw 10
+DexRatingsTable: ; 441d1 (11:41d1)
+	db 10
 	dw PokedexRatingText_44201
-	dw 20
+	db 20
 	dw PokedexRatingText_44206
-	dw 30
+	db 30
 	dw PokedexRatingText_4420b
-	dw 40
+	db 40
 	dw PokedexRatingText_44210
-	dw 50
+	db 50
 	dw PokedexRatingText_44215
-	dw 60
+	db 60
 	dw PokedexRatingText_4421a
-	dw 70
+	db 70
 	dw PokedexRatingText_4421f
-	dw 80
+	db 80
 	dw PokedexRatingText_44224
-	dw 90
+	db 90
 	dw PokedexRatingText_44229
-	dw 100
+	db 100
 	dw PokedexRatingText_4422e
-	dw 110
+	db 110
 	dw PokedexRatingText_44233
-	dw 120
+	db 120
 	dw PokedexRatingText_44238
-	dw 130
+	db 130
 	dw PokedexRatingText_4423d
-	dw 142
+	db 140
 	dw PokedexRatingText_44242
-	dw 155
+	db 150
 	dw PokedexRatingText_44247
-	dw NUM_POKEMON + 1
+	db 152
 	dw PokedexRatingText_4424c
 
-PokedexRatingText_44201:
+PokedexRatingText_44201: ; 44201 (11:4201)
 	TX_FAR _OaksLabText_44201
 	db "@"
 
-PokedexRatingText_44206:
+PokedexRatingText_44206: ; 44206 (11:4206)
 	TX_FAR _OaksLabText_44206
 	db "@"
 
-PokedexRatingText_4420b:
+PokedexRatingText_4420b: ; 4420b (11:420b)
 	TX_FAR _OaksLabText_4420b
 	db "@"
 
-PokedexRatingText_44210:
+PokedexRatingText_44210: ; 44210 (11:4210)
 	TX_FAR _OaksLabText_44210
 	db "@"
 
-PokedexRatingText_44215:
+PokedexRatingText_44215: ; 44215 (11:4215)
 	TX_FAR _OaksLabText_44215
 	db "@"
 
-PokedexRatingText_4421a:
+PokedexRatingText_4421a: ; 4421a (11:421a)
 	TX_FAR _OaksLabText_4421a
 	db "@"
 
-PokedexRatingText_4421f:
+PokedexRatingText_4421f: ; 4421f (11:421f)
 	TX_FAR _OaksLabText_4421f
 	db "@"
 
-PokedexRatingText_44224:
+PokedexRatingText_44224: ; 44224 (11:4224)
 	TX_FAR _OaksLabText_44224
 	db "@"
 
-PokedexRatingText_44229:
+PokedexRatingText_44229: ; 44229 (11:4229)
 	TX_FAR _OaksLabText_44229
 	db "@"
 
-PokedexRatingText_4422e:
+PokedexRatingText_4422e: ; 4422e (11:422e)
 	TX_FAR _OaksLabText_4422e
 	db "@"
 
-PokedexRatingText_44233:
+PokedexRatingText_44233: ; 44233 (11:4233)
 	TX_FAR _OaksLabText_44233
 	db "@"
 
-PokedexRatingText_44238:
+PokedexRatingText_44238: ; 44238 (11:4238)
 	TX_FAR _OaksLabText_44238
 	db "@"
 
-PokedexRatingText_4423d:
+PokedexRatingText_4423d: ; 4423d (11:423d)
 	TX_FAR _OaksLabText_4423d
 	db "@"
 
-PokedexRatingText_44242:
+PokedexRatingText_44242: ; 44242 (11:4242)
 	TX_FAR _OaksLabText_44242
 	db "@"
 
-PokedexRatingText_44247:
+PokedexRatingText_44247: ; 44247 (11:4247)
 	TX_FAR _OaksLabText_44247
 	db "@"
 
-PokedexRatingText_4424c:
+PokedexRatingText_4424c: ; 4424c (11:424c)
 	TX_FAR _OaksLabText_4424c
 	db "@"

@@ -14,13 +14,13 @@ Predef::
 	push af
 	ld a, BANK(GetPredefPointer)
 	ld [H_LOADEDROMBANK], a
-	ld [MBC1RomBank], a
+	ld [$2000], a
 
 	call GetPredefPointer
 
 	ld a, [wPredefBank]
 	ld [H_LOADEDROMBANK], a
-	ld [MBC1RomBank], a
+	ld [$2000], a
 
 	ld de, .done
 	push de
@@ -29,7 +29,7 @@ Predef::
 
 	pop af
 	ld [H_LOADEDROMBANK], a
-	ld [MBC1RomBank], a
+	ld [$2000], a
 	ret
 
 GetPredefRegisters::

@@ -1,211 +1,217 @@
-CeladonMartRoofScript:
+CeladonMartRoofScript: ; 483d5 (12:43d5)
 	jp EnableAutoTextBoxDrawing
 
-CeladonMartRoofScript_GetDrinksInBag:
-; construct a list of all drinks in the player's bag
+CeladonMartRoofScript_483d8: ; 483d8 (12:43d8)
 	xor a
-	ld [wFilteredBagItemsCount], a
-	ld de, wFilteredBagItems
-	ld hl, CeladonMartRoofDrinkList
-.loop
+	ld [wcd37], a
+	ld de, wcc5b
+	ld hl, CeladonMartRoofDrinkList ; $4408
+.asm_483e2
 	ld a, [hli]
 	and a
-	jr z, .done
+	jr z, .asm_48404
 	push hl
 	push de
 	ld [wd11e], a
 	ld b, a
-	predef GetQuantityOfItemInBag
+	predef IsItemInBag_ 
 	pop de
 	pop hl
 	ld a, b
 	and a
-	jr z, .loop ; if the item isn't in the bag
+	jr z, .asm_483e2
 	ld a, [wd11e]
 	ld [de], a
 	inc de
 	push hl
-	ld hl, wFilteredBagItemsCount
+	ld hl, wcd37
 	inc [hl]
 	pop hl
-	jr .loop
-.done
+	jr .asm_483e2
+.asm_48404
 	ld a, $ff
 	ld [de], a
 	ret
 
-CeladonMartRoofDrinkList:
+CeladonMartRoofDrinkList: ; 48408 (12:4408)
 	db FRESH_WATER
 	db SODA_POP
 	db LEMONADE
 	db $00
 
-CeladonMartRoofScript_GiveDrinkToGirl:
+CeladonMartRoofScript_4840c: ; 4840c (12:440c)
 	ld hl, wd730
 	set 6, [hl]
-	ld hl, CeladonMartRoofText_484ee
+	ld hl, CeladonMartRoofText_484ee ; $44ee
 	call PrintText
 	xor a
-	ld [wCurrentMenuItem], a
-	ld a, A_BUTTON | B_BUTTON
-	ld [wMenuWatchedKeys], a
-	ld a, [wFilteredBagItemsCount]
+	ld [wCurrentMenuItem], a ; wCurrentMenuItem
+	ld a, $3
+	ld [wMenuWatchedKeys], a ; wMenuWatchedKeys
+	ld a, [wcd37]
 	dec a
-	ld [wMaxMenuItem], a
-	ld a, 2
-	ld [wTopMenuItemY], a
-	ld a, 1
-	ld [wTopMenuItemX], a
-	ld a, [wFilteredBagItemsCount]
+	ld [wMaxMenuItem], a ; wMaxMenuItem
+	ld a, $2
+	ld [wTopMenuItemY], a ; wTopMenuItemY
+	ld a, $1
+	ld [wTopMenuItemX], a ; wTopMenuItemX
+	ld a, [wcd37]
 	dec a
-	ld bc, 2
-	ld hl, 3
+	ld bc, $2
+	ld hl, $3
 	call AddNTimes
 	dec l
 	ld b, l
-	ld c, 12
-	coord hl, 0, 0
+	ld c, $c
+	ld hl, wTileMap
 	call TextBoxBorder
 	call UpdateSprites
-	call CeladonMartRoofScript_PrintDrinksInBag
+	call CeladonMartRoofScript_48532
 	ld hl, wd730
 	res 6, [hl]
 	call HandleMenuInput
-	bit 1, a ; pressed b
+	bit 1, a
 	ret nz
-	ld hl, wFilteredBagItems
-	ld a, [wCurrentMenuItem]
-	ld d, 0
+	ld hl, wcc5b
+	ld a, [wCurrentMenuItem] ; wCurrentMenuItem
+	ld d, $0
 	ld e, a
 	add hl, de
 	ld a, [hl]
-	ld [hItemToRemoveID], a
+	ld [$ffdb], a
 	cp FRESH_WATER
-	jr z, .gaveFreshWater
+	jr z, .asm_484b6
 	cp SODA_POP
-	jr z, .gaveSodaPop
-; gave Lemonade
-	CheckEvent EVENT_GOT_TM49
-	jr nz, .alreadyGaveDrink
-	ld hl, CeladonMartRoofText_48515
+	jr z, .asm_48492
+	ld a, [wd778]
+	bit 6, a
+	jr nz, .asm_484e0
+	ld hl, CeladonMartRoofText_48515 ; $4515
 	call PrintText
 	call RemoveItemByIDBank12
-	lb bc, TM_49, 1
+	ld bc, (TM_49 << 8) | 1
 	call GiveItem
-	jr nc, .bagFull
+	jr nc, .BagFull
 	ld hl, ReceivedTM49Text
 	call PrintText
-	SetEvent EVENT_GOT_TM49
+	ld hl, wd778
+	set 6, [hl]
 	ret
-.gaveSodaPop
-	CheckEvent EVENT_GOT_TM48
-	jr nz, .alreadyGaveDrink
-	ld hl, CeladonMartRoofText_48504
+.asm_48492
+	ld a, [wd778]
+	bit 5, a
+	jr nz, .asm_484e0
+	ld hl, CeladonMartRoofText_48504 ; $4504
 	call PrintText
 	call RemoveItemByIDBank12
-	lb bc, TM_48, 1
+	ld bc, (TM_48 << 8) | 1
 	call GiveItem
-	jr nc, .bagFull
-	ld hl, CeladonMartRoofText_4850a
+	jr nc, .BagFull
+	ld hl, CeladonMartRoofText_4850a ; $450a
 	call PrintText
-	SetEvent EVENT_GOT_TM48
+	ld hl, wd778
+	set 5, [hl]
 	ret
-.gaveFreshWater
-	CheckEvent EVENT_GOT_TM13
-	jr nz, .alreadyGaveDrink
-	ld hl, CeladonMartRoofText_484f3
+.asm_484b6
+	ld a, [wd778]
+	bit 4, a
+	jr nz, .asm_484e0
+	ld hl, CeladonMartRoofText_484f3 ; $44f3
 	call PrintText
 	call RemoveItemByIDBank12
-	lb bc, TM_13, 1
+	ld bc, (TM_13 << 8) | 1
 	call GiveItem
-	jr nc, .bagFull
-	ld hl, CeladonMartRoofText_484f9
+	jr nc, .BagFull
+	ld hl, CeladonMartRoofText_484f9 ; $44f9
 	call PrintText
-	SetEvent EVENT_GOT_TM13
+	ld hl, wd778
+	set 4, [hl]
 	ret
-.bagFull
-	ld hl, CeladonMartRoofText_48526
+.BagFull
+	ld hl, CeladonMartRoofText_48526 ; $4526
 	jp PrintText
-.alreadyGaveDrink
-	ld hl, CeladonMartRoofText_4852c
+.asm_484e0
+	ld hl, CeladonMartRoofText_4852c ; $452c
 	jp PrintText
 
-RemoveItemByIDBank12:
-	jpba RemoveItemByID
+RemoveItemByIDBank12: ; 484e6 (12:44e6)
+	ld b, BANK(RemoveItemByID)
+	ld hl, RemoveItemByID
+	jp Bankswitch
 
-CeladonMartRoofText_484ee:
+CeladonMartRoofText_484ee: ; 484ee (12:44ee)
 	TX_FAR _CeladonMartRoofText_484ee
 	db "@"
 
-CeladonMartRoofText_484f3:
+CeladonMartRoofText_484f3: ; 484f3 (12:44f3)
 	TX_FAR _CeladonMartRoofText_484f3
-	TX_WAIT
+	db $0d
 	db "@"
 
-CeladonMartRoofText_484f9:
+CeladonMartRoofText_484f9: ; 484f9 (12:44f9)
 	TX_FAR _CeladonMartRoofText_484f9
-	TX_SFX_ITEM_1
+	db $0b
 	TX_FAR _CeladonMartRoofText_484fe
-	TX_WAIT
+	db $0d
 	db "@"
 
-CeladonMartRoofText_48504:
+CeladonMartRoofText_48504: ; 48504 (12:4504)
 	TX_FAR _CeladonMartRoofText_48504
-	TX_WAIT
+	db $0d
 	db "@"
 
-CeladonMartRoofText_4850a:
+CeladonMartRoofText_4850a: ; 4850a (12:450a)
 	TX_FAR _CeladonMartRoofText_4850a
-	TX_SFX_ITEM_1
+	db $0b
 	TX_FAR _CeladonMartRoofText_4850f
-	TX_WAIT
+	db $0d
 	db "@"
 
-CeladonMartRoofText_48515:
+CeladonMartRoofText_48515: ; 48515 (12:4515)
 	TX_FAR _CeladonMartRoofText_48515
-	TX_WAIT
+	db $0d
 	db "@"
 
-ReceivedTM49Text:
+ReceivedTM49Text: ; 4851b (12:451b)
 	TX_FAR _ReceivedTM49Text
-	TX_SFX_ITEM_1
+	db $0b
 	TX_FAR _CeladonMartRoofText_48520
-	TX_WAIT
+	db $0d
 	db "@"
 
-CeladonMartRoofText_48526:
+CeladonMartRoofText_48526: ; 48526 (12:4526)
 	TX_FAR _CeladonMartRoofText_48526
-	TX_WAIT
+	db $0d
 	db "@"
 
-CeladonMartRoofText_4852c:
+CeladonMartRoofText_4852c: ; 4852c (12:452c)
 	TX_FAR _CeladonMartRoofText_4852c
-	TX_WAIT
+	db $0d
 	db "@"
 
-CeladonMartRoofScript_PrintDrinksInBag:
-	ld hl, wFilteredBagItems
+CeladonMartRoofScript_48532: ; 48532 (12:4532)
+	ld hl, wcc5b
 	xor a
-	ld [hItemCounter], a
-.loop
+	ld [$ffdb], a
+.asm_48538
 	ld a, [hli]
 	cp $ff
 	ret z
 	push hl
 	ld [wd11e], a
 	call GetItemName
-	coord hl, 2, 2
-	ld a, [hItemCounter]
-	ld bc, SCREEN_WIDTH * 2
+	hlCoord 2, 2
+	ld a, [$ffdb]
+	ld bc, $28
 	call AddNTimes
 	ld de, wcd6d
 	call PlaceString
-	ld hl, hItemCounter
+	ld hl, $ffdb
 	inc [hl]
 	pop hl
-	jr .loop
+	jr .asm_48538
 
-CeladonMartRoofTextPointers:
+CeladonMartRoofTextPointers: ; 4855b (12:455b)
 	dw CeladonMartRoofText1
 	dw CeladonMartRoofText2
 	dw CeladonMartRoofText5
@@ -213,43 +219,43 @@ CeladonMartRoofTextPointers:
 	dw CeladonMartRoofText5
 	dw CeladonMartRoofText6
 
-CeladonMartRoofText1:
+CeladonMartRoofText1: ; 48567 (12:4567)
 	TX_FAR _CeladonMartRoofText1
 	db "@"
 
-CeladonMartRoofText2:
-	TX_ASM
-	call CeladonMartRoofScript_GetDrinksInBag
-	ld a, [wFilteredBagItemsCount]
+CeladonMartRoofText2: ; 4856c (12:456c)
+	db $08 ; asm
+	call CeladonMartRoofScript_483d8
+	ld a, [wcd37]
 	and a
-	jr z, .noDrinksInBag
-	ld a, 1
+	jr z, .asm_914b9 ; 0x48574
+	ld a, $1
 	ld [wDoNotWaitForButtonPressAfterDisplayingText], a
 	ld hl, CeladonMartRoofText4
 	call PrintText
 	call YesNoChoice
 	ld a, [wCurrentMenuItem]
 	and a
-	jr nz, .done
-	call CeladonMartRoofScript_GiveDrinkToGirl
-	jr .done
-.noDrinksInBag
+	jr nz, .asm_05aa4 ; 0x48588
+	call CeladonMartRoofScript_4840c
+	jr .asm_05aa4 ; 0x4858d
+.asm_914b9 ; 0x4858f
 	ld hl, CeladonMartRoofText3
 	call PrintText
-.done
+.asm_05aa4 ; 0x48595
 	jp TextScriptEnd
 
-CeladonMartRoofText3:
+CeladonMartRoofText3: ; 48598 (12:4598)
 	TX_FAR _CeladonMartRoofText_48598
 	db "@"
 
-CeladonMartRoofText4:
+CeladonMartRoofText4: ; 4859d (12:459d)
 	TX_FAR _CeladonMartRoofText4
 	db "@"
 
-CeladonMartRoofText5:
-	TX_VENDING_MACHINE
+CeladonMartRoofText5: ; 485a2 (12:45a2)
+	db $f5
 
-CeladonMartRoofText6:
+CeladonMartRoofText6: ; 485a3 (12:45a3)
 	TX_FAR _CeladonMartRoofText6
 	db "@"

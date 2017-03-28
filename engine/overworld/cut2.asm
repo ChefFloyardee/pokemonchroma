@@ -1,89 +1,89 @@
-AnimCut:
-	ld a, [wCutTile]
+Func_79e96: ; 79e96 (1e:5e96)
+	ld a, [wcd4d]
 	cp $52
-	jr z, .grass
+	jr z, .asm_79ec8
 	ld c, $8
-.cutTreeLoop
+.asm_79e9f
 	push bc
 	ld hl, wOAMBuffer + $91
-	ld a, 1
-	ld [wCoordAdjustmentAmount], a
-	ld c, 2
+	ld a, $1
+	ld [wd08a], a
+	ld c, $2
 	call AdjustOAMBlockXPos2
 	ld hl, wOAMBuffer + $99
-	ld a, -1
-	ld [wCoordAdjustmentAmount], a
-	ld c, 2
+	ld a, $ff
+	ld [wd08a], a
+	ld c, $2
 	call AdjustOAMBlockXPos2
-	ld a, [rOBP1]
+	ld a, [rOBP1] ; $ff49
 	xor $64
-	ld [rOBP1], a
+	ld [rOBP1], a ; $ff49
 	call DelayFrame
 	pop bc
 	dec c
-	jr nz, .cutTreeLoop
+	jr nz, .asm_79e9f
 	ret
-.grass
-	ld c, 2
-.cutGrassLoop
+.asm_79ec8
+	ld c, $2
+.asm_79eca
 	push bc
 	ld c, $8
-	call AnimCutGrass_UpdateOAMEntries
-	call AnimCutGrass_SwapOAMEntries
+	call Func_79eed
+	call Func_79f30
 	ld c, $8
-	call AnimCutGrass_UpdateOAMEntries
-	call AnimCutGrass_SwapOAMEntries
+	call Func_79eed
+	call Func_79f30
 	ld hl, wOAMBuffer + $90
-	ld a, 2
-	ld [wCoordAdjustmentAmount], a
-	ld c, 4
+	ld a, $2
+	ld [wd08a], a
+	ld c, $4
 	call AdjustOAMBlockYPos2
 	pop bc
 	dec c
-	jr nz, .cutGrassLoop
+	jr nz, .asm_79eca
 	ret
 
-AnimCutGrass_UpdateOAMEntries:
+Func_79eed: ; 79eed (1e:5eed)
 	push bc
 	ld hl, wOAMBuffer + $91
-	ld a, 1
-	ld [wCoordAdjustmentAmount], a
-	ld c, 1
+	ld a, $1
+	ld [wd08a], a
+	ld c, $1
 	call AdjustOAMBlockXPos2
 	ld hl, wOAMBuffer + $95
-	ld a, 2
-	ld [wCoordAdjustmentAmount], a
-	ld c, 1
+	ld a, $2
+	ld [wd08a], a
+	ld c, $1
 	call AdjustOAMBlockXPos2
 	ld hl, wOAMBuffer + $99
-	ld a, -2
-	ld [wCoordAdjustmentAmount], a
-	ld c, 1
+	ld a, $fe
+	ld [wd08a], a
+	ld c, $1
 	call AdjustOAMBlockXPos2
 	ld hl, wOAMBuffer + $9d
-	ld a, -1
-	ld [wCoordAdjustmentAmount], a
-	ld c, 1
+	ld a, $ff
+	ld [wd08a], a
+	ld c, $1
 	call AdjustOAMBlockXPos2
-	ld a, [rOBP1]
+	ld a, [rOBP1] ; $ff49
 	xor $64
-	ld [rOBP1], a
+	ld [rOBP1], a ; $ff49
 	call DelayFrame
 	pop bc
 	dec c
-	jr nz, AnimCutGrass_UpdateOAMEntries
+	jr nz, Func_79eed
 	ret
 
-AnimCutGrass_SwapOAMEntries:
+Func_79f30: ; 79f30 (1e:5f30)
 	ld hl, wOAMBuffer + $90
-	ld de, wBuffer
+	ld de, wHPBarMaxHP
 	ld bc, $8
 	call CopyData
 	ld hl, wOAMBuffer + $98
 	ld de, wOAMBuffer + $90
 	ld bc, $8
 	call CopyData
-	ld hl, wBuffer
+	ld hl, wHPBarMaxHP
 	ld de, wOAMBuffer + $98
 	ld bc, $8
 	jp CopyData

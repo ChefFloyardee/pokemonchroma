@@ -1,5 +1,5 @@
-_ViridianForestExitText1::
-	text "Many #mon live"
+_ViridianForestExitText1:: ; 8a6fd (22:66fd)
+	text "Many #MON live"
 	line "only in forests "
 	cont "and caves."
 
@@ -8,12 +8,13 @@ _ViridianForestExitText1::
 	cont "different kinds!"
 	done
 
-_ViridianForestExitText2::
+_ViridianForestExitText2:: ; 8a75d (22:675d)
 	text "Have you noticed"
 	line "the bushes on the"
 	cont "roadside?"
 
 	para "They can be cut"
 	line "down by a special"
-	cont "#mon move."
+	cont "#MON move."
 	done
+

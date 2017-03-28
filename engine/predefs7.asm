@@ -1,30 +1,30 @@
-DisplayElevatorFloorMenu:
+Func_1c9c6: ; 1c9c6 (7:49c6)
 	ld hl, WhichFloorText
 	call PrintText
-	ld hl, wItemList
+	ld hl, wStringBuffer2 + 11
 	ld a, l
-	ld [wListPointer], a
+	ld [wcf8b], a
 	ld a, h
-	ld [wListPointer + 1], a
-	ld a, [wListScrollOffset]
+	ld [wcf8c], a
+	ld a, [wListScrollOffset] ; wcc36
 	push af
 	xor a
-	ld [wCurrentMenuItem], a
-	ld [wListScrollOffset], a
-	ld [wPrintItemPrices], a
-	ld a, SPECIALLISTMENU
-	ld [wListMenuID], a
+	ld [wCurrentMenuItem], a ; wCurrentMenuItem
+	ld [wListScrollOffset], a ; wcc36
+	ld [wcf93], a
+	ld a, $4
+	ld [wListMenuID], a ; wListMenuID
 	call DisplayListMenuID
 	pop bc
 	ld a, b
-	ld [wListScrollOffset], a
+	ld [wListScrollOffset], a ; wcc36
 	ret c
-	ld hl, wCurrentMapScriptFlags
+	ld hl, wd126
 	set 7, [hl]
-	ld hl, wElevatorWarpMaps
-	ld a, [wWhichPokemon]
+	ld hl, wcc5b
+	ld a, [wWhichPokemon] ; wWhichPokemon
 	add a
-	ld d, 0
+	ld d, $0
 	ld e, a
 	add hl, de
 	ld a, [hli]
@@ -32,17 +32,17 @@ DisplayElevatorFloorMenu:
 	ld a, [hl]
 	ld c, a
 	ld hl, wWarpEntries
-	call .UpdateWarp
+	call Func_1ca0d
 
-.UpdateWarp
+Func_1ca0d: ; 1ca0d (7:4a0d)
 	inc hl
 	inc hl
 	ld a, b
-	ld [hli], a ; destination warp ID
+	ld [hli], a
 	ld a, c
-	ld [hli], a ; destination map ID
+	ld [hli], a
 	ret
 
-WhichFloorText:
+WhichFloorText: ; 1ca14 (7:4a14)
 	TX_FAR _WhichFloorText
 	db "@"

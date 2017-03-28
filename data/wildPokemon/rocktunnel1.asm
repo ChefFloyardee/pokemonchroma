@@ -1,13 +1,36 @@
 TunnelMonsB1:
 	db $0F
-	dbw 16,ZUBAT
-	dbw 17,ZUBAT
-	dbw 17,GEODUDE
-	dbw 15,MACHOP
-	dbw 16,GEODUDE
-	dbw 18,ZUBAT
-	dbw 15,ZUBAT
-	dbw 17,MACHOP
-	dbw 13,ONIX
-	dbw 15,ONIX
+
+	IF !_YELLOW
+		db 16,ZUBAT
+		db 17,ZUBAT
+		db 17,GEODUDE
+		db 15,MACHOP
+		db 16,GEODUDE
+		IF _RED || _GREEN || (_BLUE && !_JAPAN)
+			db 18,ZUBAT
+		ENDC
+		IF (_BLUE && _JAPAN)
+			db 18,DITTO
+		ENDC
+		db 15,ZUBAT
+		db 17,MACHOP
+		db 13,ONIX
+		db 15,ONIX
+	ENDC
+
+	IF _YELLOW
+		db 15,ZUBAT
+		db 16,GEODUDE
+		db 17,ZUBAT
+		db 19,ZUBAT
+		db 18,GEODUDE
+		db 20,GEODUDE
+		db 21,ZUBAT
+		db 17,MACHOP
+		db 19,MACHOP
+		db 21,MACHOP
+	ENDC
+
 	db $00
+

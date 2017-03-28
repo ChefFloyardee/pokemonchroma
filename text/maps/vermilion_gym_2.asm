@@ -1,4 +1,4 @@
-_VermilionGymText_5cb72::
+_VermilionGymText_5cb72:: ; 9c000 (27:4000)
 	text "A little word of"
 	line "advice, kid!"
 
@@ -7,101 +7,101 @@ _VermilionGymText_5cb72::
 
 	para "But, it's useless"
 	line "against ground-"
-	cont "type #mon!"
+	cont "type #MON!"
 	done
 
-_VermilionGymText_5cb77::
-	text "The Thunderbadge"
+_VermilionGymText_5cb77:: ; 9c069 (27:4069)
+	text "The THUNDERBADGE"
 	line "cranks up your"
-	cont "#mon's Speed!"
+	cont "#MON's SPEED!"
 
 	para "It also lets your"
-	line "#mon Fly any"
+	line "#MON FLY any"
 	cont "time, kid!"
 
 	para "You're special,"
 	line "kid! Take this!"
 	done
 
-_ReceivedTM24Text::
+_ReceivedTM24Text:: ; 9c0e0 (27:40e0)
 	text $52, " received "
 	line "@"
 	TX_RAM wcf4b
 	text "!@@"
 
-_TM24ExplanationText::
+_TM24ExplanationText:: ; 9c0f5 (27:40f5)
 	db $0
 	para "TM24 contains"
-	line "Thunderbolt!"
+	line "THUNDERBOLT!"
 
 	para "Teach it to an"
-	line "electric #mon!"
+	line "electric #MON!"
 	done
 
-_TM24NoRoomText::
+_TM24NoRoomText:: ; 9c130 (27:4130)
 	text "Yo kid, make room"
 	line "in your pack!"
 	done
 
-_ReceivedThunderbadgeText::
+_ReceivedThunderbadgeText:: ; 9c151 (27:4151)
 	text "Whoa!"
 
 	para "You're the real"
 	line "deal, kid!"
 
 	para "Fine then, take"
-	line "the Thunderbadge!"
+	line "the THUNDERBADGE!"
 	prompt
 
-_VermilionGymBattleText1::
+_VermilionGymBattleText1:: ; 9c194 (27:4194)
 	text "When I was in the"
-	line "Army, Lt.Surge"
+	line "Army, LT.SURGE"
 	cont "was my strict CO!"
 	done
 
-_VermilionGymEndBattleText1::
+_VermilionGymEndBattleText1:: ; 9c1c8 (27:41c8)
 	text "Stop!"
 	line "You're very good!"
 	prompt
 
-_VermilionGymAfterBattleText1::
+_VermilionGymAfterBattleText1:: ; 9c1e0 (27:41e0)
 	text "The door won't"
 	line "open?"
 
-	para "Lt.Surge always"
+	para "LT.SURGE always"
 	line "was cautious!"
 	done
 
-_VermilionGymBattleText2::
+_VermilionGymBattleText2:: ; 9c213 (27:4213)
 	text "I'm a lightweight,"
 	line "but I'm good with"
 	cont "electricity!"
 	done
 
-_VermilionGymEndBattleText2::
+_VermilionGymEndBattleText2:: ; 9c244 (27:4244)
 	text "Fried!"
 	prompt
 
-_VermilionGymAfterBattleText2::
+_VermilionGymAfterBattleText2:: ; 9c24c (27:424c)
 	text "OK, I'll talk!"
 
-	para "Lt.Surge said he"
+	para "LT.SURGE said he"
 	line "hid door switches"
 	cont "inside something!"
 	done
 
-_VermilionGymBattleText3::
+_VermilionGymBattleText3:: ; 9c290 (27:4290)
 	text "This is no place"
 	line "for kids!"
 	done
 
-_VermilionGymEndBattleText3::
+_VermilionGymEndBattleText3:: ; 9c2ac (27:42ac)
 	text "Wow!"
 	line "Surprised me!"
 	prompt
 
-_VermilionGymAfterBattleText3::
-	text "Lt.Surge set up"
+_VermilionGymAfterBattleText3:: ; 9c2c0 (27:42c0)
+	text "LT.SURGE set up"
 	line "double locks!"
 	cont "Here's a hint!"
 
@@ -111,25 +111,25 @@ _VermilionGymAfterBattleText3::
 	cont "next to it!"
 	done
 
-_VermilionGymText_5cbf4::
+_VermilionGymText_5cbf4:: ; 9c32b (27:432b)
 	text "Yo! Champ in"
 	line "making!"
 
-	para "Lt.Surge has a"
+	para "LT.SURGE has a"
 	line "nickname. People"
 	cont "refer to him as"
 	cont "the Lightning"
 	cont "American!"
 
 	para "He's an expert on"
-	line "electric #mon!"
+	line "electric #MON!"
 
 	para "Birds and water"
-	line "#mon are at"
+	line "#MON are at"
 	cont "risk! Beware of"
 	cont "paralysis too!"
 
-	para "Lt.Surge is very"
+	para "LT.SURGE is very"
 	line "cautious!"
 
 	para "You'll have to"
@@ -137,7 +137,8 @@ _VermilionGymText_5cbf4::
 	cont "get to him!"
 	done
 
-_VermilionGymText_5cbf9::
+_VermilionGymText_5cbf9:: ; 9c429 (27:4429)
 	text "Whew! That match"
 	line "was electric!"
 	done
+

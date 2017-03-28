@@ -1,13 +1,11 @@
-; tests if mon [wcf91] can learn move [wMoveNum]
-CanLearnTM:
+; tests if mon [wcf91] can learn move [wd0e0]
+CanLearnTM: ; 1373e (4:773e)
 	ld a, [wcf91]
 	ld [wd0b5], a
-	ld a, [wcf91 + 1]
- 	ld [wd0b5 + 1], a
 	call GetMonHeader
-	ld hl, wMonHLearnset
+	ld hl, W_MONHLEARNSET
 	push hl
-	ld a, [wMoveNum]
+	ld a, [wd0e0]
 	ld b, a
 	ld c, $0
 	ld hl, TechnicalMachines
@@ -18,15 +16,13 @@ CanLearnTM:
 	inc c
 	jr .findTMloop
 .TMfoundLoop
-	ld e, c
- 	ld d, 0
 	pop hl
-	ld b, FLAG_TEST
+	ld b, $2  ; read corresponding bit from TM compatibility array
 	predef_jump FlagActionPredef
 
 ; converts TM/HM number in wd11e into move number
 ; HMs start at 51
-TMToMove:
+TMToMove: ; 13763 (4:7763)
 	ld a, [wd11e]
 	dec a
 	ld hl, TechnicalMachines

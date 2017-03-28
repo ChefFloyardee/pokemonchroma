@@ -1,17 +1,17 @@
-_PewterHouse1Text1::
-	text "Nidoran: Bowbow!@@"
+_PewterHouse1Text1:: ; 984ce (26:44ce)
+	text "NIDORAN: Bowbow!@@"
 
-_PewterHouse1Text2::
-	text "Nidoran sit!"
+_PewterHouse1Text2:: ; 984e1 (26:44e1)
+	text "NIDORAN sit!"
 	done
 
-_PewterHouse1Text3::
-	text "Our #mon's an"
+_PewterHouse1Text3:: ; 984ef (26:44ef)
+	text "Our #MON's an"
 	line "outsider, so it's"
 	cont "hard to handle."
 
 	para "An outsider is a"
-	line "#mon that you"
+	line "#MON that you"
 	cont "get in a trade."
 
 	para "It grows fast, but"
@@ -20,5 +20,6 @@ _PewterHouse1Text3::
 	cont "in battle!"
 
 	para "If only we had"
-	line "some Badges..."
+	line "some BADGEs..."
 	done
+

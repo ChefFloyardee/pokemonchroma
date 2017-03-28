@@ -1,58 +1,58 @@
-MainMenu:
+MainMenu: ; 5af2 (1:5af2)
 ; Check save file
-	call InitOptions
+	call Func_5bff
 	xor a
-	ld [wOptionsInitialized],a
+	ld [wd08a],a
 	inc a
-	ld [wSaveFileStatus],a
-	call CheckForPlayerNameInSRAM
-	jr nc,.mainMenuLoop
+	ld [wd088],a
+	call Func_609e
+	jr nc,.next0
 
+	; Predef 52 loads the save from SRAM to RAM
 	predef LoadSAV
 
-.mainMenuLoop
+.next0
 	ld c,20
 	call DelayFrames
-	xor a ; LINK_STATE_NONE
-	ld [wLinkState],a
-	ld hl,wPartyAndBillsPCSavedMenuItem
+	xor a
+	ld [W_ISLINKBATTLE],a
+	ld hl,wcc2b
 	ld [hli],a
 	ld [hli],a
 	ld [hli],a
 	ld [hl],a
-	ld [wDefaultMap],a
+	ld [W_ANIMATIONID],a
 	ld hl,wd72e
 	res 6,[hl]
 	call ClearScreen
-	call RunDefaultPaletteCommand
+	call GoPAL_SET_CF1C
 	call LoadTextBoxTilePatterns
 	call LoadFontTilePatterns
 	ld hl,wd730
 	set 6,[hl]
-	ld a,[wSaveFileStatus]
+	ld a,[wd088]
 	cp a,1
-	jr z,.noSaveFile
-; there's a save file
-	coord hl, 0, 0
+	jr z,.next1
+	hlCoord 0, 0
 	ld b,6
 	ld c,13
 	call TextBoxBorder
-	coord hl, 2, 2
+	hlCoord 2, 2
 	ld de,ContinueText
 	call PlaceString
 	jr .next2
-.noSaveFile
-	coord hl, 0, 0
+.next1
+	hlCoord 0, 0
 	ld b,4
 	ld c,13
 	call TextBoxBorder
-	coord hl, 2, 2
+	hlCoord 2, 2
 	ld de,NewGameText
 	call PlaceString
 .next2
 	ld hl,wd730
 	res 6,[hl]
-	call UpdateSprites
+	call UpdateSprites ; OAM?
 	xor a
 	ld [wCurrentMenuItem],a
 	ld [wLastMenuItem],a
@@ -61,38 +61,36 @@ MainMenu:
 	ld [wTopMenuItemX],a
 	inc a
 	ld [wTopMenuItemY],a
-	ld a,A_BUTTON | B_BUTTON | START
+	ld a,$B
 	ld [wMenuWatchedKeys],a
-	ld a,[wSaveFileStatus]
+	ld a,[wd088]
 	ld [wMaxMenuItem],a
 	call HandleMenuInput
-	bit 1,a ; pressed B?
-	jp nz,DisplayTitleScreen ; if so, go back to the title screen
+	bit 1,a
+	jp nz,LoadTitlescreenGraphics ; load title screen (gfx and arrangement)
 	ld c,20
 	call DelayFrames
 	ld a,[wCurrentMenuItem]
 	ld b,a
-	ld a,[wSaveFileStatus]
+	ld a,[wd088]
 	cp a,2
-	jp z,.skipInc
-; If there's no save file, increment the current menu item so that the numbers
-; are the same whether or not there's a save file.
-	inc b
-.skipInc
+	jp z,.next3
+	inc b ; adjust MenuArrow_Counter
+.next3
 	ld a,b
 	and a
-	jr z,.choseContinue
+	jr z,.next4 ; if press_A on Continue
 	cp a,1
-	jp z,StartNewGame
-	call DisplayOptionMenu
+	jp z,Func_5d52 ; if press_A on NewGame
+	call DisplayOptionMenu ; if press_a on Options
 	ld a,1
-	ld [wOptionsInitialized],a
-	jp .mainMenuLoop
-.choseContinue
-	call DisplayContinueGameInfo
-	ld hl,wCurrentMapScriptFlags
+	ld [wd08a],a
+	jp .next0
+.next4
+	call ContinueGame
+	ld hl,wd126
 	set 5,[hl]
-.inputLoop
+.next6
 	xor a
 	ld [hJoyPressed],a
 	ld [hJoyReleased],a
@@ -100,21 +98,21 @@ MainMenu:
 	call Joypad
 	ld a,[hJoyHeld]
 	bit 0,a
-	jr nz,.pressedA
+	jr nz,.next5
 	bit 1,a
-	jp nz,.mainMenuLoop ; pressed B
-	jr .inputLoop
-.pressedA
+	jp nz,.next0
+	jr .next6
+.next5
 	call GBPalWhiteOutWithDelay3
 	call ClearScreen
-	ld a,PLAYER_DIR_DOWN
-	ld [wPlayerDirection],a
+	ld a,4
+	ld [wd52a],a
 	ld c,10
 	call DelayFrames
-	ld a,[wNumHoFTeams]
+	ld a,[wd5a2]
 	and a
 	jp z,SpecialEnterMap
-	ld a,[wCurMap] ; map ID
+	ld a,[W_CURMAP] ; map ID
 	cp a,HALL_OF_FAME
 	jp nz,SpecialEnterMap
 	xor a
@@ -123,36 +121,35 @@ MainMenu:
 	set 2,[hl] ; fly warp or dungeon warp
 	call SpecialWarpIn
 	jp SpecialEnterMap
-
-InitOptions:
-	ld a,1 ; no delay
-	ld [wLetterPrintingDelayFlags],a
-	ld a,3 ; medium speed
-	ld [wOptions],a
+Func_5bff: ; 5bff (1:5bff)
+	ld a,1
+	ld [wd358],a
+	ld a,3
+	ld [W_OPTIONS],a
 	ret
 
-LinkMenu:
+LinkMenu: ; 5c0a (1:5c0a)
 	xor a
-	ld [wLetterPrintingDelayFlags], a
+	ld [wd358], a
 	ld hl, wd72e
 	set 6, [hl]
-	ld hl, TextTerminator_6b20
+	ld hl, TextTerminator_6b20 ; $6b20
 	call PrintText
 	call SaveScreenTilesToBuffer1
 	ld hl, WhereWouldYouLikeText
 	call PrintText
-	coord hl, 5, 5
+	hlCoord 5, 5
 	ld b, $6
 	ld c, $d
 	call TextBoxBorder
 	call UpdateSprites
-	coord hl, 7, 7
-	ld de, CableClubOptionsText
+	hlCoord 7, 7
+	ld de, TradeCenterText
 	call PlaceString
 	xor a
-	ld [wUnusedCD37], a
+	ld [wcd37], a
 	ld [wd72d], a
-	ld hl, wTopMenuItemY
+	ld hl, wTopMenuItemY ; wTopMenuItemY
 	ld a, $7
 	ld [hli], a
 	ld a, $6
@@ -163,156 +160,151 @@ LinkMenu:
 	ld a, $2
 	ld [hli], a
 	inc a
-	; ld a, A_BUTTON | B_BUTTON
-	ld [hli], a ; wMenuWatchedKeys
+	ld [hli], a
 	xor a
 	ld [hl], a
-.waitForInputLoop
+.asm_5c52
 	call HandleMenuInput
-	and A_BUTTON | B_BUTTON
+	and $3
 	add a
 	add a
 	ld b, a
-	ld a, [wCurrentMenuItem]
+	ld a, [wCurrentMenuItem] ; wCurrentMenuItem
 	add b
 	add $d0
-	ld [wLinkMenuSelectionSendBuffer], a
-	ld [wLinkMenuSelectionSendBuffer + 1], a
-.exchangeMenuSelectionLoop
-	call Serial_ExchangeLinkMenuSelection
-	ld a, [wLinkMenuSelectionReceiveBuffer]
+	ld [wcc42], a
+	ld [wcc43], a
+.asm_5c66
+	call Func_2247
+	ld a, [wcc3d]
 	ld b, a
 	and $f0
 	cp $d0
 	jr z, .asm_5c7d
-	ld a, [wLinkMenuSelectionReceiveBuffer + 1]
+	ld a, [wcc3e]
 	ld b, a
 	and $f0
 	cp $d0
-	jr nz, .exchangeMenuSelectionLoop
+	jr nz, .asm_5c66
 .asm_5c7d
 	ld a, b
-	and $c ; did the enemy press A or B?
-	jr nz, .enemyPressedAOrB
-; the enemy didn't press A or B
-	ld a, [wLinkMenuSelectionSendBuffer]
-	and $c ; did the player press A or B?
-	jr z, .waitForInputLoop ; if neither the player nor the enemy pressed A or B, try again
-	jr .doneChoosingMenuSelection ; if the player pressed A or B but the enemy didn't, use the player's selection
-.enemyPressedAOrB
-	ld a, [wLinkMenuSelectionSendBuffer]
-	and $c ; did the player press A or B?
-	jr z, .useEnemyMenuSelection ; if the enemy pressed A or B but the player didn't, use the enemy's selection
-; the enemy and the player both pressed A or B
-; The gameboy that is clocking the connection wins.
-	ld a, [hSerialConnectionStatus]
-	cp USING_INTERNAL_CLOCK
-	jr z, .doneChoosingMenuSelection
-.useEnemyMenuSelection
+	and $c
+	jr nz, .asm_5c8b
+	ld a, [wcc42]
+	and $c
+	jr z, .asm_5c52
+	jr .asm_5ca1
+.asm_5c8b
+	ld a, [wcc42]
+	and $c
+	jr z, .asm_5c98
+	ld a, [$ffaa]
+	cp $2
+	jr z, .asm_5ca1
+.asm_5c98
 	ld a, b
-	ld [wLinkMenuSelectionSendBuffer], a
+	ld [wcc42], a
 	and $3
-	ld [wCurrentMenuItem], a
-.doneChoosingMenuSelection
-	ld a, [hSerialConnectionStatus]
-	cp USING_INTERNAL_CLOCK
-	jr nz, .skipStartingTransfer
+	ld [wCurrentMenuItem], a ; wCurrentMenuItem
+.asm_5ca1
+	ld a, [$ffaa]
+	cp $2
+	jr nz, .asm_5cb1
 	call DelayFrame
 	call DelayFrame
-	ld a, START_TRANSFER_INTERNAL_CLOCK
-	ld [rSC], a
-.skipStartingTransfer
+	ld a, $81
+	ld [$ff02], a
+.asm_5cb1
 	ld b, $7f
 	ld c, $7f
 	ld d, $ec
-	ld a, [wLinkMenuSelectionSendBuffer]
-	and (B_BUTTON << 2) ; was B button pressed?
-	jr nz, .updateCursorPosition
-; A button was pressed
-	ld a, [wCurrentMenuItem]
+	ld a, [wcc42]
+	and $8
+	jr nz, .asm_5ccc
+	ld a, [wCurrentMenuItem] ; wCurrentMenuItem
 	cp $2
-	jr z, .updateCursorPosition
+	jr z, .asm_5ccc
 	ld c, d
 	ld d, b
 	dec a
-	jr z, .updateCursorPosition
+	jr z, .asm_5ccc
 	ld b, c
 	ld c, d
-.updateCursorPosition
+.asm_5ccc
 	ld a, b
 	Coorda 6, 7
 	ld a, c
 	Coorda 6, 9
 	ld a, d
 	Coorda 6, 11
-	ld c, 40
+	ld c, $28
 	call DelayFrames
 	call LoadScreenTilesFromBuffer1
-	ld a, [wLinkMenuSelectionSendBuffer]
-	and (B_BUTTON << 2) ; was B button pressed?
-	jr nz, .choseCancel ; cancel if B pressed
-	ld a, [wCurrentMenuItem]
+	ld a, [wcc42]
+	and $8
+	jr nz, .asm_5d2d
+	ld a, [wCurrentMenuItem] ; wCurrentMenuItem
 	cp $2
-	jr z, .choseCancel
+	jr z, .asm_5d2d
 	xor a
-	ld [wWalkBikeSurfState], a ; start walking
-	ld a, [wCurrentMenuItem]
+	ld [wWalkBikeSurfState], a
+	ld a, [wCurrentMenuItem] ; wCurrentMenuItem
 	and a
-	ld a, COLOSSEUM
-	jr nz, .next
 	ld a, TRADE_CENTER
-.next
+	jr nz, .asm_5cfc
+	ld a, BATTLE_CENTER
+.asm_5cfc
 	ld [wd72d], a
 	ld hl, PleaseWaitText
 	call PrintText
-	ld c, 50
+	ld c, $32
 	call DelayFrames
 	ld hl, wd732
 	res 1, [hl]
-	ld a, [wDefaultMap]
+	ld a, [W_ANIMATIONID] ; W_ANIMATIONID
 	ld [wDestinationMap], a
 	call SpecialWarpIn
-	ld c, 20
+	ld c, $14
 	call DelayFrames
 	xor a
-	ld [wMenuJoypadPollCount], a
-	ld [wSerialExchangeNybbleSendData], a
-	inc a ; LINK_STATE_IN_CABLE_CLUB
-	ld [wLinkState], a
-	ld [wEnteringCableClub], a
+	ld [wMenuJoypadPollCount], a ; wMenuJoypadPollCount
+	ld [wcc42], a
+	inc a
+	ld [W_ISLINKBATTLE], a ; W_ISLINKBATTLE
+	ld [wcc47], a
 	jr SpecialEnterMap
-.choseCancel
+.asm_5d2d
 	xor a
-	ld [wMenuJoypadPollCount], a
+	ld [wMenuJoypadPollCount], a ; wMenuJoypadPollCount
 	call Delay3
-	call CloseLinkConnection
+	call Func_72d7
 	ld hl, LinkCanceledText
 	call PrintText
 	ld hl, wd72e
 	res 6, [hl]
 	ret
 
-WhereWouldYouLikeText:
+WhereWouldYouLikeText: ; 5d43 (1:5d43)
 	TX_FAR _WhereWouldYouLikeText
 	db "@"
 
-PleaseWaitText:
+PleaseWaitText: ; 5d48 (1:5d48)
 	TX_FAR _PleaseWaitText
 	db "@"
 
-LinkCanceledText:
+LinkCanceledText: ; 5d4d (1:5d4d)
 	TX_FAR _LinkCanceledText
 	db "@"
 
-StartNewGame:
+Func_5d52: ; 5d52 (1:5d52)
 	ld hl, wd732
 	res 1, [hl]
 	call OakSpeech
-	ld c, 20
+	ld c, $14
 	call DelayFrames
 
 ; enter map after using a special warp or loading the game from the main menu
-SpecialEnterMap:
+SpecialEnterMap: ; 5d5f (1:5d5f)
 	xor a
 	ld [hJoyPressed], a
 	ld [hJoyHeld], a
@@ -323,150 +315,144 @@ SpecialEnterMap:
 	call ResetPlayerSpriteData
 	ld c, 20
 	call DelayFrames
-	ld a, [wEnteringCableClub]
+	ld a, [wcc47]
 	and a
 	ret nz
 	jp EnterMap
 
-ContinueText:
-	db "Continue", $4e
+ContinueText: ; 5d7e (1:5d7e)
+	db "CONTINUE", $4e
 
-NewGameText:
-	db   "New Game"
-	next "Option@"
+NewGameText: ; 5d87 (1:5d87)
+	db "NEW GAME", $4e
+	db "OPTION@"
 
-CableClubOptionsText:
-	db   "Trade Center"
-	next "Colosseum"
-	next "Cancel@"
+TradeCenterText: ; 5d97 (1:5d97)
+	db "TRADE CENTER", $4e
+	db "COLOSSEUM",    $4e
+	db "CANCEL@"
 
-DisplayContinueGameInfo:
+ContinueGame: ; 5db5 (1:5db5)
 	xor a
-	ld [H_AUTOBGTRANSFERENABLED], a
-	coord hl, 4, 7
-	ld b, 8
-	ld c, 14
+	ld [H_AUTOBGTRANSFERENABLED], a ; $ffba
+	hlCoord 4, 7
+	ld b, $8
+	ld c, $e
 	call TextBoxBorder
-	coord hl, 5, 9
+	hlCoord 5, 9
 	ld de, SaveScreenInfoText
 	call PlaceString
-	coord hl, 12, 9
-	ld de, wPlayerName
+	hlCoord 12, 9
+	ld de, wPlayerName ; wd158
 	call PlaceString
-	coord hl, 17, 11
-	call PrintNumBadges
-	coord hl, 16, 13
-	call PrintNumOwnedMons
-	coord hl, 13, 15
-	call PrintPlayTime
-	ld a, 1
-	ld [H_AUTOBGTRANSFERENABLED], a
-	ld c, 30
+	hlCoord 17, 11
+	call Func_5e2f
+	hlCoord 16, 13
+	call Func_5e42
+	hlCoord 13, 15
+	call Func_5e55
+	ld a, $1
+	ld [H_AUTOBGTRANSFERENABLED], a ; $ffba
+	ld c, $1e
 	jp DelayFrames
 
-PrintSaveScreenText:
+PrintSaveScreenText: ; 5def (1:5def)
 	xor a
 	ld [H_AUTOBGTRANSFERENABLED], a
-	coord hl, 4, 0
+	ld hl, wTileMap + $4
 	ld b, $8
 	ld c, $e
 	call TextBoxBorder
 	call LoadTextBoxTilePatterns
 	call UpdateSprites
-	coord hl, 5, 2
+	ld hl, wTileMap + $2d
 	ld de, SaveScreenInfoText
 	call PlaceString
-	coord hl, 12, 2
+	ld hl, wTileMap + $34
 	ld de, wPlayerName
 	call PlaceString
-	coord hl, 17, 4
-	call PrintNumBadges
-	coord hl, 16, 6
-	call PrintNumOwnedMons
-	coord hl, 13, 8
-	call PrintPlayTime
+	ld hl, wTileMap + $61
+	call Func_5e2f
+	ld hl, wTileMap + $88
+	call Func_5e42
+	ld hl, wTileMap + $ad
+	call Func_5e55
 	ld a, $1
 	ld [H_AUTOBGTRANSFERENABLED], a
-	ld c, 30
+	ld c, $1e
 	jp DelayFrames
 
-PrintNumBadges:
+Func_5e2f: ; 5e2f (1:5e2f)
 	push hl
-	ld hl, wObtainedBadges
+	ld hl, W_OBTAINEDBADGES
 	ld b, $1
 	call CountSetBits
 	pop hl
-	ld de, wNumSetBits
-	lb bc, 1, 2
+	ld de, wd11e
+	ld bc, $102
 	jp PrintNumber
 
-PrintNumOwnedMons:
+Func_5e42: ; 5e42 (1:5e42)
 	push hl
-	ld hl, wPokedexOwned
+	ld hl, wPokedexOwned ; wPokedexOwned
 	ld b, wPokedexOwnedEnd - wPokedexOwned
 	call CountSetBits
-	ld hl, wNumSetBits
-	ld a, [hli]
- 	ld d, a
- 	ld a , [hl]
- 	ld [wNumSetBits], a
- 	ld [hl], d
 	pop hl
-	ld de, wNumSetBits
-	lb bc, 2, 3
+	ld de, wd11e
+	ld bc, $103
 	jp PrintNumber
 
-PrintPlayTime:
-	ld de, wPlayTimeHours
-	lb bc, 1, 3
+Func_5e55: ; 5e55 (1:5e55)
+	ld de, W_PLAYTIMEHOURS + 1
+	ld bc, $103
 	call PrintNumber
 	ld [hl], $6d
 	inc hl
-	ld de, wPlayTimeMinutes
-	lb bc, LEADING_ZEROES | 1, 2
+	ld de, W_PLAYTIMEMINUTES + 1
+	ld bc, $8102
 	jp PrintNumber
 
-SaveScreenInfoText:
-	db   "Player"
-	next "Badges    "
-	next "#dex    "
-	next "Time@"
+SaveScreenInfoText: ; 5e6a (1:5e6a)
+	db   "PLAYER"
+	next "BADGES    "
+	next "#DEX    "
+	next "TIME@"
 
-DisplayOptionMenu:
-	coord hl, 0, 0
+DisplayOptionMenu: ; 5e8a (1:5e8a)
+	hlCoord 0, 0
 	ld b,3
 	ld c,18
 	call TextBoxBorder
-	coord hl, 0, 5
+	hlCoord 0, 5
 	ld b,3
 	ld c,18
 	call TextBoxBorder
-	coord hl, 0, 10
+	hlCoord 0, 10
 	ld b,3
 	ld c,18
 	call TextBoxBorder
-	coord hl, 1, 1
+	hlCoord 1, 1
 	ld de,TextSpeedOptionText
 	call PlaceString
-	coord hl, 1, 6
+	hlCoord 1, 6
 	ld de,BattleAnimationOptionText
 	call PlaceString
-	coord hl, 1, 11
+	hlCoord 1, 11
 	ld de,BattleStyleOptionText
 	call PlaceString
-	coord hl, 2, 16
+	hlCoord 2, 16
 	ld de,OptionMenuCancelText
 	call PlaceString
 	xor a
 	ld [wCurrentMenuItem],a
 	ld [wLastMenuItem],a
 	inc a
-	ld [wLetterPrintingDelayFlags],a
-	ld [wUnusedCD40],a
+	ld [wd358],a
+	ld [wTrainerScreenY],a
 	ld a,3 ; text speed cursor Y coordinate
 	ld [wTopMenuItemY],a
 	call SetCursorPositionsFromOptions
-	ld a,[wOptionsTextSpeedCursorX] ; text speed cursor X coordinate
+	ld a,[wWhichTrade] ; text speed cursor X coordinate
 	ld [wTopMenuItemX],a
 	ld a,$01
 	ld [H_AUTOBGTRANSFERENABLED],a ; enable auto background transfer
@@ -478,7 +464,7 @@ DisplayOptionMenu:
 	call JoypadLowSensitivity
 	ld a,[hJoy5]
 	ld b,a
-	and a,A_BUTTON | B_BUTTON | START | D_RIGHT | D_LEFT | D_UP | D_DOWN ; any key besides select pressed?
+	and a,%11111011 ; any key besides select pressed?
 	jr z,.getJoypadStateLoop
 	bit 1,b ; B button pressed?
 	jr nz,.exitMenu
@@ -490,8 +476,8 @@ DisplayOptionMenu:
 	cp a,16 ; is the cursor on Cancel?
 	jr nz,.loop
 .exitMenu
-	ld a,SFX_PRESS_AB
-	call PlaySound
+	ld a,RBSFX_02_40
+	call PlaySound ; play sound
 	ret
 .eraseOldMenuCursor
 	ld [wTopMenuItemX],a
@@ -516,7 +502,7 @@ DisplayOptionMenu:
 .downPressed
 	cp a,16
 	ld b,-13
-	ld hl,wOptionsTextSpeedCursorX
+	ld hl,wWhichTrade
 	jr z,.updateMenuVariables
 	ld b,5
 	cp a,3
@@ -531,7 +517,7 @@ DisplayOptionMenu:
 .upPressed
 	cp a,8
 	ld b,-5
-	ld hl,wOptionsTextSpeedCursorX
+	ld hl,wWhichTrade
 	jr z,.updateMenuVariables
 	cp a,13
 	inc hl
@@ -550,17 +536,17 @@ DisplayOptionMenu:
 	call PlaceUnfilledArrowMenuCursor
 	jp .loop
 .cursorInBattleAnimation
-	ld a,[wOptionsBattleAnimCursorX] ; battle animation cursor X coordinate
+	ld a,[wTrainerEngageDistance] ; battle animation cursor X coordinate
 	xor a,$0b ; toggle between 1 and 10
-	ld [wOptionsBattleAnimCursorX],a
+	ld [wTrainerEngageDistance],a
 	jp .eraseOldMenuCursor
 .cursorInBattleStyle
-	ld a,[wOptionsBattleStyleCursorX] ; battle style cursor X coordinate
+	ld a,[wTrainerFacingDirection] ; battle style cursor X coordinate
 	xor a,$0b ; toggle between 1 and 10
-	ld [wOptionsBattleStyleCursorX],a
+	ld [wTrainerFacingDirection],a
 	jp .eraseOldMenuCursor
 .pressedLeftInTextSpeed
-	ld a,[wOptionsTextSpeedCursorX] ; text speed cursor X coordinate
+	ld a,[wWhichTrade] ; text speed cursor X coordinate
 	cp a,1
 	jr z,.updateTextSpeedXCoord
 	cp a,7
@@ -571,7 +557,7 @@ DisplayOptionMenu:
 	sub a,7
 	jr .updateTextSpeedXCoord
 .pressedRightInTextSpeed
-	ld a,[wOptionsTextSpeedCursorX] ; text speed cursor X coordinate
+	ld a,[wWhichTrade] ; text speed cursor X coordinate
 	cp a,14
 	jr z,.updateTextSpeedXCoord
 	cp a,7
@@ -581,28 +567,28 @@ DisplayOptionMenu:
 .fromFastToMedium
 	add a,6
 .updateTextSpeedXCoord
-	ld [wOptionsTextSpeedCursorX],a ; text speed cursor X coordinate
+	ld [wWhichTrade],a ; text speed cursor X coordinate
 	jp .eraseOldMenuCursor
 
-TextSpeedOptionText:
-	db   "Text Speed"
-	next " Fast  Medium Slow@"
+TextSpeedOptionText: ; 5fc0 (1:5fc0)
+	db   "TEXT SPEED"
+	next " FAST  MEDIUM SLOW@"
 
-BattleAnimationOptionText:
-	db   "Battle Animation"
-	next " On       Off@"
+BattleAnimationOptionText: ; 5fde (1:5fde)
+	db   "BATTLE ANIMATION"
+	next " ON       OFF@"
 
-BattleStyleOptionText:
-	db   "Battle Style"
-	next " Shift    Set@"
+BattleStyleOptionText: ; 5ffd (1:5ffd)
+	db   "BATTLE STYLE"
+	next " SHIFT    SET@"
 
-OptionMenuCancelText:
-	db "Cancel@"
+OptionMenuCancelText: ; 6018 (1:6018)
+	db "CANCEL@"
 
 ; sets the options variable according to the current placement of the menu cursors in the options menu
-SetOptionsFromCursorPositions:
+SetOptionsFromCursorPositions: ; 601f (1:601f)
 	ld hl,TextSpeedOptionData
-	ld a,[wOptionsTextSpeedCursorX] ; text speed cursor X coordinate
+	ld a,[wWhichTrade] ; text speed cursor X coordinate
 	ld c,a
 .loop
 	ld a,[hli]
@@ -613,7 +599,7 @@ SetOptionsFromCursorPositions:
 .textSpeedMatchFound
 	ld a,[hl]
 	ld d,a
-	ld a,[wOptionsBattleAnimCursorX] ; battle animation cursor X coordinate
+	ld a,[wTrainerEngageDistance] ; battle animation cursor X coordinate
 	dec a
 	jr z,.battleAnimationOn
 .battleAnimationOff
@@ -622,7 +608,7 @@ SetOptionsFromCursorPositions:
 .battleAnimationOn
 	res 7,d
 .checkBattleStyle
-	ld a,[wOptionsBattleStyleCursorX] ; battle style cursor X coordinate
+	ld a,[wTrainerFacingDirection] ; battle style cursor X coordinate
 	dec a
 	jr z,.battleStyleShift
 .battleStyleSet
@@ -632,13 +618,13 @@ SetOptionsFromCursorPositions:
 	res 6,d
 .storeOptions
 	ld a,d
-	ld [wOptions],a
+	ld [W_OPTIONS],a
 	ret
 
 ; reads the options variable and places menu cursors in the correct positions within the options menu
-SetCursorPositionsFromOptions:
+SetCursorPositionsFromOptions: ; 604c (1:604c)
 	ld hl,TextSpeedOptionData + 1
-	ld a,[wOptions]
+	ld a,[W_OPTIONS]
 	ld c,a
 	and a,$3f
 	push bc
@@ -647,27 +633,27 @@ SetCursorPositionsFromOptions:
 	pop bc
 	dec hl
 	ld a,[hl]
-	ld [wOptionsTextSpeedCursorX],a ; text speed cursor X coordinate
-	coord hl, 0, 3
+	ld [wWhichTrade],a ; text speed cursor X coordinate
+	hlCoord 0, 3
 	call .placeUnfilledRightArrow
 	sla c
 	ld a,1 ; On
 	jr nc,.storeBattleAnimationCursorX
 	ld a,10 ; Off
 .storeBattleAnimationCursorX
-	ld [wOptionsBattleAnimCursorX],a ; battle animation cursor X coordinate
-	coord hl, 0, 8
+	ld [wTrainerEngageDistance],a ; battle animation cursor X coordinate
+	hlCoord 0, 8
 	call .placeUnfilledRightArrow
 	sla c
 	ld a,1
 	jr nc,.storeBattleStyleCursorX
 	ld a,10
 .storeBattleStyleCursorX
-	ld [wOptionsBattleStyleCursorX],a ; battle style cursor X coordinate
-	coord hl, 0, 13
+	ld [wTrainerFacingDirection],a ; battle style cursor X coordinate
+	hlCoord 0, 13
 	call .placeUnfilledRightArrow
 ; cursor in front of Cancel
-	coord hl, 0, 16
+	hlCoord 0, 16
 	ld a,1
 .placeUnfilledRightArrow
 	ld e,a
@@ -680,39 +666,35 @@ SetCursorPositionsFromOptions:
 ; Format:
 ; 00: X coordinate of menu cursor
 ; 01: delay after printing a letter (in frames)
-TextSpeedOptionData:
+TextSpeedOptionData: ; 6096 (1:6096)
 	db 14,5 ; Slow
 	db  7,3 ; Medium
 	db  1,1 ; Fast
 	db 7 ; default X coordinate (Medium)
 	db $ff ; terminator
 
-CheckForPlayerNameInSRAM:
-; Check if the player name data in SRAM has a string terminator character
-; (indicating that a name may have been saved there) and return whether it does
-; in carry.
-	ld a, SRAM_ENABLE
-	ld [MBC1SRamEnable], a
+Func_609e: ; 609e (1:609e)
+	ld a, $a
+	ld [$0], a
 	ld a, $1
-	ld [MBC1SRamBankingMode], a
-	ld [MBC1SRamBank], a
-	ld b, NAME_LENGTH
-	ld hl, sPlayerName
-.loop
+	ld [$6000], a
+	ld [$4000], a
+	ld b, $b
+	ld hl, $a598
+.asm_60b0
 	ld a, [hli]
-	cp "@"
-	jr z, .found
+	cp $50
+	jr z, .asm_60c1
 	dec b
-	jr nz, .loop
-; not found
+	jr nz, .asm_60b0
 	xor a
-	ld [MBC1SRamEnable], a
-	ld [MBC1SRamBankingMode], a
+	ld [$0], a
+	ld [$6000], a
 	and a
 	ret
-.found
+.asm_60c1
 	xor a
-	ld [MBC1SRamEnable], a
-	ld [MBC1SRamBankingMode], a
+	ld [$0], a
+	ld [$6000], a
 	scf
 	ret

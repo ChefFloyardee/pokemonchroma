@@ -1,16 +1,17 @@
-_SafariZoneEastText5::
-	text "Rest House"
+_SafariZoneEastText5:: ; 855e0 (21:55e0)
+	text "REST HOUSE"
 	done
 
-_SafariZoneEastText6::
-	text "Trainer Tips"
+_SafariZoneEastText6:: ; 855ec (21:55ec)
+	text "TRAINER TIPS"
 
 	para "The remaining time"
 	line "declines only"
 	cont "while you walk!"
 	done
 
-_SafariZoneEastText7::
-	text "Center Area"
-	line "North: Area 2"
+_SafariZoneEastText7:: ; 8562b (21:562b)
+	text "CENTER AREA"
+	line "NORTH: AREA 2"
 	done
+

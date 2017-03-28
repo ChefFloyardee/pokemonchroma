@@ -1,27 +1,70 @@
 Route6Mons:
 	db $0F
-	IF DEF(_RED)
-		dbw 13,ODDISH
-		dbw 13,PIDGEY
-		dbw 15,BELLSPROUT
-		dbw 10,MANKEY
-		dbw 12,MEOWTH
-		dbw 15,ODDISH
-		dbw 16,BELLSPROUT
-		dbw 16,MEOWTH
-		dbw 14,MANKEY
-		dbw 16,PIDGEOTTO
+
+	IF _RED
+		db 13,ODDISH
+		db 13,PIDGEY
+		db 15,PIDGEY
+		db 10,MANKEY
+		db 12,MANKEY
+		db 15,ODDISH
+		db 16,ODDISH
+		db 16,PIDGEY
+		db 14,MANKEY
+		db 16,MANKEY
+		db $00
 	ENDC
-	IF DEF(_BLUE)
-		dbw 13,BELLSPROUT
-		dbw 13,PIDGEY
-		dbw 15,PIDGEY
-		dbw 10,MEOWTH
-		dbw 12,MEOWTH
-		dbw 15,BELLSPROUT
-		dbw 16,BELLSPROUT
-		dbw 16,PIDGEY
-		dbw 14,MEOWTH
-		dbw 16,MEOWTH
+
+	IF _GREEN || !_JAPAN && _BLUE
+		db 13,BELLSPROUT
+		db 13,PIDGEY
+		db 15,PIDGEY
+		db 10,MEOWTH
+		db 12,MEOWTH
+		db 15,BELLSPROUT
+		db 16,BELLSPROUT
+		db 16,PIDGEY
+		db 14,MEOWTH
+		db 16,MEOWTH
+		db $00
 	ENDC
-	db $00
+
+	IF _JAPAN && _BLUE
+		db 13,ODDISH
+		db 13,PIDGEY
+		db 15,PIDGEY
+		db 10,MEOWTH
+		db 12,MEOWTH
+		db 15,ODDISH
+		db 16,ODDISH
+		db 16,PIDGEY
+		db 14,MEOWTH
+		db 16,MEOWTH
+		db $00
+	ENDC
+
+	IF _YELLOW
+		db 15,PIDGEY
+		db 14,RATTATA
+		db 7,ABRA
+		db 16,PIDGEY
+		db 16,RATTATA
+		db 17,PIDGEY
+		db 17,PIDGEOTTO
+		db 3,JIGGLYPUFF
+		db 5,JIGGLYPUFF
+		db 7,JIGGLYPUFF
+
+		db $03
+		db 15,PSYDUCK
+		db 15,PSYDUCK
+		db 15,PSYDUCK
+		db 15,PSYDUCK
+		db 15,PSYDUCK
+		db 15,PSYDUCK
+		db 15,PSYDUCK
+		db 15,PSYDUCK
+		db 15,GOLDUCK
+		db 20,GOLDUCK
+	ENDC
+

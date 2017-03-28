@@ -1,4 +1,4 @@
-EvolveTradeMon:
+EvolveTradeMon: ; 17d7d (5:7d7d)
 ; Verify the TradeMon's species name before
 ; attempting to initiate a trade evolution.
 
@@ -17,7 +17,7 @@ EvolveTradeMon:
 
 ; This was fixed in Yellow.
 
-	ld a, [wInGameTradeReceiveMonName]
+	ld a, [wTradeMonNick]
 
 	; GRAVELER
 	cp "G"
@@ -26,19 +26,19 @@ EvolveTradeMon:
 	; "SPECTRE" (HAUNTER)
 	cp "S"
 	ret nz
-	ld a, [wInGameTradeReceiveMonName + 1]
+	ld a, [wTradeMonNick + 1]
 	cp "P"
 	ret nz
 
 .ok
-	ld a, [wPartyCount]
+	ld a, [wPartyCount] ; wPartyCount
 	dec a
-	ld [wWhichPokemon], a
+	ld [wWhichPokemon], a ; wWhichPokemon
 	ld a, $1
-	ld [wForceEvolution], a
-	ld a, LINK_STATE_TRADING
-	ld [wLinkState], a
+	ld [wccd4], a
+	ld a, $32
+	ld [W_ISLINKBATTLE], a ; W_ISLINKBATTLE
 	callab TryEvolvingMon
-	xor a ; LINK_STATE_NONE
-	ld [wLinkState], a
+	xor a
+	ld [W_ISLINKBATTLE], a ; W_ISLINKBATTLE
 	jp PlayDefaultMusic

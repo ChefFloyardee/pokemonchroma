@@ -1,5 +1,5 @@
 ; see also MapHeaderPointers
-MapHeaderBanks:
+MapHeaderBanks: ; c23d (3:423d)
 	db BANK(PalletTown_h) ;PALLET_TOWN
 	db BANK(ViridianCity_h) ; VIRIDIAN_CITY
 	db BANK(PewterCity_h) ; PEWTER_CITY
@@ -239,8 +239,8 @@ MapHeaderBanks:
 	db BANK(SilphCoElevator_h)
 	db $11
 	db $11
-	db BANK(TradeCenter_h)
-	db BANK(Colosseum_h)
+	db BANK(BattleCenterM_h)
+	db BANK(TradeCenterM_h)
 	db $11
 	db $11
 	db $11

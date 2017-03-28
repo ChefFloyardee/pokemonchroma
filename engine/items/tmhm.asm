@@ -1,12 +1,12 @@
-; checks if the mon in [wWhichPokemon] already knows the move in [wMoveNum]
-CheckIfMoveIsKnown:
+; checks if the mon in wWhichPokemon already knows the move in wd0e0
+CheckIfMoveIsKnown: ; 2fe18 (b:7e18)
 	ld a, [wWhichPokemon]
 	ld hl, wPartyMon1Moves
-	ld bc, wPartyMon2 - wPartyMon1
+	ld bc, $2c
 	call AddNTimes
-	ld a, [wMoveNum]
+	ld a, [wd0e0]
 	ld b, a
-	ld c, NUM_MOVES
+	ld c, $4 ; nubmer of moves
 .loop
 	ld a, [hli]
 	cp b
@@ -21,6 +21,6 @@ CheckIfMoveIsKnown:
 	scf
 	ret
 
-AlreadyKnowsText:
+AlreadyKnowsText: ; 2fe3b (b:7e3b)
 	TX_FAR _AlreadyKnowsText
 	db "@"

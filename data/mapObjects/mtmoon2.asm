@@ -1,4 +1,4 @@
-MtMoon2Object:
+MtMoon2Object: ; 0x51a4d (size=68)
 	db $3 ; border block
 
 	db $8 ; warps
@@ -13,7 +13,7 @@ MtMoon2Object:
 
 	db $0 ; signs
 
-	db $0 ; objects
+	db $0 ; people
 
 	; warp-to
 	EVENT_DISP MT_MOON_2_WIDTH, $5, $5 ; MT_MOON_1

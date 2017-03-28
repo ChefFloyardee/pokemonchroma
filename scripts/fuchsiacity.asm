@@ -1,7 +1,7 @@
-FuchsiaCityScript:
+FuchsiaCityScript: ; 19a2b (6:5a2b)
 	jp EnableAutoTextBoxDrawing
 
-FuchsiaCityTextPointers:
+FuchsiaCityTextPointers: ; 19a2e (6:5a2e)
 	dw FuchsiaCityText1
 	dw FuchsiaCityText2
 	dw FuchsiaCityText3
@@ -27,143 +27,144 @@ FuchsiaCityTextPointers:
 	dw FuchsiaCityText23
 	dw FuchsiaCityText24
 
-FuchsiaCityText1:
+FuchsiaCityText1: ; 19a5e (6:5a5e)
 	TX_FAR _FuchsiaCityText1
 	db "@"
 
-FuchsiaCityText2:
+FuchsiaCityText2: ; 19a63 (6:5a63)
 	TX_FAR _FuchsiaCityText2
 	db "@"
 
-FuchsiaCityText3:
+FuchsiaCityText3: ; 19a68 (6:5a68)
 	TX_FAR _FuchsiaCityText3
 	db "@"
 
-FuchsiaCityText4:
+FuchsiaCityText4: ; 19a6d (6:5a6d)
 	TX_FAR _FuchsiaCityText4
 	db "@"
 
-FuchsiaCityText5:
-FuchsiaCityText6:
-FuchsiaCityText7:
-FuchsiaCityText8:
-FuchsiaCityText9:
-FuchsiaCityText10:
+FuchsiaCityText5: ; 19a72 (6:5a72)
+FuchsiaCityText6: ; 19a72 (6:5a72)
+FuchsiaCityText7: ; 19a72 (6:5a72)
+FuchsiaCityText8: ; 19a72 (6:5a72)
+FuchsiaCityText9: ; 19a72 (6:5a72)
+FuchsiaCityText10: ; 19a72 (6:5a72)
 	TX_FAR _FuchsiaCityText5
 	db "@"
 
-FuchsiaCityText12:
-FuchsiaCityText11:
+FuchsiaCityText12: ; 19a77 (6:5a77)
+FuchsiaCityText11: ; 19a77 (6:5a77)
 	TX_FAR _FuchsiaCityText11
 	db "@"
 
-FuchsiaCityText13:
+FuchsiaCityText13: ; 19a7c (6:5a7c)
 	TX_FAR _FuchsiaCityText13
 	db "@"
 
-FuchsiaCityText16:
+FuchsiaCityText16: ; 19a81 (6:5a81)
 	TX_FAR _FuchsiaCityText16
 	db "@"
 
-FuchsiaCityText17:
+FuchsiaCityText17: ; 19a86 (6:5a86)
 	TX_FAR _FuchsiaCityText17
 	db "@"
 
-FuchsiaCityText18:
+FuchsiaCityText18: ; 19a8b (6:5a8b)
 	TX_FAR _FuchsiaCityText18
 	db "@"
 
-FuchsiaCityText19:
-	TX_ASM
+FuchsiaCityText19: ; 19a90 (6:5a90)
+	db $08 ; asm
 	ld hl, FuchsiaCityChanseyText
 	call PrintText
-	ld bc, CHANSEY
+	ld a, CHANSEY
 	call DisplayPokedex
 	jp TextScriptEnd
 
-FuchsiaCityChanseyText:
+FuchsiaCityChanseyText: ; 19a9f (6:5a9f)
 	TX_FAR _FuchsiaCityChanseyText
 	db "@"
 
-FuchsiaCityText20:
-	TX_ASM
+FuchsiaCityText20: ; 19aa4 (6:5aa4)
+	db $08 ; asm
 	ld hl, FuchsiaCityVoltorbText
 	call PrintText
-	ld bc, VOLTORB
+	ld a, VOLTORB
 	call DisplayPokedex
 	jp TextScriptEnd
 
-FuchsiaCityVoltorbText:
+FuchsiaCityVoltorbText: ; 19ab3 (6:5ab3)
 	TX_FAR _FuchsiaCityVoltorbText
 	db "@"
 
-FuchsiaCityText21:
-	TX_ASM
+FuchsiaCityText21: ; 19ab8 (6:5ab8)
+	db $08 ; asm
 	ld hl, FuchsiaCityKangaskhanText
 	call PrintText
-	ld bc, KANGASKHAN
+	ld a, KANGASKHAN
 	call DisplayPokedex
 	jp TextScriptEnd
 
-FuchsiaCityKangaskhanText:
+FuchsiaCityKangaskhanText: ; 19ac7 (6:5ac7)
 	TX_FAR _FuchsiaCityKangaskhanText
 	db "@"
 
-FuchsiaCityText22:
-	TX_ASM
+FuchsiaCityText22: ; 19acc (6:5acc)
+	db $08 ; asm
 	ld hl, FuchsiaCitySlowpokeText
 	call PrintText
-	ld bc, SLOWPOKE
+	ld a, SLOWPOKE
 	call DisplayPokedex
 	jp TextScriptEnd
 
-FuchsiaCitySlowpokeText:
+FuchsiaCitySlowpokeText: ; 19adb (6:5adb)
 	TX_FAR _FuchsiaCitySlowpokeText
 	db "@"
 
-FuchsiaCityText23:
-	TX_ASM
+FuchsiaCityText23: ; 19ae0 (6:5ae0)
+	db $08 ; asm
 	ld hl, FuchsiaCityLaprasText
 	call PrintText
-	ld bc, LAPRAS
+	ld a, LAPRAS
 	call DisplayPokedex
 	jp TextScriptEnd
 
-FuchsiaCityLaprasText:
+FuchsiaCityLaprasText: ; 19aef (6:5aef)
 	TX_FAR _FuchsiaCityLaprasText
 	db "@"
 
-FuchsiaCityText24:
-	TX_ASM
-	CheckEvent EVENT_GOT_DOME_FOSSIL
-	jr nz, .asm_3b4e8
-	CheckEventReuseA EVENT_GOT_HELIX_FOSSIL
-	jr nz, .asm_667d5
+FuchsiaCityText24: ; 19af4 (6:5af4)
+	db $08 ; asm
+	ld a, [wd7f6]
+	bit 6, a
+	jr nz, .asm_3b4e8 ; 0x19afa
+	bit 7, a
+	jr nz, .asm_667d5 ; 0x19afe
 	ld hl, FuchsiaCityText_19b2a
 	call PrintText
-	jr .asm_4343f
-.asm_3b4e8
+	jr .asm_4343f ; 0x19b06
+.asm_3b4e8 ; 0x19b08
 	ld hl, FuchsiaCityOmanyteText
 	call PrintText
-	ld bc, OMANYTE
-	jr .asm_81556
-.asm_667d5
+	ld a, OMANYTE
+	jr .asm_81556 ; 0x19b10
+.asm_667d5 ; 0x19b12
 	ld hl, FuchsiaCityKabutoText
 	call PrintText
-	ld bc, KABUTO
-.asm_81556
+	ld a, KABUTO
+.asm_81556 ; 0x19b1a
 	call DisplayPokedex
-.asm_4343f
+.asm_4343f ; 0x19b1d
 	jp TextScriptEnd
 
-FuchsiaCityOmanyteText:
+FuchsiaCityOmanyteText: ; 19b20 (6:5b20)
 	TX_FAR _FuchsiaCityOmanyteText
 	db "@"
 
-FuchsiaCityKabutoText:
+FuchsiaCityKabutoText: ; 19b25 (6:5b25)
 	TX_FAR _FuchsiaCityKabutoText
 	db "@"
 
-FuchsiaCityText_19b2a:
+FuchsiaCityText_19b2a: ; 19b2a (6:5b2a)
 	TX_FAR _FuchsiaCityText_19b2a
 	db "@"

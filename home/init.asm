@@ -1,7 +1,7 @@
 SoftReset::
 	call StopAllSounds
 	call GBPalWhiteOut
-	ld c, 32
+	ld c, $20
 	call DelayFrames
 	; fallthrough
 
@@ -23,17 +23,17 @@ rLCDC_DEFAULT EQU %11100011
 	xor a
 	ld [rIF], a
 	ld [rIE], a
-	ld [rSCX], a
-	ld [rSCY], a
+	ld [$ff43], a
+	ld [$ff42], a
 	ld [rSB], a
-	ld [rSC], a
-	ld [rWX], a
-	ld [rWY], a
-	ld [rTMA], a
-	ld [rTAC], a
-	ld [rBGP], a
-	ld [rOBP0], a
-	ld [rOBP1], a
+	ld [$ff02], a
+	ld [$ff4b], a
+	ld [$ff4a], a
+	ld [$ff06], a
+	ld [$ff07], a
+	ld [$ff47], a
+	ld [$ff48], a
+	ld [$ff49], a
 
 	ld a, rLCDC_ENABLE_MASK
 	ld [rLCDC], a
@@ -66,10 +66,10 @@ rLCDC_DEFAULT EQU %11100011
 
 	xor a
 	ld [hTilesetType], a
-	ld [rSTAT], a
-	ld [hSCX], a
-	ld [hSCY], a
-	ld [rIF], a
+	ld [$ff41], a
+	ld [$ffae], a
+	ld [$ffaf], a
+	ld [$ff0f], a
 	ld a, 1 << VBLANK + 1 << TIMER + 1 << SERIAL
 	ld [rIE], a
 
@@ -79,8 +79,8 @@ rLCDC_DEFAULT EQU %11100011
 	ld a, 7
 	ld [rWX], a
 
-	ld a, CONNECTION_NOT_ESTABLISHED
-	ld [hSerialConnectionStatus], a
+	ld a, $ff
+	ld [$ffaa], a
 
 	ld h, vBGMap0 / $100
 	call ClearBgMap
@@ -97,13 +97,13 @@ rLCDC_DEFAULT EQU %11100011
 
 	predef LoadSGB
 
-	ld a, BANK(SFX_Shooting_Star)
-	ld [wAudioROMBank], a
-	ld [wAudioSavedROMBank], a
+	ld a, 0 ; BANK(SFX_1f_67)
+	ld [wc0ef], a
+	ld [wc0f0], a
 	ld a, $9c
-	ld [H_AUTOBGTRANSFERDEST + 1], a
+	ld [$ffbd], a
 	xor a
-	ld [H_AUTOBGTRANSFERDEST], a
+	ld [$ffbc], a
 	dec a
 	ld [wUpdateSpritesEnabled], a
 
@@ -126,12 +126,19 @@ ClearVram:
 
 
 StopAllSounds::
-	ld a, BANK(Audio1_UpdateMusic)
-	ld [wAudioROMBank], a
-	ld [wAudioSavedROMBank], a
+    call OpenSRAMForSound
+    ld hl, MusicPlaying
+	ld bc, (wChannelSelectorSwitches+8) - Crysaudio
+	call FillMemory
+    
+    
+    
+	ld a, 0 ; BANK(Music2_UpdateMusic)
+	ld [wc0ef], a
+	ld [wc0f0], a
 	xor a
-	ld [wAudioFadeOutControl], a
-	ld [wNewSoundID], a
-	ld [wLastMusicSoundID], a
+	ld [wMusicHeaderPointer], a
+	ld [wc0ee], a
+	ld [wcfca], a
 	dec a
 	jp PlaySound

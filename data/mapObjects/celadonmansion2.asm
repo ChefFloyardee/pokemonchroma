@@ -1,4 +1,4 @@
-CeladonMansion2Object:
+CeladonMansion2Object: ; 0x48745 (size=39)
 	db $f ; border block
 
 	db $4 ; warps
@@ -10,7 +10,7 @@ CeladonMansion2Object:
 	db $1 ; signs
 	db $9, $4, $1 ; CeladonMansion2Text1
 
-	db $0 ; objects
+	db $0 ; people
 
 	; warp-to
 	EVENT_DISP CELADON_MANSION_2_WIDTH, $1, $6 ; CELADON_MANSION_3

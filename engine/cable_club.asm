@@ -1,305 +1,294 @@
-; performs the appropriate action when the player uses the gameboy on the table in the Colosseum or Trade Center
-; In the Colosseum, it starts a battle. In the Trade Center, it displays the trade selection screen.
-; Before doing either action, it swaps random numbers, trainer names and party data with the other gameboy.
-CableClub_DoBattleOrTrade:
-	ld c, 80
+Func_5317: ; 5317 (1:5317)
+	ld c, $50
 	call DelayFrames
 	call ClearScreen
 	call UpdateSprites
 	call LoadFontTilePatterns
 	call LoadHpBarAndStatusTilePatterns
 	call LoadTrainerInfoTextBoxTiles
-	coord hl, 3, 8
-	ld b, 2
-	ld c, 12
-	call CableClub_TextBoxBorder
-	coord hl, 4, 10
-	ld de, PleaseWaitString
+	hlCoord 3, 8
+	ld b, $2
+	ld c, $c
+	call Func_5ab3
+	hlCoord 4, 10
+	ld de, PleaseWaitString ; $550f
 	call PlaceString
-	ld hl, wPlayerNumHits
+	ld hl, W_NUMHITS ; wd074
 	xor a
 	ld [hli], a
 	ld [hl], $50
-	; fall through
 
-; This is called after completing a trade.
-CableClub_DoBattleOrTradeAgain:
-	ld hl, wSerialPlayerDataBlock
-	ld a, SERIAL_PREAMBLE_BYTE
-	ld b, 6
-.writePlayerDataBlockPreambleLoop
+Func_5345: ; 5345
+	ld hl, wd152
+	ld a, $fd
+	ld b, $6
+.asm_534c
 	ld [hli], a
 	dec b
-	jr nz, .writePlayerDataBlockPreambleLoop
-	ld hl, wSerialRandomNumberListBlock
-	ld a, SERIAL_PREAMBLE_BYTE
-	ld b, 7
-.writeRandomNumberListPreambleLoop
+	jr nz, .asm_534c
+	ld hl, wd141
+	ld a, $fd
+	ld b, $7
+.asm_5357
 	ld [hli], a
 	dec b
-	jr nz, .writeRandomNumberListPreambleLoop
-	ld b, 10
-.generateRandomNumberListLoop
+	jr nz, .asm_5357
+	ld b, $a
+.asm_535d
 	call Random
-	cp SERIAL_PREAMBLE_BYTE ; all the random numbers have to be less than the preamble byte
-	jr nc, .generateRandomNumberListLoop
+	cp $fd
+	jr nc, .asm_535d
 	ld [hli], a
 	dec b
-	jr nz, .generateRandomNumberListLoop
-	ld hl, wSerialPartyMonsPatchList
-	ld a, SERIAL_PREAMBLE_BYTE
+	jr nz, .asm_535d
+	ld hl, wTileMapBackup
+	ld a, $fd
 	ld [hli], a
 	ld [hli], a
 	ld [hli], a
 	ld b, $c8
 	xor a
-.zeroPlayerDataPatchListLoop
+.asm_5373
 	ld [hli], a
 	dec b
-	jr nz, .zeroPlayerDataPatchListLoop
-	ld hl, wGrassRate
-	ld bc, wTrainerHeaderPtr - wGrassRate
-.zeroEnemyPartyLoop
+	jr nz, .asm_5373
+	ld hl, W_GRASSRATE ; W_GRASSRATE
+	ld bc, $1a9
+.asm_537d
 	xor a
 	ld [hli], a
 	dec bc
 	ld a, b
 	or c
-	jr nz, .zeroEnemyPartyLoop
+	jr nz, .asm_537d
 	ld hl, wPartyMons - 1
-	ld de, wSerialPartyMonsPatchList + 10
-	ld bc, 0
-.patchPartyMonsLoop
+	ld de, wTileMapBackup + 10
+	ld bc, $0
+.asm_538d
 	inc c
 	ld a, c
-	cp SERIAL_PREAMBLE_BYTE
-	jr z, .startPatchListPart2
+	cp $fd
+	jr z, .asm_53a9
 	ld a, b
-	dec a ; are we in part 2 of the patch list?
-	jr nz, .checkPlayerDataByte ; jump if in part 1
-; if we're in part 2
+	dec a
+	jr nz, .asm_539c
 	ld a, c
-	cp (wPartyMonOT - (wPartyMons - 1)) - (SERIAL_PREAMBLE_BYTE - 1)
-	jr z, .finishedPatchingPlayerData
-.checkPlayerDataByte
+	cp $d
+	jr z, .asm_53b2
+.asm_539c
 	inc hl
 	ld a, [hl]
-	cp SERIAL_NO_DATA_BYTE
-	jr nz, .patchPartyMonsLoop
-; if the player data byte matches SERIAL_NO_DATA_BYTE, patch it with $FF and record the offset in the patch list
+	cp $fe
+	jr nz, .asm_538d
 	ld a, c
 	ld [de], a
 	inc de
 	ld [hl], $ff
-	jr .patchPartyMonsLoop
-.startPatchListPart2
-	ld a, SERIAL_PATCH_LIST_PART_TERMINATOR
-	ld [de], a ; end of part 1
+	jr .asm_538d
+.asm_53a9
+	ld a, $ff
+	ld [de], a
 	inc de
-	lb bc, 1, 0
-	jr .patchPartyMonsLoop
-.finishedPatchingPlayerData
-	ld a, SERIAL_PATCH_LIST_PART_TERMINATOR
-	ld [de], a ; end of part 2
-	call Serial_SyncAndExchangeNybble
-	ld a, [hSerialConnectionStatus]
-	cp USING_INTERNAL_CLOCK
-	jr nz, .skipSendingTwoZeroBytes
-; if using internal clock
-; send two zero bytes for syncing purposes?
+	ld bc, $100
+	jr .asm_538d
+.asm_53b2
+	ld a, $ff
+	ld [de], a
+	call Func_227f
+	ld a, [$ffaa]
+	cp $2
+	jr nz, .asm_53d2
 	call Delay3
 	xor a
-	ld [hSerialSendData], a
-	ld a, START_TRANSFER_INTERNAL_CLOCK
-	ld [rSC], a
+	ld [$ffac], a
+	ld a, $81
+	ld [$ff02], a
 	call DelayFrame
 	xor a
-	ld [hSerialSendData], a
-	ld a, START_TRANSFER_INTERNAL_CLOCK
-	ld [rSC], a
-.skipSendingTwoZeroBytes
+	ld [$ffac], a
+	ld a, $81
+	ld [$ff02], a
+.asm_53d2
 	call Delay3
-	ld a, (1 << SERIAL)
-	ld [rIE], a
-	ld hl, wSerialRandomNumberListBlock
-	ld de, wSerialOtherGameboyRandomNumberListBlock
+	ld a, $8
+	ld [rIE], a ; $ffff
+	ld hl, wd141
+	ld de, wTileMapBackup2
 	ld bc, $11
-	call Serial_ExchangeBytes
-	ld a, SERIAL_NO_DATA_BYTE
+	call Func_216f
+	ld a, $fe
 	ld [de], a
-	ld hl, wSerialPlayerDataBlock
-	ld de, wSerialEnemyDataBlock
+	ld hl, wd152
+	ld de, wd893
 	ld bc, $1a8
-	call Serial_ExchangeBytes
-	ld a, SERIAL_NO_DATA_BYTE
+	call Func_216f
+	ld a, $fe
 	ld [de], a
-	ld hl, wSerialPartyMonsPatchList
-	ld de, wSerialEnemyMonsPatchList
+	ld hl, wTileMapBackup
+	ld de, wTileMapBackup + 200
 	ld bc, $c8
-	call Serial_ExchangeBytes
-	ld a, (1 << SERIAL) | (1 << TIMER) | (1 << VBLANK)
-	ld [rIE], a
+	call Func_216f
+	ld a, $d
+	ld [rIE], a ; $ffff
 	ld a, $ff
 	call PlaySound
-	ld a, [hSerialConnectionStatus]
-	cp USING_INTERNAL_CLOCK
-	jr z, .skipCopyingRandomNumberList ; the list generated by the gameboy clocking the connection is used by both gameboys
-	ld hl, wSerialOtherGameboyRandomNumberListBlock
-.findStartOfRandomNumberListLoop
+	ld a, [$ffaa]
+	cp $2
+	jr z, .asm_5431
+	ld hl, wTileMapBackup2
+.asm_5415
 	ld a, [hli]
 	and a
-	jr z, .findStartOfRandomNumberListLoop
-	cp SERIAL_PREAMBLE_BYTE
-	jr z, .findStartOfRandomNumberListLoop
-	cp SERIAL_NO_DATA_BYTE
-	jr z, .findStartOfRandomNumberListLoop
+	jr z, .asm_5415
+	cp $fd
+	jr z, .asm_5415
+	cp $fe
+	jr z, .asm_5415
 	dec hl
-	ld de, wLinkBattleRandomNumberList
-	ld c, 10
-.copyRandomNumberListLoop
+	ld de, wd148
+	ld c, $a
+.asm_5427
 	ld a, [hli]
-	cp SERIAL_NO_DATA_BYTE
-	jr z, .copyRandomNumberListLoop
+	cp $fe
+	jr z, .asm_5427
 	ld [de], a
 	inc de
 	dec c
-	jr nz, .copyRandomNumberListLoop
-.skipCopyingRandomNumberList
-	ld hl, wSerialEnemyDataBlock + 3
-.findStartOfEnemyNameLoop
+	jr nz, .asm_5427
+.asm_5431
+	ld hl, wd896
+.asm_5434
 	ld a, [hli]
 	and a
-	jr z, .findStartOfEnemyNameLoop
-	cp SERIAL_PREAMBLE_BYTE
-	jr z, .findStartOfEnemyNameLoop
-	cp SERIAL_NO_DATA_BYTE
-	jr z, .findStartOfEnemyNameLoop
+	jr z, .asm_5434
+	cp $fd
+	jr z, .asm_5434
+	cp $fe
+	jr z, .asm_5434
 	dec hl
-	ld de, wLinkEnemyTrainerName
-	ld c, NAME_LENGTH
-.copyEnemyNameLoop
+	ld de, W_GRASSRATE ; W_GRASSRATE
+	ld c, $b
+.asm_5446
 	ld a, [hli]
-	cp SERIAL_NO_DATA_BYTE
-	jr z, .copyEnemyNameLoop
+	cp $fe
+	jr z, .asm_5446
 	ld [de], a
 	inc de
 	dec c
-	jr nz, .copyEnemyNameLoop
-	ld de, wEnemyPartyCount
-	ld bc, wTrainerHeaderPtr - wEnemyPartyCount
-.copyEnemyPartyLoop
+	jr nz, .asm_5446
+	ld de, wEnemyPartyCount ; wEnemyPartyCount
+	ld bc, $194
+.asm_5456
 	ld a, [hli]
-	cp SERIAL_NO_DATA_BYTE
-	jr z, .copyEnemyPartyLoop
+	cp $fe
+	jr z, .asm_5456
 	ld [de], a
 	inc de
 	dec bc
 	ld a, b
 	or c
-	jr nz, .copyEnemyPartyLoop
-	ld de, wSerialPartyMonsPatchList
+	jr nz, .asm_5456
+	ld de, wTileMapBackup
 	ld hl, wPartyMons
-	ld c, 2 ; patch list has 2 parts
-.unpatchPartyMonsLoop
+	ld c, $2
+.asm_546a
 	ld a, [de]
 	inc de
 	and a
-	jr z, .unpatchPartyMonsLoop
-	cp SERIAL_PREAMBLE_BYTE
-	jr z, .unpatchPartyMonsLoop
-	cp SERIAL_NO_DATA_BYTE
-	jr z, .unpatchPartyMonsLoop
-	cp SERIAL_PATCH_LIST_PART_TERMINATOR
-	jr z, .finishedPartyMonsPatchListPart
+	jr z, .asm_546a
+	cp $fd
+	jr z, .asm_546a
+	cp $fe
+	jr z, .asm_546a
+	cp $ff
+	jr z, .asm_5489
 	push hl
 	push bc
 	ld b, 0
 	dec a
 	ld c, a
 	add hl, bc
-	ld a, SERIAL_NO_DATA_BYTE
+	ld a, $fe
 	ld [hl], a
 	pop bc
 	pop hl
-	jr .unpatchPartyMonsLoop
-.finishedPartyMonsPatchListPart
-	ld hl, wPartyMons + (SERIAL_PREAMBLE_BYTE - 1)
-	dec c ; is there another part?
-	jr nz, .unpatchPartyMonsLoop
-	ld de, wSerialEnemyMonsPatchList
-	ld hl, wEnemyMons
-	ld c, 2 ; patch list has 2 parts
-.unpatchEnemyMonsLoop
-	ld a, [de]
-	inc de
-	and a
-	jr z, .unpatchEnemyMonsLoop
-	cp SERIAL_PREAMBLE_BYTE
-	jr z, .unpatchEnemyMonsLoop
-	cp SERIAL_NO_DATA_BYTE
-	jr z, .unpatchEnemyMonsLoop
-	cp SERIAL_PATCH_LIST_PART_TERMINATOR
-	jr z, .finishedEnemyMonsPatchListPart
-	push hl
-	push bc
-	ld b, 0
-	dec a
-	ld c, a
-	add hl, bc
-	ld a, SERIAL_NO_DATA_BYTE
-	ld [hl], a
-	pop bc
-	pop hl
-	jr .unpatchEnemyMonsLoop
-.finishedEnemyMonsPatchListPart
-	ld hl, wEnemyMons + (SERIAL_PREAMBLE_BYTE - 1)
+	jr .asm_546a
+.asm_5489
+	ld hl, wPartyMons + $fc ; wd267
 	dec c
-	jr nz, .unpatchEnemyMonsLoop
-	ld a, wEnemyMonOT % $100
-	ld [wUnusedCF8D], a
-	ld a, wEnemyMonOT / $100
-	ld [wUnusedCF8D + 1], a
+	jr nz, .asm_546a
+	ld de, wTileMapBackup + 200
+	ld hl, wEnemyMons
+	ld c, $2
+.asm_5497
+	ld a, [de]
+	inc de
+	and a
+	jr z, .asm_5497
+	cp $fd
+	jr z, .asm_5497
+	cp $fe
+	jr z, .asm_5497
+	cp $ff
+	jr z, .asm_54b6
+	push hl
+	push bc
+	ld b, $0
+	dec a
+	ld c, a
+	add hl, bc
+	ld a, $fe
+	ld [hl], a
+	pop bc
+	pop hl
+	jr .asm_5497
+.asm_54b6
+	ld hl, wEnemyMons + $fc
+	dec c
+	jr nz, .asm_5497
+	ld a, $ac
+	ld [wcf8d], a
+	ld a, $d9
+	ld [wcf8e], a
 	xor a
-	ld [wTradeCenterPointerTableIndex], a
+	ld [wcc38], a
 	ld a, $ff
 	call PlaySound
-	ld a, [hSerialConnectionStatus]
-	cp USING_INTERNAL_CLOCK
-	ld c, 66
-	call z, DelayFrames ; delay if using internal clock
-	ld a, [wLinkState]
-	cp LINK_STATE_START_BATTLE
-	ld a, LINK_STATE_TRADING
-	ld [wLinkState], a
-	jr nz, .trading
-	ld a, LINK_STATE_BATTLING
-	ld [wLinkState], a
-	ld a, SONY1
-	ld [wCurOpponent], a
-	ld a, $FF
- 	ld [wCurOpponent + 1], a
+	ld a, [$ffaa]
+	cp $2
+	ld c, $42
+	call z, DelayFrames
+	ld a, [W_ISLINKBATTLE] ; W_ISLINKBATTLE
+	cp $3
+	ld a, $32
+	ld [W_ISLINKBATTLE], a ; W_ISLINKBATTLE
+	jr nz, .asm_5506
+	ld a, $4
+	ld [W_ISLINKBATTLE], a ; W_ISLINKBATTLE
+	ld a, SONY1 + $c8
+	ld [W_CUROPPONENT], a ; wd059
 	call ClearScreen
 	call Delay3
-	ld hl, wOptions
+	ld hl, W_OPTIONS ; W_OPTIONS
 	res 7, [hl]
 	predef InitOpponent
 	predef HealParty
-	jp ReturnToCableClubRoom
-.trading
-	ld c, BANK(Music_GameCorner)
+	jp Func_577d
+.asm_5506
+	ld c, 0 ; 0 ; BANK(Music_GameCorner)
 	ld a, MUSIC_GAME_CORNER
 	call PlayMusic
-	jr CallCurrentTradeCenterFunction
+	jr Func_551c
 
-PleaseWaitString:
+PleaseWaitString: ; 550f (1:550f)
 	db "PLEASE WAIT!@"
 
-CallCurrentTradeCenterFunction:
-	ld hl, TradeCenterPointerTable
-	ld b, 0
-	ld a, [wTradeCenterPointerTableIndex]
+Func_551c:
+	ld hl, PointerTable_5a5b ; $5a5b
+	ld b, $0
+	ld a, [wcc38]
 	cp $ff
-	jp z, DisplayTitleScreen
+	jp z, LoadTitlescreenGraphics
 	add a
 	ld c, a
 	add hl, bc
@@ -311,66 +300,64 @@ CallCurrentTradeCenterFunction:
 TradeCenter_SelectMon:
 	call ClearScreen
 	call LoadTrainerInfoTextBoxTiles
-	call TradeCenter_DrawPartyLists
-	call TradeCenter_DrawCancelBox
+	call Func_57f2
+	call Func_57a2
 	xor a
-	ld hl, wSerialSyncAndExchangeNybbleReceiveData
+	ld hl, wcc3d
 	ld [hli], a
 	ld [hli], a
 	ld [hli], a
 	ld [hl], a
-	ld [wMenuWatchMovingOutOfBounds], a
+	ld [wcc37], a
 	ld [wCurrentMenuItem], a
 	ld [wLastMenuItem], a
 	ld [wMenuJoypadPollCount], a
 	inc a
-	ld [wSerialExchangeNybbleSendData], a
-	jp .playerMonMenu
-.enemyMonMenu
+	ld [wcc42], a
+	jp .asm_55dc
+.asm_5557
 	xor a
-	ld [wMenuWatchMovingOutOfBounds], a
+	ld [wcc37], a
 	inc a
-	ld [wWhichTradeMonSelectionMenu], a
-	ld a, D_DOWN | D_LEFT | A_BUTTON
+	ld [wcc49], a
+	ld a, $a1
 	ld [wMenuWatchedKeys], a
 	ld a, [wEnemyPartyCount]
 	ld [wMaxMenuItem], a
-	ld a, 9
+	ld a, $9
 	ld [wTopMenuItemY], a
-	ld a, 1
+	ld a, $1
 	ld [wTopMenuItemX], a
-.enemyMonMenu_HandleInput
-	ld hl, hFlags_0xFFF6
+.asm_5574
+	ld hl, $fff6
 	set 1, [hl]
 	call HandleMenuInput
-	ld hl, hFlags_0xFFF6
+	ld hl, $fff6
 	res 1, [hl]
 	and a
-	jp z, .getNewInput
-	bit 0, a ; A button pressed?
-	jr z, .enemyMonMenu_ANotPressed
-; if A button pressed
+	jp z, .asm_565b
+	bit 0, a
+	jr z, .asm_55b0 ; 0x5587 $27
 	ld a, [wMaxMenuItem]
 	ld c, a
 	ld a, [wCurrentMenuItem]
 	cp c
-	jr c, .displayEnemyMonStats
+	jr c, .asm_559a ; 0x5591 $7
 	ld a, [wMaxMenuItem]
 	dec a
 	ld [wCurrentMenuItem], a
-.displayEnemyMonStats
-	ld a, INIT_ENEMYOT_LIST
-	ld [wInitListType], a
-	callab InitList ; the list isn't used
+.asm_559a
+	ld a, $1
+	ld [wd11b], a
+	callab Func_39bd5
 	ld hl, wEnemyMons
-	call TradeCenter_DisplayStats
-	jp .getNewInput
-.enemyMonMenu_ANotPressed
-	bit 5, a ; Left pressed?
-	jr z, .enemyMonMenu_LeftNotPressed
-; if Left pressed, switch back to the player mon menu
-	xor a ; player mon menu
-	ld [wWhichTradeMonSelectionMenu], a
+	call Func_57d6
+	jp .asm_565b
+.asm_55b0
+	bit 5, a
+	jr z, .asm_55d4 ; 0x55b2 $20
+	xor a
+	ld [wcc49], a
 	ld a, [wMenuCursorLocation]
 	ld l, a
 	ld a, [wMenuCursorLocation + 1]
@@ -382,53 +369,51 @@ TradeCenter_SelectMon:
 	ld a, [wPartyCount]
 	dec a
 	cp b
-	jr nc, .playerMonMenu
+	jr nc, .asm_55dc ; 0x55cd $d
 	ld [wCurrentMenuItem], a
-	jr .playerMonMenu
-.enemyMonMenu_LeftNotPressed
-	bit 7, a ; Down pressed?
-	jp z, .getNewInput
-	jp .selectedCancelMenuItem ; jump if Down pressed
-.playerMonMenu
-	xor a ; player mon menu
-	ld [wWhichTradeMonSelectionMenu], a
-	ld [wMenuWatchMovingOutOfBounds], a
-	ld a, D_DOWN | D_RIGHT | A_BUTTON
+	jr .asm_55dc ; 0x55d2 $8
+.asm_55d4
+	bit 7, a
+	jp z, .asm_565b
+	jp .asm_572f
+.asm_55dc
+	xor a
+	ld [wcc49], a
+	ld [wcc37], a
+	ld a, $91
 	ld [wMenuWatchedKeys], a
 	ld a, [wPartyCount]
 	ld [wMaxMenuItem], a
-	ld a, 1
+	ld a, $1
 	ld [wTopMenuItemY], a
-	ld a, 1
+	ld a, $1
 	ld [wTopMenuItemX], a
-	coord hl, 1, 1
-	lb bc, 6, 1
+	ld hl, wTileMap + $15
+	ld bc, $0601
 	call ClearScreenArea
-.playerMonMenu_HandleInput
-	ld hl, hFlags_0xFFF6
+.asm_5601
+	ld hl, $fff6
 	set 1, [hl]
 	call HandleMenuInput
-	ld hl, hFlags_0xFFF6
+	ld hl, $fff6
 	res 1, [hl]
-	and a ; was anything pressed?
-	jr nz, .playerMonMenu_SomethingPressed
-	jp .getNewInput
-.playerMonMenu_SomethingPressed
-	bit 0, a ; A button pressed?
-	jr z, .playerMonMenu_ANotPressed
-	jp .chosePlayerMon ; jump if A button pressed
-; unreachable code
-	ld a, INIT_PLAYEROT_LIST
-	ld [wInitListType], a
-	callab InitList ; the list isn't used
-	call TradeCenter_DisplayStats
-	jp .getNewInput
-.playerMonMenu_ANotPressed
-	bit 4, a ; Right pressed?
-	jr z, .playerMonMenu_RightNotPressed
-; if Right pressed, switch to the enemy mon menu
-	ld a, $1 ; enemy mon menu
-	ld [wWhichTradeMonSelectionMenu], a
+	and a
+	jr nz, .asm_5614 ; 0x560f $3
+	jp .asm_565b
+.asm_5614
+	bit 0, a
+	jr z, .asm_562e ; 0x5616 $16
+	jp .asm_5665
+	ld a, $4
+	ld [wd11b], a
+	callab Func_39bd5
+	call Func_57d6
+	jp .asm_565b
+.asm_562e
+	bit 4, a
+	jr z, .asm_5654 ; 0x5630 $22
+	ld a, $1
+	ld [wcc49], a
 	ld a, [wMenuCursorLocation]
 	ld l, a
 	ld a, [wMenuCursorLocation + 1]
@@ -440,37 +425,36 @@ TradeCenter_SelectMon:
 	ld a, [wEnemyPartyCount]
 	dec a
 	cp b
-	jr nc, .notPastLastEnemyMon
-; when switching to the enemy mon menu, if the menu selection would be past the last enemy mon, select the last enemy mon
+	jr nc, .asm_5651 ; 0x564c $3
 	ld [wCurrentMenuItem], a
-.notPastLastEnemyMon
-	jp .enemyMonMenu
-.playerMonMenu_RightNotPressed
-	bit 7, a ; Down pressed?
-	jr z, .getNewInput
-	jp .selectedCancelMenuItem ; jump if Down pressed
-.getNewInput
-	ld a, [wWhichTradeMonSelectionMenu]
+.asm_5651
+	jp .asm_5557
+.asm_5654
+	bit 7, a
+	jr z, .asm_565b ; 0x5656 $3
+	jp .asm_572f
+.asm_565b
+	ld a, [wcc49]
 	and a
-	jp z, .playerMonMenu_HandleInput
-	jp .enemyMonMenu_HandleInput
-.chosePlayerMon
+	jp z, .asm_5601
+	jp .asm_5574
+.asm_5665
 	call SaveScreenTilesToBuffer1
 	call PlaceUnfilledArrowMenuCursor
 	ld a, [wMaxMenuItem]
 	ld c, a
 	ld a, [wCurrentMenuItem]
 	cp c
-	jr c, .displayStatsTradeMenu
+	jr c, .asm_5679 ; 0x5673 $4
 	ld a, [wMaxMenuItem]
 	dec a
-.displayStatsTradeMenu
+.asm_5679
 	push af
-	coord hl, 0, 14
-	ld b, 2
-	ld c, 18
-	call CableClub_TextBoxBorder
-	coord hl, 2, 16
+	ld hl, wTileMap + $118
+	ld b, $2
+	ld c, $12
+	call Func_5ab3
+	ld hl, wTileMap + $142
 	ld de, .statsTrade
 	call PlaceString
 	xor a
@@ -478,109 +462,107 @@ TradeCenter_SelectMon:
 	ld [wLastMenuItem], a
 	ld [wMenuJoypadPollCount], a
 	ld [wMaxMenuItem], a
-	ld a, 16
+	ld a, $10
 	ld [wTopMenuItemY], a
-.selectStatsMenuItem
-	ld a, " "
-	Coorda 11, 16
-	ld a, D_RIGHT | B_BUTTON | A_BUTTON
+.asm_569f
+	ld a, $7f
+	ld [wTileMap + $14b], a
+	ld a, $13
 	ld [wMenuWatchedKeys], a
-	ld a, 1
+	ld a, $1
 	ld [wTopMenuItemX], a
 	call HandleMenuInput
-	bit 4, a ; Right pressed?
-	jr nz, .selectTradeMenuItem
-	bit 1, a ; B button pressed?
-	jr z, .displayPlayerMonStats
-.cancelPlayerMonChoice
+	bit 4, a
+	jr nz, .asm_56c3 ; 0x56b3 $e
+	bit 1, a
+	jr z, .asm_56df ; 0x56b7 $26
+.asm_56b9
 	pop af
 	ld [wCurrentMenuItem], a
 	call LoadScreenTilesFromBuffer1
-	jp .playerMonMenu
-.selectTradeMenuItem
-	ld a, " "
-	Coorda 1, 16
-	ld a, D_LEFT | B_BUTTON | A_BUTTON
+	jp .asm_55dc
+.asm_56c3
+	ld a, $7f
+	ld [wTileMap + $141], a
+	ld a, $23
 	ld [wMenuWatchedKeys], a
-	ld a, 11
+	ld a, $b
 	ld [wTopMenuItemX], a
 	call HandleMenuInput
-	bit 5, a ; Left pressed?
-	jr nz, .selectStatsMenuItem
-	bit 1, a ; B button pressed?
-	jr nz, .cancelPlayerMonChoice
-	jr .choseTrade
-.displayPlayerMonStats
+	bit 5, a
+	jr nz, .asm_569f ; 0x56d7 $c6
+	bit 1, a
+	jr nz, .asm_56b9 ; 0x56db $dc
+	jr .asm_56f9 ; 0x56dd $1a
+.asm_56df
 	pop af
 	ld [wCurrentMenuItem], a
-	ld a, INIT_PLAYEROT_LIST
-	ld [wInitListType], a
-	callab InitList ; the list isn't used
-	call TradeCenter_DisplayStats
+	ld a, $4
+	ld [wd11b], a
+	callab Func_39bd5
+	call Func_57d6
 	call LoadScreenTilesFromBuffer1
-	jp .playerMonMenu
-.choseTrade
+	jp .asm_55dc
+.asm_56f9
 	call PlaceUnfilledArrowMenuCursor
 	pop af
 	ld [wCurrentMenuItem], a
-	ld [wTradingWhichPlayerMon], a
-	ld [wSerialExchangeNybbleSendData], a
-	call Serial_PrintWaitingTextAndSyncAndExchangeNybble
-	ld a, [wSerialSyncAndExchangeNybbleReceiveData]
+	ld [wWhichTrade], a
+	ld [wcc42], a
+	call Func_226e
+	ld a, [wcc3d]
 	cp $f
-	jp z, CallCurrentTradeCenterFunction ; go back to the beginning of the trade selection menu if the other person cancelled
-	ld [wTradingWhichEnemyMon], a
-	call TradeCenter_PlaceSelectedEnemyMonMenuCursor
-	ld a, $1 ; TradeCenter_Trade
-	ld [wTradeCenterPointerTableIndex], a
-	jp CallCurrentTradeCenterFunction
+	jp z, Func_551c
+	ld [wTrainerEngageDistance], a
+	call Func_57c7
+	ld a, $1
+	ld [wcc38], a
+	jp Func_551c
 .statsTrade
 	db "STATS     TRADE@"
-.selectedCancelMenuItem
+.asm_572f
 	ld a, [wCurrentMenuItem]
 	ld b, a
 	ld a, [wMaxMenuItem]
 	cp b
-	jp nz, .getNewInput
+	jp nz, .asm_565b
 	ld a, [wMenuCursorLocation]
 	ld l, a
 	ld a, [wMenuCursorLocation + 1]
 	ld h, a
-	ld a, " "
+	ld a, $7f
 	ld [hl], a
-.cancelMenuItem_Loop
-	ld a, "▶" ; filled arrow cursor
-	Coorda 1, 16
-.cancelMenuItem_JoypadLoop
+.asm_5745
+	ld a, $ed
+	ld [wTileMap + $141], a
+.asm_574a
 	call JoypadLowSensitivity
 	ld a, [hJoy5]
-	and a ; pressed anything?
-	jr z, .cancelMenuItem_JoypadLoop
-	bit 0, a ; A button pressed?
-	jr nz, .cancelMenuItem_APressed
-	bit 6, a ; Up pressed?
-	jr z, .cancelMenuItem_JoypadLoop
-; if Up pressed
-	ld a, " "
-	Coorda 1, 16
+	and a
+	jr z, .asm_574a ; 0x5750 $f8
+	bit 0, a
+	jr nz, .asm_5769 ; 0x5754 $13
+	bit 6, a
+	jr z, .asm_574a ; 0x5758 $f0
+	ld a, $7f
+	ld [wTileMap + $141], a
 	ld a, [wPartyCount]
 	dec a
 	ld [wCurrentMenuItem], a
-	jp .playerMonMenu
-.cancelMenuItem_APressed
-	ld a, "▷" ; unfilled arrow cursor
-	Coorda 1, 16
+	jp .asm_55dc
+.asm_5769
+	ld a, $ec
+	ld [wTileMap + $141], a
 	ld a, $f
-	ld [wSerialExchangeNybbleSendData], a
-	call Serial_PrintWaitingTextAndSyncAndExchangeNybble
-	ld a, [wSerialSyncAndExchangeNybbleReceiveData]
-	cp $f ; did the other person choose Cancel too?
-	jr nz, .cancelMenuItem_Loop
-	; fall through
+	ld [wcc42], a
+	call Func_226e
+	ld a, [wcc3d]
+	cp $f
+	jr nz, .asm_5745 ; 0x577b $c8
 
-ReturnToCableClubRoom:
+Func_577d: ; 577d (1:577d)
 	call GBPalWhiteOutWithDelay3
-	ld hl, wFontLoaded
+	ld hl, wcfc4
 	ld a, [hl]
 	push af
 	push hl
@@ -590,72 +572,71 @@ ReturnToCableClubRoom:
 	dec a
 	ld [wDestinationWarpID], a
 	call LoadMapData
-	callba ClearVariablesOnEnterMap
+	callba ClearVariablesAfterLoadingMapData
 	pop hl
 	pop af
 	ld [hl], a
 	call GBFadeInFromWhite
 	ret
 
-TradeCenter_DrawCancelBox:
-	coord hl, 11, 15
+Func_57a2:
+	ld hl, wTileMap + $137
 	ld a, $7e
-	ld bc, 2 * SCREEN_WIDTH + 9
+	ld bc, $0031
 	call FillMemory
-	coord hl, 0, 15
-	ld b, 1
-	ld c, 9
-	call CableClub_TextBoxBorder
-	coord hl, 2, 16
+	ld hl, wTileMap + $12c
+	ld b, $1
+	ld c, $9
+	call Func_5ab3
+	ld hl, wTileMap + $142
 	ld de, CancelTextString
 	jp PlaceString
 
 CancelTextString:
 	db "CANCEL@"
 
-TradeCenter_PlaceSelectedEnemyMonMenuCursor:
-	ld a, [wSerialSyncAndExchangeNybbleReceiveData]
-	coord hl, 1, 9
-	ld bc, SCREEN_WIDTH
+Func_57c7:
+	ld a, [wcc3d]
+	ld hl, wTileMap + $b5
+	ld bc, $0014
 	call AddNTimes
-	ld [hl], "▷" ; cursor
+	ld [hl], $ec
 	ret
 
-TradeCenter_DisplayStats:
+Func_57d6:
 	ld a, [wCurrentMenuItem]
 	ld [wWhichPokemon], a
 	predef StatusScreen
 	predef StatusScreen2
 	call GBPalNormal
 	call LoadTrainerInfoTextBoxTiles
-	call TradeCenter_DrawPartyLists
-	jp TradeCenter_DrawCancelBox
+	call Func_57f2
+	jp Func_57a2
 
-TradeCenter_DrawPartyLists:
-	coord hl, 0, 0
-	ld b, 6
-	ld c, 18
-	call CableClub_TextBoxBorder
-	coord hl, 0, 8
-	ld b, 6
-	ld c, 18
-	call CableClub_TextBoxBorder
-	coord hl, 5, 0
+Func_57f2:
+	ld hl, wTileMap
+	ld b, $6
+	ld c, $12
+	call Func_5ab3
+	ld hl, wTileMap + $a0
+	ld b, $6
+	ld c, $12
+	call Func_5ab3
+	ld hl, wTileMap + $5
 	ld de, wPlayerName
 	call PlaceString
-	coord hl, 5, 8
-	ld de, wLinkEnemyTrainerName
+	ld hl, wTileMap + $a5
+	ld de, W_GRASSRATE
 	call PlaceString
-	coord hl, 2, 1
+	ld hl, wTileMap + $16
 	ld de, wPartySpecies
-	call TradeCenter_PrintPartyListNames
-	coord hl, 2, 9
+	call Func_5827
+	ld hl, wTileMap + $b6
 	ld de, wEnemyPartyMons
-	; fall through
 
-TradeCenter_PrintPartyListNames:
+Func_5827:
 	ld c, $0
-.loop
+.asm_5829
 	ld a, [de]
 	cp $ff
 	ret z
@@ -672,208 +653,207 @@ TradeCenter_PrintPartyListNames:
 	pop de
 	inc de
 	pop hl
-	ld bc, 20
+	ld bc, $0014
 	add hl, bc
 	pop bc
 	inc c
-	jr .loop
+	jr .asm_5829 ; 0x5847 $e0
 
 TradeCenter_Trade:
-	ld c, 100
+	ld c, $64
 	call DelayFrames
 	xor a
-	ld [wSerialExchangeNybbleSendData + 1], a ; unnecessary
-	ld [wSerialExchangeNybbleReceiveData], a
-	ld [wMenuWatchMovingOutOfBounds], a
+	ld [wcc43], a
+	ld [wcc3e], a
+	ld [wcc37], a
 	ld [wMenuJoypadPollCount], a
-	coord hl, 0, 12
-	ld b, 4
-	ld c, 18
-	call CableClub_TextBoxBorder
-	ld a, [wTradingWhichPlayerMon]
+	ld hl, wTileMap + $f0
+	ld b, $4
+	ld c, $12
+	call Func_5ab3
+	ld a, [wWhichTrade]
 	ld hl, wPartySpecies
 	ld c, a
-	ld b, 0
+	ld b, $0
 	add hl, bc
 	ld a, [hl]
 	ld [wd11e], a
 	call GetMonName
 	ld hl, wcd6d
-	ld de, wNameOfPlayerMonToBeTraded
-	ld bc, NAME_LENGTH
+	ld de, wTrainerFacingDirection
+	ld bc, $000b
 	call CopyData
-	ld a, [wTradingWhichEnemyMon]
+	ld a, [wTrainerEngageDistance]
 	ld hl, wEnemyPartyMons
 	ld c, a
-	ld b, 0
+	ld b, $0
 	add hl, bc
 	ld a, [hl]
 	ld [wd11e], a
 	call GetMonName
 	ld hl, WillBeTradedText
-	coord bc, 1, 14
+	ld bc, wTileMap + $119
 	call TextCommandProcessor
 	call SaveScreenTilesToBuffer1
-	coord hl, 10, 7
-	lb bc, 8, 11
-	ld a, TRADE_CANCEL_MENU
-	ld [wTwoOptionMenuID], a
-	ld a, TWO_OPTION_MENU
-	ld [wTextBoxID], a
+	ld hl, wTileMap + $96
+	ld bc, $080b
+	ld a, $5
+	ld [wd12c], a
+	ld a, $14
+	ld [wd125], a
 	call DisplayTextBoxID
 	call LoadScreenTilesFromBuffer1
 	ld a, [wCurrentMenuItem]
 	and a
-	jr z, .tradeConfirmed
-; if trade cancelled
+	jr z, .asm_58d9 ; 0x58b9 $1e
 	ld a, $1
-	ld [wSerialExchangeNybbleSendData], a
-	coord hl, 0, 12
-	ld b, 4
-	ld c, 18
-	call CableClub_TextBoxBorder
-	coord hl, 1, 14
+	ld [wcc42], a
+	ld hl, wTileMap + $f0
+	ld b, $4
+	ld c, $12
+	call Func_5ab3
+	ld hl, wTileMap + $119
 	ld de, TradeCanceled
 	call PlaceString
-	call Serial_PrintWaitingTextAndSyncAndExchangeNybble
-	jp .tradeCancelled
-.tradeConfirmed
+	call Func_226e
+	jp Func_5a18
+.asm_58d9
 	ld a, $2
-	ld [wSerialExchangeNybbleSendData], a
-	call Serial_PrintWaitingTextAndSyncAndExchangeNybble
-	ld a, [wSerialSyncAndExchangeNybbleReceiveData]
-	dec a ; did the other person cancel?
-	jr nz, .doTrade
-; if the other person cancelled
-	coord hl, 0, 12
-	ld b, 4
-	ld c, 18
-	call CableClub_TextBoxBorder
-	coord hl, 1, 14
+	ld [wcc42], a
+	call Func_226e
+	ld a, [wcc3d]
+	dec a
+	jr nz, .asm_58fd ; 0x58e5 $16
+	ld hl, wTileMap + $f0
+	ld b, $4
+	ld c, $12
+	call Func_5ab3
+	ld hl, wTileMap + $119
 	ld de, TradeCanceled
 	call PlaceString
-	jp .tradeCancelled
-.doTrade
-	ld a, [wTradingWhichPlayerMon]
-	ld hl, wPartyMonOT
+	jp Func_5a18
+.asm_58fd
+	ld a, [wWhichTrade]
+	ld hl, wPartyMonOT ; OT names of player
 	call SkipFixedLengthTextEntries
-	ld de, wTradedPlayerMonOT
-	ld bc, NAME_LENGTH
+	ld de, wTrainerScreenX
+	ld bc, $000b
 	call CopyData
 	ld hl, wPartyMon1Species
-	ld a, [wTradingWhichPlayerMon]
-	ld bc, wPartyMon2 - wPartyMon1
+	ld a, [wWhichTrade]
+	ld bc, $002c
 	call AddNTimes
-	ld bc, wPartyMon1OTID - wPartyMon1
+	ld bc, $000c
 	add hl, bc
 	ld a, [hli]
-	ld [wTradedPlayerMonOTID], a
+	ld [wcd4c], a
 	ld a, [hl]
-	ld [wTradedPlayerMonOTID + 1], a
-	ld a, [wTradingWhichEnemyMon]
-	ld hl, wEnemyMonOT
+	ld [wcd4d], a
+	ld a, [wTrainerEngageDistance]
+	ld hl, wEnemyMonOT ; OT names of other player
 	call SkipFixedLengthTextEntries
-	ld de, wTradedEnemyMonOT
-	ld bc, NAME_LENGTH
+	ld de, wcd4e
+	ld bc, $000b
 	call CopyData
 	ld hl, wEnemyMons
-	ld a, [wTradingWhichEnemyMon]
-	ld bc, wEnemyMon2 - wEnemyMon1
+	ld a, [wTrainerEngageDistance]
+	ld bc, $002c
 	call AddNTimes
-	ld bc, wEnemyMon1OTID - wEnemyMon1
+	ld bc, $000c
 	add hl, bc
 	ld a, [hli]
-	ld [wTradedEnemyMonOTID], a
+	ld [wcd59], a
 	ld a, [hl]
-	ld [wTradedEnemyMonOTID + 1], a
-	ld a, [wTradingWhichPlayerMon]
+	ld [wcd5a], a
+	ld a, [wWhichTrade]
 	ld [wWhichPokemon], a
 	ld hl, wPartySpecies
-	ld b, 0
+	ld b, $0
 	ld c, a
 	add hl, bc
 	ld a, [hl]
-	ld [wTradedPlayerMonSpecies], a
+	ld [wWhichTrade], a
 	xor a
-	ld [wRemoveMonFromBox], a
+	ld [wcf95], a
 	call RemovePokemon
-	ld a, [wTradingWhichEnemyMon]
+	ld a, [wTrainerEngageDistance]
 	ld c, a
 	ld [wWhichPokemon], a
 	ld hl, wEnemyPartyMons
-	ld d, 0
+	ld d, $0
 	ld e, a
 	add hl, de
 	ld a, [hl]
 	ld [wcf91], a
 	ld hl, wEnemyMons
 	ld a, c
-	ld bc, wEnemyMon2 - wEnemyMon1
+	ld bc, $002c
 	call AddNTimes
-	ld de, wLoadedMon
-	ld bc, wEnemyMon2 - wEnemyMon1
+	ld de, wcf98
+	ld bc, $002c
 	call CopyData
 	call AddEnemyMonToPlayerParty
 	ld a, [wPartyCount]
 	dec a
 	ld [wWhichPokemon], a
 	ld a, $1
-	ld [wForceEvolution], a
-	ld a, [wTradingWhichEnemyMon]
+	ld [wccd4], a
+	ld a, [wTrainerEngageDistance]
 	ld hl, wEnemyPartyMons
-	ld b, 0
+	ld b, $0
 	ld c, a
 	add hl, bc
 	ld a, [hl]
-	ld [wTradedEnemyMonSpecies], a
-	ld a, 10
-	ld [wAudioFadeOutControl], a
+	ld [wTrainerEngageDistance], a
+	ld a, $a
+	ld [wMusicHeaderPointer], a
 	ld a, $2
-	ld [wAudioSavedROMBank], a
+	ld [wc0f0], a
 	ld a, MUSIC_SAFARI_ZONE
-	ld [wNewSoundID], a
+	ld [wc0ee], a
 	call PlaySound
-	ld c, 100
+	ld c, $64
 	call DelayFrames
 	call ClearScreen
 	call LoadHpBarAndStatusTilePatterns
 	xor a
-	ld [wUnusedCC5B], a
-	ld a, [hSerialConnectionStatus]
-	cp USING_EXTERNAL_CLOCK
-	jr z, .usingExternalClock
-	predef InternalClockTradeAnim
-	jr .tradeCompleted
-.usingExternalClock
-	predef ExternalClockTradeAnim
-.tradeCompleted
+	ld [wcc5b], a
+	ld a, [$ffaa]
+	cp $1
+	jr z, .asm_59d9 ; 0x59d0 $7
+	predef Func_410e2
+	jr .asm_59de ; 0x59d7 $5
+.asm_59d9
+	predef Func_410f3
+.asm_59de
 	callab TryEvolvingMon
 	call ClearScreen
 	call LoadTrainerInfoTextBoxTiles
-	call Serial_PrintWaitingTextAndSyncAndExchangeNybble
-	ld c, 40
+	call Func_226e
+	ld c, $28
 	call DelayFrames
-	coord hl, 0, 12
-	ld b, 4
-	ld c, 18
-	call CableClub_TextBoxBorder
-	coord hl, 1, 14
+	ld hl, wTileMap + $f0
+	ld b, $4
+	ld c, $12
+	call Func_5ab3
+	ld hl, wTileMap + $119
 	ld de, TradeCompleted
 	call PlaceString
 	predef SaveSAVtoSRAM2
-	ld c, 50
+	ld c, $32
 	call DelayFrames
 	xor a
-	ld [wTradeCenterPointerTableIndex], a
-	jp CableClub_DoBattleOrTradeAgain
-.tradeCancelled
-	ld c, 100
-	call DelayFrames
-	xor a ; TradeCenter_SelectMon
-	ld [wTradeCenterPointerTableIndex], a
-	jp CallCurrentTradeCenterFunction
+	ld [wcc38], a
+	jp Func_5345
 
-WillBeTradedText:
+Func_5a18:
+	ld c, $64
+	call DelayFrames
+	xor a
+	ld [wcc38], a
+	jp Func_551c
+
+WillBeTradedText: ; 5a24 (1:5a24)
 	TX_FAR _WillBeTradedText
 	db "@"
 
@@ -884,96 +864,87 @@ TradeCanceled:
 	db   "Too bad! The trade"
 	next "was canceled!@"
 
-TradeCenterPointerTable:
+PointerTable_5a5b: ; 5a5b (1:5a5b)
 	dw TradeCenter_SelectMon
 	dw TradeCenter_Trade
 
-CableClub_Run:
-	ld a, [wLinkState]
-	cp LINK_STATE_START_TRADE
-	jr z, .doBattleOrTrade
-	cp LINK_STATE_START_BATTLE
-	jr z, .doBattleOrTrade
-	cp LINK_STATE_RESET ; this is never used
+Func_5a5f: ; 5a5f (1:5a5f)
+	ld a, [W_ISLINKBATTLE] ; W_ISLINKBATTLE
+	cp $2
+	jr z, .asm_5a75
+	cp $3
+	jr z, .asm_5a75
+	cp $5
 	ret nz
-	predef EmptyFunc3
+	predef Func_5aaf
 	jp Init
-.doBattleOrTrade
-	call CableClub_DoBattleOrTrade
+.asm_5a75
+	call Func_5317
 	ld hl, Club_GFX
 	ld a, h
-	ld [wTilesetGfxPtr + 1], a
+	ld [W_TILESETGFXPTR + 1], a
 	ld a, l
-	ld [wTilesetGfxPtr], a
+	ld [W_TILESETGFXPTR], a
 	ld a, Bank(Club_GFX)
-	ld [wTilesetBank], a
+	ld [W_TILESETBANK], a
 	ld hl, Club_Coll
 	ld a, h
-	ld [wTilesetCollisionPtr + 1], a
+	ld [W_TILESETCOLLISIONPTR + 1], a
 	ld a, l
-	ld [wTilesetCollisionPtr], a
+	ld [W_TILESETCOLLISIONPTR], a
 	xor a
-	ld [wGrassRate], a
-	inc a ; LINK_STATE_IN_CABLE_CLUB
-	ld [wLinkState], a
+	ld [W_GRASSRATE], a ; W_GRASSRATE
+	inc a
+	ld [W_ISLINKBATTLE], a ; W_ISLINKBATTLE
 	ld [hJoy5], a
-	ld a, 10
-	ld [wAudioFadeOutControl], a
-	ld a, BANK(Music_Celadon)
-	ld [wAudioSavedROMBank], a
+	ld a, $a
+	ld [wMusicHeaderPointer], a
+	ld a, 0 ; 0 ; BANK(Music_Celadon)
+	ld [wc0f0], a
 	ld a, MUSIC_CELADON
-	ld [wNewSoundID], a
+	ld [wc0ee], a
 	jp PlaySound
 
-EmptyFunc3:
+Func_5aaf: ; 5aaf (1:5aaf)
 	ret
 
-Diploma_TextBoxBorder:
+Func_5ab0:
 	call GetPredefRegisters
 
-; b = height
-; c = width
-CableClub_TextBoxBorder:
+Func_5ab3: ; 5ab3 (1:5ab3)
 	push hl
-	ld a, $78 ; border upper left corner tile
+	ld a, $78
 	ld [hli], a
-	inc a ; border top horizontal line tile
-	call CableClub_DrawHorizontalLine
-	inc a ; border upper right corner tile
+	inc a
+	call Func_5ae0
+	inc a
 	ld [hl], a
 	pop hl
-	ld de, 20
+	ld de, $14
 	add hl, de
-.loop
+.asm_5ac2
 	push hl
-	ld a, $7b ; border left vertical line tile
+	ld a, $7b
 	ld [hli], a
-	ld a, " "
-	call CableClub_DrawHorizontalLine
-	ld [hl], $77 ; border right vertical line tile
+	ld a, $7f
+	call Func_5ae0
+	ld [hl], $77
 	pop hl
-	ld de, 20
+	ld de, $14
 	add hl, de
 	dec b
-	jr nz, .loop
-	ld a, $7c ; border lower left corner tile
+	jr nz, .asm_5ac2
+	ld a, $7c
 	ld [hli], a
-	ld a, $76 ; border bottom horizontal line tile
-	call CableClub_DrawHorizontalLine
-	ld [hl], $7d ; border lower right corner tile
+	ld a, $76
+	call Func_5ae0
+	ld [hl], $7d
 	ret
 
-; c = width
-CableClub_DrawHorizontalLine:
+Func_5ae0: ; 5ae0 (1:5ae0)
 	ld d, c
-.loop
+.asm_5ae1
 	ld [hli], a
 	dec d
-	jr nz, .loop
+	jr nz, .asm_5ae1
 	ret
-
-LoadTrainerInfoTextBoxTiles:
-	ld de, TrainerInfoTextBoxTileGraphics
-	ld hl, vChars2 + $760
-	lb bc, BANK(TrainerInfoTextBoxTileGraphics), (TrainerInfoTextBoxTileGraphicsEnd - TrainerInfoTextBoxTileGraphics) / $10
-	jp CopyVideoData

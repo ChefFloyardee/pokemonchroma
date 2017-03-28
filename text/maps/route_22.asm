@@ -1,25 +1,25 @@
-_Route22RivalBeforeBattleText1::
+_Route22RivalBeforeBattleText1:: ; 922cd (24:62cd)
 	text $53, ": Hey!"
 	line $52, "!"
 
 	para "You're going to"
-	line "#mon League?"
+	line "#MON LEAGUE?"
 
 	para "Forget it! You"
 	line "probably don't"
-	cont "have any Badges!"
+	cont "have any BADGEs!"
 
 	para "The guard won't"
 	line "let you through!"
 
 	para "By the way, did"
-	line "your #mon"
+	line "your #MON"
 	cont "get any stronger?"
 	done
 
-_Route22RivalAfterBattleText1::
-	text "I heard #mon"
-	line "League has many"
+_Route22RivalAfterBattleText1:: ; 9236f (24:636f)
+	text "I heard #MON"
+	line "LEAGUE has many"
 	cont "tough trainers!"
 
 	para "I have to figure"
@@ -31,46 +31,46 @@ _Route22RivalAfterBattleText1::
 	cont "a move on!"
 	done
 
-_Route22RivalDefeatedText1::
+_Route22RivalDefeatedText1:: ; 923f4 (24:63f4)
 	text "Awww!"
 	line "You just lucked"
 	cont "out!"
 	prompt
 
-_Route22Text_511bc::
+_Route22Text_511bc:: ; 92410 (24:6410)
 	text $53, ": What?"
 	line "Why do I have 2"
-	cont "#mon?"
+	cont "#MON?"
 
 	para "You should catch"
 	cont "some more too!"
 	prompt
 
-_Route22RivalBeforeBattleText2::
+_Route22RivalBeforeBattleText2:: ; 92450 (24:6450)
 	text $53, ": What?"
 	line $52, "! What a"
 	cont "surprise to see"
 	cont "you here!"
 
 	para "So you're going to"
-	line "#mon League?"
+	line "#MON LEAGUE?"
 
 	para "You collected all"
-	line "the Badges too?"
+	line "the BADGEs too?"
 	cont "That's cool!"
 
 	para "Then I'll whip you"
-	line "<PLAYER> as a"
+	line $52, " as a"
 	cont "warm up for"
-	cont "#mon League!"
+	cont "#MON LEAGUE!"
 
 	para "Come on!"
 	done
 
-_Route22RivalAfterBattleText2::
+_Route22RivalAfterBattleText2:: ; 92506 (24:6506)
 	text "That loosened me"
 	line "up! I'm ready for"
-	cont "#mon League!"
+	cont "#MON LEAGUE!"
 
 	para $52, ", you need"
 	line "more practice!"
@@ -80,16 +80,16 @@ _Route22RivalAfterBattleText2::
 	cont "here. Smell ya!"
 	done
 
-_Route22RivalDefeatedText2::
+_Route22RivalDefeatedText2:: ; 92583 (24:6583)
 	text "What!?"
 
 	para "I was just"
 	line "careless!"
 	prompt
 
-_Route22Text_511d0::
-	text "<RIVAL>: Hahaha!"
-	line "<PLAYER>! That's"
+_Route22Text_511d0:: ; 925a0 (24:65a0)
+	text $53, ": Hahaha!"
+	line $52, "! That's"
 	cont "your best? You're"
 	cont "nowhere near as"
 	cont "good as me, pal!"
@@ -98,7 +98,8 @@ _Route22Text_511d0::
 	line "more! You loser!"
 	prompt
 
-_Route22FrontGateText::
-	text "#mon League"
+_Route22FrontGateText:: ; 92606 (24:6606)
+	text "#MON LEAGUE"
 	line "Front Gate"
 	done
+

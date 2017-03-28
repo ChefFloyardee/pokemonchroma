@@ -1,14 +1,14 @@
-_PewterGymText_5c49e::
-	text "I'm Brock!"
-	line "I'm Pewter's Gym0"
-	cont "Leader!"
+_PewterGymText_5c49e:: ; 9697a (25:697a)
+	text "I'm BROCK!"
+	line "I'm PEWTER's GYM"
+	cont "LEADER!"
 
 	para "I believe in rock"
 	line "hard defense and"
 	cont "determination!"
 
 	para "That's why my"
-	line "#mon are all"
+	line "#MON are all"
 	cont "the rock-type!"
 
 	para "Do you still want"
@@ -16,3 +16,4 @@ _PewterGymText_5c49e::
 	cont "Fine then! Show"
 	cont "me your best!"
 	done
+

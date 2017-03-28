@@ -1,4 +1,4 @@
-UndergroundPathNSObject:
+UndergroundPathNSObject: ; 0x61f2a (size=20)
 	db $1 ; border block
 
 	db $2 ; warps
@@ -7,7 +7,7 @@ UndergroundPathNSObject:
 
 	db $0 ; signs
 
-	db $0 ; objects
+	db $0 ; people
 
 	; warp-to
 	EVENT_DISP UNDERGROUND_PATH_NS_WIDTH, $4, $5 ; PATH_ENTRANCE_ROUTE_5

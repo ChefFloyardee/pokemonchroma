@@ -1,31 +1,33 @@
-BikeShopScript:
+BikeShopScript: ; 1d73c (7:573c)
 	jp EnableAutoTextBoxDrawing
 
-BikeShopTextPointers:
+BikeShopTextPointers: ; 1d73f (7:573f)
 	dw BikeShopText1
 	dw BikeShopText2
 	dw BikeShopText3
 
-BikeShopText1:
-	TX_ASM
-	CheckEvent EVENT_GOT_BICYCLE
-	jr z, .asm_260d4
+BikeShopText1: ; 1d745 (7:5745)
+	db $08 ; asm
+	ld a, [wd75f]
+	bit 0, a
+	jr z, .asm_260d4 ; 0x1d74b
 	ld hl, BikeShopText_1d82f
 	call PrintText
 	jp .Done
-.asm_260d4
+.asm_260d4 ; 0x1d756
 	ld b, BIKE_VOUCHER
 	call IsItemInBag
-	jr z, .asm_41190
+	jr z, .asm_41190 ; 0x1d75b
 	ld hl, BikeShopText_1d81f
 	call PrintText
-	lb bc, BICYCLE, 1
+	ld bc, (BICYCLE << 8) | 1
 	call GiveItem
 	jr nc, .BagFull
 	ld a, BIKE_VOUCHER
-	ld [$ffdb], a
+	ldh [$db], a
 	callba RemoveItemByID
-	SetEvent EVENT_GOT_BICYCLE
+	ld hl, wd75f
+	set 0, [hl]
 	ld hl, BikeShopText_1d824
 	call PrintText
 	jr .Done
@@ -33,13 +35,13 @@ BikeShopText1:
 	ld hl, BikeShopText_1d834
 	call PrintText
 	jr .Done
-.asm_41190
+.asm_41190 ; 0x1d78c
 	ld hl, BikeShopText_1d810
 	call PrintText
 	xor a
 	ld [wCurrentMenuItem], a
 	ld [wLastMenuItem], a
-	ld a, A_BUTTON | B_BUTTON
+	ld a, $3
 	ld [wMenuWatchedKeys], a
 	ld a, $1
 	ld [wMaxMenuItem], a
@@ -49,99 +51,99 @@ BikeShopText1:
 	ld [wTopMenuItemX], a
 	ld hl, wd730
 	set 6, [hl]
-	coord hl, 0, 0
+	ld hl, wTileMap
 	ld b, $4
 	ld c, $f
 	call TextBoxBorder
 	call UpdateSprites
-	coord hl, 2, 2
+	hlCoord 2, 2
 	ld de, BikeShopMenuText
 	call PlaceString
-	coord hl, 8, 3
+	hlCoord 8, 3
 	ld de, BikeShopMenuPrice
 	call PlaceString
 	ld hl, BikeShopText_1d815
 	call PrintText
 	call HandleMenuInput
 	bit 1, a
-	jr nz, .cancel
+	jr nz, .asm_b7579 ; 0x1d7dc
 	ld hl, wd730
 	res 6, [hl]
 	ld a, [wCurrentMenuItem]
 	and a
-	jr nz, .cancel
-	ld hl, BikeShopCantAffordText
+	jr nz, .asm_b7579 ; 0x1d7e7
+	ld hl, BikeShopText_1d81a
 	call PrintText
-.cancel
-	ld hl, BikeShopComeAgainText
+.asm_b7579 ; 0x1d7ef
+	ld hl, BikeShopText_1d82a
 	call PrintText
 .Done
 	jp TextScriptEnd
 
-BikeShopMenuText:
+BikeShopMenuText: ; 1d7f8 (7:57f8)
 	db   "BICYCLE"
 	next "CANCEL@"
 
-BikeShopMenuPrice:
+BikeShopMenuPrice: ; 1d807 (7:5807)
 	db "¥1000000@"
 
-BikeShopText_1d810:
+BikeShopText_1d810: ; 1d810 (7:5810)
 	TX_FAR _BikeShopText_1d810
 	db "@"
 
-BikeShopText_1d815:
+BikeShopText_1d815: ; 1d815 (7:5815)
 	TX_FAR _BikeShopText_1d815
 	db "@"
 
-BikeShopCantAffordText:
-	TX_FAR _BikeShopCantAffordText
+BikeShopText_1d81a: ; 1d81a (7:581a)
+	TX_FAR _BikeShopText_1d81a
 	db "@"
 
-BikeShopText_1d81f:
+BikeShopText_1d81f: ; 1d81f (7:581f)
 	TX_FAR _BikeShopText_1d81f
 	db "@"
 
-BikeShopText_1d824:
-	TX_FAR _BikeShopText_1d824
-	TX_SFX_KEY_ITEM
+BikeShopText_1d824: ; 1d824 (7:5824)
+	TX_FAR _BikeShopText_1d824 ; 0x98eb2
+	db $11, "@"
+
+BikeShopText_1d82a: ; 1d82a (7:582a)
+	TX_FAR _BikeShopText_1d82a
 	db "@"
 
-BikeShopComeAgainText:
-	TX_FAR _BikeShopComeAgainText
-	db "@"
-
-BikeShopText_1d82f:
+BikeShopText_1d82f: ; 1d82f (7:582f)
 	TX_FAR _BikeShopText_1d82f
 	db "@"
 
-BikeShopText_1d834:
+BikeShopText_1d834: ; 1d834 (7:5834)
 	TX_FAR _BikeShopText_1d834
 	db "@"
 
-BikeShopText2:
-	TX_ASM
+BikeShopText2: ; 1d839 (7:5839)
+	db $08 ; asm
 	ld hl, BikeShopText_1d843
 	call PrintText
 	jp TextScriptEnd
 
-BikeShopText_1d843:
+BikeShopText_1d843: ; 1d843 (7:5843)
 	TX_FAR _BikeShopText_1d843
 	db "@"
 
-BikeShopText3:
-	TX_ASM
-	CheckEvent EVENT_GOT_BICYCLE
+BikeShopText3: ; 1d848 (7:5848)
+	db $08 ; asm
+	ld a, [wd75f]
+	bit 0, a
 	ld hl, BikeShopText_1d861
-	jr nz, .asm_34d2d
+	jr nz, .asm_34d2d ; 0x1d851
 	ld hl, BikeShopText_1d85c
-.asm_34d2d
+.asm_34d2d ; 0x1d856
 	call PrintText
 	jp TextScriptEnd
 
-BikeShopText_1d85c:
+BikeShopText_1d85c: ; 1d85c (7:585c)
 	TX_FAR _BikeShopText_1d85c
 	db "@"
 
-BikeShopText_1d861:
+BikeShopText_1d861: ; 1d861 (7:5861)
 	TX_FAR _BikeShopText_1d861
 	db "@"

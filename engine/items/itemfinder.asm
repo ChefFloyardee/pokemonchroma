@@ -1,17 +1,16 @@
-HiddenItemNear:
+HiddenItemNear: ; 7481f (1d:481f)
 	ld hl, HiddenItemCoords
-	ld b, 0
-.loop
-	ld de, 3
-	ld a, [wCurMap]
+	ld b, $0
+.asm_74824
+	ld de, $0003
+	ld a, [W_CURMAP]
 	call IsInRestOfArray
 	ret nc ; return if current map has no hidden items
 	push bc
 	push hl
-	ld hl, wObtainedHiddenItemsFlags
-	ld e, b
-	ld d, 0
-	ld b, FLAG_TEST
+	ld hl, wd6f0
+	ld c, b
+	ld b, $2
 	predef FlagActionPredef
 	ld a, c
 	pop hl
@@ -23,30 +22,28 @@ HiddenItemNear:
 	inc hl
 	ld e, [hl]
 	inc hl
-	jr nz, .loop ; if the item has already been obtained
-; check if the item is within 4-5 tiles (depending on the direction of item)
-	ld a, [wYCoord]
-	call Sub5ClampTo0
+	jr nz, .asm_74824 ; 0x74845 $dd
+	ld a, [W_YCOORD]
+	call Func_7486b
 	cp d
-	jr nc, .loop
-	ld a, [wYCoord]
-	add 4
+	jr nc, .asm_74824 ; 0x7484e $d4
+	ld a, [W_YCOORD]
+	add $4
 	cp d
-	jr c, .loop
-	ld a, [wXCoord]
-	call Sub5ClampTo0
+	jr c, .asm_74824 ; 0x74856 $cc
+	ld a, [W_XCOORD]
+	call Func_7486b
 	cp e
-	jr nc, .loop
-	ld a, [wXCoord]
-	add 5
+	jr nc, .asm_74824 ; 0x7485f $c3
+	ld a, [W_XCOORD]
+	add $5
 	cp e
-	jr c, .loop
+	jr c, .asm_74824 ; 0x74867 $bb
 	scf
 	ret
 
-Sub5ClampTo0:
-; subtract 5 but clamp to 0
-	sub 5
+Func_7486b: ; 7486b (1d:486b)
+	sub $5
 	cp $f0
 	ret c
 	xor a

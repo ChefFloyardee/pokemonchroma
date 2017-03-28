@@ -1,33 +1,34 @@
-_DayCareAllRightThenText::
+_DayCareMText_56437:: ; 8c000 (23:4000)
 	text "All right then,"
 	line "@@"
 
-_DayCareComeAgainText::
+_DayCareMText_5643b:: ; 8c013 (23:4013)
 	text "come again."
 	done
 
-_DayCareNoRoomForMonText::
+_DayCareMText_56440:: ; 8c020 (23:4020)
 	text "You have no room"
-	line "for this #mon!"
+	line "for this #MON!"
 	done
 
-_DayCareOnlyHaveOneMonText::
+_DayCareMText_56445:: ; 8c041 (23:4041)
 	text "You only have one"
-	line "#mon with you."
+	line "#MON with you."
 	done
 
-_DayCareCantAcceptMonWithHMText::
+_DayCareMText_5644a:: ; 8c063 (23:4063)
 	text "I can't accept a"
-	line "#mon that"
+	line "#MON that"
 	cont "knows an HM move."
 	done
 
-_DayCareHeresYourMonText::
+_DayCareMText_5644f:: ; 8c090 (23:4090)
 	text "Thank you! Here's"
-	line "your #mon!"
+	line "your #MON!"
 	prompt
 
-_DayCareNotEnoughMoneyText::
+_DayCareMText_56454:: ; 8c0ad (23:40ad)
 	text "Hey, you don't"
 	line "have enough ¥!"
 	done
+

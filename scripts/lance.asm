@@ -1,83 +1,85 @@
-LanceScript:
-	call LanceShowOrHideEntranceBlocks
+LanceScript: ; 5a2ae (16:62ae)
+	call LanceScript_5a2c4
 	call EnableAutoTextBoxDrawing
-	ld hl, LanceTrainerHeader0
+	ld hl, LanceTrainerHeaders
 	ld de, LanceScriptPointers
-	ld a, [wLanceCurScript]
+	ld a, [W_LANCECURSCRIPT]
 	call ExecuteCurMapScriptInTable
-	ld [wLanceCurScript], a
+	ld [W_LANCECURSCRIPT], a
 	ret
 
-LanceShowOrHideEntranceBlocks:
-	ld hl, wCurrentMapScriptFlags
+LanceScript_5a2c4: ; 5a2c4 (16:62c4)
+	ld hl, wd126
 	bit 5, [hl]
 	res 5, [hl]
 	ret z
-	CheckEvent EVENT_LANCES_ROOM_LOCK_DOOR
-	jr nz, .closeEntrance
-	; open entrance
+	ld a, [wd866]
+	bit 7, a
+	jr nz, .asm_5a2da
 	ld a, $31
 	ld b, $32
-	jp LanceSetEntranceBlocks
-.closeEntrance
+	jp LanceScript_5a2de
+.asm_5a2da
 	ld a, $72
 	ld b, $73
 
-LanceSetEntranceBlocks:
-; Replaces the tile blocks so the player can't leave.
+LanceScript_5a2de: ; 5a2de (16:62de)
 	push bc
-	ld [wNewTileBlockID], a
-	lb bc, 6, 2
-	call LanceSetEntranceBlock
+	ld [wd09f], a
+	ld bc, $602
+	call LanceScript_5a2f0
 	pop bc
 	ld a, b
-	ld [wNewTileBlockID], a
-	lb bc, 6, 3
+	ld [wd09f], a
+	ld bc, $603
 
-LanceSetEntranceBlock:
+LanceScript_5a2f0: ; 5a2f0 (16:62f0)
 	predef_jump ReplaceTileBlock
 
-ResetLanceScript:
+LanceScript_5a2f5: ; 5a2f5 (16:62f5)
 	xor a
-	ld [wLanceCurScript], a
+	ld [W_LANCECURSCRIPT], a
 	ret
 
-LanceScriptPointers:
+LanceScriptPointers: ; 5a2fa (16:62fa)
 	dw LanceScript0
 	dw DisplayEnemyTrainerTextAndStartBattle
 	dw LanceScript2
 	dw LanceScript3
 	dw LanceScript4
 
-LanceScript4:
+LanceScript4: ; 5a304 (16:6304)
 	ret
 
-LanceScript0:
-	CheckEvent EVENT_BEAT_LANCE
+LanceScript0: ; 5a305 (16:6305)
+	ld a, [wd866]
+	bit 6, a
 	ret nz
-	ld hl, LanceTriggerMovementCoords
+	ld hl, CoordsData_5a33e
 	call ArePlayerCoordsInArray
 	jp nc, CheckFightingMapTrainers
 	xor a
 	ld [hJoyHeld], a
-	ld a, [wCoordIndex]
-	cp $3  ; Is player standing next to Lance's sprite?
-	jr nc, .notStandingNextToLance
+	ld a, [wWhichTrade] ; wWhichTrade
+	cp $3
+	jr nc, .asm_5a325
 	ld a, $1
-	ld [hSpriteIndexOrTextID], a
+	ld [H_DOWNARROWBLINKCNT2], a ; $ff8c
 	jp DisplayTextID
-.notStandingNextToLance
-	cp $5  ; Is player standing on the entrance staircase?
-	jr z, WalkToLance
-	CheckAndSetEvent EVENT_LANCES_ROOM_LOCK_DOOR
+.asm_5a325
+	cp $5
+	jr z, LanceScript_5a35b
+	ld hl, wd866
+	bit 7, [hl]
+	set 7, [hl]
 	ret nz
-	ld hl, wCurrentMapScriptFlags
+	ld hl, wd126
 	set 5, [hl]
-	ld a, SFX_GO_INSIDE
+	ld a, RBSFX_02_57
 	call PlaySound
-	jp LanceShowOrHideEntranceBlocks
+	jp LanceScript_5a2c4
 
-LanceTriggerMovementCoords:
+CoordsData_5a33e: ; 5a33e (16:633e)
 	db $01,$05
 	db $02,$06
 	db $0B,$05
@@ -85,78 +87,79 @@ LanceTriggerMovementCoords:
 	db $10,$18
 	db $FF
 
-LanceScript2:
+LanceScript2: ; 5a349 (16:6349)
 	call EndTrainerBattle
-	ld a, [wIsInBattle]
+	ld a, [W_ISINBATTLE] ; W_ISINBATTLE
 	cp $ff
-	jp z, ResetLanceScript
+	jp z, LanceScript_5a2f5
 	ld a, $1
-	ld [hSpriteIndexOrTextID], a
+	ld [H_DOWNARROWBLINKCNT2], a ; $ff8c
 	jp DisplayTextID
 
-WalkToLance:
-; Moves the player down the hallway to Lance's room.
+LanceScript_5a35b: ; 5a35b (16:635b)
 	ld a, $ff
 	ld [wJoyIgnore], a
 	ld hl, wSimulatedJoypadStatesEnd
-	ld de, WalkToLance_RLEList
+	ld de, RLEList_5a379
 	call DecodeRLEList
 	dec a
 	ld [wSimulatedJoypadStatesIndex], a
 	call StartSimulatingJoypadStates
 	ld a, $3
-	ld [wLanceCurScript], a
-	ld [wCurMapScript], a
+	ld [W_LANCECURSCRIPT], a
+	ld [W_CURMAPSCRIPT], a
 	ret
 
-WalkToLance_RLEList:
-	db D_UP, $0C
-	db D_LEFT, $0C
-	db D_DOWN, $07
-	db D_LEFT, $06
+RLEList_5a379: ; 5a379 (16:6379)
+	db $40, $0C
+	db $20, $0C
+	db $80, $07
+	db $20, $06
 	db $FF
 
-LanceScript3:
+LanceScript3: ; 5a382 (16:6382)
 	ld a, [wSimulatedJoypadStatesIndex]
 	and a
 	ret nz
 	call Delay3
 	xor a
 	ld [wJoyIgnore], a
-	ld [wLanceCurScript], a
-	ld [wCurMapScript], a
+	ld [W_LANCECURSCRIPT], a
+	ld [W_CURMAPSCRIPT], a
 	ret
 
-LanceTextPointers:
+LanceTextPointers: ; 5a395 (16:6395)
 	dw LanceText1
 
-LanceTrainerHeader0:
-	dbEventFlagBit EVENT_BEAT_LANCES_ROOM_TRAINER_0
+LanceTrainerHeaders: ; 5a397 (16:6397)
+LanceTrainerHeader0: ; 5a397 (16:6397)
+	db $1 ; flag's bit
 	db ($0 << 4) ; trainer's view range
-	dwEventFlagAddress EVENT_BEAT_LANCES_ROOM_TRAINER_0
-	dw LanceBeforeBattleText ; TextBeforeBattle
-	dw LanceAfterBattleText ; TextAfterBattle
-	dw LanceEndBattleText ; TextEndBattle
-	dw LanceEndBattleText ; TextEndBattle
+	dw wd866 ; flag's byte
+	dw LanceBeforeBattleText ; 0x63ae TextBeforeBattle
+	dw LanceAfterBattleText ; 0x63b8 TextAfterBattle
+	dw LanceEndBattleText ; 0x63b3 TextEndBattle
+	dw LanceEndBattleText ; 0x63b3 TextEndBattle
 
 	db $ff
 
-LanceText1:
-	TX_ASM
+LanceText1: ; 5a3a4 (16:63a4)
+	db $08 ; asm
 	ld hl, LanceTrainerHeader0
 	call TalkToTrainer
 	jp TextScriptEnd
 
-LanceBeforeBattleText:
+LanceBeforeBattleText: ; 5a3ae (16:63ae)
 	TX_FAR _LanceBeforeBattleText
 	db "@"
 
-LanceEndBattleText:
+LanceEndBattleText: ; 5a3b3 (16:63b3)
 	TX_FAR _LanceEndBattleText
 	db "@"
 
-LanceAfterBattleText:
+LanceAfterBattleText: ; 5a3b8 (16:63b8)
 	TX_FAR _LanceAfterBattleText
-	TX_ASM
-	SetEvent EVENT_BEAT_LANCE
+	db $8
+	ld hl, wd866
+	set 6, [hl]
 	jp TextScriptEnd

@@ -1,45 +1,45 @@
-HiddenItems:
+HiddenItems: ; 76688 (1d:6688)
 	ld hl, HiddenItemCoords
-	call FindHiddenItemOrCoinsIndex
-	ld [wHiddenItemOrCoinsIndex], a
-	ld hl, wObtainedHiddenItemsFlags
-	ld a, [wHiddenItemOrCoinsIndex]
-	ld e, a
-	ld d, 0
-	ld b, FLAG_TEST
+	call Func_76857
+	ld [wTrainerScreenX], a
+	ld hl, wd6f0
+	ld a, [wTrainerScreenX]
+	ld c, a
+	ld b, $2
 	predef FlagActionPredef
 	ld a, c
 	and a
 	ret nz
 	call EnableAutoTextBoxDrawing
-	ld a, 1
+	ld a, $1
 	ld [wDoNotWaitForButtonPressAfterDisplayingText], a
-	ld a, [wHiddenObjectFunctionArgument] ; item ID
+	ld a, [wWhichTrade] ; item ID
 	ld [wd11e], a
 	call GetItemName
-	tx_pre_jump FoundHiddenItemText
+	ld a, $24
+	jp PrintPredefTextID
 
 INCLUDE "data/hidden_item_coords.asm"
 
-FoundHiddenItemText:
+FoundHiddenItemText: ; 7675b (1d:675b)
+; XXX where is the pointer to this?
 	TX_FAR _FoundHiddenItemText
-	TX_ASM
-	ld a, [wHiddenObjectFunctionArgument] ; item ID
+	db $8
+	ld a, [wWhichTrade] ; item ID
 	ld b, a
 	ld c, 1
 	call GiveItem
-	jr nc, .bagFull
-	ld hl, wObtainedHiddenItemsFlags
-	ld a, [wHiddenItemOrCoinsIndex]
-	ld e, a
-	ld d, 0
-	ld b, FLAG_SET
+	jr nc, .BagFull
+	ld hl, wd6f0
+	ld a, [wTrainerScreenX]
+	ld c, a
+	ld b, $1
 	predef FlagActionPredef
-	ld a, SFX_GET_ITEM_2
-	call PlaySoundWaitForCurrent
-	call WaitForSoundToFinish
+	ld a, RBSFX_02_3b
+	call PlaySoundWaitForCurrent ; play sound
+	call WaitForSoundToFinish ; wait for sound to finish playing
 	jp TextScriptEnd
-.bagFull
+.BagFull
 	call WaitForTextScrollButtonPress ; wait for button press
 	xor a
 	ld [wDoNotWaitForButtonPressAfterDisplayingText], a
@@ -47,119 +47,116 @@ FoundHiddenItemText:
 	call PrintText
 	jp TextScriptEnd
 
-HiddenItemBagFullText:
+HiddenItemBagFullText: ; 76794 (1d:6794)
 	TX_FAR _HiddenItemBagFullText
 	db "@"
 
-HiddenCoins:
+HiddenCoins: ; 76799 (1d:6799)
 	ld b, COIN_CASE
-	predef GetQuantityOfItemInBag
+	predef IsItemInBag_ 
 	ld a, b
 	and a
 	ret z
 	ld hl, HiddenCoinCoords
-	call FindHiddenItemOrCoinsIndex
-	ld [wHiddenItemOrCoinsIndex], a
-	ld hl, wObtainedHiddenCoinsFlags
-	ld a, [wHiddenItemOrCoinsIndex]
-	ld e, a
-	ld d, 0
-	ld b, FLAG_TEST
+	call Func_76857
+	ld [wTrainerScreenX], a
+	ld hl, wd6fe
+	ld a, [wTrainerScreenX]
+	ld c, a
+	ld b, $2
 	predef FlagActionPredef
 	ld a, c
 	and a
 	ret nz
 	xor a
-	ld [hUnusedCoinsByte], a
-	ld [hCoins], a
-	ld [hCoins + 1], a
-	ld a, [wHiddenObjectFunctionArgument]
+	ld [$ff9f], a
+	ld [$ffa0], a
+	ld [$ffa1], a
+	ld a, [wWhichTrade]
 	sub COIN
 	cp 10
 	jr z, .bcd10
 	cp 20
 	jr z, .bcd20
 	cp 40
-	jr z, .bcd20 ; should be bcd40
+	jr z, .bcd20
 	jr .bcd100
 .bcd10
 	ld a, $10
-	ld [hCoins + 1], a
-	jr .bcdDone
+	ld [$ffa1], a
+	jr .bcddone
 .bcd20
 	ld a, $20
-	ld [hCoins + 1], a
-	jr .bcdDone
+	ld [$ffa1], a
+	jr .bcddone
 .bcd40 ; due to a typo, this is never used
 	ld a, $40
-	ld [hCoins + 1], a
-	jr .bcdDone
+	ld [$ffa1], a
+	jr .bcddone
 .bcd100
 	ld a, $1
-	ld [hCoins], a
-.bcdDone
+	ld [$ffa0], a
+.bcddone
 	ld de, wPlayerCoins + 1
-	ld hl, hCoins + 1
+	ld hl, $ffa1
 	ld c, $2
 	predef AddBCDPredef
-	ld hl, wObtainedHiddenCoinsFlags
-	ld a, [wHiddenItemOrCoinsIndex]
-	ld e, a
-	ld d, 0
-	ld b, FLAG_SET
+	ld hl, wd6fe
+	ld a, [wTrainerScreenX]
+	ld c, a
+	ld b, $1
 	predef FlagActionPredef
 	call EnableAutoTextBoxDrawing
 	ld a, [wPlayerCoins]
 	cp $99
-	jr nz, .roomInCoinCase
+	jr nz, .RoomInCoinCase
 	ld a, [wPlayerCoins + 1]
 	cp $99
-	jr nz, .roomInCoinCase
-	tx_pre_id DroppedHiddenCoinsText
+	jr nz, .RoomInCoinCase
+	ld a, $2c
 	jr .done
-.roomInCoinCase
-	tx_pre_id FoundHiddenCoinsText
+.RoomInCoinCase
+	ld a, $2b
 .done
 	jp PrintPredefTextID
 
 INCLUDE "data/hidden_coins.asm"
 
-FoundHiddenCoinsText:
+FoundHiddenCoinsText: ; 76847 (1d:6847)
 	TX_FAR _FoundHiddenCoinsText
-	TX_SFX_ITEM_2
-	db "@"
+	db $10,"@"
 
-DroppedHiddenCoinsText:
+DroppedHiddenCoinsText: ; 7684d (1d:684d)
 	TX_FAR _FoundHiddenCoins2Text
-	TX_SFX_ITEM_2
+	db $10
 	TX_FAR _DroppedHiddenCoinsText
 	db "@"
 
-FindHiddenItemOrCoinsIndex:
-	ld a, [wHiddenObjectY]
+Func_76857: ; 76857 (1d:6857)
+	ld a, [wTrainerScreenY]
 	ld d, a
-	ld a, [wHiddenObjectX]
+	ld a, [wTrainerScreenX]
 	ld e, a
-	ld a, [wCurMap]
+	ld a, [W_CURMAP]
 	ld b, a
-	ld c, -1
+	ld c, $ff
 .loop
 	inc c
 	ld a, [hli]
 	cp $ff ; end of the list?
 	ret z  ; if so, we're done here
 	cp b
-	jr nz, .next1
+	jr nz, .asm_76877 ; 0x7686b $a
 	ld a, [hli]
 	cp d
-	jr nz, .next2
+	jr nz, .asm_76878 ; 0x7686f $7
 	ld a, [hli]
 	cp e
 	jr nz, .loop
 	ld a, c
 	ret
-.next1
+.asm_76877
 	inc hl
-.next2
+.asm_76878
 	inc hl
 	jr .loop

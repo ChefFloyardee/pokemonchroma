@@ -1,9 +1,9 @@
-HPBarLength:
+HPBarLength: ; f9dc (3:79dc)
 	call GetPredefRegisters
 
 ; calculates bc * 48 / de, the number of pixels the HP bar has
 ; the result is always at least 1
-GetHPBarLength:
+GetHPBarLength: ; f9df (3:79df)
 	push hl
 	xor a
 	ld hl, H_MULTIPLICAND
@@ -45,7 +45,7 @@ GetHPBarLength:
 	ret
 
 ; predef $48
-UpdateHPBar:
+UpdateHPBar: ; fa1d (3:7a1d)
 UpdateHPBar2:
 	push hl
 	ld hl, wHPBarOldHP
@@ -53,7 +53,6 @@ UpdateHPBar2:
 	ld c, a      ; old HP into bc
 	ld a, [hli]
 	ld b, a
-	ld hl, wHPBarNewHP
 	ld a, [hli]
 	ld e, a      ; new HP into de
 	ld d, [hl]
@@ -88,7 +87,6 @@ UpdateHPBar2:
 	call UpdateHPBar_CompareNewHPToOldHP
 	jr z, .animateHPBarDone
 	jr nc, .HPIncrease
-; HP decrease
 	dec bc        ; subtract 1 HP
 	ld a, c
 	ld [wHPBarNewHP], a
@@ -97,7 +95,7 @@ UpdateHPBar2:
 	call UpdateHPBar_CalcOldNewHPBarPixels
 	ld a, e
 	sub d         ; calc pixel difference
-	jr .ok
+	jr .asm_fa7e
 .HPIncrease
 	inc bc        ; add 1 HP
 	ld a, c
@@ -107,7 +105,7 @@ UpdateHPBar2:
 	call UpdateHPBar_CalcOldNewHPBarPixels
 	ld a, d
 	sub e         ; calc pixel difference
-.ok
+.asm_fa7e
 	call UpdateHPBar_PrintHPNumber
 	and a
 	jr z, .noPixelDifference
@@ -138,14 +136,14 @@ UpdateHPBar2:
 ; animates the HP bar going up or down for (a) ticks (two waiting frames each)
 ; stops prematurely if bar is filled up
 ; e: current health (in pixels) to start with
-UpdateHPBar_AnimateHPBar:
+UpdateHPBar_AnimateHPBar: ; fab1 (3:7ab1)
 	push hl
 .barAnimationLoop
 	push af
 	push de
 	ld d, $6
 	call DrawHPBar
-	ld c, 2
+	ld c, $2
 	call DelayFrames
 	pop de
 	ld a, [wHPBarDelta] ; +1 or -1
@@ -164,7 +162,7 @@ UpdateHPBar_AnimateHPBar:
 	ret
 
 ; compares old HP and new HP and sets c and z flags accordingly
-UpdateHPBar_CompareNewHPToOldHP:
+UpdateHPBar_CompareNewHPToOldHP: ; fad1 (3:7ad1)
 	ld a, d
 	sub b
 	ret nz
@@ -173,7 +171,7 @@ UpdateHPBar_CompareNewHPToOldHP:
 	ret
 
 ; calcs HP difference between bc and de (into de)
-UpdateHPBar_CalcHPDifference:
+UpdateHPBar_CalcHPDifference: ; fad7 (3:7ad7)
 	ld a, d
 	sub b
 	jr c, .oldHPGreater
@@ -202,39 +200,38 @@ UpdateHPBar_CalcHPDifference:
 	ld de, $0
 	ret
 
-UpdateHPBar_PrintHPNumber:
+UpdateHPBar_PrintHPNumber: ; faf5 (3:7af5)
 	push af
 	push de
-	ld a, [wHPBarType]
+	ld a, [wListMenuID] ; wListMenuID
 	and a
-	jr z, .done ; don't print number in enemy HUD
-; convert from little-endian to big-endian for PrintNumber
+	jr z, .asm_fb2d
 	ld a, [wHPBarOldHP]
-	ld [wHPBarTempHP + 1], a
-	ld a, [wHPBarOldHP + 1]
-	ld [wHPBarTempHP], a
+	ld [wcef1], a
+	ld a, [wHPBarOldHP+1]
+	ld [wcef0], a
 	push hl
-	ld a, [hFlags_0xFFF6]
+	ld a, [$fff6]
 	bit 0, a
 	jr z, .asm_fb15
 	ld de, $9
-	jr .next
+	jr .asm_fb18
 .asm_fb15
 	ld de, $15
-.next
+.asm_fb18
 	add hl, de
 	push hl
-	ld a, " "
+	ld a, $7f
 	ld [hli], a
 	ld [hli], a
 	ld [hli], a
 	pop hl
-	ld de, wHPBarTempHP
-	lb bc, 2, 3
+	ld de, wcef0
+	ld bc, $203
 	call PrintNumber
 	call DelayFrame
 	pop hl
-.done
+.asm_fb2d
 	pop de
 	pop af
 	ret
@@ -242,19 +239,17 @@ UpdateHPBar_PrintHPNumber:
 ; calcs number of HP bar pixels for old and new HP value
 ; d: new pixels
 ; e: old pixels
-UpdateHPBar_CalcOldNewHPBarPixels:
+UpdateHPBar_CalcOldNewHPBarPixels: ; fb30 (3:7b30)
 	push hl
 	ld hl, wHPBarMaxHP
 	ld a, [hli]  ; max HP into de
 	ld e, a
 	ld a, [hli]
 	ld d, a
-	ld hl, wHPBarOldHP
 	ld a, [hli]  ; old HP into bc
 	ld c, a
 	ld a, [hli]
 	ld b, a
-	ld hl, wHPBarNewHP
 	ld a, [hli]  ; new HP into hl
 	ld h, [hl]
 	ld l, a

@@ -1,4 +1,4 @@
-_SafariZoneRestHouse4Text1::
+_SafariZoneRestHouse4Text1:: ; 85b62 (21:5b62)
 	text "You can keep any"
 	line "item you find on"
 	cont "the ground here."
@@ -9,19 +9,20 @@ _SafariZoneRestHouse4Text1::
 	cont "of them at once!"
 	done
 
-_SafariZoneRestHouse4Text2::
+_SafariZoneRestHouse4Text2:: ; 85bd5 (21:5bd5)
 	text "Go to the deepest"
 	line "part of the"
-	cont "Safari Zone. You"
+	cont "SAFARI ZONE. You"
 	cont "will win a prize!"
 	done
 
-_SafariZoneRestHouse4Text3::
-	text "My Eevee evolved"
-	line "into Flareon!"
+_SafariZoneRestHouse4Text3:: ; 85c17 (21:5c17)
+	text "My EEVEE evolved"
+	line "into FLAREON!"
 
 	para "But, a friend's"
-	line "Eevee turned into"
-	cont "a Vaporeon!"
+	line "EEVEE turned into"
+	cont "a VAPOREON!"
 	cont "I wonder why?"
 	done
+

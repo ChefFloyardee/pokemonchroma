@@ -1,5 +1,5 @@
-AnimateHallOfFame:
-	call HoFFadeOutScreenAndMusic
+AnimateHallOfFame: ; 701a0 (1c:41a0)
+	call Func_70423
 	call ClearScreen
 	ld c, 100
 	call DelayFrames
@@ -8,10 +8,10 @@ AnimateHallOfFame:
 	call DisableLCD
 	ld hl,vBGMap0
 	ld bc, $800
-	ld a, " "
+	ld a, $7f
 	call FillMemory
 	call EnableLCD
-	ld hl, rLCDC
+	ld hl, rLCDC ; $ff40
 	set 3, [hl]
 	xor a
 	ld hl, wHallOfFame
@@ -20,59 +20,48 @@ AnimateHallOfFame:
 	xor a
 	ld [wUpdateSpritesEnabled], a
 	ld [hTilesetType], a
-	ld [wSpriteFlipped], a
-	ld [wLetterPrintingDelayFlags], a ; no delay
-	ld [wHoFMonOrPlayer], a ; mon
+	ld [W_SPRITEFLIPPED], a
+	ld [wd358], a
+	ld [wTrainerScreenY], a
 	inc a
-	ld [H_AUTOBGTRANSFERENABLED], a
-	ld hl, wNumHoFTeams
+	ld [H_AUTOBGTRANSFERENABLED], a ; $ffba
+	ld hl, wd5a2
 	ld a, [hl]
 	inc a
-	jr z, .skipInc ; don't wrap around to 0
+	jr z, .asm_701eb
 	inc [hl]
-.skipInc
+.asm_701eb
 	ld a, $90
 	ld [hWY], a
-	ld c, BANK(Music_HallOfFame)
+	ld c, 0 ; BANK(Music_HallOfFame)
 	ld a, MUSIC_HALL_OF_FAME
 	call PlayMusic
 	ld hl, wPartySpecies
 	ld c, $ff
-.partyMonLoop
+.asm_701fb
 	ld a, [hli]
 	cp $ff
-	jr nz, .notDoneShowingParty
-	ld a, [hli]
-	cp $ff
-	jr z, .doneShowingParty
-	dec hl
-.notDoneShowingParty
-	inc hl
+	jr z, .asm_70241
 	inc c
 	push hl
 	push bc
-	dec hl
- 	dec hl
- 	ld a, [hli]
-	ld [wHoFMonSpecies], a
-	ld a, [hli]
-	ld [wHoFMonSpecies + 1], a
+	ld [wWhichTrade], a ; wWhichTrade
 	ld a, c
-	ld [wHoFPartyMonIndex], a
-	ld hl, wPartyMon1Level
+	ld [wTrainerEngageDistance], a
+	ld hl, wPartyMon1Level ; wPartyMon1Level
 	ld bc, wPartyMon2 - wPartyMon1
 	call AddNTimes
 	ld a, [hl]
-	ld [wHoFMonLevel], a
-	call HoFShowMonOrPlayer
-	call HoFDisplayAndRecordMonInfo
-	ld c, 80
+	ld [wTrainerFacingDirection], a
+	call Func_70278
+	call Func_702e1
+	ld c, $50
 	call DelayFrames
-	coord hl, 2, 13
-	ld b, 3
-	ld c, 14
+	hlCoord 2, 13
+	ld b, $3
+	ld c, $e
 	call TextBoxBorder
-	coord hl, 4, 15
+	hlCoord 4, 15
 	ld de, HallOfFameText
 	call PlaceString
 	ld c, 180
@@ -80,8 +69,8 @@ AnimateHallOfFame:
 	call GBFadeOutToWhite
 	pop bc
 	pop hl
-	jr .partyMonLoop
-.doneShowingParty
+	jr .asm_701fb
+.asm_70241
 	ld a, c
 	inc a
 	ld hl, wHallOfFame
@@ -90,240 +79,207 @@ AnimateHallOfFame:
 	ld [hl], $ff
 	call SaveHallOfFameTeams
 	xor a
-	ld [wHoFMonSpecies], a
-	ld [wHoFMonSpecies + 1], a
+	ld [wWhichTrade], a ; wWhichTrade
 	inc a
-	ld [wHoFMonOrPlayer], a ; player
-	call HoFShowMonOrPlayer
-	call HoFDisplayPlayerStats
-	call HoFFadeOutScreenAndMusic
+	ld [wTrainerScreenY], a
+	call Func_70278
+	call Func_70377
+	call Func_70423
 	xor a
 	ld [hWY], a
-	ld hl, rLCDC
+	ld hl, rLCDC ; $ff40
 	res 3, [hl]
 	ret
 
-HallOfFameText:
-	db "Hall Of Fame@"
+HallOfFameText: ; 7026b (1c:426b)
+	db "HALL OF FAME@"
 
-HoFShowMonOrPlayer:
+Func_70278: ; 70278 (1c:4278)
 	call ClearScreen
 	ld a, $d0
-	ld [hSCY], a
+	ld [$ffaf], a
 	ld a, $c0
-	ld [hSCX], a
-	ld a, [wHoFMonSpecies]
+	ld [$ffae], a
+	ld a, [wWhichTrade] ; wWhichTrade
 	ld [wcf91], a
 	ld [wd0b5], a
 	ld [wBattleMonSpecies2], a
-	ld [wWholeScreenPaletteMonSpecies], a
-	ld a, [wHoFMonSpecies + 1]
- 	ld [wcf91 + 1], a
- 	ld [wd0b5 + 1], a
- 	ld [wBattleMonSpecies2 + 1], a
- 	ld [wWholeScreenPaletteMonSpecies + 1], a
-	ld a, [wHoFMonOrPlayer]
+	ld [wcf1d], a
+	ld a, [wTrainerScreenY]
 	and a
-	jr z, .showMon
-; show player
-	call HoFLoadPlayerPics
-	jr .next1
-.showMon
-	coord hl, 12, 5
+	jr z, .asm_7029d
+	call Func_7033e
+	jr .asm_702ab
+.asm_7029d
+	hlCoord 12, 5
 	call GetMonHeader
 	call LoadFrontSpriteByMonIndex
 	predef LoadMonBackPic
-.next1
-	ld b, SET_PAL_POKEMON_WHOLE_SCREEN
-	ld c, 0
-	call RunPaletteCommand
-	ld a, %11100100
-	ld [rBGP], a
-	ld c, $31 ; back pic
-	call HoFLoadMonPlayerPicTileIDs
+.asm_702ab
+	ld b, $b
+	ld c, $0
+	call GoPAL_SET
+	ld a, $e4
+	ld [rBGP], a ; $ff47
+	ld c, $31
+	call Func_7036d
 	ld d, $a0
-	ld e, 4
+	ld e, $4
 	ld a, [wOnSGB]
 	and a
-	jr z, .next2
-	sla e ; scroll more slowly on SGB
-.next2
-	call .ScrollPic ; scroll back pic left
+	jr z, .asm_702c7
+	sla e
+.asm_702c7
+	call .asm_702d5
 	xor a
-	ld [hSCY], a
-	ld c, a ; front pic
-	call HoFLoadMonPlayerPicTileIDs
-	ld d, 0
-	ld e, -4
-; scroll front pic right
-
-.ScrollPic
+	ld [$ffaf], a
+	ld c, a
+	call Func_7036d
+	ld d, $0
+	ld e, $fc
+.asm_702d5
 	call DelayFrame
-	ld a, [hSCX]
+	ld a, [$ffae]
 	add e
-	ld [hSCX], a
+	ld [$ffae], a
 	cp d
-	jr nz, .ScrollPic
+	jr nz, .asm_702d5
 	ret
 
-HoFDisplayAndRecordMonInfo:
-	ld a, [wHoFPartyMonIndex]
-	ld hl, wPartyMonNicks
+Func_702e1: ; 702e1 (1c:42e1)
+	ld a, [wTrainerEngageDistance]
+	ld hl, wPartyMonNicks ; wPartyMonNicks
 	call GetPartyMonName
-	call HoFDisplayMonInfo
-	jp HoFRecordMonInfo
+	call Func_702f0
+	jp Func_70404
 
-HoFDisplayMonInfo:
-	coord hl, 0, 2
-	ld b, 9
-	ld c, 10
+Func_702f0: ; 702f0 (1c:42f0)
+	hlCoord 0, 2
+	ld b, $9
+	ld c, $a
 	call TextBoxBorder
-	coord hl, 2, 6
+	hlCoord 2, 6
 	ld de, HoFMonInfoText
 	call PlaceString
-	coord hl, 1, 4
+	hlCoord 1, 4
 	ld de, wcd6d
 	call PlaceString
-	ld a, [wHoFMonLevel]
-	coord hl, 8, 7
+	ld a, [wTrainerFacingDirection]
+	hlCoord 8, 7
 	call PrintLevelCommon
-	ld a, [wHoFMonSpecies]
+	ld a, [wWhichTrade] ; wWhichTrade
 	ld [wd0b5], a
-	ld a, [wHoFMonSpecies + 1]
-	ld [wd0b5 + 1], a
-	coord hl, 3, 9
-	predef PrintMonType
-	ld a, [wHoFMonSpecies]
-	ld c, a
-	ld a, [wHoFMonSpecies + 1]
- 	ld b, a
+	hlCoord 3, 9
+	predef Func_27d6b
+	ld a, [wWhichTrade] ; wWhichTrade
 	jp PlayCry
 
-HoFMonInfoText:
-	db   "Level/"
-	next "Type1/"
-	next "Type2/@"
+HoFMonInfoText: ; 70329 (1c:4329)
+	db   "LEVEL/"
+	next "TYPE1/"
+	next "TYPE2/@"
 
-HoFLoadPlayerPics:
-    ld a, [wd798] ; New gender check
-    bit 2, a      ; New gender check
-    jr nz, .GirlStuff1
-    ld de, RedPicFront ; $6ede
-    ld a, BANK(RedPicFront)
-    jr .Routine ; skip the girl stuff and go to main routine
-.GirlStuff1
-    ld de, LeafPicFront
-    ld a, BANK(LeafPicFront)
-.Routine ; resume original routine
-    call UncompressSpriteFromDE
-    ld hl, sSpriteBuffer1
-    ld de, $a000
-    ld bc, $310
-    call CopyData
-    ld de, vFrontPic
-    call InterlaceMergeSpriteBuffers
-    ld a, [wd798] ; new gender check
-    bit 2, a      ; new gender check
-    jr nz, .GirlStuff2
-    ld de, RedPicBack ; $7e0a
-    ld a, BANK(RedPicBack)
-    jr .routine2 ; skip the girl stuff and continue original routine if guy
-.GirlStuff2
-    ld de, LeafPicBack
-    ld a, BANK(LeafPicBack)
-.routine2 ; original routine
-    call UncompressSpriteFromDE
-    ld a, $66
-    ld de, vBackPic
-    push de
-    jp LoadUncompressedBackSprite
-    nop
-    ld c, $1
-    callba LoadBackSpriteUnzoomed
+Func_7033e: ; 7033e (1c:433e)
+	ld de, RedPicFront ; $6ede
+	ld a, BANK(RedPicFront)
+	call UncompressSpriteFromDE
+	ld hl, S_SPRITEBUFFER1
+	ld de, $a000
+	ld bc, $310
+	call CopyData
+	ld de, vFrontPic
+	call InterlaceMergeSpriteBuffers
+	ld de, RedPicBack ; $7e0a
+	ld a, BANK(RedPicBack)
+	call UncompressSpriteFromDE
+	predef ScaleSpriteByTwo
+	ld de, vBackPic
+	call InterlaceMergeSpriteBuffers
+	ld c, $1
 
-HoFLoadMonPlayerPicTileIDs:
-; c = base tile ID
-	ld b, 0
-	coord hl, 12, 5
-	predef_jump CopyTileIDsFromList
+Func_7036d: ; 7036d (1c:436d)
+	ld b, $0
+	hlCoord 12, 5
+	predef_jump Func_79dda
 
-HoFDisplayPlayerStats:
-	SetEvent EVENT_HALL_OF_FAME_DEX_RATING
+Func_70377: ; 70377 (1c:4377)
+	ld hl, wd747
+	set 3, [hl]
 	predef DisplayDexRating
-	coord hl, 0, 4
-	ld b, 6
-	ld c, 10
+	hlCoord 0, 4
+	ld b, $6
+	ld c, $a
 	call TextBoxBorder
-	coord hl, 5, 0
-	ld b, 2
-	ld c, 9
+	hlCoord 5, 0
+	ld b, $2
+	ld c, $9
 	call TextBoxBorder
-	coord hl, 7, 2
-	ld de, wPlayerName
+	hlCoord 7, 2
+	ld de, wPlayerName ; wd158
 	call PlaceString
-	coord hl, 1, 6
+	hlCoord 1, 6
 	ld de, HoFPlayTimeText
 	call PlaceString
-	coord hl, 5, 7
-	ld de, wPlayTimeHours
-	lb bc, 1, 3
+	hlCoord 5, 7
+	ld de, W_PLAYTIMEHOURS + 1
+	ld bc, $103
 	call PrintNumber
 	ld [hl], $6d
 	inc hl
-	ld de, wPlayTimeMinutes
-	lb bc, LEADING_ZEROES | 1, 2
+	ld de, W_PLAYTIMEMINUTES + 1
+	ld bc, $8102
 	call PrintNumber
-	coord hl, 1, 9
+	hlCoord 1, 9
 	ld de, HoFMoneyText
 	call PlaceString
-	coord hl, 4, 10
-	ld de, wPlayerMoney
+	hlCoord 4, 10
+	ld de, wPlayerMoney ; wPlayerMoney
 	ld c, $a3
 	call PrintBCDNumber
 	ld hl, DexSeenOwnedText
-	call HoFPrintTextAndDelay
+	call Func_703e2
 	ld hl, DexRatingText
-	call HoFPrintTextAndDelay
-	ld hl, wDexRatingText
+	call Func_703e2
+	ld hl, wcc5d
 
-HoFPrintTextAndDelay:
+Func_703e2: ; 703e2 (1c:43e2)
 	call PrintText
-	ld c, 120
+	ld c, $78
 	jp DelayFrames
 
-HoFPlayTimeText:
+HoFPlayTimeText: ; 703ea (1c:43ea)
 	db "PLAY TIME@"
 
-HoFMoneyText:
+HoFMoneyText: ; 703f4 (1c:43f4)
 	db "MONEY@"
 
-DexSeenOwnedText:
+DexSeenOwnedText: ; 703fa (1c:43fa)
 	TX_FAR _DexSeenOwnedText
 	db "@"
 
-DexRatingText:
+DexRatingText: ; 703ff (1c:43ff)
 	TX_FAR _DexRatingText
 	db "@"
 
-HoFRecordMonInfo:
+Func_70404: ; 70404 (1c:4404)
 	ld hl, wHallOfFame
 	ld bc, HOF_MON
-	ld a, [wHoFPartyMonIndex]
+	ld a, [wTrainerEngageDistance]
 	call AddNTimes
-	ld a, [wHoFMonSpecies]
+	ld a, [wWhichTrade] ; wWhichTrade
 	ld [hli], a
-	ld a, [wHoFMonLevel]
+	ld a, [wTrainerFacingDirection]
 	ld [hli], a
 	ld e, l
 	ld d, h
 	ld hl, wcd6d
-	ld bc, NAME_LENGTH
+	ld bc, $b
 	jp CopyData
 
-HoFFadeOutScreenAndMusic:
-	ld a, 10
-	ld [wAudioFadeOutCounterReloadValue], a
-	ld [wAudioFadeOutCounter], a
+Func_70423: ; 70423 (1c:4423)
+	ld a, $a
+	ld [wcfc8], a
+	ld [wcfc9], a
 	ld a, $ff
-	ld [wAudioFadeOutControl], a
+	ld [wMusicHeaderPointer], a
 	jp GBFadeOutToWhite

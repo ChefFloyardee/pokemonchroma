@@ -1,4 +1,4 @@
-_GaryChampionIntroText::
+_GaryText_760f4:: ; 860e1 (21:60e1)
 	text $53, ": Hey!"
 
 	para "I was looking"
@@ -10,19 +10,19 @@ _GaryChampionIntroText::
 	cont "me sharp!"
 
 	para "While working on"
-	line "#dex, I looked"
+	line "#DEX, I looked"
 	cont "all over for"
-	cont "powerful #mon!"
+	cont "powerful #MON!"
 
 	para "Not only that, I"
 	line "assembled teams"
 	cont "that would beat"
-	cont "any #mon type!"
+	cont "any #MON type!"
 
 	para "And now!"
 
-	para "I'm the #mon"
-	line "League champion!"
+	para "I'm the #MON"
+	line "LEAGUE champion!"
 
 	para $52, "! Do you"
 	line "know what that"
@@ -35,21 +35,21 @@ _GaryChampionIntroText::
 	cont "in the world!"
 	done
 
-_GaryDefeatedText::
+_GaryText_760f9:: ; 8623b (21:623b)
 	text "NO!"
 	line "That can't be!"
 	cont "You beat my best!"
 
 	para "After all that"
 	line "work to become"
-	cont "League champ?"
+	cont "LEAGUE champ?"
 
 	para "My reign is over"
 	line "already?"
 	cont "It's not fair!"
 	prompt
 
-_GaryVictoryText::
+_GaryText_760fe:: ; 862b4 (21:62b4)
 	text "Hahaha!"
 	line "I won, I won!"
 
@@ -59,37 +59,37 @@ _GaryVictoryText::
 	para "You did well to"
 	line "even reach me,"
 	cont $53, ", the"
-	cont "#mon genius!"
+	cont "#MON genius!"
 
 	para "Nice try, loser!"
 	line "Hahaha!"
 	prompt
 
-_GaryText_76103::
+_GaryText_76103:: ; 8632f (21:632f)
 	text "Why?"
 	line "Why did I lose?"
 
 	para "I never made any"
 	line "mistakes raising"
-	cont "my #mon..."
+	cont "my #MON..."
 
 	para "Darn it! You're"
-	line "the new #mon"
-	cont "League champion!"
+	line "the new #MON"
+	cont "LEAGUE champion!"
 
 	para "Although I don't"
 	line "like to admit it."
 	done
 
-_GaryText2::
-	text "Oak: ", $52, "!"
+_GaryText2:: ; 863c1 (21:63c1)
+	text "OAK: ", $52, "!"
 	done
 
-_GaryText_76120::
-	text "Oak: So, you won!"
+_GaryText_76120:: ; 863ca (21:63ca)
+	text "OAK: So, you won!"
 	line "Congratulations!"
 	cont "You're the new"
-	cont "#mon League"
+	cont "#MON LEAGUE"
 	cont "champion!"
 
 	para "You've grown up so"
@@ -103,13 +103,13 @@ _GaryText_76120::
 	line "come of age!"
 	done
 
-_GaryText_76125::
-	text "Oak: ", $53, "! I'm"
+_GaryText_76125:: ; 86463 (21:6463)
+	text "OAK: ", $53, "! I'm"
 	line "disappointed!"
 
 	para "I came when I"
 	line "heard you beat"
-	cont "the Elite Four!"
+	cont "the ELITE FOUR!"
 
 	para "But, when I got"
 	line "here, you had"
@@ -121,7 +121,7 @@ _GaryText_76125::
 
 	para "You have forgotten"
 	line "to treat your"
-	cont "#mon with"
+	cont "#MON with"
 	cont "trust and love!"
 
 	para "Without them, you"
@@ -129,8 +129,8 @@ _GaryText_76125::
 	cont "a champ again!"
 	done
 
-_GaryText_7612a::
-	text "Oak: ", $52, "!"
+_GaryText_7612a:: ; 86567 (21:6567)
+	text "OAK: ", $52, "!"
 
 	para "You understand"
 	line "that your victory"
@@ -138,9 +138,10 @@ _GaryText_7612a::
 	cont "own doing!"
 
 	para "The bond you share"
-	line "with your #Mon"
+	line "with your #MON"
 	cont "is marvelous!"
 
 	para $52, "!"
 	line "Come with me!"
 	done
+

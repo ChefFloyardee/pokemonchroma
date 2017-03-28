@@ -1,4 +1,4 @@
-Route7Object:
+Route7Object: ; 0x48022 (size=47)
 	db $f ; border block
 
 	db $5 ; warps
@@ -11,7 +11,7 @@ Route7Object:
 	db $1 ; signs
 	db $d, $3, $1 ; Route7Text1
 
-	db $0 ; objects
+	db $0 ; people
 
 	; warp-to
 	EVENT_DISP ROUTE_7_WIDTH, $9, $12 ; ROUTE_7_GATE

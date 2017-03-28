@@ -1,47 +1,48 @@
-SeafoamIslands1Script:
+SeafoamIslands1Script: ; 447e9 (11:47e9)
 	call EnableAutoTextBoxDrawing
-	SetEvent EVENT_IN_SEAFOAM_ISLANDS
+	ld hl, wd7e7
+	set 0, [hl]
 	ld hl, wFlags_0xcd60
 	bit 7, [hl]
 	res 7, [hl]
-	jr z, .asm_4483b
+	jr z, .asm_4483b ; 0x447f8 $41
 	ld hl, Seafoam1HolesCoords
 	call CheckBoulderCoords
 	ret nc
-	EventFlagAddress hl, EVENT_SEAFOAM1_BOULDER1_DOWN_HOLE
-	ld a, [wCoordIndex]
+	ld hl, wd7e8
+	ld a, [wWhichTrade]
 	cp $1
-	jr nz, .asm_44819
-	SetEventReuseHL EVENT_SEAFOAM1_BOULDER1_DOWN_HOLE
-	ld a, HS_SEAFOAM_ISLANDS_1_BOULDER_1
-	ld [wObjectToHide], a
-	ld a, HS_SEAFOAM_ISLANDS_2_BOULDER_1
-	ld [wObjectToShow], a
-	jr .asm_44825
+	jr nz, .asm_44819 ; 0x44809 $e
+	set 6, [hl]
+	ld a, $d7
+	ld [wd079], a
+	ld a, $d9
+	ld [wd07a], a
+	jr .asm_44825 ; 0x44817 $c
 .asm_44819
-	SetEventAfterBranchReuseHL EVENT_SEAFOAM1_BOULDER2_DOWN_HOLE, EVENT_SEAFOAM1_BOULDER1_DOWN_HOLE
-	ld a, HS_SEAFOAM_ISLANDS_1_BOULDER_2
-	ld [wObjectToHide], a
-	ld a, HS_SEAFOAM_ISLANDS_2_BOULDER_2
-	ld [wObjectToShow], a
+	set 7, [hl]
+	ld a, $d8
+	ld [wd079], a
+	ld a, $da
+	ld [wd07a], a
 .asm_44825
-	ld a, [wObjectToHide]
-	ld [wMissableObjectIndex], a
+	ld a, [wd079]
+	ld [wcc4d], a
 	predef HideObject
-	ld a, [wObjectToShow]
-	ld [wMissableObjectIndex], a
+	ld a, [wd07a]
+	ld [wcc4d], a
 	predef_jump ShowObject
 .asm_4483b
 	ld a, $9f
 	ld [wDungeonWarpDestinationMap], a
 	ld hl, Seafoam1HolesCoords
-	jp IsPlayerOnDungeonWarp
+	jp Func_46981
 
-Seafoam1HolesCoords:
+Seafoam1HolesCoords: ; 44846 (11:4846)
 	db $06,$11
 	db $06,$18
 	db $ff
 
-SeafoamIslands1TextPointers:
+SeafoamIslands1TextPointers: ; 4484b (11:484b)
 	dw BoulderText
 	dw BoulderText

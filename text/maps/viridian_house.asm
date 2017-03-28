@@ -1,4 +1,4 @@
-_ViridianHouseText1::
+_ViridianHouseText1:: ; 95d71 (25:5d71)
 	text "Coming up with"
 	line "nicknames is fun,"
 	cont "but hard."
@@ -8,16 +8,17 @@ _ViridianHouseText1::
 	cont "remember."
 	done
 
-_ViridianHouseText2::
+_ViridianHouseText2:: ; 95dc7 (25:5dc7)
 	text "My Daddy loves"
-	line "#mon too."
+	line "#MON too."
 	done
 
-_ViridianHouseText_1d5b1::
-	text "Speary: Tetweet!"
+_ViridianHouseText_1d5b1:: ; 95de1 (25:5de1)
+	text "SPEARY: Tetweet!"
 	done
 
-_ViridianHouseText4::
-	text "Spearow"
-	line "Name: Speary"
+_ViridianHouseText4:: ; 95df3 (25:5df3)
+	text "SPEAROW"
+	line "Name: SPEARY"
 	done
+

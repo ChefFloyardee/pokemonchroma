@@ -1,273 +1,199 @@
-DrawHP:
-; Draws the HP bar in the stats screen
-	call GetPredefRegisters
-	ld a, $1
-	jr DrawHP_
-
-DrawHP2:
-; Draws the HP bar in the party screen
-	call GetPredefRegisters
-	ld a, $2
-
-DrawHP_:
-	ld [wHPBarType], a
-	push hl
-	ld a, [wLoadedMonHP]
-	ld b, a
-	ld a, [wLoadedMonHP + 1]
-	ld c, a
-	or b
-	jr nz, .nonzeroHP
-	xor a
-	ld c, a
-	ld e, a
-	ld a, $6
-	ld d, a
-	jp .drawHPBarAndPrintFraction
-.nonzeroHP
-	ld a, [wLoadedMonMaxHP]
-	ld d, a
-	ld a, [wLoadedMonMaxHP + 1]
-	ld e, a
-	predef HPBarLength
-	ld a, $6
-	ld d, a
-	ld c, a
-.drawHPBarAndPrintFraction
-	pop hl
-	push de
-	push hl
-	push hl
-	call DrawHPBar
-	pop hl
-	ld a, [hFlags_0xFFF6]
-	bit 0, a
-	jr z, .printFractionBelowBar
-	ld bc, $9 ; right of bar
-	jr .printFraction
-.printFractionBelowBar
-	ld bc, SCREEN_WIDTH + 1 ; below bar
-.printFraction
-	add hl, bc
-	ld de, wLoadedMonHP
-	lb bc, 2, 3
-	call PrintNumber
-	ld a, "/"
-	ld [hli], a
-	ld de, wLoadedMonMaxHP
-	lb bc, 2, 3
-	call PrintNumber
-	pop hl
-	pop de
-	ret
-
-
 ; Predef 0x37
-StatusScreen:
+StatusScreen: ; 12953 (4:6953)
 	call LoadMonData
-	ld a, [wMonDataLocation]
-	cp BOX_DATA
-	jr c, .DontRecalculate
-; mon is in a box or daycare
-	ld a, [wLoadedMonBoxLevel]
-	ld [wLoadedMonLevel], a
-	ld [wCurEnemyLVL], a
-	ld hl, wLoadedMonHPExp - 1
-	ld de, wLoadedMonStats
+	ld a, [wcc49]
+	cp $2 ; 2 means we're in a PC box
+	jr c, .DontRecalculate ; 0x1295b $14
+	ld a, [wcf9b]
+	ld [wcfb9], a
+	ld [W_CURENEMYLVL], a
+	ld hl, wcfa8
+	ld de, wcfba
 	ld b, $1
 	call CalcStats ; Recalculate stats
 .DontRecalculate
 	ld hl, wd72c
 	set 1, [hl]
 	ld a, $33
-	ld [rNR50], a ; Reduce the volume
+	ld [$ff24], a ; Reduce the volume
 	call GBPalWhiteOutWithDelay3
 	call ClearScreen
-	call UpdateSprites
+	call UpdateSprites ; move sprites (?)
 	call LoadHpBarAndStatusTilePatterns
-	ld de, BattleHudTiles1  ; source
+	ld de, BattleHudTiles1  ; $6080 ; source
 	ld hl, vChars2 + $6d0 ; dest
-	lb bc, BANK(BattleHudTiles1), $03
+	ld bc, (BANK(BattleHudTiles1) << 8) + $03 ; bank bytes/8
 	call CopyVideoDataDouble ; ·│ :L and halfarrow line end
-	ld de, BattleHudTiles2
+	ld de, BattleHudTiles2 ; $6098
 	ld hl, vChars2 + $780
-	lb bc, BANK(BattleHudTiles2), $01
+	ld bc, (BANK(BattleHudTiles2) << 8) + $01
 	call CopyVideoDataDouble ; │
-	ld de, BattleHudTiles3
+	ld de, BattleHudTiles3 ; $60b0
 	ld hl, vChars2 + $760
-	lb bc, BANK(BattleHudTiles3), $02
+	ld bc, (BANK(BattleHudTiles3) << 8) + $02
 	call CopyVideoDataDouble ; ─┘
 	ld de, PTile
 	ld hl, vChars2 + $720
-	lb bc, BANK(PTile), (PTileEnd - PTile) / $8
+	ld bc,(BANK(PTile) << 8 | $01)
 	call CopyVideoDataDouble ; P (for PP), inline
 	ld a, [hTilesetType]
 	push af
 	xor a
 	ld [hTilesetType], a
-	coord hl, 19, 1
-	lb bc, 6, 10
+	hlCoord 19, 1
+	ld bc, $060a
 	call DrawLineBox ; Draws the box around name, HP and status
-	ld de, -6
+	ld de, $fffa
 	add hl, de
-	ld [hl], "⠄" ; . after No ("." is a different one)
+	ld [hl], $f2 ; . after No ("." is a different one)
 	dec hl
 	ld [hl], "№"
-	coord hl, 19, 9
-	lb bc, 8, 6
+	hlCoord 19, 9
+	ld bc, $0806
 	call DrawLineBox ; Draws the box around types, ID No. and OT
-	coord hl, 10, 9
+	hlCoord 10, 9
 	ld de, Type1Text
 	call PlaceString ; "TYPE1/"
-	coord hl, 11, 3
-	predef DrawHP
-	ld hl, wStatusScreenHPBarColor
+	hlCoord 11, 3
+	predef DrawHP ; predef $5f
+	ld hl, wcf25
 	call GetHealthBarColor
-	ld b, SET_PAL_STATUS_SCREEN
-	call RunPaletteCommand
-	coord hl, 16, 6
-	ld de, wLoadedMonStatus
+	ld b, $3
+	call GoPAL_SET ; SGB palette
+	hlCoord 16, 6
+	ld de, wcf9c
 	call PrintStatusCondition
-	jr nz, .StatusWritten
-	coord hl, 16, 6
+	jr nz, .StatusWritten ; 0x129fc $9
+	hlCoord 16, 6
 	ld de, OKText
 	call PlaceString ; "OK"
 .StatusWritten
-	coord hl, 9, 6
+	hlCoord 9, 6
 	ld de, StatusText
 	call PlaceString ; "STATUS/"
-	coord hl, 14, 2
+	hlCoord 14, 2
 	call PrintLevel ; Pokémon level
-	ld a, [wMonHIndex]
+	ld a, [W_MONHDEXNUM]
 	ld [wd11e], a
 	ld [wd0b5], a
-	ld a, [wMonHIndex + 1]
- 	ld [wd11e + 1], a
- 	ld [wd0b5 + 1], a
 	predef IndexToPokedex
-	coord hl, 3, 7
+	hlCoord 3, 7
 	ld de, wd11e
-	lb bc, LEADING_ZEROES | 1, 3
+	ld bc, $8103 ; Zero-padded, 3
 	call PrintNumber ; Pokémon no.
-	coord hl, 11, 10
-	predef PrintMonType
-	ld hl, NamePointers2
-	call .GetStringPointer
+	hlCoord 11, 10
+	predef Func_27d6b ; Prints the type (?)
+	ld hl, NamePointers2 ; $6a9d
+	call .unk_12a7e
 	ld d, h
 	ld e, l
-	coord hl, 9, 1
+	hlCoord 9, 1
 	call PlaceString ; Pokémon name
-	ld hl, OTPointers
-	call .GetStringPointer
+	ld hl, OTPointers ; $6a95
+	call .unk_12a7e
 	ld d, h
 	ld e, l
-	coord hl, 12, 16
+	hlCoord 12, 16
 	call PlaceString ; OT
-	coord hl, 12, 14
-	ld de, wLoadedMonOTID
-	lb bc, LEADING_ZEROES | 2, 5
+	hlCoord 12, 14
+	ld de, wcfa4
+	ld bc, $8205 ; 5
 	call PrintNumber ; ID Number
 	ld d, $0
 	call PrintStatsBox
 	call Delay3
 	call GBPalNormal
-	coord hl, 1, 0
+	hlCoord 1, 0
 	call LoadFlippedFrontSpriteByMonIndex ; draw Pokémon picture
 	ld a, [wcf91]
-	ld c, a
-	ld a, [wcf91 + 1]
-	ld b, a
 	call PlayCry ; play Pokémon cry
 	call WaitForTextScrollButtonPress ; wait for button
 	pop af
 	ld [hTilesetType], a
 	ret
-
-.GetStringPointer
-	ld a, [wMonDataLocation]
+.unk_12a7e ; 0x12a7e ; I don't know what this does, iterates over pointers?
+	ld a, [wcc49]
 	add a
 	ld c, a
-	ld b, 0
+	ld b, $0
 	add hl, bc
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld a, [wMonDataLocation]
-	cp DAYCARE_DATA
+	ld a, [wcc49]
+	cp $3
 	ret z
 	ld a, [wWhichPokemon]
 	jp SkipFixedLengthTextEntries
 
-OTPointers:
+OTPointers: ; 12a95 (4:6a95)
 	dw wPartyMonOT
 	dw wEnemyMonOT
 	dw wBoxMonOT
-	dw wDayCareMonOT
+	dw W_DAYCAREMONOT
 
-NamePointers2:
+NamePointers2: ; 12a9d (4:6a9d)
 	dw wPartyMonNicks
 	dw wEnemyMonNicks
 	dw wBoxMonNicks
-	dw wDayCareMonName
+	dw W_DAYCAREMONNAME
 
-Type1Text:
-	db "Type1/", $4e
+Type1Text: ; 12aa5 (4:6aa5)
+	db "TYPE1/", $4e
 
-Type2Text:
-	db "Type2/", $4e
+Type2Text: ; 12aac (4:6aac)
+	db "TYPE2/", $4e
 
-IDNoText:
-	db $73, "№/", $4e
+IDNoText: ; 12ab3 (4:6ab3)
+	db $73, "№", "/", $4e
 
-OTText:
-	db   "Ot/"
-	next "@"
+OTText: ; 12ab7 (4:6ab7)
+	db "OT/", $4e, "@"
 
-StatusText:
-	db "Status/@"
+StatusText: ; 12abc (4:6abc)
+	db "STATUS/@"
 
-OKText:
-	db "Ok@"
+OKText: ; 12ac4 (4:6ac4)
+	db "OK@"
 
 ; Draws a line starting from hl high b and wide c
-DrawLineBox:
-	ld de, SCREEN_WIDTH ; New line
+DrawLineBox ; 0x12ac7
+	ld de, $0014 ; New line
 .PrintVerticalLine
 	ld [hl], $78 ; │
 	add hl, de
 	dec b
-	jr nz, .PrintVerticalLine
+	jr nz, .PrintVerticalLine ; 0x12ace $fa
 	ld [hl], $77 ; ┘
 	dec hl
 .PrintHorizLine
 	ld [hl], $76 ; ─
 	dec hl
 	dec c
-	jr nz, .PrintHorizLine
+	jr nz, .PrintHorizLine ; 0x12ad7 $fa
 	ld [hl], $6f ; ← (halfarrow ending)
 	ret
 
-PTile: ; This is a single 1bpp "P" tile
+PTile: ; 12adc (4:6adc) ; This is a single 1bpp "P" tile
 	INCBIN "gfx/p_tile.1bpp"
-PTileEnd:
 
-PrintStatsBox:
+PrintStatsBox: ; 12ae4 (4:6ae4)
 	ld a, d
 	and a ; a is 0 from the status screen
-	jr nz, .DifferentBox
-	coord hl, 0, 8
-	ld b, 8
-	ld c, 8
+	jr nz, .DifferentBox ; 0x12ae6 $12
+	hlCoord 0, 8
+	ld b, $8
+	ld c, $8
 	call TextBoxBorder ; Draws the box
-	coord hl, 1, 9 ; Start printing stats from here
+	hlCoord 1, 9 ; Start printing stats from here
 	ld bc, $0019 ; Number offset
-	jr .PrintStats
+	jr .PrintStats ; 0x12af8 $10
 .DifferentBox
-	coord hl, 9, 2
-	ld b, 8
-	ld c, 9
+	hlCoord 9, 2
+	ld b, $8
+	ld c, $9
 	call TextBoxBorder
-	coord hl, 11, 3
+	hlCoord 11, 3
 	ld bc, $0018
 .PrintStats
 	push bc
@@ -277,79 +203,79 @@ PrintStatsBox:
 	pop hl
 	pop bc
 	add hl, bc
-	ld de, wLoadedMonAttack
-	lb bc, 2, 3
+	ld de, wcfbc
+	ld bc, $0203 ; three digits
 	call PrintStat
-	ld de, wLoadedMonDefense
+	ld de, wcfbe
 	call PrintStat
-	ld de, wLoadedMonSpeed
+	ld de, wcfc0
 	call PrintStat
-	ld de, wLoadedMonSpecial
+	ld de, wcfc2
 	jp PrintNumber
-PrintStat:
+PrintStat
 	push hl
 	call PrintNumber
 	pop hl
-	ld de, SCREEN_WIDTH * 2
+	ld de, $0028
 	add hl, de
 	ret
 
-StatsText:
+StatsText: ; 12b3a (4:6b3a)
 	db   "ATTACK"
 	next "DEFENSE"
 	next "SPEED"
 	next "SPECIAL@"
 
-StatusScreen2:
+StatusScreen2: ; 12b57 (4:6b57)
 	ld a, [hTilesetType]
 	push af
 	xor a
 	ld [hTilesetType], a
-	ld [H_AUTOBGTRANSFERENABLED], a
-	ld bc, NUM_MOVES + 1
-	ld hl, wMoves
+	ld [$ffba], a
+	ld bc, $0005
+	ld hl, wd0dc
 	call FillMemory
-	ld hl, wLoadedMonMoves
-	ld de, wMoves
-	ld bc, NUM_MOVES
+	ld hl, wcfa0
+	ld de, wd0dc
+	ld bc, $0004
 	call CopyData
-	callab FormatMovesString
-	coord hl, 9, 2
-	lb bc, 5, 10
+	callab Func_39b87
+	hlCoord 9, 2
+	ld bc, $050a
 	call ClearScreenArea ; Clear under name
-	coord hl, 19, 3
+	hlCoord 19, 3
 	ld [hl], $78
-	coord hl, 0, 8
-	ld b, 8
-	ld c, 18
+	hlCoord 0, 8
+	ld b, $8
+	ld c, $12
 	call TextBoxBorder ; Draw move container
-	coord hl, 2, 9
-	ld de, wMovesString
+	hlCoord 2, 9
+	ld de, wd0e1
 	call PlaceString ; Print moves
-	ld a, [wNumMovesMinusOne]
+	ld a, [wcd6c]
 	inc a
 	ld c, a
 	ld a, $4
 	sub c
 	ld b, a ; Number of moves ?
-	coord hl, 11, 10
-	ld de, SCREEN_WIDTH * 2
-	ld a, $72 ; special P tile id
-	call StatusScreen_PrintPP ; Print "PP"
+	hlCoord 11, 10
+	ld de, $0028
+	ld a, $72
+	call Func_12ccb ; Print "PP"
 	ld a, b
 	and a
-	jr z, .InitPP
+	jr z, .InitPP ; 0x12bb3 $6
 	ld c, a
 	ld a, "-"
-	call StatusScreen_PrintPP ; Fill the rest with --
-.InitPP
-	ld hl, wLoadedMonMoves
-	coord de, 14, 10
-	ld b, 0
-.PrintPP
+	call Func_12ccb ; Fill the rest with --
+.InitPP ; 12bbb
+	ld hl, wcfa0
+	deCoord 14, 10
+	ld b, $0
+.PrintPP ; 12bc3
 	ld a, [hli]
 	and a
-	jr z, .PPDone
+	jr z, .PPDone ; 0x12bc5 $4a
 	push bc
 	push hl
 	push de
@@ -366,24 +292,24 @@ StatusScreen2:
 	pop de
 	pop hl
 	push hl
-	ld bc, wPartyMon1PP - wPartyMon1Moves - 1
+	ld bc, $0014
 	add hl, bc
 	ld a, [hl]
 	and $3f
-	ld [wStatusScreenCurrentPP], a
+	ld [wcd71], a
 	ld h, d
 	ld l, e
 	push hl
-	ld de, wStatusScreenCurrentPP
-	lb bc, 1, 2
+	ld de, wcd71
+	ld bc, $0102
 	call PrintNumber
 	ld a, "/"
 	ld [hli], a
-	ld de, wMaxPP
-	lb bc, 1, 2
+	ld de, wd11e
+	ld bc, $0102
 	call PrintNumber
 	pop hl
-	ld de, SCREEN_WIDTH * 2
+	ld de, $0028
 	add hl, de
 	ld d, h
 	ld e, l
@@ -392,47 +318,45 @@ StatusScreen2:
 	inc b
 	ld a, b
 	cp $4
-	jr nz, .PrintPP
+	jr nz, .PrintPP ; 0x12c0f $b2
 .PPDone
-	coord hl, 9, 3
-	ld de, StatusScreenExpText
+	hlCoord 9, 3
+	ld de, EXPPointsText
 	call PlaceString
-	ld a, [wLoadedMonLevel]
+	ld a, [wcfb9] ; level
 	push af
 	cp MAX_LEVEL
-	jr z, .Level100
+	jr z, .Level100 ; 0x12c20 $4
 	inc a
-	ld [wLoadedMonLevel], a ; Increase temporarily if not 100
+	ld [wcfb9], a ; Increase temporarily if not 100
 .Level100
-	coord hl, 14, 6
+	hlCoord 14, 6
 	ld [hl], $70 ; 1-tile "to"
 	inc hl
 	inc hl
 	call PrintLevel
 	pop af
-	ld [wLoadedMonLevel], a
-	ld de, wLoadedMonExp
-	coord hl, 12, 4
-	lb bc, 3, 7
+	ld [wcfb9], a
+	ld de, wcfa6
+	hlCoord 12, 4
+	ld bc, $0307
 	call PrintNumber ; exp
-	call CalcExpToLevelUp
-	ld de, wLoadedMonExp
-	coord hl, 7, 6
-	lb bc, 3, 7
-	call PrintNumber ; exp needed to level up
-	coord hl, 9, 0
-	call StatusScreen_ClearName
-	coord hl, 9, 1
-	call StatusScreen_ClearName
-	ld a, [wMonHIndex]
+	call .asm_12c86
+	ld de, wcfa6
+	hlCoord 7, 6
+	ld bc, $0307
+	call PrintNumber
+	hlCoord 9, 0
+	call Func_12cc3
+	hlCoord 9, 1
+	call Func_12cc3
+	ld a, [W_MONHDEXNUM]
 	ld [wd11e], a
-	ld a, [wMonHIndex + 1]
-	ld [wd11e + 1], a
 	call GetMonName
-	coord hl, 9, 1
+	hlCoord 9, 1
 	call PlaceString
 	ld a, $1
-	ld [H_AUTOBGTRANSFERENABLED], a
+	ld [$ffba], a
 	call Delay3
 	call WaitForTextScrollButtonPress ; wait for button
 	pop af
@@ -440,50 +364,50 @@ StatusScreen2:
 	ld hl, wd72c
 	res 1, [hl]
 	ld a, $77
-	ld [rNR50], a
+	ld [$ff24], a
 	call GBPalWhiteOut
 	jp ClearScreen
-
-CalcExpToLevelUp:
-	ld a, [wLoadedMonLevel]
+.asm_12c86 ; This does some magic with lvl/exp?
+	ld a, [wcfb9] ; Load level
 	cp MAX_LEVEL
-	jr z, .atMaxLevel
+	jr z, .asm_12ca7 ; 0x12c8b $1a ; If 100
 	inc a
 	ld d, a
 	callab CalcExperience
-	ld hl, wLoadedMonExp + 2
-	ld a, [hExperience + 2]
+	ld hl, wcfa8
+	ld a, [$ff98]
 	sub [hl]
 	ld [hld], a
-	ld a, [hExperience + 1]
+	ld a, [$ff97]
 	sbc [hl]
 	ld [hld], a
-	ld a, [hExperience]
+	ld a, [$ff96]
 	sbc [hl]
 	ld [hld], a
 	ret
-.atMaxLevel
-	ld hl, wLoadedMonExp
+.asm_12ca7
+	ld hl, wcfa6
 	xor a
 	ld [hli], a
 	ld [hli], a
 	ld [hl], a
 	ret
 
-StatusScreenExpText:
-	db   "Exp Points"
-	next "Level Up@"
+EXPPointsText: ; 12caf (4:6caf)
+	db "EXP POINTS", $4e
 
-StatusScreen_ClearName:
-	ld bc, 10
-	ld a, " "
+LevelUpText: ; 12cba (4:6cba)
+	db "LEVEL UP@"
+
+Func_12cc3: ; 12cc3 (4:6cc3)
+	ld bc, $a
+	ld a, $7f
 	jp FillMemory
 
-StatusScreen_PrintPP:
-; print PP or -- c times, going down two rows each time
+Func_12ccb: ; 12ccb (4:6ccb)
 	ld [hli], a
 	ld [hld], a
 	add hl, de
 	dec c
-	jr nz, StatusScreen_PrintPP
+	jr nz, Func_12ccb
 	ret

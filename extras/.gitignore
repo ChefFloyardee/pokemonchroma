@@ -14,24 +14,8 @@
 *.gbc
 *.gb
 
-# asm files
-*.asm
-
-# symfile
-*.sym
-
 # generated
 *.tx
-
-# output for some scripts
-*.1bpp
-*.2bpp
-*.png
-*.bst
-*.map
-*.wav
-*.blk
-*.pic
 
 # swap files for vim
 .*.swp
@@ -45,6 +29,9 @@ labels.json
 # for vim configuration
 # url: http://www.vim.org/scripts/script.php?script_id=441
 .lvimrc
+
+# some users are dumping png.py into extras/
+png.py
 
 # python packaging
 pokemontools.egg-info/

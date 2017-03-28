@@ -1,4 +1,4 @@
-LoreleiObject:
+LoreleiObject: ; 0x76280 (size=44)
 	db $3 ; border block
 
 	db $4 ; warps
@@ -9,8 +9,8 @@ LoreleiObject:
 
 	db $0 ; signs
 
-	db $1 ; objects
-	object SPRITE_LORELEI, $5, $2, STAY, DOWN, $1, LORELEI, $1
+	db $1 ; people
+	db SPRITE_LORELEI, $2 + 4, $5 + 4, $ff, $d0, TRAINER | $1, LORELEI + $C8, $1
 
 	; warp-to
 	EVENT_DISP LORELEIS_ROOM_WIDTH, $b, $4 ; INDIGO_PLATEAU_LOBBY

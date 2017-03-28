@@ -1,28 +1,29 @@
-_CeladonMart5Text1::
-	text "#mon ability"
+_CeladonMart5Text1:: ; 9ddff (27:5dff)
+	text "#MON ability"
 	line "enhancers can be"
 	cont "bought only here."
 
-	para "Use Calcium to"
-	line "increase Special"
+	para "Use CALCIUM to"
+	line "increase SPECIAL"
 	cont "abilities."
 
-	para "Use Carbos to"
-	line "increase Speed."
+	para "Use CARBOS to"
+	line "increase SPEED."
 	done
 
-_CeladonMart5Text2::
+_CeladonMart5Text2:: ; 9de79 (27:5e79)
 	text "I'm here for"
-	line "#mon ability"
+	line "#MON ability"
 	cont "enhancers."
 
-	para "Protein increases"
-	line "Attack power."
+	para "PROTEIN increases"
+	line "ATTACK power."
 
-	para "Iron increases"
-	line "Defense!"
+	para "IRON increases"
+	line "DEFENSE!"
 	done
 
-_CeladonMart5Text5::
-	text "5F: Drug Store"
+_CeladonMart5Text5:: ; 9ded6 (27:5ed6)
+	text "5F: DRUG STORE"
 	done
+

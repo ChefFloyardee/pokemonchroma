@@ -1,18 +1,35 @@
 DungeonMonsB1:
 	db $19
-	dbw 55,RHYDON
-	dbw 55,MAROWAK
-	dbw 55,ELECTRODE
-	dbw 64,CHANSEY
-	dbw 64,PARASECT
-	dbw 64,RAICHU
-	IF DEF(_RED)
-		dbw 57,ARBOK
+	IF !_YELLOW
+		db 55,RHYDON
+		db 55,MAROWAK
+		db 55,ELECTRODE
+		db 64,CHANSEY
+		db 64,PARASECT
+		db 64,RAICHU
+		IF _RED
+			db 57,ARBOK
+		ENDC
+		IF !_RED
+			db 57,SANDSLASH
+		ENDC
+		db 65,DITTO
+		db 63,DITTO
+		db 67,DITTO
 	ENDC
-	IF DEF(_BLUE)
-		dbw 57,SANDSLASH
+
+	IF _YELLOW
+		db 54,GOLBAT
+		db 59,GOLBAT
+		db 55,GRAVELER
+		db 52,RHYHORN
+		db 62,RHYDON
+		db 60,DITTO
+		db 56,CHANSEY
+		db 65,DITTO
+		db 55,LICKITUNG
+		db 50,LICKITUNG
 	ENDC
-	dbw 57,SANDSLASH
-	dbw 63,DITTO
-	dbw 67,DITTO
+
 	db $00
+

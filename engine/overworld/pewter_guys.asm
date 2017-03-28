@@ -1,4 +1,4 @@
-PewterGuys:
+PewterGuys: ; 37ca1 (d:7ca1)
 	ld hl, wSimulatedJoypadStatesEnd
 	ld a, [wSimulatedJoypadStatesIndex]
 	dec a ; this decrement causes it to overwrite the last byte before $FF in the list
@@ -9,7 +9,7 @@ PewterGuys:
 	ld d, h
 	ld e, l
 	ld hl, PointerTable_37ce6
-	ld a, [wWhichPewterGuy]
+	ld a, [wd12f]
 	add a
 	ld b, 0
 	ld c, a
@@ -17,21 +17,21 @@ PewterGuys:
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-	ld a, [wYCoord]
+	ld a, [W_YCOORD]
 	ld b, a
-	ld a, [wXCoord]
+	ld a, [W_XCOORD]
 	ld c, a
-.findMatchingCoordsLoop
+.asm_37cc7
 	ld a, [hli]
 	cp b
-	jr nz, .nextEntry1
+	jr nz, .asm_37ce1
 	ld a, [hli]
 	cp c
-	jr nz, .nextEntry2
+	jr nz, .asm_37ce2
 	ld a, [hli]
 	ld h, [hl]
 	ld l, a
-.copyMovementDataLoop
+.asm_37cd2
 	ld a, [hli]
 	cp $ff
 	ret z
@@ -40,22 +40,22 @@ PewterGuys:
 	ld a, [wSimulatedJoypadStatesIndex]
 	inc a
 	ld [wSimulatedJoypadStatesIndex], a
-	jr .copyMovementDataLoop
-.nextEntry1
+	jr .asm_37cd2
+.asm_37ce1
 	inc hl
-.nextEntry2
+.asm_37ce2
 	inc hl
 	inc hl
-	jr .findMatchingCoordsLoop
+	jr .asm_37cc7
 
-PointerTable_37ce6:
+PointerTable_37ce6: ; 37ce6 (d:7ce6)
 	dw PewterMuseumGuyCoords
 	dw PewterGymGuyCoords
 
 ; these are the four coordinates of the spaces below, above, to the left and
 ; to the right of the museum guy, and pointers to different movements for
 ; the player to make to get positioned before the main movement.
-PewterMuseumGuyCoords:
+PewterMuseumGuyCoords: ; 37cea (d:7cea)
 	db 18, 27
 	dw .down
 	db 16, 27
@@ -66,19 +66,18 @@ PewterMuseumGuyCoords:
 	dw .right
 
 .down
-	db D_UP, D_UP, $ff
+	db $40, $40, $ff
 .up
-	db D_RIGHT, D_LEFT, $ff
+	db $10, $20, $ff
 .left
-	db D_UP, D_RIGHT, $ff
+	db $40, $10, $ff
 .right
-	db D_UP, D_LEFT, $ff
+	db $40, $20, $ff
 
 ; these are the five coordinates which trigger the gym guy and pointers to
 ; different movements for the player to make to get positioned before the
 ; main movement
-; $00 is a pause
-PewterGymGuyCoords:
+PewterGymGuyCoords: ; 37d06 (d:7d06)
 	db 16, 34
 	dw .one
 	db 17, 35
@@ -91,12 +90,12 @@ PewterGymGuyCoords:
 	dw .five
 
 .one
-	db D_LEFT, D_DOWN, D_DOWN, D_RIGHT, $ff
+	db $20, $80, $80, $10, $ff
 .two
-	db D_LEFT, D_DOWN, D_RIGHT, D_LEFT, $ff
+	db $20, $80, $10, $20, $ff
 .three
-	db D_LEFT, D_LEFT, D_LEFT, $00, $00, $00, $00, $00, $00, $00, $00, $ff
+	db $20, $20, $20, $00, $00, $00, $00, $00, $00, $00, $00, $ff
 .four
-	db D_LEFT, D_LEFT, D_UP, D_LEFT, $ff
+	db $20, $20, $40, $20, $ff
 .five
-	db D_LEFT, D_DOWN, D_LEFT, $00, $00, $00, $00, $00, $00, $00, $00, $ff
+	db $20, $80, $20, $00, $00, $00, $00, $00, $00, $00, $00, $ff

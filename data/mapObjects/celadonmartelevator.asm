@@ -1,4 +1,4 @@
-CeladonMartElevatorObject:
+CeladonMartElevatorObject: ; 0x4866d (size=23)
 	db $f ; border block
 
 	db $2 ; warps
@@ -8,7 +8,7 @@ CeladonMartElevatorObject:
 	db $1 ; signs
 	db $0, $3, $1 ; CeladonMartElevatorText1
 
-	db $0 ; objects
+	db $0 ; people
 
 	; warp-to
 	EVENT_DISP CELADON_MART_ELEVATOR_WIDTH, $3, $1 ; CELADON_MART_1

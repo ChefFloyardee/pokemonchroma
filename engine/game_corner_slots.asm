@@ -1,5 +1,5 @@
-StartSlotMachine:
-	ld a, [wHiddenObjectFunctionArgument]
+StartSlotMachine: ; 37e2d (d:7e2d)
+	ld a, [wTrainerSpriteOffset]
 	cp $fd
 	jr z, .printOutOfOrder
 	cp $fe
@@ -7,33 +7,33 @@ StartSlotMachine:
 	cp $ff
 	jr z, .printSomeonesKeys
 	callba AbleToPlaySlotsCheck
-	ld a, [wCanPlaySlots]
+	ld a, [wTrainerSpriteOffset]
 	and a
 	ret z
-	ld a, [wLuckySlotHiddenObjectIndex]
+	ld a, [wcd05]
 	ld b, a
-	ld a, [wHiddenObjectIndex]
+	ld a, [wTrainerFacingDirection]
 	inc a
 	cp b
-	jr z, .match
-	ld a, 253
-	jr .next
-.match
-	ld a, 250
-.next
-	ld [wSlotMachineSevenAndBarModeChance], a
+	jr z, .asm_37e58
+	ld a, $fd
+	jr .asm_37e5a
+.asm_37e58
+	ld a, $fa
+.asm_37e5a
+	ld [wcc5b], a
 	ld a, [H_LOADEDROMBANK]
-	ld [wSlotMachineSavedROMBank], a
+	ld [wcc5e], a
 	call PromptUserToPlaySlots
 	ret
 .printOutOfOrder
-	tx_pre_id GameCornerOutOfOrderText
+	ld a, $28
 	jr .printText
 .printOutToLunch
-	tx_pre_id GameCornerOutToLunchText
+	ld a, $29
 	jr .printText
 .printSomeonesKeys
-	tx_pre_id GameCornerSomeonesKeysText
+	ld a, $2a
 .printText
 	push af
 	call EnableAutoTextBoxDrawing
@@ -41,14 +41,14 @@ StartSlotMachine:
 	call PrintPredefTextID
 	ret
 
-GameCornerOutOfOrderText:
+GameCornerOutOfOrderText: ; 37e79 (d:7e79)
 	TX_FAR _GameCornerOutOfOrderText
 	db "@"
 
-GameCornerOutToLunchText:
+GameCornerOutToLunchText: ; 37e7e (d:7e7e)
 	TX_FAR _GameCornerOutToLunchText
 	db "@"
 
-GameCornerSomeonesKeysText:
+GameCornerSomeonesKeysText: ; 37e83 (d:7e83)
 	TX_FAR _GameCornerSomeonesKeysText
 	db "@"

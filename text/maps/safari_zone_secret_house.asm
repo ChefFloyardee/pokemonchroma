@@ -1,9 +1,9 @@
-_SecretHouseText_4a350::
+_SecretHouseText_4a350:: ; 858a4 (21:58a4)
 	text "Ah! Finally!"
 
 	para "You're the first"
 	line "person to reach"
-	cont "the Secret House!"
+	cont "the SECRET HOUSE!"
 
 	para "I was getting"
 	line "worried that no"
@@ -14,16 +14,16 @@ _SecretHouseText_4a350::
 	line "You have won!"
 	prompt
 
-_ReceivedHM03Text::
+_ReceivedHM03Text:: ; 85943 (21:5943)
 	text $52, " received"
 	line "@"
 	TX_RAM wcf4b
 	text "!@@"
 
-_HM03ExplanationText::
-	text "HM03 is Surf!"
+_HM03ExplanationText:: ; 85957 (21:5957)
+	text "HM03 is SURF!"
 
-	para "#mon will be"
+	para "#MON will be"
 	line "able to ferry you"
 	cont "across water!"
 
@@ -37,8 +37,9 @@ _HM03ExplanationText::
 	cont "fabulous prize!"
 	done
 
-_HM03NoRoomText::
+_HM03NoRoomText:: ; 85a02 (21:5a02)
 	text "You don't have"
 	line "room for this"
 	cont "fabulous prize!"
 	done
+

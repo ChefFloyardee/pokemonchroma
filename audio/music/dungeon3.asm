@@ -1,4 +1,4 @@
-Music_Dungeon3_Ch0::
+Music_Dungeon3_Ch1:: ; 7e9f1 (1f:69f1)
 	tempo 160
 	volume 7, 7
 	duty 3
@@ -335,7 +335,7 @@ Music_Dungeon3_branch_7eafc::
 	endchannel
 
 
-Music_Dungeon3_Ch1::
+Music_Dungeon3_Ch2:: ; 7eb68 (1f:6b68)
 	vibrato 11, 1, 5
 	duty 3
 
@@ -607,7 +607,7 @@ Music_Dungeon3_branch_7eb6d::
 	loopchannel 0, Music_Dungeon3_branch_7eb6d
 
 
-Music_Dungeon3_Ch2::
+Music_Dungeon3_Ch3:: ; 7ec7a (1f:6c7a)
 	notetype 12, 1, 2
 	rest 16
 	rest 16
@@ -707,10 +707,10 @@ Music_Dungeon3_Ch2::
 	rest 16
 	rest 16
 	rest 10
-	loopchannel 0, Music_Dungeon3_Ch2
+	loopchannel 0, Music_Dungeon3_Ch3
 
 
-Music_Dungeon3_Ch3::
+Music_Dungeon3_Ch4:: ; 7ece4 (1f:6ce4)
 	dspeed 12
 	rest 16
 	rest 16
@@ -754,3 +754,4 @@ Music_Dungeon3_Ch3::
 	rest 16
 	rest 10
 	endchannel
+; 0x7ed0f

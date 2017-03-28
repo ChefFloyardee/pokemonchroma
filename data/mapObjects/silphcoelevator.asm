@@ -1,4 +1,4 @@
-SilphCoElevatorObject:
+SilphCoElevatorObject: ; 0x45844 (size=23)
 	db $f ; border block
 
 	db $2 ; warps
@@ -8,7 +8,7 @@ SilphCoElevatorObject:
 	db $1 ; signs
 	db $0, $3, $1 ; SilphCoElevatorText1
 
-	db $0 ; objects
+	db $0 ; people
 
 	; warp-to
 	EVENT_DISP SILPH_CO_ELEVATOR_WIDTH, $3, $1

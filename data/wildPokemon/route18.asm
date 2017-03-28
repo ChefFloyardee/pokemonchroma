@@ -1,13 +1,30 @@
 Route18Mons:
 	db $19
-	dbw 20,SPEAROW
-	dbw 22,SPEAROW
-	dbw 25,RATICATE
-	dbw 24,DODUO
-	dbw 25,FEAROW
-	dbw 26,DODUO
-	dbw 28,DODUO
-	dbw 29,RATICATE
-	dbw 27,FEAROW
-	dbw 29,FEAROW
+	IF !_YELLOW
+		db 20,SPEAROW
+		db 22,SPEAROW
+		db 25,RATICATE
+		db 24,DODUO
+		db 25,FEAROW
+		db 26,DODUO
+		db 28,DODUO
+		db 29,RATICATE
+		db 27,FEAROW
+		db 29,FEAROW
+	ENDC
+
+	IF _YELLOW
+		db 22,SPEAROW
+		db 22,DODUO
+		db 23,RATTATA
+		db 24,DODUO
+		db 24,RATTATA
+		db 26,DODUO
+		db 23,SPEAROW
+		db 24,FEAROW
+		db 25,RATICATE
+		db 26,RATICATE
+	ENDC
+
 	db $00
+

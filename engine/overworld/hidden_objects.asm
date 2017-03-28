@@ -1,4 +1,4 @@
-IsPlayerOnDungeonWarp:
+Func_46981: ; 46981 (11:6981)
 	xor a
 	ld [wWhichDungeonWarp], a
 	ld a, [wd72d]
@@ -6,7 +6,7 @@ IsPlayerOnDungeonWarp:
 	ret nz
 	call ArePlayerCoordsInArray
 	ret nc
-	ld a, [wCoordIndex]
+	ld a, [wWhichTrade]
 	ld [wWhichDungeonWarp], a
 	ld hl, wd72d
 	set 4, [hl]
@@ -15,7 +15,7 @@ IsPlayerOnDungeonWarp:
 	ret
 
 ; if a hidden object was found, stores $00 in [$ffee], else stores $ff
-CheckForHiddenObject:
+CheckForHiddenObject: ; 469a0 (11:69a0)
 	ld hl, $ffeb
 	xor a
 	ld [hli], a
@@ -29,7 +29,7 @@ CheckForHiddenObject:
 	ld b, a
 	cp $ff
 	jr z, .noMatch
-	ld a, [wCurMap]
+	ld a, [W_CURMAP]
 	cp b
 	jr z, .foundMatchingMap
 	inc de
@@ -58,7 +58,7 @@ CheckForHiddenObject:
 	ld [wHiddenObjectX], a
 	ld c, a
 	call CheckIfCoordsInFrontOfPlayerMatch
-	ld a, [hCoordsInFrontOfPlayerMatch]
+	ld a, [$ffea]
 	and a
 	jr z, .foundMatchingObject
 	inc hl
@@ -85,8 +85,8 @@ CheckForHiddenObject:
 	ret
 
 ; checks if the coordinates in front of the player's sprite match Y in b and X in c
-; [hCoordsInFrontOfPlayerMatch] = $00 if they match, $ff if they don't match
-CheckIfCoordsInFrontOfPlayerMatch:
+; [$ffea] = $00 if they match, $ff if they don't match
+CheckIfCoordsInFrontOfPlayerMatch: ; 46a01 (11:6a01)
 	ld a, [wSpriteStateData1 + 9] ; player's sprite facing direction
 	cp SPRITE_FACING_UP
 	jr z, .facingUp
@@ -95,30 +95,30 @@ CheckIfCoordsInFrontOfPlayerMatch:
 	cp SPRITE_FACING_RIGHT
 	jr z, .facingRight
 ; facing down
-	ld a, [wYCoord]
+	ld a, [W_YCOORD]
 	inc a
 	jr .upDownCommon
 .facingUp
-	ld a, [wYCoord]
+	ld a, [W_YCOORD]
 	dec a
 .upDownCommon
 	cp b
 	jr nz, .didNotMatch
-	ld a, [wXCoord]
+	ld a, [W_XCOORD]
 	cp c
 	jr nz, .didNotMatch
 	jr .matched
 .facingLeft
-	ld a, [wXCoord]
+	ld a, [W_XCOORD]
 	dec a
 	jr .leftRightCommon
 .facingRight
-	ld a, [wXCoord]
+	ld a, [W_XCOORD]
 	inc a
 .leftRightCommon
 	cp c
 	jr nz, .didNotMatch
-	ld a, [wYCoord]
+	ld a, [W_YCOORD]
 	cp b
 	jr nz, .didNotMatch
 .matched
@@ -127,7 +127,7 @@ CheckIfCoordsInFrontOfPlayerMatch:
 .didNotMatch
 	ld a, $ff
 .done
-	ld [hCoordsInFrontOfPlayerMatch], a
+	ld [$ffea], a
 	ret
 
 INCLUDE "data/hidden_objects.asm"

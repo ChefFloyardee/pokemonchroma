@@ -1,34 +1,30 @@
-DisplayPokemartDialogue_:
+DisplayPokemartDialogue_: ; 6c20 (1:6c20)
 	ld a,[wListScrollOffset]
-	ld [wSavedListScrollOffset],a
-	call UpdateSprites
+	ld [wd07e],a
+	call UpdateSprites ; move sprites
 	xor a
-	ld [wBoughtOrSoldItemInMart],a
+	ld [wcf0a],a ; flag that is set if something is sold or bought
 .loop
 	xor a
 	ld [wListScrollOffset],a
 	ld [wCurrentMenuItem],a
 	ld [wPlayerMonNumber],a
 	inc a
-	ld [wPrintItemPrices],a
-	ld a,MONEY_BOX
-	ld [wTextBoxID],a
-	call DisplayTextBoxID
-	ld a,BUY_SELL_QUIT_MENU
-	ld [wTextBoxID],a
-	call DisplayTextBoxID
-
-; This code is useless. It copies the address of the pokemart's inventory to hl,
-; but the address is never used.
-	ld hl,wItemListPointer
+	ld [wcf93],a
+	ld a,$13
+	ld [wd125],a
+	call DisplayTextBoxID ; draw money text box
+	ld a,$15
+	ld [wd125],a
+	call DisplayTextBoxID ; do buy/sell/quit menu
+	ld hl,wd128 ; pointer to this pokemart's inventory
 	ld a,[hli]
 	ld l,[hl]
-	ld h,a
-
-	ld a,[wMenuExitMethod]
-	cp a,CANCELLED_MENU
+	ld h,a ; hl = address of inventory
+	ld a,[wd12e]
+	cp a,$02
 	jp z,.done
-	ld a,[wChosenMenuItem]
+	ld a,[wd12d] ; ID of the chosen menu item
 	and a ; buying?
 	jp z,.buyMenu
 	dec a ; selling?
@@ -36,14 +32,11 @@ DisplayPokemartDialogue_:
 	dec a ; quitting?
 	jp z,.done
 .sellMenu
-
-; the same variables are set again below, so this code has no effect
 	xor a
-	ld [wPrintItemPrices],a
-	ld a,INIT_BAG_ITEM_LIST
-	ld [wInitListType],a
-	callab InitList
-
+	ld [wcf93],a
+	ld a,$02
+	ld [wd11b],a
+	callab Func_39bd5
 	ld a,[wNumBagItems]
 	and a
 	jp z,.bagEmpty
@@ -52,24 +45,24 @@ DisplayPokemartDialogue_:
 	call SaveScreenTilesToBuffer1 ; save screen
 .sellMenuLoop
 	call LoadScreenTilesFromBuffer1 ; restore saved screen
-	ld a,MONEY_BOX
-	ld [wTextBoxID],a
+	ld a,$13
+	ld [wd125],a
 	call DisplayTextBoxID ; draw money text box
 	ld hl,wNumBagItems
 	ld a,l
-	ld [wListPointer],a
+	ld [wcf8b],a
 	ld a,h
-	ld [wListPointer + 1],a
+	ld [wcf8c],a
 	xor a
-	ld [wPrintItemPrices],a
+	ld [wcf93],a
 	ld [wCurrentMenuItem],a
 	ld a,ITEMLISTMENU
 	ld [wListMenuID],a
 	call DisplayListMenuID
 	jp c,.returnToMainPokemartMenu ; if the player closed the menu
 .confirmItemSale ; if the player is trying to sell a specific item
-	call IsKeyItem
-	ld a,[wIsKeyItem]
+	call IsKeyItem ; check if item is unsellable
+	ld a,[wd124]
 	and a
 	jr nz,.unsellableItem
 	ld a,[wcf91]
@@ -77,34 +70,30 @@ DisplayPokemartDialogue_:
 	jr c,.unsellableItem
 	ld a,PRICEDITEMLISTMENU
 	ld [wListMenuID],a
-	ld [hHalveItemPrices],a ; halve prices when selling
+	ld [$ff8e],a ; halve prices when selling
 	call DisplayChooseQuantityMenu
 	inc a
 	jr z,.sellMenuLoop ; if the player closed the choose quantity menu with the B button
 	ld hl,PokemartTellSellPriceText
-	lb bc, 14, 1 ; location that PrintText always prints to, this is useless
+	ld bc,$0e01
 	call PrintText
-	coord hl, 14, 7
-	lb bc, 8, 15
-	ld a,TWO_OPTION_MENU
-	ld [wTextBoxID],a
+	hlCoord 14, 7
+	ld bc,$080f
+	ld a,$14
+	ld [wd125],a
 	call DisplayTextBoxID ; yes/no menu
-	ld a,[wMenuExitMethod]
-	cp a,CHOSE_SECOND_ITEM
-	jr z,.sellMenuLoop ; if the player chose No or pressed the B button
-
-; The following code is supposed to check if the player chose No, but the above
-; check already catches it.
-	ld a,[wChosenMenuItem]
+	ld a,[wd12e]
+	cp a,$02
+	jr z,.sellMenuLoop ; if the player pressed the B button
+	ld a,[wd12d] ; ID of the chosen menu item
 	dec a
-	jr z,.sellMenuLoop
-
+	jr z,.sellMenuLoop ; if the player chose No
 .sellItem
-	ld a,[wBoughtOrSoldItemInMart]
+	ld a,[wcf0a] ; flag that is set if something is sold or bought
 	and a
 	jr nz,.skipSettingFlag1
 	inc a
-	ld [wBoughtOrSoldItemInMart],a
+	ld [wcf0a],a
 .skipSettingFlag1
 	call AddAmountSoldToMoney
 	ld hl,wNumBagItems
@@ -117,42 +106,39 @@ DisplayPokemartDialogue_:
 .bagEmpty
 	ld hl,PokemartItemBagEmptyText
 	call PrintText
-	call SaveScreenTilesToBuffer1
+	call SaveScreenTilesToBuffer1 ; save screen
 	jp .returnToMainPokemartMenu
 .buyMenu
-
-; the same variables are set again below, so this code has no effect
-	ld a,1
-	ld [wPrintItemPrices],a
-	ld a,INIT_OTHER_ITEM_LIST
-	ld [wInitListType],a
-	callab InitList
-
+	ld a,$01
+	ld [wcf93],a
+	ld a,$03
+	ld [wd11b],a
+	callab Func_39bd5
 	ld hl,PokemartBuyingGreetingText
 	call PrintText
-	call SaveScreenTilesToBuffer1
+	call SaveScreenTilesToBuffer1 ; save screen
 .buyMenuLoop
-	call LoadScreenTilesFromBuffer1
-	ld a,MONEY_BOX
-	ld [wTextBoxID],a
-	call DisplayTextBoxID
-	ld hl,wItemList
+	call LoadScreenTilesFromBuffer1 ; restore saved screen
+	ld a,$13
+	ld [wd125],a
+	call DisplayTextBoxID ; draw money text box
+	ld hl,wStringBuffer2 + 11
 	ld a,l
-	ld [wListPointer],a
+	ld [wcf8b],a
 	ld a,h
-	ld [wListPointer + 1],a
+	ld [wcf8c],a
 	xor a
 	ld [wCurrentMenuItem],a
 	inc a
-	ld [wPrintItemPrices],a
+	ld [wcf93],a
 	inc a ; a = 2 (PRICEDITEMLISTMENU)
 	ld [wListMenuID],a
 	call DisplayListMenuID
 	jr c,.returnToMainPokemartMenu ; if the player closed the menu
-	ld a,99
-	ld [wMaxItemQuantity],a
+	ld a,$63
+	ld [wcf97],a
 	xor a
-	ld [hHalveItemPrices],a ; don't halve item prices when buying
+	ld [$ff8e],a
 	call DisplayChooseQuantityMenu
 	inc a
 	jr z,.buyMenuLoop ; if the player closed the choose quantity menu with the B button
@@ -162,21 +148,17 @@ DisplayPokemartDialogue_:
 	call CopyStringToCF4B ; copy name to wcf4b
 	ld hl,PokemartTellBuyPriceText
 	call PrintText
-	coord hl, 14, 7
-	lb bc, 8, 15
-	ld a,TWO_OPTION_MENU
-	ld [wTextBoxID],a
+	hlCoord 14, 7
+	ld bc,$080f
+	ld a,$14
+	ld [wd125],a
 	call DisplayTextBoxID ; yes/no menu
-	ld a,[wMenuExitMethod]
-	cp a,CHOSE_SECOND_ITEM
-	jp z,.buyMenuLoop ; if the player chose No or pressed the B button
-
-; The following code is supposed to check if the player chose No, but the above
-; check already catches it.
-	ld a,[wChosenMenuItem]
+	ld a,[wd12e]
+	cp a,$02
+	jp z,.buyMenuLoop ; if the player pressed the B button
+	ld a,[wd12d] ; ID of the chosen menu item
 	dec a
-	jr z,.buyMenuLoop
-
+	jr z,.buyMenuLoop ; if the player chose No
 .buyItem
 	call .isThereEnoughMoney
 	jr c,.notEnoughMoney
@@ -184,13 +166,13 @@ DisplayPokemartDialogue_:
 	call AddItemToInventory
 	jr nc,.bagFull
 	call SubtractAmountPaidFromMoney
-	ld a,[wBoughtOrSoldItemInMart]
+	ld a,[wcf0a] ; flag that is set if something is sold or bought
 	and a
 	jr nz,.skipSettingFlag2
-	ld a,1
-	ld [wBoughtOrSoldItemInMart],a
+	ld a,$01
+	ld [wcf0a],a
 .skipSettingFlag2
-	ld a,SFX_PURCHASE
+	ld a,RBSFX_02_5a
 	call PlaySoundWaitForCurrent
 	call WaitForSoundToFinish
 	ld hl,PokemartBoughtItemText
@@ -198,15 +180,15 @@ DisplayPokemartDialogue_:
 	jp .buyMenuLoop
 .returnToMainPokemartMenu
 	call LoadScreenTilesFromBuffer1
-	ld a,MONEY_BOX
-	ld [wTextBoxID],a
-	call DisplayTextBoxID
+	ld a,$13
+	ld [wd125],a
+	call DisplayTextBoxID ; draw money text box
 	ld hl,PokemartAnythingElseText
 	call PrintText
 	jp .loop
 .isThereEnoughMoney
 	ld de,wPlayerMoney
-	ld hl,hMoney
+	ld hl,$ff9f ; item price
 	ld c,3 ; length of money in bytes
 	jp StringCmp
 .notEnoughMoney
@@ -220,53 +202,53 @@ DisplayPokemartDialogue_:
 .done
 	ld hl,PokemartThankYouText
 	call PrintText
-	ld a,1
+	ld a,$01
 	ld [wUpdateSpritesEnabled],a
-	call UpdateSprites
-	ld a,[wSavedListScrollOffset]
+	call UpdateSprites ; move sprites
+	ld a,[wd07e]
 	ld [wListScrollOffset],a
 	ret
 
-PokemartBuyingGreetingText:
+PokemartBuyingGreetingText: ; 6e0c (1:6e0c)
 	TX_FAR _PokemartBuyingGreetingText
 	db "@"
 
-PokemartTellBuyPriceText:
+PokemartTellBuyPriceText: ; 6e11 (1:6e11)
 	TX_FAR _PokemartTellBuyPriceText
 	db "@"
 
-PokemartBoughtItemText:
+PokemartBoughtItemText: ; 6e16 (1:6e16)
 	TX_FAR _PokemartBoughtItemText
 	db "@"
 
-PokemartNotEnoughMoneyText:
+PokemartNotEnoughMoneyText: ; 6e1b (1:6e1b)
 	TX_FAR _PokemartNotEnoughMoneyText
 	db "@"
 
-PokemartItemBagFullText:
+PokemartItemBagFullText: ; 6e20 (1:6e20)
 	TX_FAR _PokemartItemBagFullText
 	db "@"
 
-PokemonSellingGreetingText:
+PokemonSellingGreetingText: ; 6e25 (1:6e25)
 	TX_FAR _PokemonSellingGreetingText
 	db "@"
 
-PokemartTellSellPriceText:
+PokemartTellSellPriceText: ; 6e2a (1:6e2a)
 	TX_FAR _PokemartTellSellPriceText
 	db "@"
 
-PokemartItemBagEmptyText:
+PokemartItemBagEmptyText: ; 6e2f (1:6e2f)
 	TX_FAR _PokemartItemBagEmptyText
 	db "@"
 
-PokemartUnsellableItemText:
+PokemartUnsellableItemText: ; 6e34 (1:6e34)
 	TX_FAR _PokemartUnsellableItemText
 	db "@"
 
-PokemartThankYouText:
+PokemartThankYouText: ; 6e39 (1:6e39)
 	TX_FAR _PokemartThankYouText
 	db "@"
 
-PokemartAnythingElseText:
+PokemartAnythingElseText: ; 6e3e (1:6e3e)
 	TX_FAR _PokemartAnythingElseText
 	db "@"

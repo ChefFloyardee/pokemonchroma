@@ -1,3 +1,3 @@
 ; timer interrupt is apparently not invoked anyway
-Timer::
+Timer:: ; 2306 (0:2306)
 	reti

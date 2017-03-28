@@ -1,153 +1,79 @@
-_GivePokemon:
-; returns success in carry
-; and whether the mon was added to the party in [wAddedToParty]
+_GivePokemon: ; 4fda5 (13:7da5)
 	call EnableAutoTextBoxDrawing
 	xor a
-	ld [wAddedToParty], a
-	ld a, [wPartyCount]
+	ld [wccd3], a
+	ld a, [wPartyCount] ; wPartyCount
 	cp PARTY_LENGTH
-	jr c, .addToParty
-	ld a, [wNumInBox]
+	jr c, .asm_4fe01
+	ld a, [W_NUMINBOX] ; wda80
 	cp MONS_PER_BOX
-	jr nc, .boxFull
-; add to box
+	jr nc, .asm_4fdf9
 	xor a
-	ld [wEnemyBattleStatus3], a
+	ld [W_ENEMYBATTSTATUS3], a ; W_ENEMYBATTSTATUS3
 	ld a, [wcf91]
 	ld [wEnemyMonSpecies2], a
-	ld a, [wcf91 + 1]
- 	ld [wEnemyMonSpecies2 + 1], a
 	callab LoadEnemyMonData
 	call SetPokedexOwnedFlag
-	callab SendNewMonToBox
+	callab Func_e7a4
 	ld hl, wcf4b
-	ld a, [wCurrentBoxNum]
+	ld a, [wd5a0]
 	and $7f
 	cp 9
-	jr c, .singleDigitBoxNum
+	jr c, .asm_4fdec
 	sub 9
 	ld [hl], "1"
 	inc hl
 	add "0"
-	jr .next
-.singleDigitBoxNum
+	jr .asm_4fdee
+.asm_4fdec
 	add "1"
-.next
+.asm_4fdee
 	ld [hli], a
 	ld [hl], "@"
 	ld hl, SetToBoxText
 	call PrintText
 	scf
 	ret
-.boxFull
+.asm_4fdf9
 	ld hl, BoxIsFullText
 	call PrintText
 	and a
 	ret
-.addToParty
+.asm_4fe01
 	call SetPokedexOwnedFlag
 	call AddPartyMon
-	ld a, 1
+	ld a, $1
 	ld [wDoNotWaitForButtonPressAfterDisplayingText], a
-	ld [wAddedToParty], a
+	ld [wccd3], a
 	scf
 	ret
 
-SetPokedexOwnedFlag:
+SetPokedexOwnedFlag: ; 4fe11 (13:7e11)
 	ld a, [wcf91]
-	ld e, a
- 	ld a, [wcf91 + 1]
- 	ld d, a
- 	push de
- 	ld [wd11e + 1], a
- 	ld a, e
+	push af
 	ld [wd11e], a
 	predef IndexToPokedex
 	ld a, [wd11e]
-	ld e, a
- 	ld a, [wd11e + 1]
- 	ld d, a
- 	dec de
-	ld hl, wPokedexOwned
-	call Set16BitFlag_Bank13
- 	pop de
- 	ld a, e
+	dec a
+	ld c, a
+	ld hl, wPokedexOwned ; wPokedexOwned
+	ld b, $1
+	predef FlagActionPredef
+	pop af
 	ld [wd11e], a
-	ld a, d
- 	ld [wd11e + 1], a
 	call GetMonName
 	ld hl, GotMonText
 	jp PrintText
 
-GotMonText:
+GotMonText: ; 4fe39 (13:7e39)
 	TX_FAR _GotMonText
-	TX_SFX_ITEM_1
+	db $0b
 	db "@"
 
-SetToBoxText:
+SetToBoxText: ; 4fe3f (13:7e3f)
 	TX_FAR _SetToBoxText
 	db "@"
 
-BoxIsFullText:
+BoxIsFullText: ; 4fe44 (13:7e44)
 	TX_FAR _BoxIsFullText
 	db "@"
-
-Set16BitFlag_Bank13:
-; Input: de = flag index
-;        hl = flag data
- 	ld bc, $20
- 	ld a, d
-.hi
- 	and a
- 	jr z, .next
- 	add hl, bc
- 	dec a
- 	jr .hi
-.next
- 	ld a, e
- 	srl a
- 	srl a
- 	srl a
- 	ld b, 0
- 	ld c, a
- 	add hl, bc
- 	ld a, e
- 	and a, %00000111
- 	cp 7
- 	jr nz, .check6
- 	set 7, [hl]
- 	ret
-.check6
- 	cp 6
- 	jr nz, .check5
- 	set 6, [hl]
- 	ret
-.check5
- 	cp 5
- 	jr nz, .check4
- 	set 5, [hl]
- 	ret
-.check4
- 	cp 4
- 	jr nz, .check3
- 	set 3, [hl]
- 	ret
-.check3
- 	cp 3
- 	jr nz, .check2
- 	set 3, [hl]
- 	ret
-.check2
- 	cp 2
- 	jr nz, .check1
- 	set 2, [hl]
- 	ret
-.check1
- 	cp 1
- 	jr nz, .zero
- 	set 1, [hl]
- 	ret
-.zero
- 	set 0, [hl]
- 	ret
-	

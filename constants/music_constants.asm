@@ -1,269 +1,388 @@
-; HW sound channel register base addresses
-HW_CH1_BASE EQU (rNR10 % $100)
-HW_CH2_BASE EQU ((rNR21 % $100) - 1)
-HW_CH3_BASE EQU (rNR30 % $100)
-HW_CH4_BASE EQU ((rNR41 % $100) - 1)
-
-; HW sound channel enable bit masks
-HW_CH1_ENABLE_MASK EQU %00010001
-HW_CH2_ENABLE_MASK EQU %00100010
-HW_CH3_ENABLE_MASK EQU %01000100
-HW_CH4_ENABLE_MASK EQU %10001000
-
-; HW sound channel disable bit masks
-HW_CH1_DISABLE_MASK EQU (~HW_CH1_ENABLE_MASK & $ff)
-HW_CH2_DISABLE_MASK EQU (~HW_CH2_ENABLE_MASK & $ff)
-HW_CH3_DISABLE_MASK EQU (~HW_CH3_ENABLE_MASK & $ff)
-HW_CH4_DISABLE_MASK EQU (~HW_CH4_ENABLE_MASK & $ff)
-
-REG_DUTY_SOUND_LEN  EQU 1
-REG_VOLUME_ENVELOPE EQU 2
-REG_FREQUENCY_LO    EQU 3
-
-MAX_SFX_ID EQU $B9
-
-CRY_SFX_START EQU $14
-CRY_SFX_END   EQU $86
-
-; wChannelFlags1 constants
-BIT_PERFECT_PITCH         EQU 0 ; controlled by toggleperfectpitch command
-BIT_CHANNEL_CALL          EQU 1 ; if in channel call
-BIT_NOISE_OR_SFX          EQU 2 ; if channel is the music noise channel or an SFX channel
-BIT_VIBRATO_DIRECTION     EQU 3 ; if the pitch is above or below normal (cycles)
-BIT_PITCH_BEND_ON         EQU 4 ; if pitch bend is active
-BIT_PITCH_BEND_DECREASING EQU 5 ; if the pitch bend frequency is decreasing (instead of increasing)
-BIT_ROTATE_DUTY           EQU 6 ; if rotating duty
-
-; wChannelFlags2 constant (only has one flag)
-BIT_EXECUTE_MUSIC EQU 0 ; if in execute music
-
 ; Song ids are calculated by address to save space.
 
-music_const: MACRO
-\1 EQUS "((\2 - SFX_Headers_1) / 3)"
-ENDM
+;music_const: MACRO
+;\1 EQUS "RB(\2)"
+;ENDM
+const_value = 1
 
-	; AUDIO_1
-	music_const MUSIC_PALLET_TOWN,         Music_PalletTown
-	music_const MUSIC_POKECENTER,          Music_Pokecenter
-	music_const MUSIC_GYM,                 Music_Gym
-	music_const MUSIC_CITIES1,             Music_Cities1
-	music_const MUSIC_CITIES2,             Music_Cities2
-	music_const MUSIC_CELADON,             Music_Celadon
-	music_const MUSIC_CINNABAR,            Music_Cinnabar
-	music_const MUSIC_VERMILION,           Music_Vermilion
-	music_const MUSIC_LAVENDER,            Music_Lavender
-	music_const MUSIC_SS_ANNE,             Music_SSAnne
-	music_const MUSIC_MEET_PROF_OAK,       Music_MeetProfOak
-	music_const MUSIC_MEET_RIVAL,          Music_MeetRival
-	music_const MUSIC_MUSEUM_GUY,          Music_MuseumGuy
-	music_const MUSIC_SAFARI_ZONE,         Music_SafariZone
-	music_const MUSIC_PKMN_HEALED,         Music_PkmnHealed
-	music_const MUSIC_ROUTES1,             Music_Routes1
-	music_const MUSIC_ROUTES2,             Music_Routes2
-	music_const MUSIC_ROUTES3,             Music_Routes3
-	music_const MUSIC_ROUTES4,             Music_Routes4
-	music_const MUSIC_INDIGO_PLATEAU,      Music_IndigoPlateau
+    const MUSIC_PALLET_TOWN
+	const MUSIC_POKECENTER
+	const MUSIC_GYM
+	const MUSIC_CITIES1
+	const MUSIC_CITIES2
+	const MUSIC_CELADON
+	const MUSIC_CINNABAR
+	const MUSIC_VERMILION
+	const MUSIC_LAVENDER
+	const MUSIC_SS_ANNE
+	const MUSIC_MEET_PROF_OAK
+	const MUSIC_MEET_RIVAL
+	const MUSIC_MUSEUM_GUY
+	const MUSIC_SAFARI_ZONE
+	const MUSIC_PKMN_HEALED
+	const MUSIC_ROUTES1
+	const MUSIC_ROUTES2
+	const MUSIC_ROUTES3
+	const MUSIC_ROUTES4
+	const MUSIC_INDIGO_PLATEAU
+	
+	const MUSIC_GYM_LEADER_BATTLE
+	const MUSIC_TRAINER_BATTLE
+	const MUSIC_WILD_BATTLE
+	const MUSIC_FINAL_BATTLE
+	const MUSIC_DEFEATED_TRAINER
+	const MUSIC_DEFEATED_WILD_MON
+	const MUSIC_DEFEATED_GYM_LEADER
+	
+	const MUSIC_TITLE_SCREEN
+	const MUSIC_CREDITS
+	const MUSIC_HALL_OF_FAME
+	const MUSIC_OAKS_LAB
+	const MUSIC_JIGGLYPUFF_SONG
+	const MUSIC_BIKE_RIDING
+	const MUSIC_SURFING
+	const MUSIC_GAME_CORNER
+	const MUSIC_INTRO_BATTLE
+	const MUSIC_DUNGEON1
+	const MUSIC_DUNGEON2
+	const MUSIC_DUNGEON3
+	const MUSIC_CINNABAR_MANSION
+	const MUSIC_POKEMON_TOWER
+	const MUSIC_SILPH_CO
+	const MUSIC_MEET_EVIL_TRAINER
+	const MUSIC_MEET_FEMALE_TRAINER
+	const MUSIC_MEET_MALE_TRAINER
 
-	; AUDIO_2
-	music_const MUSIC_GYM_LEADER_BATTLE,   Music_GymLeaderBattle
-	music_const MUSIC_TRAINER_BATTLE,      Music_TrainerBattle
-	music_const MUSIC_WILD_BATTLE,         Music_WildBattle
-	music_const MUSIC_FINAL_BATTLE,        Music_FinalBattle
-	music_const MUSIC_DEFEATED_TRAINER,    Music_DefeatedTrainer
-	music_const MUSIC_DEFEATED_WILD_MON,   Music_DefeatedWildMon
-	music_const MUSIC_DEFEATED_GYM_LEADER, Music_DefeatedGymLeader
 
-	; AUDIO_3
-	music_const MUSIC_TITLE_SCREEN,        Music_TitleScreen
-	music_const MUSIC_CREDITS,             Music_Credits
-	music_const MUSIC_HALL_OF_FAME,        Music_HallOfFame
-	music_const MUSIC_OAKS_LAB,            Music_OaksLab
-	music_const MUSIC_JIGGLYPUFF_SONG,     Music_JigglypuffSong
-	music_const MUSIC_BIKE_RIDING,         Music_BikeRiding
-	music_const MUSIC_SURFING,             Music_Surfing
-	music_const MUSIC_GAME_CORNER,         Music_GameCorner
-	music_const MUSIC_INTRO_BATTLE,        Music_IntroBattle
-	music_const MUSIC_DUNGEON1,            Music_Dungeon1
-	music_const MUSIC_DUNGEON2,            Music_Dungeon2
-	music_const MUSIC_DUNGEON3,            Music_Dungeon3
-	music_const MUSIC_CINNABAR_MANSION,    Music_CinnabarMansion
-	music_const MUSIC_POKEMON_TOWER,       Music_PokemonTower
-	music_const MUSIC_SILPH_CO,            Music_SilphCo
-	music_const MUSIC_MEET_EVIL_TRAINER,   Music_MeetEvilTrainer
-	music_const MUSIC_MEET_FEMALE_TRAINER, Music_MeetFemaleTrainer
-	music_const MUSIC_MEET_MALE_TRAINER,   Music_MeetMaleTrainer
 
-	; AUDIO_1 AUDIO_2 AUDIO_3
-	music_const SFX_SNARE_1,            SFX_Snare1_1
-	music_const SFX_SNARE_2,            SFX_Snare2_1
-	music_const SFX_SNARE_3,            SFX_Snare3_1
-	music_const SFX_SNARE_4,            SFX_Snare4_1
-	music_const SFX_SNARE_5,            SFX_Snare5_1
-	music_const SFX_TRIANGLE_1,         SFX_Triangle1_1
-	music_const SFX_TRIANGLE_2,         SFX_Triangle2_1
-	music_const SFX_SNARE_6,            SFX_Snare6_1
-	music_const SFX_SNARE_7,            SFX_Snare7_1
-	music_const SFX_SNARE_8,            SFX_Snare8_1
-	music_const SFX_SNARE_9,            SFX_Snare9_1
-	music_const SFX_CYMBAL_1,           SFX_Cymbal1_1
-	music_const SFX_CYMBAL_2,           SFX_Cymbal2_1
-	music_const SFX_CYMBAL_3,           SFX_Cymbal3_1
-	music_const SFX_MUTED_SNARE_1,      SFX_Muted_Snare1_1
-	music_const SFX_TRIANGLE_3,         SFX_Triangle3_1
-	music_const SFX_MUTED_SNARE_2,      SFX_Muted_Snare2_1
-	music_const SFX_MUTED_SNARE_3,      SFX_Muted_Snare3_1
-	music_const SFX_MUTED_SNARE_4,      SFX_Muted_Snare4_1
-	music_const SFX_CRY_00,             SFX_Cry00_1
-	music_const SFX_CRY_01,             SFX_Cry01_1
-	music_const SFX_CRY_02,             SFX_Cry02_1
-	music_const SFX_CRY_03,             SFX_Cry03_1
-	music_const SFX_CRY_04,             SFX_Cry04_1
-	music_const SFX_CRY_05,             SFX_Cry05_1
-	music_const SFX_CRY_06,             SFX_Cry06_1
-	music_const SFX_CRY_07,             SFX_Cry07_1
-	music_const SFX_CRY_08,             SFX_Cry08_1
-	music_const SFX_CRY_09,             SFX_Cry09_1
-	music_const SFX_CRY_0A,             SFX_Cry0A_1
-	music_const SFX_CRY_0B,             SFX_Cry0B_1
-	music_const SFX_CRY_0C,             SFX_Cry0C_1
-	music_const SFX_CRY_0D,             SFX_Cry0D_1
-	music_const SFX_CRY_0E,             SFX_Cry0E_1
-	music_const SFX_CRY_0F,             SFX_Cry0F_1
-	music_const SFX_CRY_10,             SFX_Cry10_1
-	music_const SFX_CRY_11,             SFX_Cry11_1
-	music_const SFX_CRY_12,             SFX_Cry12_1
-	music_const SFX_CRY_13,             SFX_Cry13_1
-	music_const SFX_CRY_14,             SFX_Cry14_1
-	music_const SFX_CRY_15,             SFX_Cry15_1
-	music_const SFX_CRY_16,             SFX_Cry16_1
-	music_const SFX_CRY_17,             SFX_Cry17_1
-	music_const SFX_CRY_18,             SFX_Cry18_1
-	music_const SFX_CRY_19,             SFX_Cry19_1
-	music_const SFX_CRY_1A,             SFX_Cry1A_1
-	music_const SFX_CRY_1B,             SFX_Cry1B_1
-	music_const SFX_CRY_1C,             SFX_Cry1C_1
-	music_const SFX_CRY_1D,             SFX_Cry1D_1
-	music_const SFX_CRY_1E,             SFX_Cry1E_1
-	music_const SFX_CRY_1F,             SFX_Cry1F_1
-	music_const SFX_CRY_20,             SFX_Cry20_1
-	music_const SFX_CRY_21,             SFX_Cry21_1
-	music_const SFX_CRY_22,             SFX_Cry22_1
-	music_const SFX_CRY_23,             SFX_Cry23_1
-	music_const SFX_CRY_24,             SFX_Cry24_1
-	music_const SFX_CRY_25,             SFX_Cry25_1
+; mappings
+RBSFX_02_00 EQU $00
+RBSFX_02_01 EQU $01
+RBSFX_02_02 EQU $02
+RBSFX_02_03 EQU $03
+RBSFX_02_04 EQU $04
+RBSFX_02_05 EQU $05
+RBSFX_02_06 EQU $06
+RBSFX_02_07 EQU $07
+RBSFX_02_08 EQU $08
+RBSFX_02_09 EQU $09
+RBSFX_02_0a EQU $0a
+RBSFX_02_0b EQU $0b
+RBSFX_02_0c EQU $0c
+RBSFX_02_0d EQU $0d
+RBSFX_02_0e EQU $0e
+RBSFX_02_0f EQU $0f
+RBSFX_02_10 EQU $10
+RBSFX_02_11 EQU $11
+RBSFX_02_12 EQU $12
+RBSFX_02_13 EQU $13
+RBSFX_02_14 EQU $14
+RBSFX_02_15 EQU $15
+RBSFX_02_16 EQU $16
+RBSFX_02_17 EQU $17
+RBSFX_02_18 EQU $18
+RBSFX_02_19 EQU $19
+RBSFX_02_1a EQU $1a
+RBSFX_02_1b EQU $1b
+RBSFX_02_1c EQU $1c
+RBSFX_02_1d EQU $1d
+RBSFX_02_1e EQU $1e
+RBSFX_02_1f EQU $1f
+RBSFX_02_20 EQU $20
+RBSFX_02_21 EQU $21
+RBSFX_02_22 EQU $22
+RBSFX_02_23 EQU $23
+RBSFX_02_24 EQU $24
+RBSFX_02_25 EQU $25
+RBSFX_02_26 EQU $26
+RBSFX_02_27 EQU $27
+RBSFX_02_28 EQU $28
+RBSFX_02_29 EQU $29
+RBSFX_02_2a EQU $2a
+RBSFX_02_2b EQU $2b
+RBSFX_02_2c EQU $2c
+RBSFX_02_2d EQU $2d
+RBSFX_02_2e EQU $2e
+RBSFX_02_2f EQU $2f
+RBSFX_02_30 EQU $30
+RBSFX_02_31 EQU $31
+RBSFX_02_32 EQU $32
+RBSFX_02_33 EQU $33
+RBSFX_02_34 EQU $34
+RBSFX_02_35 EQU $35
+RBSFX_02_36 EQU $36
+RBSFX_02_37 EQU $37
+RBSFX_02_38 EQU $38
+RBSFX_02_39 EQU $39
+RBSFX_02_3a EQU $3a
+RBSFX_02_3b EQU $3b
+RBSFX_02_3c EQU $3c
+RBSFX_02_3d EQU $3d
+RBSFX_02_3e EQU $3e
+RBSFX_02_3f EQU $3f
+RBSFX_02_40 EQU $40
+RBSFX_02_41 EQU $41
+RBSFX_02_42 EQU $42
+RBSFX_02_43 EQU $43
+RBSFX_02_44 EQU $44
+RBSFX_02_45 EQU $45
+RBSFX_02_46 EQU $46
+RBSFX_02_47 EQU $47
+RBSFX_02_48 EQU $48
+RBSFX_02_49 EQU $49
+RBSFX_02_4a EQU $4a
+RBSFX_02_4b EQU $4b
+RBSFX_02_4c EQU $4c
+RBSFX_02_4d EQU $4d
+RBSFX_02_4e EQU $4e
+RBSFX_02_4f EQU $4f
+RBSFX_02_50 EQU $50
+RBSFX_02_51 EQU $51
+RBSFX_02_52 EQU $52
+RBSFX_02_53 EQU $53
+RBSFX_02_54 EQU $54
+RBSFX_02_55 EQU $55
+RBSFX_02_56 EQU $56
+RBSFX_02_57 EQU $57
+RBSFX_02_58 EQU $58
+RBSFX_02_59 EQU $59
+RBSFX_02_5a EQU $5a
+RBSFX_02_5b EQU $5b
+RBSFX_02_5c EQU $5c
+RBSFX_02_5d EQU $5d
+RBSFX_02_5e EQU $5e
+RBSFX_02_5f EQU $5f
 
-	music_const SFX_GET_ITEM_2,         SFX_Get_Item2_1
-	music_const SFX_TINK,               SFX_Tink_1
-	music_const SFX_HEAL_HP,            SFX_Heal_HP_1
-	music_const SFX_HEAL_AILMENT,       SFX_Heal_Ailment_1
-	music_const SFX_START_MENU,         SFX_Start_Menu_1
-	music_const SFX_PRESS_AB,           SFX_Press_AB_1
 
-	; AUDIO_1 AUDIO_3
-	music_const SFX_GET_ITEM_1,         SFX_Get_Item1_1
+RBSFX_08_00 EQU $00
+RBSFX_08_01 EQU $01
+RBSFX_08_02 EQU $02
+RBSFX_08_03 EQU $03
+RBSFX_08_04 EQU $04
+RBSFX_08_05 EQU $05
+RBSFX_08_06 EQU $06
+RBSFX_08_07 EQU $07
+RBSFX_08_08 EQU $08
+RBSFX_08_09 EQU $09
+RBSFX_08_0a EQU $0a
+RBSFX_08_0b EQU $0b
+RBSFX_08_0c EQU $0c
+RBSFX_08_0d EQU $0d
+RBSFX_08_0e EQU $0e
+RBSFX_08_0f EQU $0f
+RBSFX_08_10 EQU $10
+RBSFX_08_11 EQU $11
+RBSFX_08_12 EQU $12
+RBSFX_08_13 EQU $13
+RBSFX_08_14 EQU $14
+RBSFX_08_15 EQU $15
+RBSFX_08_16 EQU $16
+RBSFX_08_17 EQU $17
+RBSFX_08_18 EQU $18
+RBSFX_08_19 EQU $19
+RBSFX_08_1a EQU $1a
+RBSFX_08_1b EQU $1b
+RBSFX_08_1c EQU $1c
+RBSFX_08_1d EQU $1d
+RBSFX_08_1e EQU $1e
+RBSFX_08_1f EQU $1f
+RBSFX_08_20 EQU $20
+RBSFX_08_21 EQU $21
+RBSFX_08_22 EQU $22
+RBSFX_08_23 EQU $23
+RBSFX_08_24 EQU $24
+RBSFX_08_25 EQU $25
+RBSFX_08_26 EQU $26
+RBSFX_08_27 EQU $27
+RBSFX_08_28 EQU $28
+RBSFX_08_29 EQU $29
+RBSFX_08_2a EQU $2a
+RBSFX_08_2b EQU $2b
+RBSFX_08_2c EQU $2c
+RBSFX_08_2d EQU $2d
+RBSFX_08_2e EQU $2e
+RBSFX_08_2f EQU $2f
+RBSFX_08_30 EQU $30
+RBSFX_08_31 EQU $31
+RBSFX_08_32 EQU $32
+RBSFX_08_33 EQU $33
+RBSFX_08_34 EQU $34
+RBSFX_08_35 EQU $35
+RBSFX_08_36 EQU $36
+RBSFX_08_37 EQU $37
+RBSFX_08_38 EQU $38
+RBSFX_08_39 EQU $39
+RBSFX_08_3a EQU $3a
+RBSFX_08_3b EQU $3b
+RBSFX_08_3c EQU $3c
+RBSFX_08_3d EQU $3d
+RBSFX_08_3e EQU $3e
+RBSFX_08_3f EQU $3f
 
-	music_const SFX_POKEDEX_RATING,     SFX_Pokedex_Rating_1
-	music_const SFX_GET_KEY_ITEM,       SFX_Get_Key_Item_1
-	music_const SFX_POISONED,           SFX_Poisoned_1
-	music_const SFX_TRADE_MACHINE,      SFX_Trade_Machine_1
-	music_const SFX_TURN_ON_PC,         SFX_Turn_On_PC_1
-	music_const SFX_TURN_OFF_PC,        SFX_Turn_Off_PC_1
-	music_const SFX_ENTER_PC,           SFX_Enter_PC_1
-	music_const SFX_SHRINK,             SFX_Shrink_1
-	music_const SFX_SWITCH,             SFX_Switch_1
-	music_const SFX_HEALING_MACHINE,    SFX_Healing_Machine_1
-	music_const SFX_TELEPORT_EXIT_1,    SFX_Teleport_Exit1_1
-	music_const SFX_TELEPORT_ENTER_1,   SFX_Teleport_Enter1_1
-	music_const SFX_TELEPORT_EXIT_2,    SFX_Teleport_Exit2_1
-	music_const SFX_LEDGE,              SFX_Ledge_1
-	music_const SFX_TELEPORT_ENTER_2,   SFX_Teleport_Enter2_1
-	music_const SFX_FLY,                SFX_Fly_1
-	music_const SFX_DENIED,             SFX_Denied_1
-	music_const SFX_ARROW_TILES,        SFX_Arrow_Tiles_1
-	music_const SFX_PUSH_BOULDER,       SFX_Push_Boulder_1
-	music_const SFX_SS_ANNE_HORN,       SFX_SS_Anne_Horn_1
-	music_const SFX_WITHDRAW_DEPOSIT,   SFX_Withdraw_Deposit_1
-	music_const SFX_CUT,                SFX_Cut_1
-	music_const SFX_GO_INSIDE,          SFX_Go_Inside_1
-	music_const SFX_SWAP,               SFX_Swap_1
-	music_const SFX_59,                 SFX_59_1 ; unused, sounds similar to SFX_SLOTS_STOP_WHEEL
-	music_const SFX_PURCHASE,           SFX_Purchase_1
-	music_const SFX_COLLISION,          SFX_Collision_1
-	music_const SFX_GO_OUTSIDE,         SFX_Go_Outside_1
-	music_const SFX_SAVE,               SFX_Save_1
+RBSFX_08_40 EQU $60
+RBSFX_08_41 EQU $61
+RBSFX_08_42 EQU $62
+RBSFX_08_43 EQU $63
+RBSFX_08_44 EQU $64
+RBSFX_08_45 EQU $65
+RBSFX_08_46 EQU $66
+RBSFX_08_47 EQU $67
+RBSFX_08_48 EQU $68
+RBSFX_08_49 EQU $69
+RBSFX_08_4a EQU $6a
+RBSFX_08_4b EQU $6b
+RBSFX_08_4c EQU $6c
+RBSFX_08_4d EQU $6d
+RBSFX_08_4e EQU $6e
+RBSFX_08_4f EQU $6f
+RBSFX_08_50 EQU $70
+RBSFX_08_51 EQU $71
+RBSFX_08_52 EQU $72
+RBSFX_08_53 EQU $73
+RBSFX_08_54 EQU $74
+RBSFX_08_55 EQU $75
+RBSFX_08_56 EQU $76
+RBSFX_08_57 EQU $77
+RBSFX_08_58 EQU $78
+RBSFX_08_59 EQU $79
+RBSFX_08_5a EQU $7a
+RBSFX_08_5b EQU $7b
+RBSFX_08_5c EQU $7c
+RBSFX_08_5d EQU $7d
+RBSFX_08_5e EQU $7e
+RBSFX_08_5f EQU $7f
+RBSFX_08_60 EQU $80
+RBSFX_08_61 EQU $81
+RBSFX_08_62 EQU $82
+RBSFX_08_63 EQU $83
+RBSFX_08_64 EQU $84
+RBSFX_08_65 EQU $85
+RBSFX_08_66 EQU $86
+RBSFX_08_67 EQU $87
+RBSFX_08_68 EQU $88
+RBSFX_08_69 EQU $89
+RBSFX_08_6a EQU $8a
+RBSFX_08_6b EQU $8b
+RBSFX_08_6c EQU $8c
+RBSFX_08_6d EQU $8d
+RBSFX_08_6e EQU $8e
+RBSFX_08_6f EQU $8f
+RBSFX_08_70 EQU $90
+RBSFX_08_71 EQU $91
+RBSFX_08_72 EQU $92
+RBSFX_08_73 EQU $93
+RBSFX_08_74 EQU $94
+RBSFX_08_75 EQU $95
+RBSFX_08_76 EQU $96
+RBSFX_08_77 EQU $97
 
-	; AUDIO_1
-	music_const SFX_POKEFLUE,           SFX_Pokeflute
-	music_const SFX_SAFARI_ZONE_PA,     SFX_Safari_Zone_PA
 
-	; AUDIO_2
-	music_const SFX_LEVEL_UP,           SFX_Level_Up
+RBSFX_1f_00 EQU $00
+RBSFX_1f_01 EQU $01
+RBSFX_1f_02 EQU $02
+RBSFX_1f_03 EQU $03
+RBSFX_1f_04 EQU $04
+RBSFX_1f_05 EQU $05
+RBSFX_1f_06 EQU $06
+RBSFX_1f_07 EQU $07
+RBSFX_1f_08 EQU $08
+RBSFX_1f_09 EQU $09
+RBSFX_1f_0a EQU $0a
+RBSFX_1f_0b EQU $0b
+RBSFX_1f_0c EQU $0c
+RBSFX_1f_0d EQU $0d
+RBSFX_1f_0e EQU $0e
+RBSFX_1f_0f EQU $0f
+RBSFX_1f_10 EQU $10
+RBSFX_1f_11 EQU $11
+RBSFX_1f_12 EQU $12
+RBSFX_1f_13 EQU $13
+RBSFX_1f_14 EQU $14
+RBSFX_1f_15 EQU $15
+RBSFX_1f_16 EQU $16
+RBSFX_1f_17 EQU $17
+RBSFX_1f_18 EQU $18
+RBSFX_1f_19 EQU $19
+RBSFX_1f_1a EQU $1a
+RBSFX_1f_1b EQU $1b
+RBSFX_1f_1c EQU $1c
+RBSFX_1f_1d EQU $1d
+RBSFX_1f_1e EQU $1e
+RBSFX_1f_1f EQU $1f
+RBSFX_1f_20 EQU $20
+RBSFX_1f_21 EQU $21
+RBSFX_1f_22 EQU $22
+RBSFX_1f_23 EQU $23
+RBSFX_1f_24 EQU $24
+RBSFX_1f_25 EQU $25
+RBSFX_1f_26 EQU $26
+RBSFX_1f_27 EQU $27
+RBSFX_1f_28 EQU $28
+RBSFX_1f_29 EQU $29
+RBSFX_1f_2a EQU $2a
+RBSFX_1f_2b EQU $2b
+RBSFX_1f_2c EQU $2c
+RBSFX_1f_2d EQU $2d
+RBSFX_1f_2e EQU $2e
+RBSFX_1f_2f EQU $2f
+RBSFX_1f_30 EQU $30
+RBSFX_1f_31 EQU $31
+RBSFX_1f_32 EQU $32
+RBSFX_1f_33 EQU $33
+RBSFX_1f_34 EQU $34
+RBSFX_1f_35 EQU $35
+RBSFX_1f_36 EQU $36
+RBSFX_1f_37 EQU $37
+RBSFX_1f_38 EQU $38
+RBSFX_1f_39 EQU $39
+RBSFX_1f_3a EQU $3a
+RBSFX_1f_3b EQU $3b
+RBSFX_1f_3c EQU $3c
+RBSFX_1f_3d EQU $3d
+RBSFX_1f_3e EQU $3e
+RBSFX_1f_3f EQU $3f
+RBSFX_1f_40 EQU $40
+RBSFX_1f_41 EQU $41
+RBSFX_1f_42 EQU $42
+RBSFX_1f_43 EQU $43
+RBSFX_1f_44 EQU $44
+RBSFX_1f_45 EQU $45
+RBSFX_1f_46 EQU $46
+RBSFX_1f_47 EQU $47
+RBSFX_1f_48 EQU $48
+RBSFX_1f_49 EQU $49
+RBSFX_1f_4a EQU $4a
+RBSFX_1f_4b EQU $4b
+RBSFX_1f_4c EQU $4c
+RBSFX_1f_4d EQU $4d
+RBSFX_1f_4e EQU $4e
+RBSFX_1f_4f EQU $4f
+RBSFX_1f_50 EQU $50
+RBSFX_1f_51 EQU $51
+RBSFX_1f_52 EQU $52
+RBSFX_1f_53 EQU $53
+RBSFX_1f_54 EQU $54
+RBSFX_1f_55 EQU $55
+RBSFX_1f_56 EQU $56
+RBSFX_1f_57 EQU $57
+RBSFX_1f_58 EQU $58
+RBSFX_1f_59 EQU $59
+RBSFX_1f_5a EQU $5a
+RBSFX_1f_5b EQU $5b
+RBSFX_1f_5c EQU $5c
 
-	music_const SFX_BALL_TOSS,          SFX_Ball_Toss
-	music_const SFX_BALL_POOF,          SFX_Ball_Poof
-	music_const SFX_FAINT_THUD,         SFX_Faint_Thud
-	music_const SFX_RUN,                SFX_Run
-	music_const SFX_DEX_PAGE_ADDED,     SFX_Dex_Page_Added
-	music_const SFX_CAUGHT_MON,         SFX_Caught_Mon
-	music_const SFX_PECK,               SFX_Peck
-	music_const SFX_FAINT_FALL,         SFX_Faint_Fall
-	music_const SFX_BATTLE_09,          SFX_Battle_09
-	music_const SFX_POUND,              SFX_Pound
-	music_const SFX_BATTLE_0B,          SFX_Battle_0B
-	music_const SFX_BATTLE_0C,          SFX_Battle_0C
-	music_const SFX_BATTLE_0D,          SFX_Battle_0D
-	music_const SFX_BATTLE_0E,          SFX_Battle_0E
-	music_const SFX_BATTLE_0F,          SFX_Battle_0F
-	music_const SFX_DAMAGE,             SFX_Damage
-	music_const SFX_NOT_VERY_EFFECTIVE, SFX_Not_Very_Effective
-	music_const SFX_BATTLE_12,          SFX_Battle_12
-	music_const SFX_BATTLE_13,          SFX_Battle_13
-	music_const SFX_BATTLE_14,          SFX_Battle_14
-	music_const SFX_VINE_WHIP,          SFX_Vine_Whip
-	music_const SFX_BATTLE_16,          SFX_Battle_16 ; unused?
-	music_const SFX_BATTLE_17,          SFX_Battle_17
-	music_const SFX_BATTLE_18,          SFX_Battle_18
-	music_const SFX_BATTLE_19,          SFX_Battle_19
-	music_const SFX_SUPER_EFFECTIVE,    SFX_Super_Effective
-	music_const SFX_BATTLE_1B,          SFX_Battle_1B
-	music_const SFX_BATTLE_1C,          SFX_Battle_1C
-	music_const SFX_DOUBLESLAP,         SFX_Doubleslap
-	music_const SFX_BATTLE_1E,          SFX_Battle_1E
-	music_const SFX_HORN_DRILL,         SFX_Horn_Drill
-	music_const SFX_BATTLE_20,          SFX_Battle_20
-	music_const SFX_BATTLE_21,          SFX_Battle_21
-	music_const SFX_BATTLE_22,          SFX_Battle_22
-	music_const SFX_BATTLE_23,          SFX_Battle_23
-	music_const SFX_BATTLE_24,          SFX_Battle_24
-	music_const SFX_BATTLE_25,          SFX_Battle_25
-	music_const SFX_BATTLE_26,          SFX_Battle_26
-	music_const SFX_BATTLE_27,          SFX_Battle_27
-	music_const SFX_BATTLE_28,          SFX_Battle_28
-	music_const SFX_BATTLE_29,          SFX_Battle_29
-	music_const SFX_BATTLE_2A,          SFX_Battle_2A
-	music_const SFX_BATTLE_2B,          SFX_Battle_2B
-	music_const SFX_BATTLE_2C,          SFX_Battle_2C
-	music_const SFX_PSYBEAM,            SFX_Psybeam
-	music_const SFX_BATTLE_2E,          SFX_Battle_2E
-	music_const SFX_BATTLE_2F,          SFX_Battle_2F
-	music_const SFX_PSYCHIC_M,          SFX_Psychic_M
-	music_const SFX_BATTLE_31,          SFX_Battle_31
-	music_const SFX_BATTLE_32,          SFX_Battle_32
-	music_const SFX_BATTLE_33,          SFX_Battle_33
-	music_const SFX_BATTLE_34,          SFX_Battle_34
-	music_const SFX_BATTLE_35,          SFX_Battle_35
-	music_const SFX_BATTLE_36,          SFX_Battle_36
-	music_const SFX_SILPH_SCOPE,        SFX_Silph_Scope
+RBSFX_1f_5d EQU $98
+RBSFX_1f_5e EQU $99
+RBSFX_1f_5f EQU $9a
+RBSFX_1f_60 EQU $9b
+RBSFX_1f_61 EQU $9c
+RBSFX_1f_62 EQU $9d
+RBSFX_1f_63 EQU $9e
+RBSFX_1f_64 EQU $9f
+RBSFX_1f_65 EQU $a0
+RBSFX_1f_66 EQU $a1
+RBSFX_1f_67 EQU $a2
 
-	; AUDIO_3
-	music_const SFX_INTRO_LUNGE,        SFX_Intro_Lunge
-	music_const SFX_INTRO_HIP,          SFX_Intro_Hip
-	music_const SFX_INTRO_HOP,          SFX_Intro_Hop
-	music_const SFX_INTRO_RAISE,        SFX_Intro_Raise
-	music_const SFX_INTRO_CRASH,        SFX_Intro_Crash
-	music_const SFX_INTRO_WHOOSH,       SFX_Intro_Whoosh
-	music_const SFX_SLOTS_STOP_WHEEL,   SFX_Slots_Stop_Wheel
-	music_const SFX_SLOTS_REWARD,       SFX_Slots_Reward
-	music_const SFX_SLOTS_NEW_SPIN,     SFX_Slots_New_Spin
-	music_const SFX_SHOOTING_STAR,      SFX_Shooting_Star
+GSSFX_NOT_VERY_EFFECTIVE EQU $a3
+GSSFX_DAMAGE EQU $a4
+GSSFX_SUPER_EFFECTIVE EQU $a5

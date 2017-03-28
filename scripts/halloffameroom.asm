@@ -1,61 +1,65 @@
-HallofFameRoomScript:
+HallofFameRoomScript: ; 5a49e (16:649e)
 	call EnableAutoTextBoxDrawing
 	ld hl, HallofFameRoomScriptPointers
-	ld a, [wHallOfFameRoomCurScript]
+	ld a, [W_HALLOFFAMEROOMCURSCRIPT]
 	jp CallFunctionInTable
 
-HallofFameRoomScript_5a4aa:
+HallofFameRoomScript_5a4aa: ; 5a4aa (16:64aa)
 	xor a
 	ld [wJoyIgnore], a
-	ld [wHallOfFameRoomCurScript], a
+	ld [W_HALLOFFAMEROOMCURSCRIPT], a
 	ret
 
-HallofFameRoomScriptPointers:
+HallofFameRoomScriptPointers: ; 5a4b2 (16:64b2)
 	dw HallofFameRoomScript0
 	dw HallofFameRoomScript1
 	dw HallofFameRoomScript2
 	dw HallofFameRoomScript3
 
-HallofFameRoomScript3:
+HallofFameRoomScript3: ; 5a4ba (16:64ba)
 	ret
 
-HallofFameRoomScript2:
+HallofFameRoomScript2: ; 5a4bb (16:64bb)
 	call Delay3
-	ld a, [wLetterPrintingDelayFlags]
+	ld a, [wd358]
 	push af
 	xor a
 	ld [wJoyIgnore], a
 	predef HallOfFamePC
 	pop af
-	ld [wLetterPrintingDelayFlags], a
-	ld hl, wFlags_D733
+	ld [wd358], a
+	ld hl, W_FLAGS_D733
 	res 1, [hl]
 	inc hl
 	set 0, [hl]
 	xor a
-	ld hl, wLoreleiCurScript
+	ld hl, W_LORELEICURSCRIPT
 	ld [hli], a
 	ld [hli], a
 	ld [hl], a
-	ld [wLanceCurScript], a
-	ld [wHallOfFameRoomCurScript], a
-	; Elite 4 events
-	ResetEventRange ELITE4_EVENTS_START, ELITE4_CHAMPION_EVENTS_END, 1
+	ld [W_LANCECURSCRIPT], a
+	ld [W_HALLOFFAMEROOMCURSCRIPT], a
+	ld hl, wd863
+	ld [hli], a
+	ld [hli], a
+	ld [hli], a
+	ld [hli], a
+	ld [hl], a
 	xor a
-	ld [wHallOfFameRoomCurScript], a
+	ld [W_HALLOFFAMEROOMCURSCRIPT], a
 	ld a, PALLET_TOWN
 	ld [wLastBlackoutMap], a
 	callba SaveSAVtoSRAM
 	ld b, 5
-.delayLoop
+.asm_5a4ff
 	ld c, 600 / 5
 	call DelayFrames
 	dec b
-	jr nz, .delayLoop
+	jr nz, .asm_5a4ff ; 0x5a505 $f8
 	call WaitForTextScrollButtonPress
 	jp Init
 
-HallofFameRoomScript0:
+HallofFameRoomScript0: ; 5a50d (16:650d)
 	ld a, $ff
 	ld [wJoyIgnore], a
 	ld hl, wSimulatedJoypadStatesEnd
@@ -65,45 +69,45 @@ HallofFameRoomScript0:
 	ld [wSimulatedJoypadStatesIndex], a
 	call StartSimulatingJoypadStates
 	ld a, $1
-	ld [wHallOfFameRoomCurScript], a
+	ld [W_HALLOFFAMEROOMCURSCRIPT], a
 	ret
 
-RLEMovement5a528:
-	db D_UP,$5
+RLEMovement5a528: ; 5a528 (16:6528)
+	db $40,$5
 	db $ff
 
-HallofFameRoomScript1:
+HallofFameRoomScript1: ; 5a52b (16:652b)
 	ld a, [wSimulatedJoypadStatesIndex]
 	and a
 	ret nz
-	ld a, PLAYER_DIR_RIGHT
-	ld [wPlayerMovingDirection], a
 	ld a, $1
-	ld [H_SPRITEINDEX], a
+	ld [wd528], a
+	ld a, $1
+	ld [$ff8c], a
 	call SetSpriteMovementBytesToFF
-	ld a, SPRITE_FACING_LEFT
-	ld [hSpriteFacingDirection], a
+	ld a, $8
+	ld [$ff8d], a
 	call SetSpriteFacingDirectionAndDelay
 	call Delay3
 	xor a
 	ld [wJoyIgnore], a
-	inc a ; PLAYER_DIR_RIGHT
-	ld [wPlayerMovingDirection], a
+	inc a
+	ld [wd528], a
 	ld a, $1
-	ld [hSpriteIndexOrTextID], a
+	ld [$ff8c], a
 	call DisplayTextID
 	ld a, $ff
 	ld [wJoyIgnore], a
-	ld a, HS_UNKNOWN_DUNGEON_GUY
-	ld [wMissableObjectIndex], a
+	ld a, $8
+	ld [wcc4d], a
 	predef HideObject
 	ld a, $2
-	ld [wHallOfFameRoomCurScript], a
+	ld [W_HALLOFFAMEROOMCURSCRIPT], a
 	ret
 
-HallofFameRoomTextPointers:
+HallofFameRoomTextPointers: ; 5a56a (16:656a)
 	dw HallofFameRoomText1
 
-HallofFameRoomText1:
+HallofFameRoomText1: ; 5a56c (16:656c)
 	TX_FAR _HallofFameRoomText1
 	db "@"

@@ -1,10 +1,10 @@
 FarCopyData2::
-; Identical to FarCopyData, but uses hROMBankTemp
+; Identical to FarCopyData, but uses $ff8b
 ; as temp space instead of wBuffer.
-	ld [hROMBankTemp],a
+	ld [$ff8b],a
 	ld a,[H_LOADEDROMBANK]
 	push af
-	ld a,[hROMBankTemp]
+	ld a,[$ff8b]
 	ld [H_LOADEDROMBANK],a
 	ld [MBC1RomBank],a
 	call CopyData
@@ -15,10 +15,10 @@ FarCopyData2::
 
 FarCopyData3::
 ; Copy bc bytes from a:de to hl.
-	ld [hROMBankTemp],a
+	ld [$ff8b],a
 	ld a,[H_LOADEDROMBANK]
 	push af
-	ld a,[hROMBankTemp]
+	ld a,[$ff8b]
 	ld [H_LOADEDROMBANK],a
 	ld [MBC1RomBank],a
 	push hl
@@ -38,10 +38,10 @@ FarCopyData3::
 FarCopyDataDouble::
 ; Expand bc bytes of 1bpp image data
 ; from a:hl to 2bpp data at de.
-	ld [hROMBankTemp],a
+	ld [$ff8b],a
 	ld a,[H_LOADEDROMBANK]
 	push af
-	ld a,[hROMBankTemp]
+	ld a,[$ff8b]
 	ld [H_LOADEDROMBANK],a
 	ld [MBC1RomBank],a
 .loop
@@ -70,7 +70,7 @@ CopyVideoData::
 	ld [H_AUTOBGTRANSFERENABLED], a
 
 	ld a, [H_LOADEDROMBANK]
-	ld [hROMBankTemp], a
+	ld [$ff8b], a
 
 	ld a, b
 	ld [H_LOADEDROMBANK], a
@@ -94,7 +94,7 @@ CopyVideoData::
 .done
 	ld [H_VBCOPYSIZE], a
 	call DelayFrame
-	ld a, [hROMBankTemp]
+	ld a, [$ff8b]
 	ld [H_LOADEDROMBANK], a
 	ld [MBC1RomBank], a
 	pop af
@@ -119,7 +119,7 @@ CopyVideoDataDouble::
 	xor a ; disable auto-transfer while copying
 	ld [H_AUTOBGTRANSFERENABLED], a
 	ld a, [H_LOADEDROMBANK]
-	ld [hROMBankTemp], a
+	ld [$ff8b], a
 
 	ld a, b
 	ld [H_LOADEDROMBANK], a
@@ -143,7 +143,7 @@ CopyVideoDataDouble::
 .done
 	ld [H_VBCOPYDOUBLESIZE], a
 	call DelayFrame
-	ld a, [hROMBankTemp]
+	ld a, [$ff8b]
 	ld [H_LOADEDROMBANK], a
 	ld [MBC1RomBank], a
 	pop af
@@ -161,7 +161,7 @@ CopyVideoDataDouble::
 
 ClearScreenArea::
 ; Clear tilemap area cxb at hl.
-	ld a, " " ; blank tile
+	ld a, $7f ; blank tile
 	ld de, 20 ; screen width
 .y
 	push hl
@@ -184,17 +184,17 @@ CopyScreenTileBufferToVRAM::
 	ld c, 6
 
 	ld hl, $600 * 0
-	coord de, 0, 6 * 0
+	ld de, wTileMap + 20 * 6 * 0
 	call .setup
 	call DelayFrame
 
 	ld hl, $600 * 1
-	coord de, 0, 6 * 1
+	ld de, wTileMap + 20 * 6 * 1
 	call .setup
 	call DelayFrame
 
 	ld hl, $600 * 2
-	coord de, 0, 6 * 2
+	ld de, wTileMap + 20 * 6 * 2
 	call .setup
 	jp DelayFrame
 
@@ -217,8 +217,8 @@ ClearScreen::
 ; for the bg map to update.
 	ld bc, 20 * 18
 	inc b
-	coord hl, 0, 0
-	ld a, " "
+	ld hl, wTileMap
+	ld a, $7f
 .loop
 	ld [hli], a
 	dec c

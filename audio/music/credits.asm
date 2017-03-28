@@ -1,4 +1,4 @@
-Music_Credits_Ch0::
+Music_Credits_Ch1:: ; 7fc1f (1f:7c1f)
 	tempo 140
 	volume 7, 7
 	duty 3
@@ -284,7 +284,7 @@ Music_Credits_Ch0::
 	endchannel
 
 
-Music_Credits_Ch1::
+Music_Credits_Ch2:: ; 7fd5f (1f:7d5f)
 	duty 3
 	vibrato 10, 2, 5
 	notetype 12, 12, 5
@@ -574,7 +574,7 @@ Music_Credits_Ch1::
 	endchannel
 
 
-Music_Credits_Ch2::
+Music_Credits_Ch3:: ; 7fec2 (1f:7ec2)
 	notetype 12, 1, 0
 	octave 5
 	C# 6
@@ -818,3 +818,4 @@ Music_Credits_branch_7ffed::
 	A_ 1
 	rest 3
 	endchannel
+; 0x7fffa

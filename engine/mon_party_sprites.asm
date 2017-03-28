@@ -1,23 +1,23 @@
-AnimatePartyMon_ForceSpeed1:
+AnimatePartyMon_ForceSpeed1: ; 716f7 (1c:56f7)
 	xor a
-	ld [wCurrentMenuItem], a
+	ld [wCurrentMenuItem], a ; wCurrentMenuItem
 	ld b, a
 	inc a
 	jr GetAnimationSpeed
 
-; wPartyMenuHPBarColors contains the party mon's health bar colors
+; wcf1f contains the party mon's health bar colors
 ; 0: green
 ; 1: yellow
 ; 2: red
-AnimatePartyMon:
-	ld hl, wPartyMenuHPBarColors
+AnimatePartyMon: ; 716ff (1c:56ff)
+	ld hl, wcf1f
 	ld a, [wCurrentMenuItem]
 	ld c, a
-	ld b, 0
+	ld b, $0
 	add hl, bc
 	ld a, [hl]
 
-GetAnimationSpeed:
+GetAnimationSpeed: ; 7170a (1c:570a)
 	ld c, a
 	ld hl, PartyMonSpeeds
 	add hl, bc
@@ -27,7 +27,7 @@ GetAnimationSpeed:
 	ld c, a
 	add a
 	ld b, a
-	ld a, [wAnimCounter]
+	ld a, [W_SUBANIMTRANSFORM] ; W_SUBANIMTRANSFORM
 	and a
 	jr z, .resetSprites
 	cp c
@@ -35,14 +35,14 @@ GetAnimationSpeed:
 .incTimer
 	inc a
 	cp b
-	jr nz, .skipResetTimer
-	xor a ; reset timer
-.skipResetTimer
-	ld [wAnimCounter], a
+	jr nz, .resetTimer
+	xor a
+.resetTimer
+	ld [W_SUBANIMTRANSFORM], a ; W_SUBANIMTRANSFORM
 	jp DelayFrame
 .resetSprites
 	push bc
-	ld hl, wMonPartySpritesSavedOAM
+	ld hl, wcc5b
 	ld de, wOAMBuffer
 	ld bc, $60
 	call CopyData
@@ -81,24 +81,16 @@ GetAnimationSpeed:
 	ld a, c
 	jr .incTimer
 
-; Party mon animations cycle between 2 frames.
-; The members of the PartyMonSpeeds array specify the number of V-blanks
-; that each frame lasts for green HP, yellow HP, and red HP in order.
-; On the naming screen, the yellow HP speed is always used.
-PartyMonSpeeds:
-	db 5, 16, 32
+PartyMonSpeeds: ; 71769 (1c:5769)
+	db $05,$10,$20
 
-LoadMonPartySpriteGfx:
-; Load mon party sprite tile patterns into VRAM during V-blank.
-	ld hl, MonPartySpritePointers
+Func_7176c: ; 7176c (1c:576c)
+	ld hl, MonPartySpritePointers ; $57c0
 	ld a, $1c
 
-LoadAnimSpriteGfx:
-; Load animated sprite tile patterns into VRAM during V-blank. hl is the address
-; of an array of structures that contain arguments for CopyVideoData and a is
-; the number of structures in the array.
+Func_71771: ; 71771 (1c:5771)
 	ld bc, $0
-.loop
+.asm_71774
 	push af
 	push bc
 	push hl
@@ -122,17 +114,15 @@ LoadAnimSpriteGfx:
 	ld c, a
 	pop af
 	dec a
-	jr nz, .loop
+	jr nz, .asm_71774
 	ret
 
-LoadMonPartySpriteGfxWithLCDDisabled:
-; Load mon party sprite tile patterns into VRAM immediately by disabling the
-; LCD.
+Func_71791: ; 71791 (1c:5791)
 	call DisableLCD
-	ld hl, MonPartySpritePointers
+	ld hl, MonPartySpritePointers ; $57c0
 	ld a, $1c
 	ld bc, $0
-.loop
+.asm_7179c
 	push af
 	push bc
 	push hl
@@ -159,10 +149,10 @@ LoadMonPartySpriteGfxWithLCDDisabled:
 	ld c, a
 	pop af
 	dec a
-	jr nz, .loop
+	jr nz, .asm_7179c
 	jp EnableLCD
 
-MonPartySpritePointers:
+MonPartySpritePointers: ; 717c0 (1c:57c0)
 	dw SlowbroSprite + $c0
 	db $40 / $10 ; 40 bytes
 	db BANK(SlowbroSprite)
@@ -303,68 +293,51 @@ MonPartySpritePointers:
 	db BANK(MonPartySprites)
 	dw vSprites + $780
 
-WriteMonPartySpriteOAMByPartyIndex:
-; Write OAM blocks for the party mon in [hPartyMonIndex].
+Func_71868: ; 71868 (1c:5868)
 	push hl
 	push de
 	push bc
-	ld a, [hPartyMonIndex]
+	ld a, [H_DOWNARROWBLINKCNT2] ; $ff8c
 	ld hl, wPartySpecies
 	ld e, a
-	ld d, 0
+	ld d, $0
 	add hl, de
-	add hl, de
-	ld a, [hli]
- 	ld c, a
 	ld a, [hl]
-	ld b, a
 	call GetPartyMonSpriteID
-	ld [wOAMBaseTile], a
-	call WriteMonPartySpriteOAM
+	ld [wcd5b], a
+	call Func_718c3
 	pop bc
 	pop de
 	pop hl
 	ret
 
-WriteMonPartySpriteOAMBySpecies:
-; Write OAM blocks for the party sprite of the species in
-; [wMonPartySpriteSpecies].
+Func_71882: ; 71882 (1c:5882)
 	xor a
-	ld [hPartyMonIndex], a
-	ld a, [wMonPartySpriteSpecies]
-	ld c, a
- 	ld a, [wMonPartySpriteSpecies + 1]
- 	ld b, a
+	ld [H_DOWNARROWBLINKCNT2], a ; $ff8c
+	ld a, [wcd5d]
 	call GetPartyMonSpriteID
-	ld [wOAMBaseTile], a
-	jr WriteMonPartySpriteOAM
+	ld [wcd5b], a
+	jr Func_718c3
 
-UnusedPartyMonSpriteFunction:
-; This function is unused and doesn't appear to do anything useful. It looks
-; like it may have been intended to load the tile patterns and OAM data for
-; the mon party sprite associated with the species in [wcf91].
-; However, its calculations are off and it loads garbage data.
+Func_71890: ; 71890 (1c:5890)
 	ld a, [wcf91]
-	ld c, a
- 	ld a, [wcf91 + 1]
- 	ld b, a
 	call GetPartyMonSpriteID
 	push af
 	ld hl, vSprites
-	call .LoadTilePatterns
+	call Func_718ac
 	pop af
 	add $54
 	ld hl, vSprites + $40
-	call .LoadTilePatterns
+	call Func_718ac
 	xor a
-	ld [wMonPartySpriteSpecies], a
-	jr WriteMonPartySpriteOAMBySpecies
+	ld [wcd5d], a
+	jr Func_71882
 
-.LoadTilePatterns
+Func_718ac: ; 718ac (1c:58ac)
 	push hl
 	add a
 	ld c, a
-	ld b, 0
+	ld b, $0
 	ld hl, MonPartySpritePointers
 	add hl, bc
 	add hl, bc
@@ -380,58 +353,44 @@ UnusedPartyMonSpriteFunction:
 	pop hl
 	jp CopyVideoData
 
-WriteMonPartySpriteOAM:
-; Write the OAM blocks for the first animation frame into the OAM buffer and
-; make a copy at wMonPartySpritesSavedOAM.
+Func_718c3: ; 718c3 (1c:58c3)
 	push af
 	ld c, $10
 	ld h, wOAMBuffer / $100
-	ld a, [hPartyMonIndex]
+	ld a, [H_DOWNARROWBLINKCNT2] ; $ff8c
 	swap a
 	ld l, a
 	add $10
 	ld b, a
 	pop af
-	cp SPRITE_HELIX << 2
-	jr z, .helix
-	call WriteSymmetricMonPartySpriteOAM
-	jr .makeCopy
-.helix
-	call WriteAsymmetricMonPartySpriteOAM
-; Make a copy of the OAM buffer with the first animation frame written so that
-; we can flip back to it from the second frame by copying it back.
-.makeCopy
+	cp $8
+	jr z, .asm_718da
+	call Func_712a6
+	jr .asm_718dd
+.asm_718da
+	call Func_71281
+.asm_718dd
 	ld hl, wOAMBuffer
-	ld de, wMonPartySpritesSavedOAM
+	ld de, wcc5b
 	ld bc, $60
 	jp CopyData
 
-GetPartyMonSpriteID:
-; bc = mon id
- 	ld a, c
+GetPartyMonSpriteID: ; 718e9 (1c:58e9)
 	ld [wd11e], a
-	ld a, b
- 	ld [wd11e + 1], a
 	predef IndexToPokedex
 	ld a, [wd11e]
 	ld c, a
-	ld d, a
- 	ld a, [wd11e + 1]
- 	ld b, a
- 	; bc = pokedex id
- 	dec bc
- 	srl c
- 	srl b
- 	jr nc, .nocarry
- 	set 7, c
-.nocarry
-	ld hl, MonPartyData
-	add hl, bc
+	dec a
+	srl a
+	ld hl, MonPartyData ; $590d
+	ld e, a
+	ld d, $0
+	add hl, de
 	ld a, [hl]
-	bit 0, d
-	jr nz, .skipSwap
-	swap a ; use lower nybble if pokedex num is even
-.skipSwap
+	bit 0, c
+	jr nz, .asm_71906
+	swap a
+.asm_71906
 	and $f0
 	srl a
 	srl a
@@ -439,5 +398,5 @@ GetPartyMonSpriteID:
 
 INCLUDE "data/mon_party_sprites.asm"
 
-MonPartySprites:
+MonPartySprites: ; 71959 (1c:5959)
 	INCBIN "gfx/mon_ow_sprites.2bpp"

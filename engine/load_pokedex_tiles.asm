@@ -1,11 +1,11 @@
 ; Loads tile patterns for tiles used in the pokedex.
-LoadPokedexTilePatterns:
+LoadPokedexTilePatterns: ; 17840 (5:7840)
 	call LoadHpBarAndStatusTilePatterns
-	ld de,PokedexTileGraphics
+	ld de,PokedexTileGraphics ; $6488
 	ld hl,vChars2 + $600
-	lb bc, BANK(PokedexTileGraphics), (PokedexTileGraphicsEnd - PokedexTileGraphics) / $10
+	ld bc,(BANK(PokedexTileGraphics) << 8) + $12
 	call CopyVideoData
-	ld de,PokeballTileGraphics
+	ld de,PokeballTileGraphics ; $697e
 	ld hl,vChars2 + $720
-	lb bc, BANK(PokeballTileGraphics), $01
+	ld bc,(BANK(PokeballTileGraphics) << 8) + $01
 	jp CopyVideoData ; load pokeball tile for marking caught mons

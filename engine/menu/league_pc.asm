@@ -1,5 +1,4 @@
-PKMNLeaguePC:
-	ret
+PKMNLeaguePC: ; 0x7657e
 	ld hl, AccessedHoFPCText
 	call PrintText
 	ld hl, wd730
@@ -11,35 +10,33 @@ PKMNLeaguePC:
 	push af
 	xor a
 	ld [hTilesetType], a
-	ld [wSpriteFlipped], a
+	ld [W_SPRITEFLIPPED], a
 	ld [wUpdateSpritesEnabled], a
-	ld [wHoFTeamIndex2], a
-	ld [wHoFTeamNo], a
-	ld a, [wNumHoFTeams]
+	ld [wTrainerScreenX], a
+	ld [wcd42], a
+	ld a, [wd5a2]
 	ld b, a
-	cp HOF_TEAM_CAPACITY + 1
-	jr c, .loop
-; If the total number of hall of fame teams is greater than the storage
-; capacity, then calculate the number of the first team that is still recorded.
-	ld b, HOF_TEAM_CAPACITY
+	cp NUM_HOF_TEAMS + 1
+	jr c, .first
+	ld b, NUM_HOF_TEAMS
 	sub b
-	ld [wHoFTeamNo], a
-.loop
-	ld hl, wHoFTeamNo
+	ld [wcd42], a
+.first
+	ld hl, wcd42
 	inc [hl]
 	push bc
-	ld a, [wHoFTeamIndex2]
-	ld [wHoFTeamIndex], a
+	ld a, [wTrainerScreenX]
+	ld [wWhichTrade], a
 	callba LoadHallOfFameTeams
-	call LeaguePCShowTeam
+	call Func_765e5
 	pop bc
-	jr c, .doneShowingTeams
-	ld hl, wHoFTeamIndex2
+	jr c, .second
+	ld hl, wTrainerScreenX
 	inc [hl]
 	ld a, [hl]
 	cp b
-	jr nz, .loop
-.doneShowingTeams
+	jr nz, .first
+.second
 	pop af
 	ld [hTilesetType], a
 	pop af
@@ -48,14 +45,14 @@ PKMNLeaguePC:
 	res 6, [hl]
 	call GBPalWhiteOutWithDelay3
 	call ClearScreen
-	call RunDefaultPaletteCommand
+	call GoPAL_SET_CF1C
 	jp GBPalNormal
 
-LeaguePCShowTeam:
+Func_765e5: ; 765e5 (1d:65e5)
 	ld c, PARTY_LENGTH
 .loop
 	push bc
-	call LeaguePCShowMon
+	call Func_76610
 	call WaitForTextScrollButtonPress
 	ld a, [hJoyHeld]
 	bit 1, a
@@ -78,50 +75,46 @@ LeaguePCShowTeam:
 	scf
 	ret
 
-LeaguePCShowMon:
+Func_76610: ; 76610 (1d:6610)
 	call GBPalWhiteOutWithDelay3
 	call ClearScreen
 	ld hl, wHallOfFame
 	ld a, [hli]
-	ld [wHoFMonSpecies], a
+	ld [wWhichTrade], a
 	ld [wcf91], a
 	ld [wd0b5], a
 	ld [wBattleMonSpecies2], a
-	ld [wWholeScreenPaletteMonSpecies], a
+	ld [wcf1d], a
 	ld a, [hli]
-	ld [wHoFMonSpecies + 1], a
- 	ld [wcf91 + 1], a
- 	ld [wd0b5 + 1], a
- 	ld [wBattleMonSpecies2 + 1], a
- 	ld [wWholeScreenPaletteMonSpecies + 1], a
- 	ld a, [hli]
-	ld [wHoFMonLevel], a
+	ld [wTrainerFacingDirection], a
 	ld de, wcd6d
-	ld bc, NAME_LENGTH
+	ld bc, $000B
 	call CopyData
-	ld b, SET_PAL_POKEMON_WHOLE_SCREEN
+	ld b, $0B
 	ld c, 0
-	call RunPaletteCommand
-	coord hl, 12, 5
+	call GoPAL_SET
+	hlCoord 12, 5
 	call GetMonHeader
 	call LoadFrontSpriteByMonIndex
 	call GBPalNormal
-	coord hl, 0, 13
+	hlCoord 0, 13
 	ld b, 2
 	ld c, $12
 	call TextBoxBorder
-	coord hl, 1, 15
+	hlCoord 1, 15
 	ld de, HallOfFameNoText
 	call PlaceString
-	coord hl, 16, 15
-	ld de, wHoFTeamNo
-	lb bc, 1, 3
+	hlCoord 16, 15
+	ld de, wcd42
+	ld bc, $0103
 	call PrintNumber
-	jpba HoFDisplayMonInfo
+	ld b, BANK(Func_702f0)
+	ld hl, Func_702f0
+	jp Bankswitch
 
-HallOfFameNoText:
+HallOfFameNoText: ; 76670 (1d:6670)
 	db "HALL OF FAME No   @"
 
-AccessedHoFPCText:
+AccessedHoFPCText: ; 76683 (1d:6683)
 	TX_FAR _AccessedHoFPCText
 	db "@"

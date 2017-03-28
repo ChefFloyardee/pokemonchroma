@@ -1,9 +1,9 @@
-_Route11GateUpstairsText_494a3::
+_Route11GateUpstairsText_494a3:: ; 8c689 (23:4689)
 	text "There are items on"
 	line "the ground that"
 	cont "can't be seen."
 
-	para "Itemfinder will"
+	para "ITEMFINDER will"
 	line "detect an item"
 	cont "close to you."
 
@@ -16,7 +16,7 @@ _BinocularsSnorlaxText::
 	text "Looked into the"
 	line "binoculars."
 
-	para "A big #mon is"
+	para "A big #MON is"
 	line "asleep on a road!"
 	done
 
@@ -28,13 +28,14 @@ _BinocularsNoSnorlaxText::
 	line "view!"
 	done
 
-_Route11GateUpstairsText_494d5::
+_Route11GateUpstairsText_494d5:: ; 8c78b (23:478b)
 	text "Looked into the"
 	line "binoculars."
 
 	para "The only way to"
-	line "get from Cerulean"
-	cont "City to Lavender"
+	line "get from CERULEAN"
+	cont "CITY to LAVENDER"
 	cont "is by way of the"
-	cont "Rock Tunnel."
+	cont "ROCK TUNNEL."
 	done
+

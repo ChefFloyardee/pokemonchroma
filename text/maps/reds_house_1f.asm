@@ -1,35 +1,24 @@
 _MomWakeUpText::
-	text "Mom: Right."
+	text "MOM: Right."
 	line "All boys leave"
 	cont "home some day."
 	cont "It said so on TV."
 
-	para "Prof.Oak, next"
+	para "PROF.OAK, next"
 	line "door, is looking"
 	cont "for you."
 	done
 
-_MomWakeUpText2::
-	text "Mom: Right."
-	line "All girls leave"
-	cont "home someday."
-	cont "It said so on TV."
-
-	para "Prof. Oak, next"
-	line "door, is looking"
-	cont "for you."
-	done
-	
 _MomHealText1::
-	text "Mom: <PLAYER>!"
+	text "MOM: ",$52,"!"
 	line "You should take a"
 	cont "quick rest."
 	prompt
 
 _MomHealText2::
-	text "Mom: Oh good!"
+	text "MOM: Oh good!"
 	line "You and your"
-	cont "#mon are"
+	cont "#MON are"
 	cont "looking great!"
 	cont "Take care now!"
 	done
@@ -42,19 +31,8 @@ _StandByMeText::
 
 	para "I better go too."
 	done
-	
-_WizardOfOzText::
-	text "There's a movie"
-	line "on TV."
-	
-	para "A girl with her"
-	line "hair in pigtails"
-	cont "is walking up a"
-	cont "brick road."
-
-	para "I better go too."
-	done
 
 _TVWrongSideText::
 	text "Oops, wrong side."
 	done
+

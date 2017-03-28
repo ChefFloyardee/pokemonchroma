@@ -1,5 +1,5 @@
-_KogaBeforeBattleText::
-	text "Koga: Fwahahaha!"
+_UnnamedText_75581:: ; 9e9b1 (27:69b1)
+	text "KOGA: Fwahahaha!"
 
 	para "A mere child like"
 	line "you dares to"
@@ -16,11 +16,12 @@ _KogaBeforeBattleText::
 	cont "techniques!"
 	done
 
-_KogaAfterBattleText::
+_UnnamedText_75586:: ; 9ea66 (27:6a66)
 	text "Humph!"
 	line "You have proven"
 	cont "your worth!"
 
 	para "Here! Take the"
-	line "Soulbadge!"
+	line "SOULBADGE!"
 	prompt
+

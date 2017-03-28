@@ -1,15 +1,15 @@
-EnterMapAnim:
-	call InitFacingDirectionList
+EnterMapAnim: ; 70510 (1c:4510)
+	call InitFacingDirectionBuffer
 	ld a, $ec
 	ld [wSpriteStateData1 + 4], a ; player's sprite Y screen position
 	call Delay3
 	push hl
 	call GBFadeInFromWhite
-	ld hl, wFlags_D733
+	ld hl, W_FLAGS_D733
 	bit 7, [hl] ; used fly out of battle?
 	res 7, [hl]
 	jr nz, .flyAnimation
-	ld a, SFX_TELEPORT_ENTER_1
+	ld a, RBSFX_02_4c
 	call PlaySound
 	ld hl, wd732
 	bit 4, [hl] ; used dungeon warp?
@@ -17,7 +17,7 @@ EnterMapAnim:
 	pop hl
 	jr nz, .dungeonWarpAnimation
 	call PlayerSpinWhileMovingDown
-	ld a, SFX_TELEPORT_ENTER_2
+	ld a, RBSFX_02_4f
 	call PlaySound
 	call IsPlayerStandingOnWarpPadOrHole
 	ld a, b
@@ -32,7 +32,7 @@ EnterMapAnim:
 	ld a, $8
 	ld [hli], a ; wPlayerSpinInPlaceAnimFrameDelayEndValue
 	ld [hl], $ff ; wPlayerSpinInPlaceAnimSoundID
-	ld hl, wFacingDirectionList
+	ld hl, wcd48
 	call PlayerSpinInPlace
 .restoreDefaultMusic
 	call PlayDefaultMusic
@@ -47,10 +47,10 @@ EnterMapAnim:
 	pop hl
 	ld de, BirdSprite
 	ld hl, vNPCSprites
-	lb bc, BANK(BirdSprite), $0c
+	ld bc, (BANK(BirdSprite) << 8) + $0c
 	call CopyVideoData
 	call LoadBirdSpriteGraphics
-	ld a, SFX_FLY
+	ld a, RBSFX_02_50
 	call PlaySound
 	ld hl, wFlyAnimUsingCoordList
 	xor a ; is using coord list
@@ -58,12 +58,12 @@ EnterMapAnim:
 	ld a, 12
 	ld [hli], a ; wFlyAnimCounter
 	ld [hl], $8 ; wFlyAnimBirdSpriteImageIndex (facing right)
-	ld de, FlyAnimationEnterScreenCoords
+	ld de, FlyAnimationEnterScreenCoords ; $4592
 	call DoFlyAnimation
 	call LoadPlayerSpriteGraphics
 	jr .restoreDefaultMusic
 
-FlyAnimationEnterScreenCoords:
+FlyAnimationEnterScreenCoords: ; 70592 (1c:4592)
 ; y, x pairs
 ; This is the sequence of screen coordinates used by the overworld
 ; Fly animation when the player is entering a map.
@@ -80,7 +80,7 @@ FlyAnimationEnterScreenCoords:
 	db $3C, $48
 	db $3C, $40
 
-PlayerSpinWhileMovingDown:
+PlayerSpinWhileMovingDown: ; 705aa (1c:45aa)
 	ld hl, wPlayerSpinWhileMovingUpOrDownAnimDeltaY
 	ld a, $10
 	ld [hli], a ; wPlayerSpinWhileMovingUpOrDownAnimDeltaY
@@ -90,8 +90,8 @@ PlayerSpinWhileMovingDown:
 	ld [hl], a ; wPlayerSpinWhileMovingUpOrDownAnimFrameDelay
 	jp PlayerSpinWhileMovingUpOrDown
 
-_LeaveMapAnim:
-	call InitFacingDirectionList
+_LeaveMapAnim: ; 705ba (1c:45ba)
+	call InitFacingDirectionBuffer
 	call IsPlayerStandingOnWarpPadOrHole
 	ld a, b
 	and a
@@ -99,7 +99,7 @@ _LeaveMapAnim:
 	dec a
 	jp nz, LeaveMapThroughHoleAnim
 .spinWhileMovingUp
-	ld a, SFX_TELEPORT_EXIT_1
+	ld a, RBSFX_02_4b
 	call PlaySound
 	ld hl, wPlayerSpinWhileMovingUpOrDownAnimDeltaY
 	ld a, -$10
@@ -133,8 +133,8 @@ _LeaveMapAnim:
 	ld [hli], a ; wPlayerSpinInPlaceAnimFrameDelayDelta
 	xor a
 	ld [hli], a ; wPlayerSpinInPlaceAnimFrameDelayEndValue
-	ld [hl], SFX_TELEPORT_EXIT_2 ; wPlayerSpinInPlaceAnimSoundID
-	ld hl, wFacingDirectionList
+	ld [hl], $a1 ; wPlayerSpinInPlaceAnimSoundID
+	ld hl, wcd48
 	call PlayerSpinInPlace
 	jr .spinWhileMovingUp
 .flyAnimation
@@ -146,7 +146,7 @@ _LeaveMapAnim:
 	ld [hli], a ; wFlyAnimCounter
 	ld [hl], $c ; wFlyAnimBirdSpriteImageIndex
 	call DoFlyAnimation
-	ld a, SFX_FLY
+	ld a, RBSFX_02_50
 	call PlaySound
 	ld hl, wFlyAnimUsingCoordList
 	xor a ; is using coord list
@@ -154,7 +154,7 @@ _LeaveMapAnim:
 	ld a, $c
 	ld [hli], a ; wFlyAnimCounter
 	ld [hl], $c ; wFlyAnimBirdSpriteImageIndex (facing right)
-	ld de, FlyAnimationScreenCoords1
+	ld de, FlyAnimationScreenCoords1 ; $464f
 	call DoFlyAnimation
 	ld c, 40
 	call DelayFrames
@@ -162,12 +162,12 @@ _LeaveMapAnim:
 	ld a, 11
 	ld [hli], a ; wFlyAnimCounter
 	ld [hl], $8 ; wFlyAnimBirdSpriteImageIndex (facing left)
-	ld de, FlyAnimationScreenCoords2
+	ld de, FlyAnimationScreenCoords2 ; $4667
 	call DoFlyAnimation
 	call GBFadeOutToWhite
 	jp RestoreFacingDirectionAndYScreenPos
 
-FlyAnimationScreenCoords1:
+FlyAnimationScreenCoords1: ; 7064f (1c:464f)
 ; y, x pairs
 ; This is the sequence of screen coordinates used by the first part
 ; of the Fly overworld animation.
@@ -184,7 +184,7 @@ FlyAnimationScreenCoords1:
 	db $2A, $98
 	db $27, $A0
 
-FlyAnimationScreenCoords2:
+FlyAnimationScreenCoords2: ; 70667 (1c:4667)
 ; y, x pairs
 ; This is the sequence of screen coordinates used by the second part
 ; of the Fly overworld animation.
@@ -201,7 +201,7 @@ FlyAnimationScreenCoords2:
 
 	db $F0, $00
 
-LeaveMapThroughHoleAnim:
+LeaveMapThroughHoleAnim: ; 7067d (1c:467d)
 	ld a, $ff
 	ld [wUpdateSpritesEnabled], a ; disable UpdateSprites
 	; shift upper half of player's sprite down 8 pixels and hide lower half
@@ -214,7 +214,7 @@ LeaveMapThroughHoleAnim:
 	ld [wOAMBuffer + 1 * 4], a
 	ld c, 2
 	call DelayFrames
-	; hide upper half of player's sprite
+	; hide lower half of player's sprite
 	ld a, $a0
 	ld [wOAMBuffer + 2 * 4], a
 	ld [wOAMBuffer + 3 * 4], a
@@ -223,7 +223,7 @@ LeaveMapThroughHoleAnim:
 	ld [wUpdateSpritesEnabled], a ; enable UpdateSprites
 	jp RestoreFacingDirectionAndYScreenPos
 
-DoFlyAnimation:
+DoFlyAnimation: ; 706ae (1c:46ae)
 	ld a, [wFlyAnimBirdSpriteImageIndex]
 	xor $1 ; make the bird flap its wings
 	ld [wFlyAnimBirdSpriteImageIndex], a
@@ -231,7 +231,7 @@ DoFlyAnimation:
 	call Delay3
 	ld a, [wFlyAnimUsingCoordList]
 	cp $ff
-	jr z, .skipCopyingCoords ; if the bird is flapping its wings in place
+	jr z, .asm_706cd
 	ld hl, wSpriteStateData1 + 4
 	ld a, [de]
 	inc de
@@ -240,35 +240,34 @@ DoFlyAnimation:
 	ld a, [de]
 	inc de
 	ld [hl], a
-.skipCopyingCoords
+.asm_706cd
 	ld a, [wFlyAnimCounter]
 	dec a
 	ld [wFlyAnimCounter], a
 	jr nz, DoFlyAnimation
 	ret
 
-LoadBirdSpriteGraphics:
-	ld de, BirdSprite
+LoadBirdSpriteGraphics: ; 706d7 (1c:46d7)
+	ld de, BirdSprite ; $4d80
 	ld hl, vNPCSprites
-	lb bc, BANK(BirdSprite), $0c
+	ld bc, (BANK(BirdSprite) << 8) + $0c
 	call CopyVideoData
-	ld de, BirdSprite + $c0 ; moving animation sprite
+	ld de, BirdSprite + $c0 ; $4e40 ; moving amination sprite
 	ld hl, vNPCSprites2
-	lb bc, BANK(BirdSprite), $0c
+	ld bc, (BANK(BirdSprite) << 8) + $0c
 	jp CopyVideoData
 
-InitFacingDirectionList:
+InitFacingDirectionBuffer: ; 706ef (1c:46ef)
 	ld a, [wSpriteStateData1 + 2] ; player's sprite facing direction (image index is locked to standing images)
-	ld [wSavedPlayerFacingDirection], a
+	ld [wcd50], a
 	ld a, [wSpriteStateData1 + 4] ; player's sprite Y screen position
-	ld [wSavedPlayerScreenY], a
+	ld [wcd4f], a
 	ld hl, PlayerSpinningFacingOrder
-	ld de, wFacingDirectionList
-	ld bc, 4
+	ld de, wcd48
+	ld bc, $4
 	call CopyData
 	ld a, [wSpriteStateData1 + 2] ; player's sprite facing direction (image index is locked to standing images)
-	ld hl, wFacingDirectionList
-; find the place in the list that matches the current facing direction
+	ld hl, wcd48
 .loop
 	cp [hl]
 	inc hl
@@ -276,36 +275,34 @@ InitFacingDirectionList:
 	dec hl
 	ret
 
-PlayerSpinningFacingOrder:
+PlayerSpinningFacingOrder: ; 70713 (1c:4713)
 ; The order of the direction the player's sprite is facing when teleporting
 ; away. Creates a spinning effect.
 	db SPRITE_FACING_DOWN, SPRITE_FACING_LEFT, SPRITE_FACING_UP, SPRITE_FACING_RIGHT
 
-SpinPlayerSprite:
-; copy the current value from the list into the sprite data and rotate the list
+SpinPlayerSprite: ; 70717 (1c:4717)
 	ld a, [hl]
 	ld [wSpriteStateData1 + 2], a ; player's sprite facing direction (image index is locked to standing images)
 	push hl
-	ld hl, wFacingDirectionList
-	ld de, wFacingDirectionList - 1
-	ld bc, 4
+	ld hl, wcd48
+	ld de, wcd47
+	ld bc, $4
 	call CopyData
-	ld a, [wFacingDirectionList - 1]
-	ld [wFacingDirectionList + 3], a
+	ld a, [wcd47]
+	ld [wcd4b], a
 	pop hl
 	ret
 
-PlayerSpinInPlace:
+PlayerSpinInPlace: ; 70730 (1c:4730)
 	call SpinPlayerSprite
 	ld a, [wPlayerSpinInPlaceAnimFrameDelay]
 	ld c, a
 	and $3
-	jr nz, .skipPlayingSound
-; when the last delay was a multiple of 4, play a sound if there is one
+	jr nz, .asm_70743
 	ld a, [wPlayerSpinInPlaceAnimSoundID]
 	cp $ff
 	call nz, PlaySound
-.skipPlayingSound
+.asm_70743
 	ld a, [wPlayerSpinInPlaceAnimFrameDelayDelta]
 	add c
 	ld [wPlayerSpinInPlaceAnimFrameDelay], a
@@ -316,7 +313,7 @@ PlayerSpinInPlace:
 	call DelayFrames
 	jr PlayerSpinInPlace
 
-PlayerSpinWhileMovingUpOrDown:
+PlayerSpinWhileMovingUpOrDown: ; 70755 (1c:4755)
 	call SpinPlayerSprite
 	ld a, [wPlayerSpinWhileMovingUpOrDownAnimDeltaY]
 	ld c, a
@@ -332,25 +329,25 @@ PlayerSpinWhileMovingUpOrDown:
 	call DelayFrames
 	jr PlayerSpinWhileMovingUpOrDown
 
-RestoreFacingDirectionAndYScreenPos:
-	ld a, [wSavedPlayerScreenY]
+RestoreFacingDirectionAndYScreenPos: ; 70772 (1c:4772)
+	ld a, [wcd4f]
 	ld [wSpriteStateData1 + 4], a
-	ld a, [wSavedPlayerFacingDirection]
+	ld a, [wcd50]
 	ld [wSpriteStateData1 + 2], a
 	ret
 
 ; if SGB, 2 frames, else 3 frames
-GetPlayerTeleportAnimFrameDelay:
+GetPlayerTeleportAnimFrameDelay: ; 7077f (1c:477f)
 	ld a, [wOnSGB]
 	xor $1
 	inc a
 	inc a
 	ret
 
-IsPlayerStandingOnWarpPadOrHole:
+IsPlayerStandingOnWarpPadOrHole: ; 70787 (1c:4787)
 	ld b, 0
 	ld hl, .warpPadAndHoleData
-	ld a, [wCurMapTileset]
+	ld a, [W_CURMAPTILESET]
 	ld c, a
 .loop
 	ld a, [hli]
@@ -370,128 +367,99 @@ IsPlayerStandingOnWarpPadOrHole:
 	ld b, [hl]
 .done
 	ld a, b
-	ld [wStandingOnWarpPadOrHole], a
+	ld [wcd5b], a
 	ret
 
-; format: db tileset id, tile id, value to be put in [wStandingOnWarpPadOrHole]
-.warpPadAndHoleData:
+; format: db tileset id, tile id, value to be put in wcd5b
+.warpPadAndHoleData: ; 707a9 (1c:47a9)
 	db FACILITY, $20, 1 ; warp pad
 	db FACILITY, $11, 2 ; hole
 	db CAVERN,   $22, 2 ; hole
 	db INTERIOR, $55, 1 ; warp pad
 	db $FF
 
-FishingAnim:
-    ld c, $a
-    call DelayFrames
-    ld hl, wd736
-    set 6, [hl]
-    ld a, [wd798] ; added gender check
-    bit 2, a      ; added gender check
-    jr z, .BoySpriteLoad
-    ld de, LeafSprite
-    ld hl, vNPCSprites
-    ld bc, (BANK(LeafSprite) << 8) + $0c
-    jr .KeepLoadingSpriteStuff
-.BoySpriteLoad
-    ld de, RedSprite ; $4180
-    ld hl, vNPCSprites
-    ld bc, (BANK(RedSprite) << 8) + $0c
-.KeepLoadingSpriteStuff
-    call CopyVideoData
-    ld a, [wd798] ; added gender check
-    bit 2, a      ; added gender check
-    jr z, .BoyTiles ; skip loading Leaf's stuff if you're Red
-    ld a, $4
-    ld hl, LeafFishingTiles
-    jr .ContinueRoutine ; go back to main routine after loading Leaf's stuff
-.BoyTiles ; alternately, load Red's stuff
-    ld a, $4
-    ld hl, RedFishingTiles ; $4866
-.ContinueRoutine
-    call LoadAnimSpriteGfx
+Func_707b6: ; 707b6 (1c:47b6)
+	ld c, $a
+	call DelayFrames
+	ld hl, wd736
+	set 6, [hl]
+	ld de, RedSprite ; $4180
+	ld hl, vNPCSprites
+	ld bc, (BANK(RedSprite) << 8) + $0c
+	call CopyVideoData
+	ld a, $4
+	ld hl, RedFishingTiles ; $4866
+	call Func_71771
 	ld a, [wSpriteStateData1 + 2]
 	ld c, a
 	ld b, $0
-	ld hl, FishingRodOAM
+	ld hl, FishingRodGfxProperties ; $4856
 	add hl, bc
 	ld de, wOAMBuffer + $9c
 	ld bc, $4
 	call CopyData
-	ld c, 100
+	ld c, $64
 	call DelayFrames
-	ld a, [wRodResponse]
+	ld a, [wWhichTrade] ; wWhichTrade
 	and a
 	ld hl, NoNibbleText
-	jr z, .done
+	jr z, .asm_70836
 	cp $2
 	ld hl, NothingHereText
-	jr z, .done
-
-; there was a bite
-
-; shake the player's sprite vertically
-	ld b, 10
-.loop
-	ld hl, wSpriteStateData1 + 4 ; player's sprite Y screen position
-	call .ShakePlayerSprite
+	jr z, .asm_70836
+	ld b, $a
+.asm_707fe
+	ld hl, wSpriteStateData1 + 4
+	call Func_70842
 	ld hl, wOAMBuffer + $9c
-	call .ShakePlayerSprite
+	call Func_70842
 	call Delay3
 	dec b
-	jr nz, .loop
-
-; If the player is facing up, hide the fishing rod so it doesn't overlap with
-; the exclamation bubble that will be shown next.
-	ld a, [wSpriteStateData1 + 2] ; player's sprite facing direction
-	cp SPRITE_FACING_UP
-	jr nz, .skipHidingFishingRod
+	jr nz, .asm_707fe
+	ld a, [wSpriteStateData1 + 2]
+	cp $4
+	jr nz, .asm_7081c
 	ld a, $a0
 	ld [wOAMBuffer + $9c], a
-
-.skipHidingFishingRod
-	ld hl, wEmotionBubbleSpriteIndex
+.asm_7081c
+	ld hl, wcd4f
 	xor a
-	ld [hli], a ; player's sprite
-	ld [hl], a ; EXCLAMATION_BUBBLE
+	ld [hli], a
+	ld [hl], a
 	predef EmotionBubble
-
-; If the player is facing up, unhide the fishing rod.
-	ld a, [wSpriteStateData1 + 2] ; player's sprite facing direction
-	cp SPRITE_FACING_UP
-	jr nz, .skipUnhidingFishingRod
+	ld a, [wSpriteStateData1 + 2]
+	cp $4
+	jr nz, .asm_70833
 	ld a, $44
 	ld [wOAMBuffer + $9c], a
-
-.skipUnhidingFishingRod
+.asm_70833
 	ld hl, ItsABiteText
-
-.done
+.asm_70836
 	call PrintText
 	ld hl, wd736
-	res 6, [hl] ; unreserve the last 4 OAM entries
+	res 6, [hl]
 	call LoadFontTilePatterns
 	ret
 
-.ShakePlayerSprite
+Func_70842: ; 70842 (1c:4842)
 	ld a, [hl]
 	xor $1
 	ld [hl], a
 	ret
 
-NoNibbleText:
+NoNibbleText: ; 70847 (1c:4847)
 	TX_FAR _NoNibbleText
 	db "@"
 
-NothingHereText:
+NothingHereText: ; 7084c (1c:484c)
 	TX_FAR _NothingHereText
 	db "@"
 
-ItsABiteText:
+ItsABiteText: ; 70851 (1c:4851)
 	TX_FAR _ItsABiteText
 	db "@"
 
-FishingRodOAM:
+FishingRodGfxProperties: ; 70856 (1c:4856)
 ; specifies how the fishing rod should be drawn on the screen
 ; first byte = screen y coordinate
 ; second byte = screen x coordinate
@@ -502,7 +470,7 @@ FishingRodOAM:
 	db $50, $40, $FE, $00 ; player facing left
 	db $50, $58, $FE, $20 ; player facing right ($20 means "horizontally flip the tile")
 
-RedFishingTiles:
+RedFishingTiles: ; 70866 (1c:4866)
 	dw RedFishingTilesFront
 	db 2, BANK(RedFishingTilesFront)
 	dw vNPCSprites + $20
@@ -518,25 +486,8 @@ RedFishingTiles:
 	dw RedFishingRodTiles
 	db 3, BANK(RedFishingRodTiles)
 	dw vNPCSprites2 + $7d0
-	
-LeafFishingTiles: ; newly added table of Leaf's sprites
-    dw LeafFishingTilesFront
-    db 2, BANK(LeafFishingTilesFront)
-    dw vNPCSprites + $20
 
-    dw LeafFishingTilesBack
-    db 2, BANK(LeafFishingTilesBack)
-    dw vNPCSprites + $60
-
-    dw LeafFishingTilesSide
-    db 2, BANK(LeafFishingTilesSide)
-    dw vNPCSprites + $a0
-
-    dw RedFishingRodTiles
-    db 3, BANK(RedFishingRodTiles)
-    dw vNPCSprites2 + $7d0
-
-_HandleMidJump:
+_HandleMidJump: ; 7087e (1c:487e)
 	ld a, [wPlayerJumpingYScreenCoordsIndex]
 	ld c, a
 	inc a
@@ -568,6 +519,6 @@ _HandleMidJump:
 	ld [wJoyIgnore], a
 	ret
 
-PlayerJumpingYScreenCoords:
+PlayerJumpingYScreenCoords: ; 708ba (1c:48ba)
 ; Sequence of y screen coordinates for player's sprite when jumping over a ledge.
 	db $38, $36, $34, $32, $31, $30, $30, $30, $31, $32, $33, $34, $36, $38, $3C, $3C

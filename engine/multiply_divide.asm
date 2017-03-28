@@ -1,143 +1,143 @@
-_Multiply:
+_Multiply: ; 37d41 (d:7d41)
 	ld a, $8
 	ld b, a
 	xor a
-	ld [H_PRODUCT], a
-	ld [H_MULTIPLYBUFFER], a
-	ld [H_MULTIPLYBUFFER+1], a
-	ld [H_MULTIPLYBUFFER+2], a
-	ld [H_MULTIPLYBUFFER+3], a
-.loop
-	ld a, [H_MULTIPLIER]
+	ld [H_DIVIDEND], a ; $ff95 (aliases: H_PRODUCT, H_PASTLEADINGZEROES, H_QUOTIENT)
+	ld [$ff9b], a
+	ld [H_SAVEDNUMTOPRINT], a ; $ff9c
+	ld [$ff9d], a
+	ld [$ff9e], a
+.asm_37d4f
+	ld a, [H_REMAINDER] ; $ff99 (aliases: H_DIVISOR, H_MULTIPLIER, H_POWEROFTEN)
 	srl a
-	ld [H_MULTIPLIER], a ; (aliases: H_DIVISOR, H_MULTIPLIER, H_POWEROFTEN)
-	jr nc, .smallMultiplier
-	ld a, [H_MULTIPLYBUFFER+3]
+	ld [H_REMAINDER], a ; $ff99 (aliases: H_DIVISOR, H_MULTIPLIER, H_POWEROFTEN)
+	jr nc, .asm_37d77
+	ld a, [$ff9e]
 	ld c, a
-	ld a, [H_MULTIPLICAND+2]
+	ld a, [$ff98]
 	add c
-	ld [H_MULTIPLYBUFFER+3], a
-	ld a, [H_MULTIPLYBUFFER+2]
+	ld [$ff9e], a
+	ld a, [$ff9d]
 	ld c, a
-	ld a, [H_MULTIPLICAND+1]
+	ld a, [$ff97]
 	adc c
-	ld [H_MULTIPLYBUFFER+2], a
-	ld a, [H_MULTIPLYBUFFER+1]
+	ld [$ff9d], a
+	ld a, [H_SAVEDNUMTOPRINT] ; $ff9c
 	ld c, a
-	ld a, [H_MULTIPLICAND] ; (aliases: H_MULTIPLICAND)
+	ld a, [H_NUMTOPRINT] ; $ff96 (aliases: H_MULTIPLICAND)
 	adc c
-	ld [H_MULTIPLYBUFFER+1], a
-	ld a, [H_MULTIPLYBUFFER]
+	ld [H_SAVEDNUMTOPRINT], a ; $ff9c
+	ld a, [$ff9b]
 	ld c, a
-	ld a, [H_PRODUCT] ; (aliases: H_PRODUCT, H_PASTLEADINGZEROES, H_QUOTIENT)
+	ld a, [H_DIVIDEND] ; $ff95 (aliases: H_PRODUCT, H_PASTLEADINGZEROES, H_QUOTIENT)
 	adc c
-	ld [H_MULTIPLYBUFFER], a
-.smallMultiplier
+	ld [$ff9b], a
+.asm_37d77
 	dec b
-	jr z, .done
-	ld a, [H_MULTIPLICAND+2]
+	jr z, .asm_37d94
+	ld a, [$ff98]
 	sla a
-	ld [H_MULTIPLICAND+2], a
-	ld a, [H_MULTIPLICAND+1]
+	ld [$ff98], a
+	ld a, [$ff97]
 	rl a
-	ld [H_MULTIPLICAND+1], a
-	ld a, [H_MULTIPLICAND]
+	ld [$ff97], a
+	ld a, [H_NUMTOPRINT] ; $ff96 (aliases: H_MULTIPLICAND)
 	rl a
-	ld [H_MULTIPLICAND], a
-	ld a, [H_PRODUCT]
+	ld [H_NUMTOPRINT], a ; $ff96 (aliases: H_MULTIPLICAND)
+	ld a, [H_DIVIDEND] ; $ff95 (aliases: H_PRODUCT, H_PASTLEADINGZEROES, H_QUOTIENT)
 	rl a
-	ld [H_PRODUCT], a
-	jr .loop
-.done
-	ld a, [H_MULTIPLYBUFFER+3]
-	ld [H_PRODUCT+3], a
-	ld a, [H_MULTIPLYBUFFER+2]
-	ld [H_PRODUCT+2], a
-	ld a, [H_MULTIPLYBUFFER+1]
-	ld [H_PRODUCT+1], a
-	ld a, [H_MULTIPLYBUFFER]
-	ld [H_PRODUCT], a
+	ld [H_DIVIDEND], a ; $ff95 (aliases: H_PRODUCT, H_PASTLEADINGZEROES, H_QUOTIENT)
+	jr .asm_37d4f
+.asm_37d94
+	ld a, [$ff9e]
+	ld [$ff98], a
+	ld a, [$ff9d]
+	ld [$ff97], a
+	ld a, [H_SAVEDNUMTOPRINT] ; $ff9c
+	ld [H_NUMTOPRINT], a ; $ff96 (aliases: H_MULTIPLICAND)
+	ld a, [$ff9b]
+	ld [H_DIVIDEND], a ; $ff95 (aliases: H_PRODUCT, H_PASTLEADINGZEROES, H_QUOTIENT)
 	ret
 
-_Divide:
+_Divide: ; 37da5 (d:7da5)
 	xor a
-	ld [H_DIVIDEBUFFER], a
-	ld [H_DIVIDEBUFFER+1], a
-	ld [H_DIVIDEBUFFER+2], a
-	ld [H_DIVIDEBUFFER+3], a
-	ld [H_DIVIDEBUFFER+4], a
+	ld [$ff9a], a
+	ld [$ff9b], a
+	ld [H_SAVEDNUMTOPRINT], a ; $ff9c
+	ld [$ff9d], a
+	ld [$ff9e], a
 	ld a, $9
 	ld e, a
 .asm_37db3
-	ld a, [H_DIVIDEBUFFER]
+	ld a, [$ff9a]
 	ld c, a
-	ld a, [H_DIVIDEND+1] ; (aliases: H_MULTIPLICAND)
+	ld a, [H_NUMTOPRINT] ; $ff96 (aliases: H_MULTIPLICAND)
 	sub c
 	ld d, a
-	ld a, [H_DIVISOR] ; (aliases: H_DIVISOR, H_MULTIPLIER, H_POWEROFTEN)
+	ld a, [H_REMAINDER] ; $ff99 (aliases: H_DIVISOR, H_MULTIPLIER, H_POWEROFTEN)
 	ld c, a
-	ld a, [H_DIVIDEND] ; (aliases: H_PRODUCT, H_PASTLEADINGZEROES, H_QUOTIENT)
+	ld a, [H_DIVIDEND] ; $ff95 (aliases: H_PRODUCT, H_PASTLEADINGZEROES, H_QUOTIENT)
 	sbc c
 	jr c, .asm_37dce
-	ld [H_DIVIDEND], a ; (aliases: H_PRODUCT, H_PASTLEADINGZEROES, H_QUOTIENT)
+	ld [H_DIVIDEND], a ; $ff95 (aliases: H_PRODUCT, H_PASTLEADINGZEROES, H_QUOTIENT)
 	ld a, d
-	ld [H_DIVIDEND+1], a ; (aliases: H_MULTIPLICAND)
-	ld a, [H_DIVIDEBUFFER+4]
+	ld [H_NUMTOPRINT], a ; $ff96 (aliases: H_MULTIPLICAND)
+	ld a, [$ff9e]
 	inc a
-	ld [H_DIVIDEBUFFER+4], a
+	ld [$ff9e], a
 	jr .asm_37db3
 .asm_37dce
 	ld a, b
 	cp $1
 	jr z, .asm_37e18
-	ld a, [H_DIVIDEBUFFER+4]
+	ld a, [$ff9e]
 	sla a
-	ld [H_DIVIDEBUFFER+4], a
-	ld a, [H_DIVIDEBUFFER+3]
+	ld [$ff9e], a
+	ld a, [$ff9d]
 	rl a
-	ld [H_DIVIDEBUFFER+3], a
-	ld a, [H_DIVIDEBUFFER+2]
+	ld [$ff9d], a
+	ld a, [H_SAVEDNUMTOPRINT] ; $ff9c
 	rl a
-	ld [H_DIVIDEBUFFER+2], a
-	ld a, [H_DIVIDEBUFFER+1]
+	ld [H_SAVEDNUMTOPRINT], a ; $ff9c
+	ld a, [$ff9b]
 	rl a
-	ld [H_DIVIDEBUFFER+1], a
+	ld [$ff9b], a
 	dec e
 	jr nz, .asm_37e04
 	ld a, $8
 	ld e, a
-	ld a, [H_DIVIDEBUFFER]
-	ld [H_DIVISOR], a ; (aliases: H_DIVISOR, H_MULTIPLIER, H_POWEROFTEN)
+	ld a, [$ff9a]
+	ld [H_REMAINDER], a ; $ff99 (aliases: H_DIVISOR, H_MULTIPLIER, H_POWEROFTEN)
 	xor a
-	ld [H_DIVIDEBUFFER], a
-	ld a, [H_DIVIDEND+1] ; (aliases: H_MULTIPLICAND)
-	ld [H_DIVIDEND], a ; (aliases: H_PRODUCT, H_PASTLEADINGZEROES, H_QUOTIENT)
-	ld a, [H_DIVIDEND+2]
-	ld [H_DIVIDEND+1], a ; (aliases: H_MULTIPLICAND)
-	ld a, [H_DIVIDEND+3]
-	ld [H_DIVIDEND+2], a
+	ld [$ff9a], a
+	ld a, [H_NUMTOPRINT] ; $ff96 (aliases: H_MULTIPLICAND)
+	ld [H_DIVIDEND], a ; $ff95 (aliases: H_PRODUCT, H_PASTLEADINGZEROES, H_QUOTIENT)
+	ld a, [$ff97]
+	ld [H_NUMTOPRINT], a ; $ff96 (aliases: H_MULTIPLICAND)
+	ld a, [$ff98]
+	ld [$ff97], a
 .asm_37e04
 	ld a, e
 	cp $1
 	jr nz, .asm_37e0a
 	dec b
 .asm_37e0a
-	ld a, [H_DIVISOR] ; (aliases: H_DIVISOR, H_MULTIPLIER, H_POWEROFTEN)
+	ld a, [H_REMAINDER] ; $ff99 (aliases: H_DIVISOR, H_MULTIPLIER, H_POWEROFTEN)
 	srl a
-	ld [H_DIVISOR], a ; (aliases: H_DIVISOR, H_MULTIPLIER, H_POWEROFTEN)
-	ld a, [H_DIVIDEBUFFER]
+	ld [H_REMAINDER], a ; $ff99 (aliases: H_DIVISOR, H_MULTIPLIER, H_POWEROFTEN)
+	ld a, [$ff9a]
 	rr a
-	ld [H_DIVIDEBUFFER], a
+	ld [$ff9a], a
 	jr .asm_37db3
 .asm_37e18
-	ld a, [H_DIVIDEND+1] ; (aliases: H_MULTIPLICAND)
-	ld [H_REMAINDER], a ; (aliases: H_DIVISOR, H_MULTIPLIER, H_POWEROFTEN)
-	ld a, [H_DIVIDEBUFFER+4]
-	ld [H_QUOTIENT+3], a
-	ld a, [H_DIVIDEBUFFER+3]
-	ld [H_QUOTIENT+2], a
-	ld a, [H_DIVIDEBUFFER+2]
-	ld [H_QUOTIENT+1], a ; (aliases: H_MULTIPLICAND)
-	ld a, [H_DIVIDEBUFFER+1]
-	ld [H_DIVIDEND], a ; (aliases: H_PRODUCT, H_PASTLEADINGZEROES, H_QUOTIENT)
+	ld a, [H_NUMTOPRINT] ; $ff96 (aliases: H_MULTIPLICAND)
+	ld [H_REMAINDER], a ; $ff99 (aliases: H_DIVISOR, H_MULTIPLIER, H_POWEROFTEN)
+	ld a, [$ff9e]
+	ld [$ff98], a
+	ld a, [$ff9d]
+	ld [$ff97], a
+	ld a, [H_SAVEDNUMTOPRINT] ; $ff9c
+	ld [H_NUMTOPRINT], a ; $ff96 (aliases: H_MULTIPLICAND)
+	ld a, [$ff9b]
+	ld [H_DIVIDEND], a ; $ff95 (aliases: H_PRODUCT, H_PASTLEADINGZEROES, H_QUOTIENT)
 	ret

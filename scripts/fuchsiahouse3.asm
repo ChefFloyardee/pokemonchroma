@@ -1,11 +1,11 @@
-FuchsiaHouse3Script:
+FuchsiaHouse3Script: ; 5617c (15:617c)
 	jp EnableAutoTextBoxDrawing
 
-FuchsiaHouse3TextPointers:
+FuchsiaHouse3TextPointers: ; 5617f (15:617f)
 	dw FuchsiaHouse3Text1
 
-FuchsiaHouse3Text1:
-	TX_ASM
+FuchsiaHouse3Text1: ; 56181 (15:6181)
+	db $08 ; asm
 	ld a, [wd728]
 	bit 4, a
 	jr nz, .after
@@ -18,7 +18,7 @@ FuchsiaHouse3Text1:
 	and a
 	jr nz, .refused
 
-	lb bc, GOOD_ROD, 1
+	ld bc, (GOOD_ROD << 8) | 1
 	call GiveItem
 	jr nc, .full
 
@@ -43,16 +43,16 @@ FuchsiaHouse3Text1:
 	call PrintText
 	jp TextScriptEnd
 
-FuchsiaHouse3Text_561bd:
+FuchsiaHouse3Text_561bd: ; 561bd (15:61bd)
 	TX_FAR _FuchsiaHouse3Text_561bd
 	db "@"
 
-FuchsiaHouse3Text_561c2:
-	TX_FAR _FuchsiaHouse3Text_561c2
-	TX_SFX_ITEM_1
+FuchsiaHouse3Text_561c2: ; 561c2 (15:61c2)
+	TX_FAR _FuchsiaHouse3Text_561c2 ; 0xa06e8
+	db $0B
 	db "@"
 
-UnusedText_561c8:
+UnnamedText_561c8: ; 561c8
 	para "つり こそ"
 	line "おとこの ロマン だ!"
 
@@ -62,14 +62,14 @@ UnusedText_561c8:
 	line "もっと いいもんが つれるんじゃ!"
 	done
 
-FuchsiaHouse3Text_56212:
+FuchsiaHouse3Text_56212: ; 56212 (15:6212)
 	TX_FAR _FuchsiaHouse3Text_56212
 	db "@"
 
-FuchsiaHouse3Text_56217:
+FuchsiaHouse3Text_56217: ; 56217 (15:6217)
 	TX_FAR _FuchsiaHouse3Text_56217
 	db "@"
 
-FuchsiaHouse3Text_5621c:
+FuchsiaHouse3Text_5621c: ; 5621c (15:621c)
 	TX_FAR _FuchsiaHouse3Text_5621c
 	db "@"

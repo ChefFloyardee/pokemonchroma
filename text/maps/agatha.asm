@@ -1,8 +1,8 @@
-_AgathaBeforeBattleText::
-	text "I am Agatha of"
-	line "the Elite Four!"
+_AgathaBeforeBattleText:: ; 8686b (21:686b)
+	text "I am AGATHA of"
+	line "the ELITE FOUR!"
 
-	para "Oak's taken a lot"
+	para "OAK's taken a lot"
 	line "of interest in"
 	cont "you, child!"
 
@@ -13,8 +13,8 @@ _AgathaBeforeBattleText::
 
 	para "Now he just wants"
 	line "to fiddle with"
-	cont "his #dex! He's"
-	cont "wrong! #mon"
+	cont "his #DEX! He's"
+	cont "wrong! #MON"
 	cont "are for fighting!"
 
 	para $52, "! I'll show"
@@ -22,13 +22,13 @@ _AgathaBeforeBattleText::
 	cont "trainer fights!"
 	done
 
-_AgathaEndBattleText::
+_AgathaEndBattleText:: ; 86970 (21:6970)
 	text "Oh ho!"
 	line "You're something"
 	cont "special, child!"
 	prompt
 
-_AgathaAfterBattleText::
+_AgathaAfterBattleText:: ; 86998 (21:6998)
 	text "You win! I see"
 	line "what the old duff"
 	cont "sees in you now!"
@@ -38,7 +38,8 @@ _AgathaAfterBattleText::
 	cont "along now, child!"
 	done
 
-_AgathaDontRunAwayText::
+_AgathaText2:: ; 869fd (21:69fd)
 	text "Someone's voice:"
 	line "Don't run away!"
 	done
+

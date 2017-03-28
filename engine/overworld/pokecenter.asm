@@ -1,4 +1,4 @@
-DisplayPokemonCenterDialogue_:
+DisplayPokemonCenterDialogue_: ; 6fe6 (1:6fe6)
 	call SaveScreenTilesToBuffer1 ; save screen
 	ld hl, PokemonCenterWelcomeText
 	call PrintText
@@ -24,12 +24,12 @@ DisplayPokemonCenterDialogue_:
 	predef HealParty
 	callba AnimateHealingMachine ; do the healing machine animation
 	xor a
-	ld [wAudioFadeOutControl], a
-	ld a, [wAudioSavedROMBank]
-	ld [wAudioROMBank], a
-	ld a, [wMapMusicSoundID]
-	ld [wLastMusicSoundID], a
-	ld [wNewSoundID], a
+	ld [wMusicHeaderPointer], a
+	ld a, [wc0f0]
+	ld [wc0ef], a
+	ld a, [wd35b]
+	ld [wcfca], a
+	ld [wc0ee], a
 	call PlaySound
 	ld hl, PokemonFightingFitText
 	call PrintText
@@ -43,26 +43,26 @@ DisplayPokemonCenterDialogue_:
 .done
 	ld hl, PokemonCenterFarewellText
 	call PrintText
-	jp UpdateSprites
+	jp UpdateSprites ; move sprites
 
-PokemonCenterWelcomeText:
+PokemonCenterWelcomeText: ; 705d (1:705d)
 	TX_FAR _PokemonCenterWelcomeText
 	db "@"
 
-ShallWeHealYourPokemonText:
-	TX_DELAY
+ShallWeHealYourPokemonText: ; 7062 (1:7062)
+	db $a
 	TX_FAR _ShallWeHealYourPokemonText
 	db "@"
 
-NeedYourPokemonText:
+NeedYourPokemonText: ; 7068 (1:7068)
 	TX_FAR _NeedYourPokemonText
 	db "@"
 
-PokemonFightingFitText:
+PokemonFightingFitText: ; 706d (1:706d)
 	TX_FAR _PokemonFightingFitText
 	db "@"
 
-PokemonCenterFarewellText:
-	TX_DELAY
+PokemonCenterFarewellText: ; 7072 (1:7072)
+	db $a
 	TX_FAR _PokemonCenterFarewellText
 	db "@"

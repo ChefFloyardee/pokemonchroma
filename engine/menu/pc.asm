@@ -1,16 +1,16 @@
-ActivatePC:
-	call SaveScreenTilesToBuffer2
-	ld a, SFX_TURN_ON_PC
-	call PlaySound
+ActivatePC: ; 17e2c (5:7e2c)
+	call SaveScreenTilesToBuffer2  ;XXX: copy background from wTileMap to wTileMapBackup2
+	ld a, RBSFX_02_45
+	call PlaySound  ;XXX: play sound or stop music
 	ld hl, TurnedOnPC1Text
 	call PrintText
-	call WaitForSoundToFinish
+	call WaitForSoundToFinish  ;XXX: wait for sound to be done
 	ld hl, wFlags_0xcd60
 	set 3, [hl]
-	call LoadScreenTilesFromBuffer2
+	call LoadScreenTilesFromBuffer2  ;XXX: restore saved screen
 	call Delay3
-PCMainMenu:
-	callba DisplayPCMainMenu
+PCMainMenu: ; 17e48 (5:7e48)
+	callba Func_213c8
 	ld hl, wFlags_0xcd60
 	set 5, [hl]
 	call HandleMenuInput
@@ -51,30 +51,31 @@ PCMainMenu:
 	ld hl, wFlags_0xcd60
 	res 5, [hl]
 	set 3, [hl]
-	ld a, SFX_ENTER_PC
-	call PlaySound
-	call WaitForSoundToFinish
+	ld a, RBSFX_02_47
+	call PlaySound  ;XXX: play sound or stop music
+	call WaitForSoundToFinish  ;XXX: wait for sound to be done
 	ld hl, AccessedMyPCText
 	call PrintText
 	callba PlayerPC
 	jr ReloadMainMenu
-OaksPC:
-	ld a, SFX_ENTER_PC
-	call PlaySound
-	call WaitForSoundToFinish
+OaksPC: ; 17ec0 (5:7ec0)
+	ld a, RBSFX_02_47
+	call PlaySound  ;XXX: play sound or stop music
+	call WaitForSoundToFinish  ;XXX: wait for sound to be done
 	callba OpenOaksPC
 	jr ReloadMainMenu
-PKMNLeague:
-	ld a, SFX_ENTER_PC
-	call PlaySound
-	call WaitForSoundToFinish
+PKMNLeague: ; 17ed2 (5:7ed2)
+	ld a, RBSFX_02_47
+	call PlaySound  ;XXX: play sound or stop music
+	call WaitForSoundToFinish  ;XXX: wait for sound to be done
 	callba PKMNLeaguePC
 	jr ReloadMainMenu
-BillsPC:
-	ld a, SFX_ENTER_PC
-	call PlaySound
-	call WaitForSoundToFinish
-	CheckEvent EVENT_MET_BILL
+BillsPC: ; 17ee4 (5:7ee4)
+	ld a, RBSFX_02_47
+	call PlaySound    ;XXX: play sound or stop music
+	call WaitForSoundToFinish    ;XXX: wait for sound to be done
+	ld a, [wd7f1] ;has to do with having met Bill
+	bit 0, a
 	jr nz, .billsPC ;if you've met bill, use that bill's instead of someone's
 	ld hl, AccessedSomeonesPCText
 	jr .printText
@@ -83,59 +84,59 @@ BillsPC:
 .printText
 	call PrintText
 	callba BillsPC_
-ReloadMainMenu:
+ReloadMainMenu: ; 17f06 (5:7f06)
 	xor a
 	ld [wDoNotWaitForButtonPressAfterDisplayingText], a
 	call ReloadMapData
-	call UpdateSprites
+	call UpdateSprites  ;XXX: moves sprites
 	jp PCMainMenu
-LogOff:
-	ld a, SFX_TURN_OFF_PC
-	call PlaySound
-	call WaitForSoundToFinish
+LogOff: ; 17f13 (5:7f13)
+	ld a, RBSFX_02_46
+	call PlaySound  ;XXX: play sound or stop music
+	call WaitForSoundToFinish  ;XXX: wait for sound to be done
 	ld hl, wFlags_0xcd60
 	res 3, [hl]
 	res 5, [hl]
 	ret
 
-TurnedOnPC1Text:
+TurnedOnPC1Text: ; 17f23 (5:7f23)
 	TX_FAR _TurnedOnPC1Text
 	db "@"
 
-AccessedBillsPCText:
+AccessedBillsPCText: ; 17f28 (5:7f28)
 	TX_FAR _AccessedBillsPCText
 	db "@"
 
-AccessedSomeonesPCText:
+AccessedSomeonesPCText: ; 17f2d (5:7f2d)
 	TX_FAR _AccessedSomeonesPCText
 	db "@"
 
-AccessedMyPCText:
+AccessedMyPCText: ; 17f32 (5:7f32)
 	TX_FAR _AccessedMyPCText
 	db "@"
 
-; removes one of the specified item ID [hItemToRemoveID] from bag (if existent)
-RemoveItemByID:
-	ld hl, wBagItems
-	ld a, [hItemToRemoveID]
+; removes one of the specified item ID [$FFdb] from bag (if existent)
+RemoveItemByID: ; 17f37 (5:7f37)
+	ld hl, wBagItems ; wd31e
+	ld a, [$ffdb]
 	ld b, a
 	xor a
-	ld [hItemToRemoveIndex], a
-.loop
+	ld [$ffdc], a
+.asm_17f40
 	ld a, [hli]
-	cp -1 ; reached terminator?
+	cp $ff
 	ret z
 	cp b
-	jr z, .foundItem
+	jr z, .asm_17f4f
 	inc hl
-	ld a, [hItemToRemoveIndex]
+	ld a, [$ffdc]
 	inc a
-	ld [hItemToRemoveIndex], a
-	jr .loop
-.foundItem
+	ld [$ffdc], a
+	jr .asm_17f40
+.asm_17f4f
 	ld a, $1
-	ld [wItemQuantity], a
-	ld a, [hItemToRemoveIndex]
-	ld [wWhichPokemon], a
-	ld hl, wNumBagItems
+	ld [wcf96], a
+	ld a, [$ffdc]
+	ld [wWhichPokemon], a ; wWhichPokemon
+	ld hl, wNumBagItems ; wNumBagItems
 	jp RemoveItemFromInventory

@@ -1,4 +1,4 @@
-RocketHideoutElevatorObject:
+RocketHideoutElevatorObject: ; 0x45791 (size=23)
 	db $f ; border block
 
 	db $2 ; warps
@@ -8,7 +8,7 @@ RocketHideoutElevatorObject:
 	db $1 ; signs
 	db $1, $1, $1 ; RocketHideoutElevatorText1
 
-	db $0 ; objects
+	db $0 ; people
 
 	; warp-to
 	EVENT_DISP ROCKET_HIDEOUT_ELEVATOR_WIDTH, $1, $2 ; ROCKET_HIDEOUT_1

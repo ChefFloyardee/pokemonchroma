@@ -1,4 +1,4 @@
-UndergroundPathWEObject:
+UndergroundPathWEObject: ; 0x61f4e (size=20)
 	db $1 ; border block
 
 	db $2 ; warps
@@ -7,7 +7,7 @@ UndergroundPathWEObject:
 
 	db $0 ; signs
 
-	db $0 ; objects
+	db $0 ; people
 
 	; warp-to
 	EVENT_DISP UNDERGROUND_PATH_WE_WIDTH, $5, $2 ; PATH_ENTRANCE_ROUTE_7

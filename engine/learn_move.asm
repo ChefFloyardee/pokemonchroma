@@ -1,28 +1,28 @@
-LearnMove:
+LearnMove: ; 6e43 (1:6e43)
 	call SaveScreenTilesToBuffer1
-	ld a, [wWhichPokemon]
-	ld hl, wPartyMonNicks
+	ld a, [wWhichPokemon] ; wWhichPokemon
+	ld hl, wPartyMonNicks ; wPartyMonNicks
 	call GetPartyMonName
 	ld hl, wcd6d
-	ld de, wLearnMoveMonName
-	ld bc, NAME_LENGTH
+	ld de, wd036
+	ld bc, $b
 	call CopyData
 
-DontAbandonLearning:
-	ld hl, wPartyMon1Moves
-	ld bc, wPartyMon2Moves - wPartyMon1Moves
-	ld a, [wWhichPokemon]
+DontAbandonLearning: ; 6e5b (1:6e5b)
+	ld hl, wPartyMon1Moves ; wPartyMon1Moves
+	ld bc, $2c
+	ld a, [wWhichPokemon] ; wWhichPokemon
 	call AddNTimes
 	ld d, h
 	ld e, l
-	ld b, NUM_MOVES
-.findEmptyMoveSlotLoop
+	ld b, $4
+.asm_6e6b
 	ld a, [hl]
 	and a
-	jr z, .next
+	jr z, .asm_6e8b
 	inc hl
 	dec b
-	jr nz, .findEmptyMoveSlotLoop
+	jr nz, .asm_6e6b
 	push de
 	call TryingToLearn
 	pop de
@@ -35,132 +35,132 @@ DontAbandonLearning:
 	call PrintText
 	pop de
 	pop hl
-.next
-	ld a, [wMoveNum]
+.asm_6e8b
+	ld a, [wd0e0]
 	ld [hl], a
-	ld bc, wPartyMon1PP - wPartyMon1Moves
+	ld bc, $15
 	add hl, bc
 	push hl
 	push de
 	dec a
-	ld hl, Moves
-	ld bc, MoveEnd - Moves
+	ld hl, Moves ; $4000
+	ld bc, $6
 	call AddNTimes
-	ld de, wBuffer
+	ld de, wHPBarMaxHP
 	ld a, BANK(Moves)
 	call FarCopyData
-	ld a, [wBuffer + 5] ; a = move's max PP
+	ld a, [wHPBarNewHP + 1]
 	pop de
 	pop hl
 	ld [hl], a
-	ld a, [wIsInBattle]
+	ld a, [W_ISINBATTLE] ; W_ISINBATTLE
 	and a
 	jp z, PrintLearnedMove
-	ld a, [wWhichPokemon]
+	ld a, [wWhichPokemon] ; wWhichPokemon
 	ld b, a
-	ld a, [wPlayerMonNumber]
+	ld a, [wPlayerMonNumber] ; wPlayerMonNumber
 	cp b
 	jp nz, PrintLearnedMove
 	ld h, d
 	ld l, e
 	ld de, wBattleMonMoves
-	ld bc, NUM_MOVES
+	ld bc, $4
 	call CopyData
-	ld bc, wPartyMon1PP - wPartyMon1OTID
+	ld bc, $11
 	add hl, bc
-	ld de, wBattleMonPP
-	ld bc, NUM_MOVES
+	ld de, wBattleMonPP ; wBattleMonPP
+	ld bc, $4
 	call CopyData
 	jp PrintLearnedMove
 
-AbandonLearning:
+AbandonLearning: ; 6eda (1:6eda)
 	ld hl, AbandonLearningText
 	call PrintText
-	coord hl, 14, 7
-	lb bc, 8, 15
-	ld a, TWO_OPTION_MENU
-	ld [wTextBoxID], a
-	call DisplayTextBoxID ; yes/no menu
-	ld a, [wCurrentMenuItem]
+	hlCoord 14, 7
+	ld bc, $80f
+	ld a, $14
+	ld [wd125], a
+	call DisplayTextBoxID
+	ld a, [wCurrentMenuItem] ; wCurrentMenuItem
 	and a
 	jp nz, DontAbandonLearning
 	ld hl, DidNotLearnText
 	call PrintText
-	ld b, 0
+	ld b, $0
 	ret
 
-PrintLearnedMove:
+PrintLearnedMove: ; 6efe (1:6efe)
 	ld hl, LearnedMove1Text
 	call PrintText
-	ld b, 1
+	ld b, $1
 	ret
 
-TryingToLearn:
+TryingToLearn: ; 6f07 (1:6f07)
 	push hl
 	ld hl, TryingToLearnText
 	call PrintText
-	coord hl, 14, 7
-	lb bc, 8, 15
-	ld a, TWO_OPTION_MENU
-	ld [wTextBoxID], a
-	call DisplayTextBoxID ; yes/no menu
+	hlCoord 14, 7
+	ld bc, $80f
+	ld a, $14
+	ld [wd125], a
+	call DisplayTextBoxID
 	pop hl
-	ld a, [wCurrentMenuItem]
+	ld a, [wCurrentMenuItem] ; wCurrentMenuItem
 	rra
 	ret c
-	ld bc, -NUM_MOVES
+	ld bc, $fffc
 	add hl, bc
 	push hl
-	ld de, wMoves
-	ld bc, NUM_MOVES
+	ld de, wd0dc
+	ld bc, $4
 	call CopyData
-	callab FormatMovesString
+	callab Func_39b87
 	pop hl
-.loop
+.asm_6f39
 	push hl
 	ld hl, WhichMoveToForgetText
 	call PrintText
-	coord hl, 4, 7
-	ld b, 4
-	ld c, 14
+	hlCoord 4, 7
+	ld b, $4
+	ld c, $e
 	call TextBoxBorder
-	coord hl, 6, 8
-	ld de, wMovesString
-	ld a, [hFlags_0xFFF6]
+	hlCoord 6, 8
+	ld de, wd0e1
+	ld a, [$fff6]
 	set 2, a
-	ld [hFlags_0xFFF6], a
+	ld [$fff6], a
 	call PlaceString
-	ld a, [hFlags_0xFFF6]
+	ld a, [$fff6]
 	res 2, a
-	ld [hFlags_0xFFF6], a
-	ld hl, wTopMenuItemY
-	ld a, 8
-	ld [hli], a ; wTopMenuItemY
-	ld a, 5
-	ld [hli], a ; wTopMenuItemX
+	ld [$fff6], a
+	ld hl, wTopMenuItemY ; wTopMenuItemY
+	ld a, $8
+	ld [hli], a
+	ld a, $5
+	ld [hli], a
 	xor a
-	ld [hli], a ; wCurrentMenuItem
+	ld [hli], a
 	inc hl
-	ld a, [wNumMovesMinusOne]
-	ld [hli], a ; wMaxMenuItem
-	ld a, A_BUTTON | B_BUTTON
-	ld [hli], a ; wMenuWatchedKeys
-	ld [hl], 0 ; wLastMenuItem
-	ld hl, hFlags_0xFFF6
+	ld a, [wcd6c]
+	ld [hli], a
+	ld a, $3
+	ld [hli], a
+	ld [hl], $0
+	ld hl, $fff6
 	set 1, [hl]
 	call HandleMenuInput
-	ld hl, hFlags_0xFFF6
+	ld hl, $fff6
 	res 1, [hl]
 	push af
 	call LoadScreenTilesFromBuffer1
 	pop af
 	pop hl
-	bit 1, a ; pressed b
-	jr nz, .cancel
+	bit 1, a
+	jr nz, .asm_6fab
 	push hl
-	ld a, [wCurrentMenuItem]
+	ld a, [wCurrentMenuItem] ; wCurrentMenuItem
 	ld c, a
-	ld b, 0
+	ld b, $0
 	add hl, bc
 	ld a, [hl]
 	push af
@@ -169,58 +169,56 @@ TryingToLearn:
 	pop bc
 	pop de
 	ld a, d
-	jr c, .hm
+	jr c, .asm_6fa2
 	pop hl
 	add hl, bc
 	and a
 	ret
-.hm
+.asm_6fa2
 	ld hl, HMCantDeleteText
 	call PrintText
 	pop hl
-	jr .loop
-.cancel
+	jr .asm_6f39
+.asm_6fab
 	scf
 	ret
 
-LearnedMove1Text:
+LearnedMove1Text: ; 6fb4 (1:6fb4)
 	TX_FAR _LearnedMove1Text
-	TX_SFX_ITEM_1 ; plays SFX_GET_ITEM_1 in the pary menu (rare candy) and plays SFX_LEVEL_UP in battle
-	TX_BLINK
-	db "@"
+	db $b,6,"@"
 
-WhichMoveToForgetText:
+WhichMoveToForgetText: ; 6fb4 (1:6fb4)
 	TX_FAR _WhichMoveToForgetText
 	db "@"
 
-AbandonLearningText:
+AbandonLearningText: ; 6fb9 (1:6fb9)
 	TX_FAR _AbandonLearningText
 	db "@"
 
-DidNotLearnText:
+DidNotLearnText: ; 6fbe (1:6fbe)
 	TX_FAR _DidNotLearnText
 	db "@"
 
-TryingToLearnText:
+TryingToLearnText: ; 6fc3 (1:6fc3)
 	TX_FAR _TryingToLearnText
 	db "@"
 
-OneTwoAndText:
+OneTwoAndText: ; 6fc8 (1:6fc8)
 	TX_FAR _OneTwoAndText
-	TX_DELAY
-	TX_ASM
-	ld a, SFX_SWAP
+	db $a
+	db $8
+	ld a, RBSFX_02_58
 	call PlaySoundWaitForCurrent
 	ld hl, PoofText
 	ret
 
-PoofText:
+PoofText: ; 6fd7 (1:6fd7)
 	TX_FAR _PoofText
-	TX_DELAY
-ForgotAndText:
+	db $a
+ForgotAndText: ; 6fdc (1:6fdc)
 	TX_FAR _ForgotAndText
 	db "@"
 
-HMCantDeleteText:
+HMCantDeleteText: ; 6fe1 (1:6fe1)
 	TX_FAR _HMCantDeleteText
 	db "@"

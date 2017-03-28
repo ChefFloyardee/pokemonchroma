@@ -1,13 +1,30 @@
 Route16Mons:
 	db $19
-	dbw 20,SPEAROW
-	dbw 22,SPEAROW
-	dbw 18,RATTATA
-	dbw 20,DODUO
-	dbw 20,RATTATA
-	dbw 18,DODUO
-	dbw 22,DODUO
-	dbw 22,RATTATA
-	dbw 23,RATICATE
-	dbw 25,RATICATE
+	IF !_YELLOW
+		db 20,SPEAROW
+		db 22,SPEAROW
+		db 18,RATTATA
+		db 20,DODUO
+		db 20,RATTATA
+		db 18,DODUO
+		db 22,DODUO
+		db 22,RATTATA
+		db 23,RATICATE
+		db 25,RATICATE
+	ENDC
+
+	IF _YELLOW
+		db 22,SPEAROW
+		db 22,DODUO
+		db 23,RATTATA
+		db 24,DODUO
+		db 24,RATTATA
+		db 26,DODUO
+		db 23,SPEAROW
+		db 24,FEAROW
+		db 25,RATICATE
+		db 26,RATICATE
+	ENDC
+
 	db $00
+

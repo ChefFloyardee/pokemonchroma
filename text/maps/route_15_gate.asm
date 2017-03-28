@@ -1,7 +1,8 @@
-_Route15GateText1::
+_Route15GateText1:: ; 8cb73 (23:4b73)
 	text "Are you working"
-	line "on a #dex?"
+	line "on a #DEX?"
 
-	para "Prof.Oak's Aide"
+	para "PROF.OAK's AIDE"
 	line "came by here."
 	done
+

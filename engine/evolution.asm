@@ -1,4 +1,4 @@
-EvolveMon:
+Func_7bde9: ; 7bde9 (1e:7de9)
 	push hl
 	push de
 	push bc
@@ -7,93 +7,73 @@ EvolveMon:
 	ld a, [wd0b5]
 	push af
 	xor a
-	ld [wLowHealthAlarm], a
-	ld [wChannelSoundIDs + Ch4], a
+	ld [wDanger], a
+	ld [wc02a], a
 	dec a
-	ld [wNewSoundID], a
+	ld [wc0ee], a
 	call PlaySound
 	ld a, $1
-	ld [H_AUTOBGTRANSFERENABLED], a
-	ld a, SFX_TINK
+	ld [H_AUTOBGTRANSFERENABLED], a ; $ffba
+	ld a, RBSFX_08_3c
 	call PlaySound
 	call Delay3
 	xor a
-	ld [H_AUTOBGTRANSFERENABLED], a
+	ld [H_AUTOBGTRANSFERENABLED], a ; $ffba
 	ld [hTilesetType], a
-	ld a, [wEvoOldSpecies]
-	ld [wWholeScreenPaletteMonSpecies], a
-	ld a, [wEvoOldSpecies + 1]
-	ld [wWholeScreenPaletteMonSpecies + 1], a
-	ld c, 0
-	call EvolutionSetWholeScreenPalette
-	ld a, [wEvoNewSpecies]
+	ld a, [wHPBarMaxHP]
+	ld [wcf1d], a
+	ld c, $0
+	call Func_7beb4
+	ld a, [wHPBarMaxHP + 1]
 	ld [wcf91], a
 	ld [wd0b5], a
-	ld a, [wEvoNewSpecies + 1]
-	ld [wcf91 + 1], a
-	ld [wd0b5 + 1], a
-	call Evolution_LoadPic
+	call Func_7beb9
 	ld de, vFrontPic
 	ld hl, vBackPic
 	ld bc, 7 * 7
 	call CopyVideoData
-	ld a, [wEvoOldSpecies]
+	ld a, [wHPBarMaxHP]
 	ld [wcf91], a
 	ld [wd0b5], a
-	ld a, [wEvoOldSpecies + 1]
- 	ld [wcf91 + 1], a
- 	ld [wd0b5 + 1], a
-	call Evolution_LoadPic
+	call Func_7beb9
 	ld a, $1
-	ld [H_AUTOBGTRANSFERENABLED], a
-	ld a, [wEvoOldSpecies]
-	ld c, a
- 	ld a, [wEvoOldSpecies + 1]
- 	ld b, a
+	ld [H_AUTOBGTRANSFERENABLED], a ; $ffba
+	ld a, [wHPBarMaxHP]
 	call PlayCry
 	call WaitForSoundToFinish
-	ld c, BANK(Music_SafariZone)
+	ld c, 0 ; BANK(Music_SafariZone)
 	ld a, MUSIC_SAFARI_ZONE
 	call PlayMusic
-	ld c, 80
+	ld c, $50
 	call DelayFrames
-	ld c, 1 ; set PAL_BLACK instead of mon palette
-	call EvolutionSetWholeScreenPalette
-	lb bc, $1, $10
-.animLoop
+	ld c, $1
+	call Func_7beb4
+	ld bc, $110
+.asm_7be63
 	push bc
-	call Evolution_CheckForCancel
-	jr c, .evolutionCancelled
-	call Evolution_BackAndForthAnim
+	call asm_7befa
+	jr c, .asm_7bea9
+	call asm_7bec2
 	pop bc
 	inc b
 	dec c
 	dec c
-	jr nz, .animLoop
+	jr nz, .asm_7be63
 	xor a
-	ld [wEvoCancelled], a
+	ld [wHPBarOldHP + 1], a
 	ld a, $31
-	ld [wEvoMonTileOffset], a
-	call Evolution_ChangeMonPic ; show the new species pic
-	ld a, [wEvoNewSpecies]
-	ld c, a
-	ld a, [wEvoNewSpecies + 1]
- 	ld b, a
-.done
-	ld a, c
-	ld [wWholeScreenPaletteMonSpecies], a
-	ld a, b
-	ld [wWholeScreenPaletteMonSpecies + 1], a
+	ld [wHPBarOldHP], a
+	call Func_7bed6
+	ld a, [wHPBarMaxHP + 1]
+.asm_7be81
+	ld [wcf1d], a
 	ld a, $ff
-	ld [wNewSoundID], a
+	ld [wc0ee], a
 	call PlaySound
-	ld a, [wWholeScreenPaletteMonSpecies]
-	ld c, a
-	ld a, [wWholeScreenPaletteMonSpecies + 1]
-	ld b, a
+	ld a, [wcf1d]
 	call PlayCry
-	ld c, 0
-	call EvolutionSetWholeScreenPalette
+	ld c, $0
+	call Func_7beb4
 	pop af
 	ld [wd0b5], a
 	pop af
@@ -101,83 +81,77 @@ EvolveMon:
 	pop bc
 	pop de
 	pop hl
-	ld a, [wEvoCancelled]
+	ld a, [wHPBarOldHP + 1]
 	and a
 	ret z
 	scf
 	ret
-.evolutionCancelled
+.asm_7bea9
 	pop bc
-	ld a, 1
-	ld [wEvoCancelled], a
-	ld a, [wEvoOldSpecies]
-	ld c, a
-	ld a, [wEvoOldSpecies + 1]
-	ld b, a
-	jr .done
+	ld a, $1
+	ld [wHPBarOldHP + 1], a
+	ld a, [wHPBarMaxHP]
+	jr .asm_7be81
 
-EvolutionSetWholeScreenPalette:
-	ld b, SET_PAL_POKEMON_WHOLE_SCREEN
-	jp RunPaletteCommand
+Func_7beb4: ; 7beb4 (1e:7eb4)
+	ld b, $b
+	jp GoPAL_SET
 
-Evolution_LoadPic:
+Func_7beb9: ; 7beb9 (1e:7eb9)
 	call GetMonHeader
-	coord hl, 7, 2
+	hlCoord 7, 2
 	jp LoadFlippedFrontSpriteByMonIndex
-
-Evolution_BackAndForthAnim:
-; show the mon change back and forth between the new and old species b times
+asm_7bec2: ; 7bec2 (1e:7ec2)
 	ld a, $31
-	ld [wEvoMonTileOffset], a
-	call Evolution_ChangeMonPic
-	ld a, -$31
-	ld [wEvoMonTileOffset], a
-	call Evolution_ChangeMonPic
+	ld [wHPBarOldHP], a
+	call Func_7bed6
+	ld a, $cf
+	ld [wHPBarOldHP], a
+	call Func_7bed6
 	dec b
-	jr nz, Evolution_BackAndForthAnim
+	jr nz, asm_7bec2
 	ret
 
-Evolution_ChangeMonPic:
+Func_7bed6: ; 7bed6 (1e:7ed6)
 	push bc
 	xor a
-	ld [H_AUTOBGTRANSFERENABLED], a
-	coord hl, 7, 2
-	lb bc, 7, 7
-	ld de, SCREEN_WIDTH - 7
-.loop
+	ld [H_AUTOBGTRANSFERENABLED], a ; $ffba
+	hlCoord 7, 2
+	ld bc, $707
+	ld de, $d
+.asm_7bee3
 	push bc
-.innerLoop
-	ld a, [wEvoMonTileOffset]
+.asm_7bee4
+	ld a, [wHPBarOldHP]
 	add [hl]
 	ld [hli], a
 	dec c
-	jr nz, .innerLoop
+	jr nz, .asm_7bee4
 	pop bc
 	add hl, de
 	dec b
-	jr nz, .loop
-	ld a, 1
-	ld [H_AUTOBGTRANSFERENABLED], a
+	jr nz, .asm_7bee3
+	ld a, $1
+	ld [H_AUTOBGTRANSFERENABLED], a ; $ffba
 	call Delay3
 	pop bc
 	ret
-
-Evolution_CheckForCancel:
+asm_7befa: ; 7befa (1e:7efa)
 	call DelayFrame
 	push bc
 	call JoypadLowSensitivity
 	ld a, [hJoy5]
 	pop bc
-	and B_BUTTON
-	jr nz, .pressedB
-.notAllowedToCancel
+	and $2
+	jr nz, .asm_7bf0d
+.asm_7bf08
 	dec c
-	jr nz, Evolution_CheckForCancel
+	jr nz, asm_7befa
 	and a
 	ret
-.pressedB
-	ld a, [wForceEvolution]
+.asm_7bf0d
+	ld a, [wccd4]
 	and a
-	jr nz, .notAllowedToCancel
+	jr nz, .asm_7bf08
 	scf
 	ret

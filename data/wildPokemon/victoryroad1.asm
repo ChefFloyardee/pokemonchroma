@@ -1,13 +1,30 @@
 PlateauMons1:
 	db $0F
-	dbw 24,MACHOP
-	dbw 26,GEODUDE
-	dbw 22,GOLBAT
-	dbw 36,ONIX
-	dbw 39,ONIX
-	dbw 42,ONIX
-	dbw 41,GRAVELER
-	dbw 41,HITMONLEE
-	dbw 42,MACHOKE
-	dbw 43,MAROWAK
+	IF !_YELLOW
+		db 24,MACHOP
+		db 26,GEODUDE
+		db 22,ZUBAT
+		db 36,ONIX
+		db 39,ONIX
+		db 42,ONIX
+		db 41,GRAVELER
+		db 41,GOLBAT
+		db 42,MACHOKE
+		db 43,MAROWAK
+	ENDC
+
+	IF _YELLOW
+		db 26,GEODUDE
+		db 31,GEODUDE
+		db 36,GEODUDE
+		db 39,ZUBAT
+		db 44,ZUBAT
+		db 41,GEODUDE
+		db 43,ONIX
+		db 45,ONIX
+		db 41,GRAVELER
+		db 47,GRAVELER
+	ENDC
+
 	db $00
+

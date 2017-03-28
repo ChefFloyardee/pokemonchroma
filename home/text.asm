@@ -1,5 +1,5 @@
 TextBoxBorder::
-; Draw a c×b text box at hl.
+; Draw a cxb text box at hl.
 
 	; top row
 	push hl
@@ -11,7 +11,7 @@ TextBoxBorder::
 	ld [hl], a
 	pop hl
 
-	ld de, SCREEN_WIDTH
+	ld de, 20
 	add hl, de
 
 	; middle rows
@@ -24,7 +24,7 @@ TextBoxBorder::
 	ld [hl], "│"
 	pop hl
 
-	ld de, SCREEN_WIDTH
+	ld de, 20
 	add hl, de
 	dec b
 	jr nz, .next
@@ -46,78 +46,88 @@ NPlaceChar::
 	jr nz, .loop
 	ret
 
-PlaceString::
+PlaceString:: ; 1955 (0:1955)
 	push hl
-PlaceNextChar::
+PlaceNextChar:: ; 1956 (0:1956)
 	ld a,[de]
 
 	cp "@"
-	jr nz, Char4ETest
+	jr nz,.PlaceText
 	ld b,h
 	ld c,l
 	pop hl
 	ret
 
-Char4ETest::
-	cp $4E ; next
-	jr nz, .char4FTest
-	ld bc, 2 * SCREEN_WIDTH
-	ld a,[hFlags_0xFFF6]
+.PlaceText
+	cp $4E
+	jr nz,.next
+	ld bc,$0028
+	ld a,[$FFF6]
 	bit 2,a
-	jr z,.ok
-	ld bc,SCREEN_WIDTH
-.ok
+	jr z,.next2
+	ld bc,$14
+.next2
 	pop hl
 	add hl,bc
 	push hl
-	jp PlaceNextChar_inc
+	jp Next19E8
 
-.char4FTest
-	cp $4F ; line
+.next
+	cp $4F
 	jr nz,.next3
 	pop hl
-	coord hl, 1, 16
+	hlCoord 1, 16
 	push hl
-	jp PlaceNextChar_inc
+	jp Next19E8
 
 .next3 ; Check against a dictionary
-dict: macro
-if \1 == 0
 	and a
-else
-	cp \1
-endc
-	jp z, \2
-endm
-
-	dict $00, Char00 ; error
-	dict $4C, Char4C ; autocont
-	dict $4B, Char4B ; cont_
-	dict $51, Char51 ; para
-	dict $49, Char49 ; page
-	dict $52, Char52 ; player
-	dict $53, Char53 ; rival
-	dict $54, Char54 ; POKé
-	dict $5B, Char5B ; PC
-	dict $5E, Char5E ; ROCKET
-	dict $5C, Char5C ; TM
-	dict $5D, Char5D ; TRAINER
-	dict $55, Char55 ; cont
-	dict $56, Char56 ; 6 dots
-	dict $57, Char57 ; done
-	dict $58, Char58 ; prompt
-	dict $4A, Char4A ; PKMN
-	dict $5F, Char5F ; dex
-	dict $59, Char59 ; TARGET
-	dict $5A, Char5A ; USER
-
+	jp z,Char00
+	cp $4C
+	jp z,Char4C
+	cp $4B
+	jp z,Char4B
+	cp $51
+	jp z,Char51
+	cp $49
+	jp z,Char49
+	cp $52
+	jp z,Char52
+	cp $53
+	jp z,Char53
+	cp $54
+	jp z,Char54
+	cp $5B
+	jp z,Char5B
+	cp $5E
+	jp z,Char5E
+	cp $5C
+	jp z,Char5C
+	cp $5D
+	jp z,Char5D
+	cp $55
+	jp z,Char55
+	cp $56
+	jp z,Char56
+	cp $57
+	jp z,Char57
+	cp $58
+	jp z,Char58
+	cp $4A
+	jp z,Char4A
+	cp $5F
+	jp z,Char5F
+	cp $59
+	jp z,Char59
+	cp $5A
+	jp z,Char5A
 	ld [hli],a
 	call PrintLetterDelay
-PlaceNextChar_inc::
+Next19E8:: ; 19e8 (0:19e8)
 	inc de
 	jp PlaceNextChar
 
-Char00::
+Char00:: ; 19ec (0:19ec)
 	ld b,h
 	ld c,l
 	pop hl
@@ -125,56 +135,56 @@ Char00::
 	dec de
 	ret
 
-Char00Text:: ; “%d ERROR.”
+Char00Text:: ; 0x19f4 “%d ERROR.”
 	TX_FAR _Char00Text
 	db "@"
 
-Char52:: ; player’s name
+Char52:: ; 0x19f9 player’s name
 	push de
 	ld de,wPlayerName
 	jr FinishDTE
 
-Char53:: ; rival’s name
+Char53:: ; 19ff (0:19ff) ; rival’s name
 	push de
-	ld de,wRivalName
+	ld de,W_RIVALNAME
 	jr FinishDTE
 
-Char5D:: ; TRAINER
+Char5D:: ; 1a05 (0:1a05) ; TRAINER
 	push de
 	ld de,Char5DText
 	jr FinishDTE
 
-Char5C:: ; TM
+Char5C:: ; 1a0b (0:1a0b) ; TM
 	push de
 	ld de,Char5CText
 	jr FinishDTE
 
-Char5B:: ; PC
+Char5B:: ; 1a11 (0:1a11) ; PC
 	push de
 	ld de,Char5BText
 	jr FinishDTE
 
-Char5E:: ; ROCKET
+Char5E:: ; 1a17 (0:1a17) ; ROCKET
 	push de
 	ld de,Char5EText
 	jr FinishDTE
 
-Char54:: ; POKé
+Char54:: ; 1a1d (0:1a1d) ; POKé
 	push de
 	ld de,Char54Text
 	jr FinishDTE
 
-Char56:: ; ……
+Char56:: ; 1a23 (0:1a23) ; ……
 	push de
 	ld de,Char56Text
 	jr FinishDTE
 
-Char4A:: ; PKMN
+Char4A:: ; 1a29 (0:1a29) ; PKMN
 	push de
 	ld de,Char4AText
 	jr FinishDTE
 
-Char59::
+Char59:: ; 1a2f (0:1a2f)
 ; depending on whose turn it is, print
 ; enemy active monster’s name, prefixed with “Enemy ”
 ; or
@@ -184,28 +194,29 @@ Char59::
 	xor 1
 	jr MonsterNameCharsCommon
 
-Char5A::
+Char5A:: ; 1a35 (0:1a35)
 ; depending on whose turn it is, print
 ; player active monster’s name
 ; or
 ; enemy active monster’s name, prefixed with “Enemy ”
 	ld a,[H_WHOSETURN]
-MonsterNameCharsCommon::
+MonsterNameCharsCommon:: ; 1a37 (0:1a37)
 	push de
 	and a
 	jr nz,.Enemy
 	ld de,wBattleMonNick ; player active monster name
 	jr FinishDTE
 
-.Enemy
+.Enemy ; 1A40
 	; print “Enemy ”
 	ld de,Char5AText
 	call PlaceString
+
 	ld h,b
 	ld l,c
 	ld de,wEnemyMonNick ; enemy active monster name
 
-FinishDTE::
+FinishDTE:: ; 1a4b (0:1a4b)
 	call PlaceString
 	ld h,b
 	ld l,c
@@ -213,24 +224,24 @@ FinishDTE::
 	inc de
 	jp PlaceNextChar
 
-Char5CText::
+Char5CText:: ; 1a55 (0:1a55)
 	db "TM@"
-Char5DText::
+Char5DText:: ; 1a58 (0:1a58)
 	db "TRAINER@"
-Char5BText::
+Char5BText:: ; 1a60 (0:1a60)
 	db "PC@"
-Char5EText::
+Char5EText:: ; 1a63 (0:1a63)
 	db "ROCKET@"
-Char54Text::
+Char54Text:: ; 1a6a (0:1a6a)
 	db "POKé@"
-Char56Text::
+Char56Text:: ; 1a6f (0:1a6f)
 	db "……@"
-Char5AText::
+Char5AText:: ; 1a72 (0:1a72)
 	db "Enemy @"
-Char4AText::
+Char4AText:: ; 1a79 (0:1a79)
 	db $E1,$E2,"@" ; PKMN
 
-Char55::
+Char55:: ; 1a7c (0:1a7c)
 	push de
 	ld b,h
 	ld c,l
@@ -242,108 +253,104 @@ Char55::
 	inc de
 	jp PlaceNextChar
 
-Char55Text::
+Char55Text:: ; 1a8c (0:1a8c)
 ; equivalent to Char4B
 	TX_FAR _Char55Text
 	db "@"
 
-Char5F::
+Char5F:: ; 1a91 (0:1a91)
 ; ends a Pokédex entry
 	ld [hl],"."
 	pop hl
 	ret
 
-Char58:: ; prompt
-	ld a,[wLinkState]
-	cp LINK_STATE_BATTLING
-	jp z, .ok
-	ld a, "▼"
+Char58:: ; 1a95 (0:1a95)
+	ld a,[W_ISLINKBATTLE]
+	cp 4
+	jp z,Next1AA2
+	ld a,$EE
 	Coorda 18, 16
-.ok
+Next1AA2:: ; 1aa2 (0:1aa2)
 	call ProtectedDelay3
 	call ManualTextScroll
-	ld a, " "
+	ld a,$7F
 	Coorda 18, 16
-Char57:: ; done
+Char57:: ; 1aad (0:1aad)
 	pop hl
-	ld de, Char58Text
+	ld de,Char58Text
 	dec de
 	ret
 
-Char58Text::
+Char58Text:: ; 1ab3 (0:1ab3)
 	db "@"
 
-Char51:: ; para
+Char51:: ; 1ab4 (0:1ab4)
 	push de
-	ld a, "▼"
+	ld a,$EE
 	Coorda 18, 16
 	call ProtectedDelay3
 	call ManualTextScroll
-	coord hl, 1, 13
-	lb bc, 4, 18
+	hlCoord 1, 13
+	ld bc,$0412
 	call ClearScreenArea
-	ld c, 20
+	ld c,$14
 	call DelayFrames
 	pop de
-	coord hl, 1, 14
-	jp PlaceNextChar_inc
+	hlCoord 1, 14
+	jp Next19E8
 
-Char49::
+Char49:: ; 1ad5 (0:1ad5)
 	push de
-	ld a,"▼"
+	ld a,$EE
 	Coorda 18, 16
 	call ProtectedDelay3
 	call ManualTextScroll
-	coord hl, 1, 10
-	lb bc, 7, 18
+	hlCoord 1, 10
+	ld bc,$0712
 	call ClearScreenArea
-	ld c,20
+	ld c,$14
 	call DelayFrames
 	pop de
 	pop hl
-	coord hl, 1, 11
+	hlCoord 1, 11
 	push hl
-	jp PlaceNextChar_inc
+	jp Next19E8
 
-Char4B::
-	ld a,"▼"
+Char4B:: ; 1af8 (0:1af8)
+	ld a,$EE
 	Coorda 18, 16
 	call ProtectedDelay3
 	push de
 	call ManualTextScroll
 	pop de
-	ld a, " "
+	ld a,$7F
 	Coorda 18, 16
 	;fall through
-Char4C::
+Char4C:: ; 1b0a (0:1b0a)
 	push de
-	call ScrollTextUpOneLine
-	call ScrollTextUpOneLine
-	coord hl, 1, 16
+	call Next1B18
+	call Next1B18
+	hlCoord 1, 16
 	pop de
-	jp PlaceNextChar_inc
+	jp Next19E8
 
-; move both rows of text in the normal text box up one row
-; always called twice in a row
-; first time, copy the two rows of text to the "in between" rows that are usually emtpy
-; second time, copy the bottom row of text into the top row of text
-ScrollTextUpOneLine::
-	coord hl, 0, 14 ; top row of text
-	coord de, 0, 13 ; empty line above text
-	ld b, SCREEN_WIDTH * 3
-.copyText
+Next1B18:: ; 1b18 (0:1b18)
+	hlCoord 0, 14
+	deCoord 0, 13
+	ld b,$3C
+.next
 	ld a,[hli]
 	ld [de],a
 	inc de
 	dec b
-	jr nz,.copyText
-	coord hl, 1, 16
-	ld a, " "
-	ld b,SCREEN_WIDTH - 2
-.clearText
+	jr nz,.next
+	hlCoord 1, 16
+	ld a,$7F
+	ld b,$12
+.next2
 	ld [hli],a
 	dec b
-	jr nz,.clearText
+	jr nz,.next2
 
 	; wait five frames
 	ld b,5
@@ -354,57 +361,57 @@ ScrollTextUpOneLine::
 
 	ret
 
-ProtectedDelay3::
+ProtectedDelay3:: ; 1b3a (0:1b3a)
 	push bc
 	call Delay3
 	pop bc
 	ret
 
-TextCommandProcessor::
-	ld a,[wLetterPrintingDelayFlags]
+TextCommandProcessor:: ; 1b40 (0:1b40)
+	ld a,[wd358]
 	push af
 	set 1,a
 	ld e,a
-	ld a, [$fff4]
+	ld a,[$fff4]
 	xor e
-	ld [wLetterPrintingDelayFlags],a
+	ld [wd358],a
 	ld a,c
-	ld [wTextDest],a
+	ld [wcc3a],a
 	ld a,b
-	ld [wTextDest + 1],a
+	ld [wcc3b],a
 
-NextTextCommand::
+NextTextCommand:: ; 1b55 (0:1b55)
 	ld a,[hli]
 	cp a, "@" ; terminator
 	jr nz,.doTextCommand
 	pop af
-	ld [wLetterPrintingDelayFlags],a
+	ld [wd358],a
 	ret
 .doTextCommand
 	push hl
-	cp a, $17
-	jp z, TextCommand17
-	cp a, $0e
+	cp a,$17
+	jp z,TextCommand17
+	cp a,$0e
 	jp nc,TextCommand0B ; if a != 0x17 and a >= 0xE, go to command 0xB
 ; if a < 0xE, use a jump table
 	ld hl,TextCommandJumpTable
 	push bc
 	add a
-	ld b, 0
-	ld c, a
-	add hl, bc
+	ld b,$00
+	ld c,a
+	add hl,bc
 	pop bc
-	ld a, [hli]
-	ld h, [hl]
-	ld l, a
-	jp hl
+	ld a,[hli]
+	ld h,[hl]
+	ld l,a
+	jp [hl]
 
 ; draw box
 ; 04AAAABBCC
 ; AAAA = address of upper left corner
 ; BB = height
 ; CC = width
-TextCommand04::
+TextCommand04:: ; 1b78 (0:1b78)
 	pop hl
 	ld a,[hli]
 	ld e,a
@@ -423,7 +430,7 @@ TextCommand04::
 
 ; place string inline
 ; 00{string}
-TextCommand00::
+TextCommand00:: ; 1b8a (0:1b8a)
 	pop hl
 	ld d,h
 	ld e,l
@@ -438,7 +445,7 @@ TextCommand00::
 ; place string from RAM
 ; 01AAAA
 ; AAAA = address of string
-TextCommand01::
+TextCommand01:: ; 1b97 (0:1b97)
 	pop hl
 	ld a,[hli]
 	ld e,a
@@ -457,7 +464,7 @@ TextCommand01::
 ; BB
 ; bits 0-4 = length in bytes
 ; bits 5-7 = unknown flags
-TextCommand02::
+TextCommand02:: ; 1ba5 (0:1ba5)
 	pop hl
 	ld a,[hli]
 	ld e,a
@@ -477,32 +484,32 @@ TextCommand02::
 ; repoint destination address
 ; 03AAAA
 ; AAAA = new destination address
-TextCommand03::
+TextCommand03:: ; 1bb7 (0:1bb7)
 	pop hl
 	ld a,[hli]
-	ld [wTextDest],a
+	ld [wcc3a],a
 	ld c,a
 	ld a,[hli]
-	ld [wTextDest + 1],a
+	ld [wcc3b],a
 	ld b,a
 	jp NextTextCommand
 
 ; repoint destination to second line of dialogue text box
 ; 05
 ; (no arguments)
-TextCommand05::
+TextCommand05:: ; 1bc5 (0:1bc5)
 	pop hl
-	coord bc, 1, 16 ; address of second line of dialogue text box
+	bcCoord 1, 16 ; address of second line of dialogue text box
 	jp NextTextCommand
 
 ; blink arrow and wait for A or B to be pressed
 ; 06
 ; (no arguments)
-TextCommand06::
-	ld a,[wLinkState]
-	cp a,LINK_STATE_BATTLING
+TextCommand06:: ; 1bcc (0:1bcc)
+	ld a,[W_ISLINKBATTLE]
+	cp a,$04
 	jp z,TextCommand0D
-	ld a,"▼"
+	ld a,$ee ; down arrow
 	Coorda 18, 16 ; place down arrow in lower right corner of dialogue text box
 	push bc
 	call ManualTextScroll ; blink arrow and wait for A or B to be pressed
@@ -515,22 +522,22 @@ TextCommand06::
 ; scroll text up one line
 ; 07
 ; (no arguments)
-TextCommand07::
-	ld a, " "
+TextCommand07:: ; 1be7 (0:1be7)
+	ld a," "
 	Coorda 18, 16 ; place blank space in lower right corner of dialogue text box
-	call ScrollTextUpOneLine
-	call ScrollTextUpOneLine
+	call Next1B18 ; scroll up text
+	call Next1B18
 	pop hl
-	coord bc, 1, 16 ; address of second line of dialogue text box
+	bcCoord 1, 16 ; address of second line of dialogue text box
 	jp NextTextCommand
 
 ; execute asm inline
 ; 08{code}
-TextCommand08::
+TextCommand08:: ; 1bf9 (0:1bf9)
 	pop hl
 	ld de,NextTextCommand
 	push de ; return address
-	jp hl
+	jp [hl]
 
 ; print decimal number (converted from binary number)
 ; 09AAAABB
@@ -538,7 +545,7 @@ TextCommand08::
 ; BB
 ; bits 0-3 = how many digits to display
 ; bits 4-7 = how long the number is in bytes
-TextCommand09::
+TextCommand09:: ; 1bff (0:1bff)
 	pop hl
 	ld a,[hli]
 	ld e,a
@@ -554,7 +561,7 @@ TextCommand09::
 	ld a,b
 	and a,$f0
 	swap a
-	set BIT_LEFT_ALIGN,a
+	set 6,a
 	ld b,a
 	call PrintNumber
 	ld b,h
@@ -565,11 +572,11 @@ TextCommand09::
 ; wait half a second if the user doesn't hold A or B
 ; 0A
 ; (no arguments)
-TextCommand0A::
+TextCommand0A:: ; 1c1d (0:1c1d)
 	push bc
 	call Joypad
 	ld a,[hJoyHeld]
-	and a,A_BUTTON | B_BUTTON
+	and a,%00000011 ; A and B buttons
 	jr nz,.skipDelay
 	ld c,30
 	call DelayFrames
@@ -581,7 +588,7 @@ TextCommand0A::
 ; plays sounds
 ; this actually handles various command ID's, not just 0B
 ; (no arguments)
-TextCommand0B::
+TextCommand0B:: ; 1c31 (0:1c31)
 	pop hl
 	push bc
 	dec hl
@@ -591,31 +598,26 @@ TextCommand0B::
 	ld hl,TextCommandSounds
 .loop
 	ld a,[hli]
-	cp $14
-	jr nc, .cries
 	cp b
 	jr z,.matchFound
 	inc hl
 	jr .loop
 .matchFound
+	cp a,$14
+	jr z,.pokemonCry
+	cp a,$15
+	jr z,.pokemonCry
+	cp a,$16
+	jr z,.pokemonCry
 	ld a,[hl]
 	call PlaySound
 	call WaitForSoundToFinish
 	pop hl
 	pop bc
 	jp NextTextCommand
-.cries
- 	cp b
- 	jr z, .pokemonCry
- 	inc hl
- 	inc hl
- 	jr .cries
 .pokemonCry
 	push de
-	ld a,[hli]
- 	ld c, a
- 	ld a, [hl]
- 	ld b, a
+	ld a,[hl]
 	call PlayCry
 	pop de
 	pop hl
@@ -623,22 +625,22 @@ TextCommand0B::
 	jp NextTextCommand
 
 ; format: text command ID, sound ID or cry ID
-TextCommandSounds::
-	db $0B, SFX_GET_ITEM_1 ; actually plays SFX_LEVEL_UP when the battle music engine is loaded
-	db $12, SFX_CAUGHT_MON
-	db $0E, SFX_POKEDEX_RATING ; unused?
-	db $0F, SFX_GET_ITEM_1 ; unused?
-	db $10, SFX_GET_ITEM_2
-	db $11, SFX_GET_KEY_ITEM
-	db $13, SFX_DEX_PAGE_ADDED
-	dbw $14, NIDORINA ; used in OakSpeech
-	dbw $15, PIDGEOT  ; used in SaffronCityText12
-	dbw $16, DEWGONG  ; unused?
+TextCommandSounds:: ; 1c64 (0:1c64)
+	db $0B,RBSFX_02_3a
+	db $12,RBSFX_02_46
+	db $0E,RBSFX_02_41
+	db $0F,RBSFX_02_3a
+	db $10,RBSFX_02_3b
+	db $11,RBSFX_02_42
+	db $13,RBSFX_02_44
+	db $14,NIDORINA ; used in OakSpeech
+	db $15,PIDGEOT  ; used in SaffronCityText12
+	db $16,DEWGONG  ; unused?
 
 ; draw ellipses
 ; 0CAA
 ; AA = number of ellipses to draw
-TextCommand0C::
+TextCommand0C:: ; 1c78 (0:1c78)
 	pop hl
 	ld a,[hli]
 	ld d,a
@@ -646,13 +648,13 @@ TextCommand0C::
 	ld h,b
 	ld l,c
 .loop
-	ld a,"…"
+	ld a,$75 ; ellipsis
 	ld [hli],a
 	push de
 	call Joypad
 	pop de
 	ld a,[hJoyHeld] ; joypad state
-	and a,A_BUTTON | B_BUTTON
+	and a,%00000011 ; is A or B button pressed?
 	jr nz,.skipDelay ; if so, skip the delay
 	ld c,10
 	call DelayFrames
@@ -667,7 +669,7 @@ TextCommand0C::
 ; wait for A or B to be pressed
 ; 0D
 ; (no arguments)
-TextCommand0D::
+TextCommand0D:: ; 1c9a (0:1c9a)
 	push bc
 	call ManualTextScroll ; wait for A or B to be pressed
 	pop bc
@@ -678,7 +680,7 @@ TextCommand0D::
 ; 17AAAABB
 ; AAAA = address of text commands
 ; BB = bank
-TextCommand17::
+TextCommand17:: ; 1ca3 (0:1ca3)
 	pop hl
 	ld a,[H_LOADEDROMBANK]
 	push af
@@ -688,7 +690,7 @@ TextCommand17::
 	ld d,a
 	ld a,[hli]
 	ld [H_LOADEDROMBANK],a
-	ld [MBC1RomBank],a
+	ld [$2000],a
 	push hl
 	ld l,e
 	ld h,d
@@ -696,10 +698,10 @@ TextCommand17::
 	pop hl
 	pop af
 	ld [H_LOADEDROMBANK],a
-	ld [MBC1RomBank],a
+	ld [$2000],a
 	jp NextTextCommand
 
-TextCommandJumpTable::
+TextCommandJumpTable:: ; 1cc1 (0:1cc1)
 	dw TextCommand00
 	dw TextCommand01
 	dw TextCommand02
