@@ -1,13 +1,12 @@
-_CeladonPrizeRoomText1:: ; 9dee6 (27:5ee6)
+_CeladonPrizeRoomText1::
 	text "I sure do fancy"
-	line "that PORYGON!"
+	line "that Porygon!"
 
 	para "But, it's hard to"
 	line "win at slots!"
 	done
 
-_CeladonPrizeRoomText2:: ; 9df24 (27:5f24)
+_CeladonPrizeRoomText2::
 	text "I had a major"
 	line "haul today!"
 	done
-

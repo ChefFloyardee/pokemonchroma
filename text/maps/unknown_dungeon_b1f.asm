@@ -1,3 +1,5 @@
-_UnknownDungeon3MewtwoText:: ; 85c72 (21:5c72)
+_MewtwoBattleText::
 	text "Mew!@@"
-
+	
+_MewBattleText::
+	text "Mew!@@"

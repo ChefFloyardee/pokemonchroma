@@ -1,4 +1,4 @@
-PrintSafariZoneBattleText: ; 4277 (1:4277)
+PrintSafariZoneBattleText:
 	ld hl, wSafariBaitFactor
 	ld a, [hl]
 	and a
@@ -17,8 +17,10 @@ PrintSafariZoneBattleText: ; 4277 (1:4277)
 	push hl
 	ld a, [wEnemyMonSpecies]
 	ld [wd0b5], a
+	ld a, [wEnemyMonSpecies + 1]
+	ld [wd0b5 + 1], a
 	call GetMonHeader
-	ld a, [W_MONHCATCHRATE]
+	ld a, [wMonHCatchRate]
 	ld [wEnemyMonCatchRate], a
 	pop hl
 .asm_429f
@@ -27,10 +29,10 @@ PrintSafariZoneBattleText: ; 4277 (1:4277)
 	pop hl
 	jp PrintText
 
-SafariZoneEatingText: ; 42a7 (1:42a7)
+SafariZoneEatingText:
 	TX_FAR _SafariZoneEatingText
 	db "@"
 
-SafariZoneAngryText: ; 42ac (1:42ac)
+SafariZoneAngryText:
 	TX_FAR _SafariZoneAngryText
 	db "@"

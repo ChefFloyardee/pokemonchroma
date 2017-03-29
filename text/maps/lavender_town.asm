@@ -1,14 +1,14 @@
-_LavenderTownText_4413c:: ; a5482 (29:5482)
+_LavenderTownText_4413c::
 	text "Do you believe in"
-	line "GHOSTs?"
+	line "Ghosts?"
 	done
 
-_LavenderTownText_44141:: ; a549d (29:549d)
+_LavenderTownText_44141::
 	text "Really? So there"
 	line "are believers..."
 	done
 
-_LavenderTownText_44146:: ; a54c0 (29:54c0)
+_LavenderTownText_44146::
 	text "Hahaha, I guess"
 	line "not."
 
@@ -17,49 +17,48 @@ _LavenderTownText_44146:: ; a54c0 (29:54c0)
 	cont "it's not real."
 	done
 
-_LavenderTownText2:: ; a5506 (29:5506)
+_LavenderTownText2::
 	text "This town is known"
 	line "as the grave site"
-	cont "of #MON."
+	cont "of #mon."
 
 	para "Memorial services"
 	line "are held in"
-	cont "#MON TOWER."
+	cont "#mom Tower."
 	done
 
-_LavenderTownText3:: ; a555f (29:555f)
-	text "GHOSTs appeared"
-	line "in #MON TOWER."
+_LavenderTownText3::
+	text "Ghosts appeared"
+	line "in #mon Tower."
 
 	para "I think they're"
 	line "the spirits of"
-	cont "#MON that the"
-	cont "ROCKETs killed."
+	cont "#mon that the"
+	cont "Rockets killed."
 	done
 
-_LavenderTownText4:: ; a55bb (29:55bb)
-	text "LAVENDER TOWN"
+_LavenderTownText4::
+	text "Lavender Town"
 	line "The Noble Purple"
 	cont "Town"
 	done
 
-_LavenderTownText5:: ; a55e0 (29:55e0)
-	text "New SILPH SCOPE!"
+_LavenderTownText5::
+	text "New Silph Scope!"
 
 	para "Make the Invisible"
 	line "Plain to See!"
 
-	para "SILPH CO."
+	para "Silph Co."
 	done
 
-_LavenderTownText8:: ; a561d (29:561d)
-	text "LAVENDER VOLUNTEER"
-	line "#MON HOUSE"
+_LavenderTownText8::
+	text "Lavender Volunteer"
+	line "#Mon House"
 	done
 
-_LavenderTownText9:: ; a563c (29:563c)
+_LavenderTownText9::
 	text "May the Souls of"
-	line "#MON Rest Easy"
-	cont "#MON TOWER"
+	line "#Mon Rest Easy"
+	cont "#Mon Tower"
 	done
-

@@ -1,15 +1,14 @@
-_PewterPokecenterText1:: ; 98704 (26:4704)
+_PewterPokecenterText2::
 	text "What!?"
 
 	para "TEAM ROCKET is"
-	line "at MT.MOON? Huh?"
+	line "at Mt.Moon? Huh?"
 	cont "I'm on the phone!"
 
 	para "Scram!"
 	done
 
-_PewterPokecenterText5:: ; 98744 (26:4744)
-	text "JIGGLYPUFF: Puu"
+_PewterJigglypuffText::
+	text "Jigglypuff: Puu"
 	line "pupuu!"
 	done
-

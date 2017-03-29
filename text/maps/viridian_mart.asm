@@ -1,49 +1,30 @@
-_ViridianPokeCenterText2:: ; 95ba1 (25:5ba1)
-_ViridianPokeCenterText1:: ; 95ba1 (25:5ba1)
-	text "You can use that"
-	line "PC in the corner."
-
-	para "The receptionist"
-	line "told me. So kind!"
-	done
-
-_ViridianPokeCenterText3:: ; 95be8 (25:5be8)
-	text "There's a #MON"
-	line "CENTER in every"
-	cont "town ahead."
-
-	para "They don't charge"
-	line "any money either!"
-	done
-
-_ViridianMartText1:: ; 95c36 (25:5c36)
+_ViridianMartText1::
 	text "Okay! Say hi to"
-	line "PROF.OAK for me!"
+	line "Prof.Oak for me!"
 	done
 
-_ViridianMartText4:: ; 95c58 (25:5c58)
+_ViridianMartText4::
 	text "Hey! You came from"
-	line "PALLET TOWN?"
+	line "Pallet Town?"
 	done
 
-ViridianMartParcelQuestText:: ; 95c79 (25:5c79)
-	text "You know PROF."
-	line "OAK, right?"
+ViridianMartParcelQuestText::
+	text "You know Prof."
+	line "Oak, right?"
 
 	para "His order came in."
 	line "Will you take it"
 	cont "to him?"
 
 	para $52, " got"
-	line "OAK's PARCEL!@@"
+	line "Oak's Parcel!@@"
 
-_ViridianMartText2:: ; 95cd5 (25:5cd5)
+_ViridianMartText2::
 	text "This shop sells"
-	line "many ANTIDOTEs."
+	line "many Antidotes."
 	done
 
-_ViridianMartText3:: ; 95cf6 (25:5cf6)
-	text "No! POTIONs are"
-	line "all sold out."
+_ViridianMartText3::
+	text "Yes! Potions are"
+	line "back on stock!"
 	done
-

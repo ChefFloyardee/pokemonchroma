@@ -1,7 +1,7 @@
-_SilphCoPresidentText:: ; 84e9b (21:4e9b)
-	text "PRESIDENT: Thank"
+_SilphCoPresidentText::
+	text "President: Thank"
 	line "you for saving"
-	cont "SILPH!"
+	cont "Silph!"
 
 	para "I will never"
 	line "forget you saved"
@@ -19,23 +19,23 @@ _SilphCoPresidentText:: ; 84e9b (21:4e9b)
 	line "will do!"
 	prompt
 
-_ReceivedSilphCoMasterBallText:: ; 84f63 (21:4f63)
+_ReceivedSilphCoMasterBallText::
 	text $52, " got a"
 	line "@"
 	TX_RAM wcf4b
 	text "!@@"
 
-_SilphCo10Text_6231c:: ; 84f74 (21:4f74)
-	text "PRESIDENT: You"
+_SilphCo10Text_6231c::
+	text "President: You"
 	line "can't buy that"
 	cont "anywhere!"
 
 	para "It's our secret"
-	line "prototype MASTER"
-	cont "BALL!"
+	line "prototype Master"
+	cont "Ball!"
 
 	para "It will catch any"
-	line "#MON without"
+	line "#mon without"
 	cont "fail!"
 
 	para "You should be"
@@ -43,13 +43,13 @@ _SilphCo10Text_6231c:: ; 84f74 (21:4f74)
 	cont "it, though."
 	done
 
-_SilphCoMasterBallNoRoomText:: ; 85013 (21:5013)
+_SilphCoMasterBallNoRoomText::
 	text "You have no"
 	line "room for this."
 	done
 
-_SilphCo11Text2:: ; 8502f (21:502f)
-	text "SECRETARY: Thank"
+_SilphCo11Text2::
+	text "Secretary: Thank"
 	line "you for rescuing"
 	cont "all of us!"
 
@@ -57,11 +57,11 @@ _SilphCo11Text2:: ; 8502f (21:502f)
 	line "courage."
 	done
 
-_SilphCo11Text3:: ; 85075 (21:5075)
-	text "Ah ", $52, "!"
+_SilphCo11Text3::
+	text "Ah <PLAYER>!"
 	line "So we meet again!"
 
-	para "The PRESIDENT and"
+	para "The President and"
 	line "I are discussing"
 	cont "a vital business"
 	cont "proposition."
@@ -74,62 +74,61 @@ _SilphCo11Text3:: ; 85075 (21:5075)
 	line "world of pain!"
 	done
 
-_SilphCo10Text_62330:: ; 85119 (21:5119)
+_SilphCo10Text_62330::
 	text "Arrgh!!"
 	line "I lost again!?"
 	prompt
 
-_SilphCo10Text_62335:: ; 85131 (21:5131)
+_SilphCo10Text_62335::
 	text "Blast it all!"
 	line "You ruined our"
-	cont "plans for SILPH!"
+	cont "plans for Silph!"
 
-	para "But, TEAM ROCKET"
+	para "But, Team Rocket"
 	line "will never fall!"
 
 	para $52, "! Never"
 	line "forget that all"
-	cont "#MON exist"
-	cont "for TEAM ROCKET!"
+	cont "#mon exist"
+	cont "for Team Rocket!"
 
 	para "I must go, but I"
 	line "shall return!"
 	done
 
-_SilphCo11BattleText1:: ; 851d6 (21:51d6)
+_SilphCo11BattleText1::
 	text "Stop right there!"
 	line "Don't you move!"
 	done
 
-_SilphCo11EndBattleText1:: ; 851f8 (21:51f8)
+_SilphCo11EndBattleText1::
 	text "Don't..."
 	line "Please!"
 	prompt
 
-_SilphCo11AfterBattleText1:: ; 85209 (21:5209)
+_SilphCo11AfterBattleText1::
 	text "So, you want to"
-	line "see my BOSS?"
+	line "see my Boss?"
 	done
 
-_SilphCo11BattleText2:: ; 85227 (21:5227)
+_SilphCo11BattleText2::
 	text "Halt! Do you have"
 	line "an appointment"
-	cont "with my BOSS?"
+	cont "with my Boss?"
 	done
 
-_SilphCo11EndBattleText2:: ; 85257 (21:5257)
+_SilphCo11EndBattleText2::
 	text "Gaah!"
 	line "Demolished!"
 	prompt
 
-_SilphCo11AfterBattleText2:: ; 8526a (21:526a)
+_SilphCo11AfterBattleText2::
 	text "Watch your step,"
-	line "my BOSS likes his"
-	cont "#MON tough!"
+	line "my Boss likes his"
+	cont "#mon tough!"
 	done
 
-_SilphCo10Text_6237b:: ; 8529a (21:529a)
+_SilphCo10Text_6237b::
 	text "The monitor has"
-	line "#MON on it!"
+	line "#mon on it!"
 	done
-

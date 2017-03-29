@@ -1,40 +1,23 @@
 Route23Mons:
 	db $0A
-	IF !_YELLOW
-		IF _RED
-			db 26,EKANS
-		ENDC
-		IF !_RED
-			db 26,SANDSHREW
-		ENDC
-		db 33,DITTO
-		db 26,SPEAROW
-		db 38,FEAROW
-		db 38,DITTO
-		db 38,FEAROW
-		IF _RED
-			db 41,ARBOK
-		ENDC
-		IF !_RED
-			db 41,SANDSLASH
-		ENDC
-		db 43,DITTO
-		db 41,FEAROW
-		db 43,FEAROW
+	IF DEF(_RED)
+		dbw 26,EKANS
 	ENDC
-
-	IF _YELLOW
-		db 41,NIDORINO
-		db 41,NIDORINA
-		db 36,MANKEY
-		db 44,NIDORINO
-		db 44,NIDORINA
-		db 40,FEAROW
-		db 41,MANKEY
-		db 45,FEAROW
-		db 41,PRIMEAPE
-		db 46,PRIMEAPE
+	IF !DEF(_RED)
+		dbw 26,SANDSHREW
 	ENDC
-
+	dbw 33,DITTO
+	dbw 26,SANDSHREW
+	dbw 38,FEAROW
+	dbw 38,DITTO
+	dbw 38,SANDSLASH
+	IF DEF(_RED)
+		dbw 41,ARBOK
+	ENDC
+	IF !DEF(_RED)
+		dbw 41,SANDSLASH
+	ENDC
+	dbw 43,DITTO
+	dbw 41,FEAROW
+	dbw 43,FEAROW
 	db $00
-

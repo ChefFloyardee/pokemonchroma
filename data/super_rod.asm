@@ -1,6 +1,6 @@
 ; super rod data
 ; format: map, pointer to fishing group
-SuperRodData: ; e919 (3:6919)
+SuperRodData:
 	dbw PALLET_TOWN, FishingGroup1
 	dbw VIRIDIAN_CITY, FishingGroup1
 	dbw CERULEAN_CITY, FishingGroup3
@@ -25,77 +25,77 @@ SuperRodData: ; e919 (3:6919)
 	dbw ROUTE_25, FishingGroup3
 	dbw CERULEAN_GYM, FishingGroup3
 	dbw VERMILION_DOCK, FishingGroup4
-;XXX syntax errors on the rest?
-	dbw $A1, FishingGroup8 ; SEAFOAM_ISLANDS_4
-	dbw $A2, FishingGroup8 ; SEAFOAM_ISLANDS_5
+	dbw SEAFOAM_ISLANDS_4, FishingGroup8
+	dbw SEAFOAM_ISLANDS_5, FishingGroup8
 	dbw SAFARI_ZONE_EAST, FishingGroup6
-	dbw $DA, FishingGroup6 ; SAFARI_ZONE_NORTH
+	dbw SAFARI_ZONE_NORTH, FishingGroup6
 	dbw SAFARI_ZONE_WEST, FishingGroup6
-	dbw $DC, FishingGroup6 ; SAFARI_ZONE_CENTER
-	dbw $E2, FishingGroup9 ; UNKNOWN_DUNGEON_2
-	dbw $E3, FishingGroup9 ; UNKNOWN_DUNGEON_3
-	dbw $E4, FishingGroup9 ; UNKNOWN_DUNGEON_1
+	dbw SAFARI_ZONE_CENTER, FishingGroup6
+	dbw UNKNOWN_DUNGEON_2, FishingGroup9
+	dbw UNKNOWN_DUNGEON_3, FishingGroup9
+	dbw UNKNOWN_DUNGEON_1, FishingGroup9
 	db $FF
 
 ; fishing groups
 ; number of monsters, followed by level/monster pairs
-FishingGroup1: ; e97d (3:697d)
+FishingGroup1:
 	db 2
-	db 15,TENTACOOL
-	db 15,POLIWAG
+	dbw 15,CHINCHOU
+	dbw 15,POLIWAG
 
-FishingGroup2: ; e982 (3:6982)
+FishingGroup2:
 	db 2
-	db 15,GOLDEEN
-	db 15,POLIWAG
+	dbw 15,GOLDEEN
+	dbw 15,POLIWAG
 
-FishingGroup3: ; e987 (3:6987)
+FishingGroup3:
 	db 3
-	db 15,PSYDUCK
-	db 15,GOLDEEN
-	db 15,KRABBY
+	dbw 15,PSYDUCK
+	dbw 15,GOLDEEN
+	dbw 15,KRABBY
 
-FishingGroup4: ; e98e (3:698e)
+FishingGroup4:
+	db 3
+	dbw 15,KRABBY
+	dbw 15,SHELLDER
+	dbw 15,CHINCHOU
+
+FishingGroup5:
 	db 2
-	db 15,KRABBY
-	db 15,SHELLDER
+	dbw 23,POLIWHIRL
+	dbw 15,SLOWPOKE
 
-FishingGroup5: ; e993 (3:6993)
-	db 2
-	db 23,POLIWHIRL
-	db 15,SLOWPOKE
-
-FishingGroup6: ; e998 (3:6998)
+FishingGroup6:
 	db 4
-	db 15,DRATINI
-	db 15,KRABBY
-	db 15,PSYDUCK
-	db 15,SLOWPOKE
+	dbw 15,DRATINI
+	dbw 15,KRABBY
+	dbw 15,PSYDUCK
+	dbw 15,DRAGONAIR
 
-FishingGroup7: ; e9a1 (3:69a1)
+FishingGroup7:
 	db 4
-	db 5,TENTACOOL
-	db 15,KRABBY
-	db 15,GOLDEEN
-	db 15,MAGIKARP
+	dbw 5,TENTACOOL
+	dbw 15,KRABBY
+	dbw 15,GOLDEEN
+	dbw 15,MAGIKARP
 
-FishingGroup8: ; e9aa (3:69aa)
+FishingGroup8:
 	db 4
-	db 15,STARYU
-	db 15,HORSEA
-	db 15,SHELLDER
-	db 15,GOLDEEN
+	dbw 15,STARYU
+	dbw 15,HORSEA
+	dbw 15,SHELLDER
+	dbw 15,CHINCHOU
 
-FishingGroup9: ; e9b3 (3:69b3)
+FishingGroup9:
 	db 4
-	db 23,SLOWBRO
-	db 23,SEAKING
-	db 23,KINGLER
-	db 23,SEADRA
+	dbw 23,SLOWBRO
+	dbw 23,SEAKING
+	dbw 23,KINGLER
+	dbw 23,SEADRA
 
-FishingGroup10: ; e9bc (3:69bc)
+FishingGroup10:
 	db 4
-	db 23,SEAKING
-	db 15,KRABBY
-	db 15,GOLDEEN
-	db 15,MAGIKARP
+	dbw 23,SEAKING
+	dbw 15,KRABBY
+	dbw 15,GYARADOS
+	dbw 15,MAGIKARP

@@ -1,12 +1,12 @@
-SetDefaultNames: ; 60ca (1:60ca)
-	ld a, [wd358]
+SetDefaultNames:
+	ld a, [wLetterPrintingDelayFlags]
 	push af
-	ld a, [W_OPTIONS] ; W_OPTIONS
+	ld a, [wOptions]
 	push af
 	ld a, [wd732]
 	push af
-	ld hl, wPlayerName ; wd158
-	ld bc, $d8a
+	ld hl, wPlayerName
+	ld bc, wBoxDataEnd - wPlayerName
 	xor a
 	call FillMemory
 	ld hl, wSpriteStateData1
@@ -16,28 +16,28 @@ SetDefaultNames: ; 60ca (1:60ca)
 	pop af
 	ld [wd732], a
 	pop af
-	ld [W_OPTIONS], a ; W_OPTIONS
+	ld [wOptions], a
 	pop af
-	ld [wd358], a
-	ld a, [wd08a]
+	ld [wLetterPrintingDelayFlags], a
+	ld a, [wOptionsInitialized]
 	and a
-	call z, Func_5bff
+	call z, InitOptions
 	ld hl, NintenText
-	ld de, wPlayerName ; wd158
-	ld bc, $b
+	ld de, wPlayerName
+	ld bc, NAME_LENGTH
 	call CopyData
 	ld hl, SonyText
-	ld de, W_RIVALNAME ; wd34a
-	ld bc, $b
+	ld de, wRivalName
+	ld bc, NAME_LENGTH
 	jp CopyData
 
-OakSpeech: ; 6115 (1:6115)
+OakSpeech:
 	ld a,$FF
 	call PlaySound ; stop music
-	ld a, 0 ; 0 ; BANK(Music_Routes2) ; bank of song
+	ld a, BANK(Music_Routes2)
 	ld c,a
-	ld a, MUSIC_ROUTES2 ; song #
-	call PlayMusic  ; plays music
+	ld a, MUSIC_ROUTES2
+	call PlayMusic
 	call ClearScreen
 	call LoadTextBoxTilePatterns
 	call SetDefaultNames
@@ -46,58 +46,83 @@ OakSpeech: ; 6115 (1:6115)
 	ld a,POTION
 	ld [wcf91],a
 	ld a,1
-	ld [wcf96],a
+	ld [wItemQuantity],a
 	call AddItemToInventory  ; give one potion
-	ld a,[W_ANIMATIONID]
+	ld a,[wDefaultMap]
 	ld [wDestinationMap],a
 	call SpecialWarpIn
 	xor a
 	ld [hTilesetType],a
 	ld a,[wd732]
-	bit 1,a ; XXX when is bit 1 set?
-	jp nz,Func_61bc ; easter egg: skip the intro
+	bit 1,a ; possibly a debug mode bit
+    ld hl,BoyGirlText  ; added to the same file as the other oak text
+    call PrintText     ; show this text
+    call BoyGirlChoice ; added routine at the end of this file
+    ld a, [$cc26]
+    and a
+    jr z, .AfterSettingGirl ; skip setting the girl and leave that flag alone if you chose the boy
+    ld hl, wd798 ; load ram address of Gender
+    set 2, [hl]      ; sets you as a girl
+.AfterSettingGirl: ; resume main intro, jumps here if you were a guy
+    call ClearScreen ; clear the screen before resuming normal intro
+
+	jp nz,.skipChoosingNames
 	ld de,ProfOakPic
-	ld bc, (Bank(ProfOakPic) << 8) | $00
-	call IntroPredef3B   ; displays Oak pic?
+	lb bc, Bank(ProfOakPic), $00
+	call IntroDisplayPicCenteredOrUpperRight
 	call FadeInIntroPic
 	ld hl,OakSpeechText1
-	call PrintText      ; prints text box
+	call PrintText
 	call GBFadeOutToWhite
 	call ClearScreen
-	ld a,NIDORINO
-	ld [wd0b5],a    ; pic displayed is stored at this location
+	ld a,(NIDORINO & $FF)
+	ld [wd0b5],a
 	ld [wcf91],a
-	call GetMonHeader      ; this is also related to the pic
-	hlCoord 6, 4     ; position on tilemap the pic is displayed
-	call LoadFlippedFrontSpriteByMonIndex      ; displays pic?
+	ld a,(NIDORINO >> 8)
+ 	ld [wd0b5 + 1],a
+ 	ld [wcf91 + 1],a
+	call GetMonHeader
+	coord hl, 6, 4
+	call LoadFlippedFrontSpriteByMonIndex
 	call MovePicLeft
 	ld hl,OakSpeechText2
-	call PrintText      ; Prints text box
-	call GBFadeOutToWhite
-	call ClearScreen
-	ld de,RedPicFront
-	ld bc,(Bank(RedPicFront) << 8) | $00
-	call IntroPredef3B      ; displays player pic?
+    call PrintText      ; Prints text box
+    call GBFadeOutToWhite
+    call ClearScreen
+    ld de,RedPicFront
+    ld bc,(Bank(RedPicFront) << 8) | $00
+    ld a, [wd798] ; check gender
+    bit 2, a      ; check gender
+    jr z, .NotLeaf1
+    ld de,LeafPicFront
+    ld bc,(Bank(LeafPicFront) << 8) | $00
+.NotLeaf1:
+    call IntroDisplayPicCenteredOrUpperRight      ; displays player pic?
 	call MovePicLeft
 	ld hl,IntroducePlayerText
 	call PrintText
-	call LoadDefaultNamesPlayer ; brings up NewName/Red/etc menu
+	call ChoosePlayerName
 	call GBFadeOutToWhite
 	call ClearScreen
 	ld de,Rival1Pic
-	ld bc,(Bank(Rival1Pic) << 8) | $00
-	call IntroPredef3B ; displays rival pic
+	lb bc, Bank(Rival1Pic), $00
+	call IntroDisplayPicCenteredOrUpperRight
 	call FadeInIntroPic
 	ld hl,IntroduceRivalText
 	call PrintText
-	call LoadDefaultNamesRival
-
-Func_61bc: ; 61bc (1:61bc)
-	call GBFadeOutToWhite
-	call ClearScreen
-	ld de,RedPicFront
-	ld bc,(Bank(RedPicFront) << 8) | $00
-	call IntroPredef3B
+	call ChooseRivalName
+.skipChoosingNames
+    call GBFadeOutToWhite
+    call ClearScreen
+    ld de,RedPicFront
+    ld bc,(Bank(RedPicFront) << 8) | $00
+    ld a, [wd798] ; check gender
+    bit 2, a      ; check gender
+    jr z, .NotLeaf2
+    ld de,LeafPicFront
+    ld bc,(Bank(LeafPicFront) << 8) | $00
+.NotLeaf2:
+    call IntroDisplayPicCenteredOrUpperRight
 	call GBFadeInFromWhite
 	ld a,[wd72d]
 	and a
@@ -107,71 +132,80 @@ Func_61bc: ; 61bc (1:61bc)
 .next
 	ld a,[H_LOADEDROMBANK]
 	push af
-	ld a,RBSFX_02_48
+	ld a,SFX_SHRINK
 	call PlaySound
 	pop af
 	ld [H_LOADEDROMBANK],a
-	ld [$2000],a
+	ld [MBC1RomBank],a
 	ld c,4
 	call DelayFrames
 	ld de,RedSprite ; $4180
-	ld hl,vSprites
-	ld bc,(BANK(RedSprite) << 8) | $0C
-	call CopyVideoData
-	ld de,ShrinkPic1
-	ld bc,(BANK(ShrinkPic1) << 8) | $00
-	call IntroPredef3B
+    ld bc,(BANK(RedSprite) << 8) | $0C
+    ld a, [wd798] ; check gender
+    bit 2, a      ; check gender
+    jr z, .NotLeaf3
+    ld de,LeafSprite
+    ld bc,(BANK(LeafSprite) << 8) | $0C
+.NotLeaf3:
+    ld hl,vSprites
+    call CopyVideoData
+    ld de,ShrinkPic1
+    ld bc,(BANK(ShrinkPic1) << 8) | $00
+    call IntroDisplayPicCenteredOrUpperRight
 	ld c,4
 	call DelayFrames
 	ld de,ShrinkPic2
-	ld bc,(BANK(ShrinkPic2) << 8) | $00
-	call IntroPredef3B
+	lb bc, BANK(ShrinkPic2), $00
+	call IntroDisplayPicCenteredOrUpperRight
 	call ResetPlayerSpriteData
 	ld a,[H_LOADEDROMBANK]
 	push af
-	ld a,0 ;  0 ; BANK(Music_PalletTown)
-	ld [wc0ef],a
-	ld [wc0f0],a
-	ld a,$A
-	ld [wMusicHeaderPointer],a
+	ld a, BANK(Music_PalletTown)
+	ld [wAudioROMBank],a
+	ld [wAudioSavedROMBank],a
+	ld a, 10
+	ld [wAudioFadeOutControl],a
 	ld a,$FF
-	ld [wc0ee],a
+	ld [wNewSoundID],a
 	call PlaySound ; stop music
 	pop af
 	ld [H_LOADEDROMBANK],a
-	ld [$2000],a
-	ld c,$14
+	ld [MBC1RomBank],a
+	ld c,20
 	call DelayFrames
-	hlCoord 6, 5
+	coord hl, 6, 5
 	ld b,7
 	ld c,7
 	call ClearScreenArea
 	call LoadTextBoxTilePatterns
 	ld a,1
 	ld [wUpdateSpritesEnabled],a
-	ld c,$32
+	ld c,50
 	call DelayFrames
 	call GBFadeOutToWhite
 	jp ClearScreen
-OakSpeechText1: ; 6253 (1:6253)
+OakSpeechText1:
 	TX_FAR _OakSpeechText1
 	db "@"
-OakSpeechText2: ; 6258 (1:6258)
+OakSpeechText2:
 	TX_FAR _OakSpeechText2A
-	db $14 ; play NIDORINA cry from TextCommandSounds
+	TX_CRY_NIDORINA
 	TX_FAR _OakSpeechText2B
 	db "@"
-IntroducePlayerText: ; 6262 (1:6262)
+IntroducePlayerText:
 	TX_FAR _IntroducePlayerText
 	db "@"
-IntroduceRivalText: ; 6267 (1:6267)
+IntroduceRivalText:
 	TX_FAR _IntroduceRivalText
 	db "@"
-OakSpeechText3: ; 626c (1:626c)
+OakSpeechText3:
 	TX_FAR _OakSpeechText3
 	db "@"
+BoyGirlText: ; This is new so we had to add a reference to get it to compile
+    TX_FAR _BoyGirlText
+    db "@"
 
-FadeInIntroPic: ; 6271 (1:6271)
+FadeInIntroPic:
 	ld hl,IntroFadePalettes
 	ld b,6
 .next
@@ -183,7 +217,7 @@ FadeInIntroPic: ; 6271 (1:6271)
 	jr nz,.next
 	ret
 
-IntroFadePalettes: ; 6282 (1:6282)
+IntroFadePalettes:
 	db %01010100
 	db %10101000
 	db %11111100
@@ -191,31 +225,33 @@ IntroFadePalettes: ; 6282 (1:6282)
 	db %11110100
 	db %11100100
 
-MovePicLeft: ; 6288 (1:6288)
+MovePicLeft:
 	ld a,119
-	ld [$FF4B],a
+	ld [rWX],a
 	call DelayFrame
 
-	ld a,$E4
+	ld a,%11100100
 	ld [rBGP],a
 .next
 	call DelayFrame
-	ld a,[$FF4B]
+	ld a,[rWX]
 	sub 8
 	cp $FF
 	ret z
-	ld [$FF4B],a
+	ld [rWX],a
 	jr .next
 
-Predef3B: ; 62a1 (1:62a1)
+DisplayPicCenteredOrUpperRight:
 	call GetPredefRegisters
-IntroPredef3B: ; 62a4 (1:62a4)
-; bank of sprite given in b
+IntroDisplayPicCenteredOrUpperRight:
+; b = bank
+; de = address of compressed pic
+; c: 0 = centred, non-zero = upper-right
 	push bc
 	ld a,b
 	call UncompressSpriteFromDE
-	ld hl,S_SPRITEBUFFER1
-	ld de,S_SPRITEBUFFER0
+	ld hl,sSpriteBuffer1
+	ld de,sSpriteBuffer0
 	ld bc,$310
 	call CopyData
 	ld de,vFrontPic
@@ -223,10 +259,29 @@ IntroPredef3B: ; 62a4 (1:62a4)
 	pop bc
 	ld a,c
 	and a
-	hlCoord 15, 1
+	coord hl, 15, 1
 	jr nz,.next
-	hlCoord 6, 4
+	coord hl, 6, 4
 .next
 	xor a
-	ld [$FFE1],a
-	predef_jump Func_3f0c6
+	ld [hStartTileID],a
+	predef_jump CopyUncompressedPicToTilemap
+
+; displays boy/girl choice
+BoyGirlChoice::
+    call SaveScreenTilesToBuffer1
+    call InitBoyGirlTextBoxParameters
+    jr DisplayBoyGirlChoice
+    
+InitBoyGirlTextBoxParameters::
+    ld a, $1 ; loads the value for the unused North/West choice, that was changed to say Boy/Girl
+    ld [wTwoOptionMenuID], a
+    coord hl, 11, 7 
+    ld bc, $80c
+    ret
+    
+DisplayBoyGirlChoice::
+    ld a, $14
+    ld [wTextBoxID], a
+    call DisplayTextBoxID
+    jp LoadScreenTilesFromBuffer1

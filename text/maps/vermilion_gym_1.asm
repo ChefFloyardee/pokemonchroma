@@ -1,4 +1,4 @@
-_VermilionGymText_5cb6d:: ; 9aaa5 (26:6aa5)
+_VermilionGymText_5cb6d::
 	text "Hey, kid! What do"
 	line "you think you're"
 	cont "doing here?"
@@ -8,7 +8,7 @@ _VermilionGymText_5cb6d:: ; 9aaa5 (26:6aa5)
 	cont "That's for sure!"
 
 	para "I tell you kid,"
-	line "electric #MON"
+	line "electric #mon"
 	cont "saved me during"
 	cont "the war!"
 
@@ -19,4 +19,3 @@ _VermilionGymText_5cb6d:: ; 9aaa5 (26:6aa5)
 	para "The same as I'll"
 	line "do to you!"
 	done
-

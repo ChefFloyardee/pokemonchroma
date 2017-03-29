@@ -1,322 +1,218 @@
-PlayDefaultMusic:: ; 2307 (0:2307)
+PlayDefaultMusic::
 	call WaitForSoundToFinish
 	xor a
 	ld c, a
 	ld d, a
-	ld [wcfca], a
-	jr asm_2324
+	ld [wLastMusicSoundID], a
+	jr PlayDefaultMusicCommon
 
-Func_2312:: ; 2312 (0:2312)
-	ld c, $a
-	ld d, $0
+PlayDefaultMusicFadeOutCurrent::
+; Fade out the current music and then play the default music.
+	ld c, 10
+	ld d, 0
 	ld a, [wd72e]
-	bit 5, a
-	jr z, asm_2324
+	bit 5, a ; has a battle just ended?
+	jr z, PlayDefaultMusicCommon
 	xor a
-	ld [wcfca], a
-	ld c, $8
+	ld [wLastMusicSoundID], a
+	ld c, 8
 	ld d, c
-asm_2324:: ; 2324 (0:2324)
+
+PlayDefaultMusicCommon::
 	ld a, [wWalkBikeSurfState]
 	and a
-	jr z, .asm_2343
+	jr z, .walking
 	cp $2
-	jr z, .asm_2332
+	jr z, .surfing
 	ld a, MUSIC_BIKE_RIDING
-	jr .asm_2334
-.asm_2332
+	jr .next
+
+.surfing
 	ld a, MUSIC_SURFING
-.asm_2334
+
+.next
 	ld b, a
 	ld a, d
-	and a
-	ld a, 0 ; 0 ; BANK(Music_BikeRiding)
-	jr nz, .asm_233e
-	ld [wc0ef], a
-.asm_233e
-	ld [wc0f0], a
-	jr .asm_234c
-.asm_2343
-	ld a, [wd35b]
+	and a ; should current music be faded out first?
+	ld a, BANK(Music_BikeRiding)
+	jr nz, .next2
+
+; Only change the audio ROM bank if the current music isn't going to be faded
+; out before the default music begins.
+	ld [wAudioROMBank], a
+
+.next2
+; [wAudioSavedROMBank] will be copied to [wAudioROMBank] after fading out the
+; current music (if the current music is faded out).
+	ld [wAudioSavedROMBank], a
+	jr .next3
+
+.walking
+	ld a, [wMapMusicSoundID]
 	ld b, a
-	call Func_2385
-	jr c, .asm_2351
-.asm_234c
-	ld a, [wcfca]
-	cp b
-	ret z
-.asm_2351
+	call CompareMapMusicBankWithCurrentBank
+	jr c, .next4
+
+.next3
+	ld a, [wLastMusicSoundID]
+	cp b ; is the default music already playing?
+	ret z ; if so, do nothing
+
+.next4
 	ld a, c
-	ld [wMusicHeaderPointer], a
+	ld [wAudioFadeOutControl], a
 	ld a, b
-	ld [wcfca], a
-	ld [wc0ee], a
-	
-	ld [MusicFadeID], a
-	ld a, 1
-	ld [MusicFade], a
-	;call FadeMusic ; called in updatemusic
-	ret
+	ld [wLastMusicSoundID], a
+	ld [wNewSoundID], a
+	jp PlaySound
 
-Func_235f:: ; 235f (0:235f)
-    ;jp UpdateSound
-;    ret ; XXX UpdateMusic
-Func_2385:
-    
-    ret
+UpdateMusic6Times::
+; This is called when entering a map, before fading out the current music and
+; playing the default music (i.e. the map's music or biking/surfing music).
+	ld a, [wAudioROMBank]
+	ld b, a
+	cp BANK(Audio1_UpdateMusic)
+	jr nz, .checkForAudio2
 
-; plays <s>music</s>SFX specified by a. If value is $ff, music is stopped
-PlaySound:: ; 23b1 (0:23b1)
-    cp $ff
-    jr nz, .notff
-    xor a
-    jp PlayMusic
-.notff
-    ld e, a
-    xor a
-    ld d, a
-    jp PlaySFX
+; audio 1
+	ld hl, Audio1_UpdateMusic
+	jr .next
 
-OpenSRAMForSound::
-	ld a, SRAM_ENABLE
-	ld [MBC1SRamEnable], a
-	xor a
-	ld [MBC1SRamBankingMode], a
-	ld [MBC1SRamBank], a
-	ret
+.checkForAudio2
+	cp BANK(Audio2_UpdateMusic)
+	jr nz, .audio3
 
-;SoundRestart:: ; 3b4e
-;
-;	push hl
-;	push de
-;	push bc
-;	push af
-;	
-;    call OpenSRAMForSound
-;    
-;	ld a, [hROMBank]
-;	push af
-;	ld a, BANK(_SoundRestart)
-;	ld [hROMBank], a
-;	ld [$2000], a
-;
-;	call _SoundRestart
-;
-;	pop af
-;	ld [hROMBank], a
-;	ld [$2000], a
-;
-;	pop af
-;	pop bc
-;	pop de
-;	pop hl
-;	ret
-; 3b6a
+; audio 2
+	ld hl, Audio2_UpdateMusic
+	jr .next
 
+.audio3
+	ld hl, Audio3_UpdateMusic
 
-UpdateSound:: ; 3b6a
-
-;	push hl
-;	push de
-;	push bc
-;	push af   
-    ld a, [wHaltAudio]
-    and a
-    ret nz
-	
-    call OpenSRAMForSound
-    
-	ld a, [hROMBank]
-	push af
-	ld a, BANK(_UpdateSound)
-	ld [hROMBank], a
-	ld [$2000], a
-
-	call _UpdateSound
-
-	pop af
-	ld [hROMBank], a
-	ld [$2000], a
-
-;	pop af
-;	pop bc
-;	pop de
-;	pop hl
-	ret
-; 3b86
-
-PlayMusic:: ; 3b97
-    ld e, a
-    xor a
-    ld d, a
-; Play music de.
-
-	push hl
-	push de
+.next
+	ld c, 6
+.loop
 	push bc
-	push af
-	
-    call OpenSRAMForSound
-    
-	ld a, [hROMBank]
-	push af
-	ld a, BANK(_PlayMusic) ; and BANK(_SoundRestart)
-	ld [hROMBank], a
-	ld [$2000], a
-
-	ld a, e
-	and a
-	jr z, .nomusic
-
-	call _PlayMusic
-	jr .end
-
-.nomusic
-	call _SoundRestart
-
-.end
-	pop af
-	ld [hROMBank], a
-	ld [$2000], a
-	pop af
-	pop bc
-	pop de
+	push hl
+	call Bankswitch
 	pop hl
+	pop bc
+	dec c
+	jr nz, .loop
 	ret
-; 3bbc
 
-
-PlayCry:: ; 13d0 (0:13d0)
-; Play monster a's cry.
-; Play a cry given parameters in header de
-
-	push hl
-	push de
-	push bc
-	push af
-	ld [wd11e], a
-	predef IndexToPokedex
-	ld a, [wd11e]
-	dec a
+CompareMapMusicBankWithCurrentBank::
+; Compares the map music's audio ROM bank with the current audio ROM bank
+; and updates the audio ROM bank variables.
+; Returns whether the banks are different in carry.
+	ld a, [wMapMusicROMBank]
 	ld e, a
-	ld d, 0
-
-; Save current bank
-	ld a, [hROMBank]
-	push af
-
-; Cry headers are stuck in one bank.
-	ld a, BANK(CryHeaders)
-	ld [hROMBank], a
-	ld [$2000], a
-
-; Each header is 6 bytes long:
-	ld hl, CryHeaders
-	add hl, de
-	add hl, de
-	add hl, de
-	add hl, de
-	add hl, de
-	add hl, de
-
-	ld e, [hl]
-	inc hl
-	ld d, [hl]
-	inc hl
-
-	ld a, [hli]
-	ld [CryPitch], a
-	ld a, [hli]
-	ld [CryEcho], a
-	ld a, [hli]
-	ld [CryLength], a
-	ld a, [hl]
-	ld [CryLength+1], a
-
-	ld a, BANK(PlayCry_)
-	ld [hROMBank], a
-	ld [$2000], a
-
-	call PlayCry_
-
-	pop af
-	ld [hROMBank], a
-	ld [$2000], a
-	
-	call WaitForSoundToFinish
-	
-	pop af
-	pop bc
-	pop de
-	pop hl
+	ld a, [wAudioROMBank]
+	cp e
+	jr nz, .differentBanks
+	ld [wAudioSavedROMBank], a
+	and a
 	ret
-; 3c23
-
-
-PlaySFX:: ; 3c23
-; Play sound effect de.
-; Sound effects are ordered by priority (lowest to highest)
-
-	push hl
-	push de
-	push bc
-	push af
-
-; Is something already playing?
-	;call CheckSFX
-	;jr nc, .play
-; Does it have priority?
-	;ld a, [CurSFX]
-	;cp e
-	;jr c, .quit
-
-PlaySFX_play
-.play
-	ld a, [hROMBank]
-	push af
-	ld a, BANK(_PlaySFX)
-	ld [hROMBank], a
-	ld [$2000], a ; bankswitch
-
+.differentBanks
+	ld a, c ; this is a fade-out counter value and it's always non-zero
+	and a
 	ld a, e
-	ld [CurSFX], a
-	call _PlaySFX
-
-	pop af
-	ld [hROMBank], a
-	ld [$2000], a ; bankswitch
-.quit
-	pop af
-	pop bc
-	pop de
-	pop hl
+	jr nz, .next
+; If the fade-counter is non-zero, we don't change the audio ROM bank because
+; it's needed to keep playing the music as it fades out. The FadeOutAudio
+; routine will take care of copying [wAudioSavedROMBank] to [wAudioROMBank]
+; when the music has faded out.
+	ld [wAudioROMBank], a
+.next
+	ld [wAudioSavedROMBank], a
+	scf
 	ret
-; 3c4e
 
-PlayAnimSoundShim:
+PlayMusic::
+	ld b, a
+	ld [wNewSoundID], a
+	xor a
+	ld [wAudioFadeOutControl], a
+	ld a, c
+	ld [wAudioROMBank], a
+	ld [wAudioSavedROMBank], a
+	ld a, b
+
+; plays music specified by a. If value is $ff, music is stopped
+PlaySound::
 	push hl
 	push de
 	push bc
-	push af
-	
-	ld d, a
-	callab _PlayAnimSoundShim
-	ld e, d
-	ld d, 00
-	jp PlaySFX_play
+	ld b, a
+	ld a, [wNewSoundID]
+	and a
+	jr z, .next
+	xor a
+	ld [wChannelSoundIDs + Ch4], a
+	ld [wChannelSoundIDs + Ch5], a
+	ld [wChannelSoundIDs + Ch6], a
+	ld [wChannelSoundIDs + Ch7], a
+.next
+	ld a, [wAudioFadeOutControl]
+	and a ; has a fade-out length been specified?
+	jr z, .noFadeOut
+	ld a, [wNewSoundID]
+	and a ; is the new sound ID 0?
+	jr z, .done ; if so, do nothing
+	xor a
+	ld [wNewSoundID], a
+	ld a, [wLastMusicSoundID]
+	cp $ff ; has the music been stopped?
+	jr nz, .fadeOut ; if not, fade out the current music
+; If it has been stopped, start playing the new music immediately.
+	xor a
+	ld [wAudioFadeOutControl], a
+.noFadeOut
+	xor a
+	ld [wNewSoundID], a
+	ld a, [H_LOADEDROMBANK]
+	ld [hSavedROMBank], a
+	ld a, [wAudioROMBank]
+	ld [H_LOADEDROMBANK], a
+	ld [MBC1RomBank], a
+	cp BANK(Audio1_PlaySound)
+	jr nz, .checkForAudio2
 
+; audio 1
+	ld a, b
+	call Audio1_PlaySound
+	jr .next2
 
-_LoadMusicByte:: ; 3b86
-; CurMusicByte = [a:de]
-GLOBAL LoadMusicByte
-    
-	ld [hROMBank], a
-	ld [$2000], a
+.checkForAudio2
+	cp BANK(Audio2_PlaySound)
+	jr nz, .audio3
 
-	ld a, [de]
-	ld [CurMusicByte], a
-	ld a, BANK(LoadMusicByte)
+; audio 2
+	ld a, b
+	call Audio2_PlaySound
+	jr .next2
 
-	ld [hROMBank], a
-	ld [$2000], a
+.audio3
+	ld a, b
+	call Audio3_PlaySound
+
+.next2
+	ld a, [hSavedROMBank]
+	ld [H_LOADEDROMBANK], a
+	ld [MBC1RomBank], a
+	jr .done
+
+.fadeOut
+	ld a, b
+	ld [wLastMusicSoundID], a
+	ld a, [wAudioFadeOutControl]
+	ld [wAudioFadeOutCounterReloadValue], a
+	ld [wAudioFadeOutCounter], a
+	ld a, b
+	ld [wAudioFadeOutControl], a
+
+.done
+	pop bc
+	pop de
+	pop hl
 	ret

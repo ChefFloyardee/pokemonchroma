@@ -1,18 +1,18 @@
-UndergroundPathEntranceRoute5Script: ; 5d6a9 (17:56a9)
+UndergroundPathEntranceRoute5Script:
 	ld a, ROUTE_5
 	ld [wLastMap], a
 	ret
 
-UndergroundPathEntranceRoute5_5d6af: ; 5d6af (17:56af)
+UndergroundPathEntranceRoute5_5d6af:
 	db "@"
 
-UndergroundPathEntranceRoute5TextPointers: ; 5d6b0 (17:56b0)
+UndergroundPathEntranceRoute5TextPointers:
 	dw UndergroundPathEntranceRoute5Text1
 
-UndergroundPathEntranceRoute5Text1: ; 5d6b2 (17:56b2)
-	db $08 ; asm
+UndergroundPathEntranceRoute5Text1:
+	TX_ASM
 	ld a, $9
 	ld [wWhichTrade], a
-	predef Predef54 
+	predef DoInGameTradeDialogue
 	ld hl, UndergroundPathEntranceRoute5_5d6af
 	ret

@@ -1,3 +1,3 @@
-GoodRodMons: ; e27f (3:627f)
-	db 10,GOLDEEN
-	db 10,POLIWAG
+GoodRodMons:
+	dbw 10,CHINCHOU
+	dbw 10,POLIWAG

@@ -1,20 +1,20 @@
-_Route4Text1:: ; 8db1e (23:5b1e)
+_Route4Text1::
 	text "Ouch! I tripped"
 	line "over a rocky"
-	cont "#MON, GEODUDE!"
+	cont "#mon, Geodude!"
 	done
 
-_Route4BattleText1:: ; 8db4b (23:5b4b)
+_Route4BattleText1::
 	text "I came to get my"
-	line "mushroom #MON!"
+	line "mushroom #mon!"
 	done
 
-_Route4EndBattleText1:: ; 8db6c (23:5b6c)
+_Route4EndBattleText1::
 	text "Oh! My cute"
-	line "mushroom #MON!"
+	line "mushroom #mon!"
 	prompt
 
-_Route4AfterBattleText1:: ; 8db88 (23:5b88)
+_Route4AfterBattleText1::
 	text "There might not"
 	line "be any more"
 	cont "mushrooms here."
@@ -23,14 +23,13 @@ _Route4AfterBattleText1:: ; 8db88 (23:5b88)
 	line "them all."
 	done
 
-_Route4Text5:: ; 8dbcd (23:5bcd)
-	text "MT.MOON"
+_Route4Text5::
+	text "Mt.Moon"
 	line "Tunnel Entrance"
 	done
 
-_Route4Text6:: ; 8dbe6 (23:5be6)
-	text "ROUTE 4"
-	line "MT.MOON -"
-	cont "CERULEAN CITY"
+_Route4Text6::
+	text "Route 4"
+	line "Mt.Moon -"
+	cont "Cerulean City"
 	done
-

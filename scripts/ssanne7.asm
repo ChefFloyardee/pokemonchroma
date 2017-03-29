@@ -1,96 +1,93 @@
-SSAnne7Script: ; 61895 (18:5895)
+SSAnne7Script:
 	call SSAnne7Script_6189b
 	jp EnableAutoTextBoxDrawing
 
-SSAnne7Script_6189b: ; 6189b (18:589b)
-	ld a, [wd803]
-	bit 1, a
+SSAnne7Script_6189b:
+	CheckEvent EVENT_RUBBED_CAPTAINS_BACK
 	ret nz
 	ld hl, wd72d
 	set 5, [hl]
 	ret
 
-SSAnne7TextPointers: ; 618a7 (18:58a7)
+SSAnne7TextPointers:
 	dw SSAnne7Text1
 	dw SSAnne7Text2
 	dw SSAnne7Text3
 
-SSAnne7Text1: ; 618ad (18:58ad)
-	db $08 ; asm
-	ld a, [wd803]
-	bit 0, a
-	jr nz, .asm_797c4 ; 0x618b3
+SSAnne7Text1:
+	TX_ASM
+	CheckEvent EVENT_GOT_HM01
+	jr nz, .asm_797c4
 	ld hl, SSAnne7RubText
 	call PrintText
 	ld hl, ReceivingHM01Text
 	call PrintText
-	ld bc, (HM_01 << 8) | 1
+	lb bc, HM_01, 1
 	call GiveItem
 	jr nc, .BagFull
 	ld hl, ReceivedHM01Text
 	call PrintText
-	ld hl, wd803
-	set 0, [hl]
-	jr .asm_0faf5 ; 0x618d4
+	SetEvent EVENT_GOT_HM01
+	jr .asm_0faf5
 .BagFull
 	ld hl, HM01NoRoomText
 	call PrintText
 	ld hl, wd72d
 	set 5, [hl]
-	jr .asm_0faf5 ; 0x618e1
-.asm_797c4 ; 0x618e3
+	jr .asm_0faf5
+.asm_797c4
 	ld hl, SSAnne7Text_61932
 	call PrintText
-.asm_0faf5 ; 0x618e9
+.asm_0faf5
 	jp TextScriptEnd
 
-SSAnne7RubText: ; 618ec (18:58ec)
+SSAnne7RubText:
 	TX_FAR _SSAnne7RubText
-	db $8
-	ld a, [wc0ef]
-	cp $1f
-	ld [wc0f0], a
-	jr nz, .asm_61908 ; 0x618f9 $d
+	TX_ASM
+	ld a, [wAudioROMBank]
+	cp BANK(Audio3_UpdateMusic)
+	ld [wAudioSavedROMBank], a
+	jr nz, .asm_61908
 	ld a, $ff
-	ld [wc0ee], a
+	ld [wNewSoundID], a
 	call PlaySound
-	ld a, 0 ; Bank(Func_9876)
-	ld [wc0ef], a
+	ld a, Bank(Music_PkmnHealed)
+	ld [wAudioROMBank], a
 .asm_61908
 	ld a, MUSIC_PKMN_HEALED
-	ld [wc0ee], a
-	call PlayMusic
+	ld [wNewSoundID], a
+	call PlaySound
 .asm_61910
-	ld a, [wc026]
+	ld a, [wChannelSoundIDs]
 	cp MUSIC_PKMN_HEALED
-	jr z, .asm_61910 ; 0x61915 $f9
+	jr z, .asm_61910
 	call PlayDefaultMusic
-	ld hl, wd803
-	set 1, [hl]
+	SetEvent EVENT_RUBBED_CAPTAINS_BACK
 	ld hl, wd72d
 	res 5, [hl]
 	jp TextScriptEnd
 
-ReceivingHM01Text: ; 61927 (18:5927)
+ReceivingHM01Text:
 	TX_FAR _ReceivingHM01Text
 	db "@"
 
-ReceivedHM01Text: ; 6192c (18:592c)
+ReceivedHM01Text:
 	TX_FAR _ReceivedHM01Text
-	db $11, "@"
+	TX_SFX_KEY_ITEM
+	db "@"
 
-SSAnne7Text_61932: ; 61932 (18:5932)
+SSAnne7Text_61932:
 	TX_FAR _SSAnne7Text_61932
 	db "@"
 
-HM01NoRoomText: ; 61937 (18:5937)
+HM01NoRoomText:
 	TX_FAR _HM01NoRoomText
 	db "@"
 
-SSAnne7Text2: ; 6193c (18:593c)
+SSAnne7Text2:
 	TX_FAR _SSAnne7Text2
 	db "@"
 
-SSAnne7Text3: ; 61941 (18:5941)
+SSAnne7Text3:
 	TX_FAR _SSAnne7Text3
 	db "@"

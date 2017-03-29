@@ -1,30 +1,30 @@
-PewterMartScript: ; 74cad (1d:4cad)
+PewterMartScript:
 	call EnableAutoTextBoxDrawing
 	ld a, $1
 	ld [wAutoTextBoxDrawingControl], a
 	ret
 
-PewterMartTextPointers: ; 74cb6 (1d:4cb6)
-	dw PewterMartText1
+PewterMartTextPointers:
+	dw PewterCashierText
 	dw PewterMartText2
 	dw PewterMartText3
+	
+INCLUDE "data/martInventories/pewter.asm"
 
-PewterMartText2: ; 74cbc (1d:4cbc)
-	db $08 ; asm
-	ld hl, PewterMartText_74cc6
+PewterMartText2:
+	TX_ASM
+	ld hl, .Text
 	call PrintText
 	jp TextScriptEnd
-
-PewterMartText_74cc6: ; 74cc6 (1d:4cc6)
-	TX_FAR _PewterMartText_74cc6
+.Text
+	TX_FAR _PewterMartText2
 	db "@"
 
-PewterMartText3: ; 74ccb (1d:4ccb)
-	db $08 ; asm
-	ld hl, PewterMartText_74cd5
+PewterMartText3:
+	TX_ASM
+	ld hl, .Text
 	call PrintText
 	jp TextScriptEnd
-
-PewterMartText_74cd5: ; 74cd5 (1d:4cd5)
-	TX_FAR _PewterMartText_74cd5
+.Text
+	TX_FAR _PewterMartText3
 	db "@"

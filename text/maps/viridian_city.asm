@@ -1,63 +1,63 @@
-_ViridianCityText1:: ; a43cc (29:43cc)
-	text "Those # BALLs"
+_ViridianCityText1::
+	text "Those # Balls"
 	line "at your waist!"
-	cont "You have #MON!"
+	cont "You have #mon!"
 
 	para "It's great that"
 	line "you can carry and"
-	cont "use #MON any"
+	cont "use #mon any"
 	cont "time, anywhere!"
 	done
 
-_ViridianCityText_19122:: ; a4437 (29:4437)
-	text "This #MON GYM"
+_ViridianCityText_19122::
+	text "This #mon Gym"
 	line "is always closed."
 
 	para "I wonder who the"
-	line "LEADER is?"
+	line "Leader is?"
 	done
 
-_ViridianCityText_19127:: ; a4474 (29:4474)
-	text "VIRIDIAN GYM's"
-	line "LEADER returned!"
+_ViridianCityText_19127::
+	text "Viridian Gym's"
+	line "Leader returned!"
 	done
 
-_ViridianCityText_1914d:: ; a4494 (29:4494)
+_ViridianCityText_1914d::
 	text "You want to know"
 	line "about the 2 kinds"
 	cont "of caterpillar"
-	cont "#MON?"
+	cont "#mon?"
 	done
 
-_ViridianCityText_19152:: ; a44cd (29:44cd)
+_ViridianCityText_19152::
 	text "Oh, OK then!"
 	done
 
-_ViridianCityText_19157:: ; a44db (29:44db)
-	text "CATERPIE has no"
+_ViridianCityText_19157::
+	text "Caterpie has no"
 	line "poison, but"
-	cont "WEEDLE does."
+	cont "Weedle does."
 
 	para "Watch out for its"
-	line "POISON STING!"
+	line "Poison Sting!"
 	done
 
-_ViridianCityText_19175:: ; a4525 (29:4525)
+_ViridianCityText_19175::
 	text "Oh Grandpa! Don't"
 	line "be so mean!"
 	cont "He hasn't had his"
 	cont "coffee yet."
 	done
 
-_ViridianCityText_1917a:: ; a4560 (29:4560)
+_ViridianCityText_1917a::
 	text "When I go shop in"
-	line "PEWTER CITY, I"
+	line "Pewter City, I"
 	cont "have to take the"
 	cont "winding trail in"
-	cont "VIRIDIAN FOREST."
+	cont "Viridian Forest."
 	done
 
-_ViridianCityText_19191:: ; a45b5 (29:45b5)
+_ViridianCityText_19191::
 	text "You can't go"
 	line "through here!"
 
@@ -65,13 +65,13 @@ _ViridianCityText_19191:: ; a45b5 (29:45b5)
 	line "property!"
 	done
 
-_ViridianCityText_191ca:: ; a45ea (29:45ea)
+_ViridianCityText_191ca::
 	text "Yawn!"
 	line "I must have dozed"
 	cont "off in the sun."
 
 	para "I had this dream"
-	line "about a DROWZEE"
+	line "about a Drowzee"
 	cont "eating my dream."
 	cont "What's this?"
 	cont "Where did this TM"
@@ -82,22 +82,22 @@ _ViridianCityText_191ca:: ; a45ea (29:45ea)
 	cont "have this TM."
 	prompt
 
-_ReceivedTM42Text:: ; a469a (29:469a)
+_ReceivedTM42Text::
 	text $52, " received"
 	line "TM42!@@"
 
-_TM42Explanation:: ; a46ad (29:46ad)
+_TM42Explanation::
 	text "TM42 contains"
-	line "DREAM EATER..."
+	line "Dream Eater..."
 	cont "...Snore..."
 	done
 
-_TM42NoRoomText:: ; a46d7 (29:46d7)
+_TM42NoRoomText::
 	text "You have too much"
 	line "stuff already."
 	done
 
-_ViridianCityText_1920a:: ; a46f9 (29:46f9)
+_ViridianCityText_1920a::
 	text "Ahh, I've had my"
 	line "coffee now and I"
 	cont "feel great!"
@@ -109,44 +109,44 @@ _ViridianCityText_1920a:: ; a46f9 (29:46f9)
 	line "hurry?"
 	done
 
-_ViridianCityText_1920f:: ; a4754 (29:4754)
+_ViridianCityText_1920f::
 	text "I see you're using"
-	line "a #DEX."
+	line "a #dex."
 
 	para "When you catch a"
-	line "#MON, #DEX"
+	line "#mon, #dex"
 	cont "is automatically"
 	cont "updated."
 
 	para "What? Don't you"
 	line "know how to catch"
-	cont "#MON?"
+	cont "#mon?"
 
 	para "I'll show you"
 	line "how to then."
 	done
 
-_ViridianCityText_19214:: ; a47e6 (29:47e6)
+_ViridianCityText_19214::
 	text "Time is money..."
 	line "Go along then."
 	done
 
-_ViridianCityText_19219:: ; a4807 (29:4807)
+_ViridianCityText_19219::
 	text "First, you need"
 	line "to weaken the"
-	cont "target #MON."
+	cont "target #mon."
 	done
 
-_ViridianCityText8:: ; a4833 (29:4833)
-	text "VIRIDIAN CITY "
+_ViridianCityText8::
+	text "Viridian City "
 	line "The Eternally"
 	cont "Green Paradise"
 	done
 
-_ViridianCityText9:: ; a4860 (29:4860)
-	text "TRAINER TIPS"
+_ViridianCityText9::
+	text "Trainer Tips"
 
-	para "Catch #MON"
+	para "Catch #mon"
 	line "and expand your"
 	cont "collection!"
 
@@ -155,27 +155,26 @@ _ViridianCityText9:: ; a4860 (29:4860)
 	cont "to fight!"
 	done
 
-_ViridianCityText10:: ; a48c3 (29:48c3)
-	text "TRAINER TIPS"
+_ViridianCityText10::
+	text "Trainer Tips"
 
 	para "The battle moves"
-	line "of #MON are"
+	line "of #mon are"
 	cont "limited by their"
-	cont "POWER POINTs, PP."
+	cont "Power Points, PP."
 
 	para "To replenish PP,"
 	line "rest your tired"
-	cont "#MON at a"
-	cont "#MON CENTER!"
+	cont "#mon at a"
+	cont "#mon Center!"
 	done
 
-_ViridianCityText13:: ; a4949 (29:4949)
-	text "VIRIDIAN CITY"
+_ViridianCityText13::
+	text "Viridian City"
 	line "#MON GYM"
 	done
 
-_ViridianCityText14:: ; a4961 (29:4961)
-	text "The GYM's doors"
+_ViridianCityText14::
+	text "The Gym's doors"
 	line "are locked..."
 	done
-

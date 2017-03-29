@@ -30,6 +30,9 @@ OAM_X_FLIP    EQU 5
 OAM_Y_FLIP    EQU 6
 OAM_PRIORITY  EQU 7 ; 0: OBJ above BG, 1: OBJ behind BG (colors 1-3)
 
+; serial
+START_TRANSFER_EXTERNAL_CLOCK EQU $80
+START_TRANSFER_INTERNAL_CLOCK EQU $81
 
 ; Hardware registers
 rJOYP       EQU $ff00 ; Joypad (R/W)
@@ -104,4 +107,3 @@ rUNKNOWN5   EQU $ff75 ; (8Fh) - Bit 4-6 (Read/Write)
 rUNKNOWN6   EQU $ff76 ; (00h) - Always 00h (Read Only)
 rUNKNOWN7   EQU $ff77 ; (00h) - Always 00h (Read Only)
 rIE         EQU $ffff ; Interrupt Enable (R/W)
-

@@ -1,57 +1,27 @@
 Route25Mons:
 	db $0F
-
-	IF _RED
-		db 8,WEEDLE
-		db 9,KAKUNA
-		db 13,PIDGEY
-		db 12,ODDISH
-		db 13,ODDISH
-		db 12,ABRA
-		db 14,ODDISH
-		db 10,ABRA
-		db 7,METAPOD
-		db 8,CATERPIE
+	IF DEF(_RED)
+		dbw 8,WEEDLE
+		dbw 9,CATERPIE
+		dbw 13,PIDGEY
+		dbw 12,ODDISH
+		dbw 13,BELLSPROUT
+		dbw 12,ABRA
+		dbw 14,KAKUNA
+		dbw 10,ABRA
+		dbw 7,METAPOD
+		dbw 8,EEVEE
 	ENDC
-
-	IF _GREEN || !_JAPAN && _BLUE
-		db 8,CATERPIE
-		db 9,METAPOD
-		db 13,PIDGEY
-		db 12,BELLSPROUT
-		db 13,BELLSPROUT
-		db 12,ABRA
-		db 14,BELLSPROUT
-		db 10,ABRA
-		db 7,KAKUNA
-		db 8,WEEDLE
+	IF DEF(_BLUE)
+		dbw 8,CATERPIE
+		dbw 9,METAPOD
+		dbw 13,PIDGEY
+		dbw 12,BELLSPROUT
+		dbw 13,BELLSPROUT
+		dbw 12,ABRA
+		dbw 14,BELLSPROUT
+		dbw 10,ABRA
+		dbw 7,KAKUNA
+		dbw 8,WEEDLE
 	ENDC
-
-	IF _JAPAN && _BLUE
-		db 8,CATERPIE
-		db 9,METAPOD
-		db 13,PIDGEY
-		db 12,ODDISH
-		db 13,ODDISH
-		db 12,ABRA
-		db 14,ODDISH
-		db 10,ABRA
-		db 7,KAKUNA
-		db 8,WEEDLE
-	ENDC
-
-	IF _YELLOW
-		db 12,ODDISH
-	db 12,BELLSPROUT
-	db 13,PIDGEY
-	db 14,ODDISH
-	db 14,BELLSPROUT
-	db 15,PIDGEY
-	db 13,VENONAT
-	db 16,VENONAT
-	db 17,PIDGEY
-	db 17,PIDGEOTTO
-	ENDC
-
 	db $00
-

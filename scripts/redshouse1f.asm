@@ -1,16 +1,23 @@
-RedsHouse1FScript: ; 48168 (12:4168)
+RedsHouse1FScript:
 	jp EnableAutoTextBoxDrawing
 
-RedsHouse1FTextPointers: ; 4816b (12:416b)
+RedsHouse1FTextPointers:
 	dw RedsHouse1FText1
 	dw RedsHouse1FText2
 
-RedsHouse1FText1: ; 4816f (12:416f) ; 416F Mom
-	db 8
+RedsHouse1FText1: ; Mom
+	TX_ASM
 	ld a, [wd72e]
 	bit 3, a
 	jr nz, .heal ; if player has received a Pokémon from Oak, heal team
+	ld a, [wd798]
+	and a
+	jr nz, .girl
 	ld hl, MomWakeUpText
+	call PrintText
+	jr .done
+.girl
+	ld hl, MomWakeUpText2
 	call PrintText
 	jr .done
 .heal
@@ -18,52 +25,65 @@ RedsHouse1FText1: ; 4816f (12:416f) ; 416F Mom
 .done
 	jp TextScriptEnd
 
-MomWakeUpText: ; 48185 (12:4185)
+MomWakeUpText:
 	TX_FAR _MomWakeUpText
 	db "@"
 
-MomHealPokemon: ; 4818a (12:418a)
+MomWakeUpText2:
+	TX_FAR _MomWakeUpText2
+	db "@"
+
+MomHealPokemon:
 	ld hl, MomHealText1
 	call PrintText
 	call GBFadeOutToWhite
 	call ReloadMapData
 	predef HealParty
 	ld a, MUSIC_PKMN_HEALED
-	ld [wc0ee], a
-	call PlayMusic ; play sound?
+	ld [wNewSoundID], a
+	call PlaySound
 .next
-	ld a, [wc026]
+	ld a, [wChannelSoundIDs]
 	cp MUSIC_PKMN_HEALED
 	jr z, .next
-	ld a, [wd35b]
-	ld [wc0ee], a
-	call PlayMusic
+	ld a, [wMapMusicSoundID]
+	ld [wNewSoundID], a
+	call PlaySound
 	call GBFadeInFromWhite
 	ld hl, MomHealText2
 	jp PrintText
 
-MomHealText1: ; 481bc (12:41bc)
+MomHealText1:
 	TX_FAR _MomHealText1
 	db "@"
-MomHealText2: ; 481c1 (12:41c1)
+MomHealText2:
 	TX_FAR _MomHealText2
 	db "@"
 
-RedsHouse1FText2: ; 0x481c6 TV
-	db 8
+RedsHouse1FText2: ; TV
+	TX_ASM
 	ld a,[wSpriteStateData1 + 9]
-	cp 4
+	cp SPRITE_FACING_UP
 	ld hl,TVWrongSideText
-	jr nz,.done ; if player is not facing up
+	jr nz,.notUp
+	ld a, [wd798]
+	and a
+	jr nz, .girl
 	ld hl,StandByMeText
-.done
+.girl
+	ld hl,WizardOfOzText
+.notUp
 	call PrintText
 	jp TextScriptEnd
 
-StandByMeText: ; 481da (12:41da)
+StandByMeText:
 	TX_FAR _StandByMeText
 	db "@"
+	
+WizardOfOzText: ; 481da (12:41da)
+	TX_FAR _WizardOfOzText
+	db "@"
 
-TVWrongSideText: ; 481df (12:41df)
+TVWrongSideText:
 	TX_FAR _TVWrongSideText
 	db "@"

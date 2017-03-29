@@ -1,12 +1,11 @@
-_SafariZoneCenterText2:: ; 85807 (21:5807)
-	text "REST HOUSE"
+_SafariZoneCenterText2::
+	text "Rest House"
 	done
 
-_SafariZoneCenterText3:: ; 85813 (21:5813)
-	text "TRAINER TIPS"
+_SafariZoneCenterText3::
+	text "Trainer Tips"
 
-	para "Press the START"
+	para "Press the Start"
 	line "Button to check"
 	cont "remaining time!"
 	done
-

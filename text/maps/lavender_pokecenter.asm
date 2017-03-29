@@ -1,15 +1,12 @@
-_LavenderPokecenterText4:: ; 9940e (26:540e)
-_LavenderPokecenterText2:: ; 9940e (26:540e)
-_LavenderPokecenterText1:: ; 9940e (26:540e)
-	text "TEAM ROCKET will"
+_LavenderPokecenterText2::
+	text "Team Rocket will"
 	line "do anything for"
 	cont "the sake of gold!"
 	done
 
-_LavenderPokecenterText3:: ; 99442 (26:5442)
-	text "I saw CUBONE's"
+_LavenderPokecenterText3::
+	text "I saw Cubone's"
 	line "mother die trying"
 	cont "to escape from"
-	cont "TEAM ROCKET!"
+	cont "Team Rocket!"
 	done
-

@@ -1,40 +1,47 @@
-# precompiled python
-*.pyc
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
 
-# compiled object file
-*.o
+# Folder config file
+Desktop.ini
 
-# no binaries
-*.exe
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
 
-# roms
-*.gbc
-*.gb
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
 
-# rgbds extras
-*.map
-*.sym
+# Windows shortcuts
+*.lnk
 
-# generated
-*.tx
+# =========================
+# Operating System Files
+# =========================
 
-# converted image data
-*.2bpp
-*.1bpp
-*.pic
+# OSX
+# =========================
 
-# swap files for vim
-.*.swp
-*~
+.DS_Store
+.AppleDouble
+.LSOverride
 
-# no data from extras/
-*.json
+# Thumbnails
+._*
 
-# for any of the poor souls with save game files in their working directory
-*.sgm
-*.sav
-*.sys
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
 
-# for vim configuration
-# url: http://www.vim.org/scripts/script.php?script_id=441
-.lvimrc
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk

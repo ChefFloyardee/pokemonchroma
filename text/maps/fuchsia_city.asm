@@ -1,120 +1,119 @@
-_FuchsiaCityText1:: ; a5e9c (29:5e9c)
+_FuchsiaCityText1::
 	text "Did you try the"
-	line "SAFARI GAME? Some"
-	cont "#MON can only"
+	line "Safari Game? Some"
+	cont "#mon can only"
 	cont "be caught there."
 	done
 
-_FuchsiaCityText2:: ; a5ede (29:5ede)
-	text "SAFARI ZONE has a"
+_FuchsiaCityText2::
+	text "Safari Zone has a"
 	line "zoo in front of"
 	cont "the entrance."
 
 	para "Out back is the"
-	line "SAFARI GAME for"
+	line "Safari Game for"
 	cont "catching #MON."
 	done
 
-_FuchsiaCityText3:: ; a5f3e (29:5f3e)
-	text "ERIK: Where's"
-	line "SARA? I said I'd"
+_FuchsiaCityText3::
+	text "Erik: Where's"
+	line "Sara? I said I'd"
 	cont "meet her here."
 	done
 
-_FuchsiaCityText4:: ; a5f6b (29:5f6b)
+_FuchsiaCityText4::
 	text "That item ball in"
 	line "there is really a"
-	cont "#MON."
+	cont "#mon."
 	done
 
-_FuchsiaCityText5:: ; a5f96 (29:5f96)
+_FuchsiaCityText5::
 	text "!"
 	done
 
-_FuchsiaCityText11:: ; a5f99 (29:5f99)
-	text "FUCHSIA CITY"
+_FuchsiaCityText11::
+	text "Fuchsia City"
 	line "Behold! It's"
 	cont "Passion Pink!"
 	done
 
-_FuchsiaCityText13:: ; a5fc1 (29:5fc1)
-	text "SAFARI GAME"
-	line "#MON-U-CATCH!"
+_FuchsiaCityText13::
+	text "Safari Game"
+	line "#mon-U-Catch!"
 	done
 
-_FuchsiaCityText16:: ; a5fdc (29:5fdc)
-	text "SAFARI ZONE"
-	line "WARDEN's HOME"
+_FuchsiaCityText16::
+	text "Safari Zone"
+	line "Warden's Home"
 	done
 
-_FuchsiaCityText17:: ; a5ff6 (29:5ff6)
-	text "#MON PARADISE"
-	line "SAFARI ZONE"
+_FuchsiaCityText17::
+	text "#mon Paradise"
+	line "Safari Zone"
 	done
 
-_FuchsiaCityText18:: ; a6011 (29:6011)
-	text "FUCHSIA CITY"
-	line "#MON GYM"
-	cont "LEADER: KOGA"
+_FuchsiaCityText18::
+	text "Fuchsia City"
+	line "#mon Gym"
+	cont "Leader: Koga"
 
 	para "The Poisonous"
 	line "Ninja Master"
 	done
 
-_FuchsiaCityChanseyText:: ; a6050 (29:6050)
-	text "Name: CHANSEY"
+_FuchsiaCityChanseyText::
+	text "Name: Chansey"
 
 	para "Catching one is"
 	line "all up to chance."
 	prompt
 
-_FuchsiaCityVoltorbText:: ; a6081 (29:6081)
-	text "Name: VOLTORB"
+_FuchsiaCityVoltorbText::
+	text "Name: Voltorb"
 
 	para "The very image of"
 	line "a # BALL."
 	prompt
 
-_FuchsiaCityKangaskhanText:: ; a60ac (29:60ac)
-	text "Name: KANGASKHAN"
+_FuchsiaCityKangaskhanText::
+	text "Name: Kangaskhan"
 
-	para "A maternal #MON"
+	para "A maternal #mon"
 	line "that raises its"
 	cont "young in a pouch"
 	cont "on its belly."
 	prompt
 
-_FuchsiaCitySlowpokeText:: ; a60fd (29:60fd)
-	text "Name: SLOWPOKE"
+_FuchsiaCitySlowpokeText::
+	text "Name: Slowpoke"
 
 	para "Friendly and very"
 	line "slow moving."
 	prompt
 
-_FuchsiaCityLaprasText:: ; a612c (29:612c)
-	text "Name: LAPRAS"
+_FuchsiaCityLaprasText::
+	text "Name: Lapras"
 
 	para "A.K.A. the king"
 	line "of the seas."
 	prompt
 
-_FuchsiaCityOmanyteText:: ; a6157 (29:6157)
-	text "Name: OMANYTE"
+_FuchsiaCityOmanyteText::
+	text "Name: Omanyte"
 
-	para "A #MON that"
+	para "A #mon that"
 	line "was resurrected"
 	cont "from a fossil."
 	prompt
 
-_FuchsiaCityKabutoText:: ; a6191 (29:6191)
-	text "Name: KABUTO"
+_FuchsiaCityKabutoText::
+	text "Name: Kabuto"
 
-	para "A #MON that"
+	para "A #mon that"
 	line "was resurrected"
 	cont "from a fossil."
 	prompt
 
-_FuchsiaCityText_19b2a:: ; a61ca (29:61ca)
+_FuchsiaCityText_19b2a::
 	text "..."
 	done
-

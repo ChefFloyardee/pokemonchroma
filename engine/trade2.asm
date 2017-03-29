@@ -1,49 +1,48 @@
-Func_42769: ; 42769 (10:6769)
-	hlCoord 5, 0
-	ld de,OTString67E5
+Trade_PrintPlayerMonInfoText:
+	coord hl, 5, 0
+	ld de,Trade_MonInfoText
 	call PlaceString
-	ld a,[wWhichTrade]
+	ld a,[wTradedPlayerMonSpecies]
 	ld [wd11e],a
 	predef IndexToPokedex
-	hlCoord 9, 0
+	coord hl, 9, 0
 	ld de,wd11e
-	ld bc,$8103
+	lb bc, LEADING_ZEROES | 1, 3
 	call PrintNumber
-	hlCoord 5, 2
+	coord hl, 5, 2
 	ld de,wcf4b
 	call PlaceString
-	hlCoord 8, 4
-	ld de,wTrainerScreenX
+	coord hl, 8, 4
+	ld de,wTradedPlayerMonOT
 	call PlaceString
-	hlCoord 8, 6
-	ld de,wcd4c
-	ld bc,$8205
+	coord hl, 8, 6
+	ld de,wTradedPlayerMonOTID
+	lb bc, LEADING_ZEROES | 2, 5
 	jp PrintNumber
 
-Func_427a7: ; 427a7 (10:67a7)
-	hlCoord 5, 10
-	ld de,OTString67E5
+Trade_PrintEnemyMonInfoText:
+	coord hl, 5, 10
+	ld de,Trade_MonInfoText
 	call PlaceString
-	ld a,[wTrainerEngageDistance]
+	ld a,[wTradedEnemyMonSpecies]
 	ld [wd11e],a
 	predef IndexToPokedex
-	hlCoord 9, 10
+	coord hl, 9, 10
 	ld de,wd11e
-	ld bc,$8103
+	lb bc, LEADING_ZEROES | 1, 3
 	call PrintNumber
-	hlCoord 5, 12
+	coord hl, 5, 12
 	ld de,wcd6d
 	call PlaceString
-	hlCoord 8, 14
-	ld de,wcd4e
+	coord hl, 8, 14
+	ld de,wTradedEnemyMonOT
 	call PlaceString
-	hlCoord 8, 16
-	ld de,wcd59
-	ld bc,$8205
+	coord hl, 8, 16
+	ld de,wTradedEnemyMonOTID
+	lb bc, LEADING_ZEROES | 2, 5
 	jp PrintNumber
 
-OTString67E5: ; 427e5 (10:67e5)
-	db "──",$74,$F2,$4E
-	db $4E
-	db "OT/",$4E
-	db $73,"№",$F2,"@"
+Trade_MonInfoText:
+	db "──№⠄",$4E
+	next "OT/"
+	next $73,"№⠄","@"

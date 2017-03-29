@@ -1,5 +1,5 @@
-_PewterHouse2Text1:: ; 98656 (26:4656)
-	text "#MON learn new"
+_PewterHouse2Text1::
+	text "#mon learn new"
 	line "techniques as"
 	cont "they grow!"
 
@@ -8,8 +8,8 @@ _PewterHouse2Text1:: ; 98656 (26:4656)
 	cont "the trainer!"
 	done
 
-_PewterHouse2Text2:: ; 986ae (26:46ae)
-	text "#MON become"
+_PewterHouse2Text2::
+	text "#mon become"
 	line "easier to catch"
 	cont "when they are"
 	cont "hurt or asleep!"
@@ -17,4 +17,3 @@ _PewterHouse2Text2:: ; 986ae (26:46ae)
 	para "But, it's not a"
 	line "sure thing!"
 	done
-

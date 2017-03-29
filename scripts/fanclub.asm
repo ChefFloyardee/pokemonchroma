@@ -1,10 +1,9 @@
-FanClubScript: ; 59b70 (16:5b70)
+FanClubScript:
 	jp EnableAutoTextBoxDrawing
 
 FanClubBikeInBag:
 ; check if any bike paraphernalia in bag
-	ld a, [wd771]
-	bit 1, a ; got bike voucher?
+	CheckEvent EVENT_GOT_BIKE_VOUCHER
 	ret nz
 	ld b, BICYCLE
 	call IsItemInBag
@@ -12,7 +11,7 @@ FanClubBikeInBag:
 	ld b, BIKE_VOUCHER
 	jp IsItemInBag
 
-FanClubTextPointers: ; 59b84 (16:5b84)
+FanClubTextPointers:
 	dw FanClubText1
 	dw FanClubText2
 	dw FanClubText3
@@ -24,20 +23,17 @@ FanClubTextPointers: ; 59b84 (16:5b84)
 
 FanClubText1:
 ; pikachu fan
-	db $08 ; asm
-	ld a, [wd771]
-	bit 7, a
+	TX_ASM
+	CheckEvent EVENT_PIKACHU_FAN_BOAST
 	jr nz, .mineisbetter
 	ld hl, .normaltext
 	call PrintText
-	ld hl, wd771
-	set 6, [hl]
+	SetEvent EVENT_SEEL_FAN_BOAST
 	jr .done
 .mineisbetter
 	ld hl, .bettertext
 	call PrintText
-	ld hl, wd771
-	res 7, [hl]
+	ResetEvent EVENT_PIKACHU_FAN_BOAST
 .done
 	jp TextScriptEnd
 
@@ -51,20 +47,17 @@ FanClubText1:
 
 FanClubText2:
 ; seel fan
-	db $08 ; asm
-	ld a, [wd771]
-	bit 6, a
+	TX_ASM
+	CheckEvent EVENT_SEEL_FAN_BOAST
 	jr nz, .mineisbetter
 	ld hl, .normaltext
 	call PrintText
-	ld hl, wd771
-	set 7, [hl]
+	SetEvent EVENT_PIKACHU_FAN_BOAST
 	jr .done
 .mineisbetter
 	ld hl, .bettertext
 	call PrintText
-	ld hl, wd771
-	res 6, [hl]
+	ResetEvent EVENT_SEEL_FAN_BOAST
 .done
 	jp TextScriptEnd
 
@@ -78,10 +71,13 @@ FanClubText2:
 
 FanClubText3:
 ; pikachu
-	db $8
+	TX_ASM
 	ld hl, .text
 	call PrintText
-	ld a, PIKACHU
+	ld a, (PIKACHU & $FF)
+ 	ld c, a
+ 	ld a, (PIKACHU >> 8)
+ 	ld b, a
 	call PlayCry
 	call WaitForSoundToFinish
 	jp TextScriptEnd
@@ -92,10 +88,13 @@ FanClubText3:
 
 FanClubText4:
 ; seel
-	db $08 ; asm
+	TX_ASM
 	ld hl, .text
 	call PrintText
-	ld a, SEEL
+	ld a, (SEEL & $FF)
+ 	ld c, a
+ 	ld a, (SEEL >> 8)
+ 	ld b, a
 	call PlayCry
 	call WaitForSoundToFinish
 	jp TextScriptEnd
@@ -106,7 +105,7 @@ FanClubText4:
 
 FanClubText5:
 ; chair
-	db $08 ; asm
+	TX_ASM
 	call FanClubBikeInBag
 	jr nz, .nothingleft
 
@@ -120,13 +119,12 @@ FanClubText5:
 	; tell the story
 	ld hl, .storytext
 	call PrintText
-	ld bc, (BIKE_VOUCHER << 8) | 1
+	lb bc, BIKE_VOUCHER, 1
 	call GiveItem
 	jr nc, .BagFull
 	ld hl, .receivedvouchertext
 	call PrintText
-	ld hl, wd771
-	set 1, [hl]
+	SetEvent EVENT_GOT_BIKE_VOUCHER
 	jr .done
 .BagFull
 	ld hl, .bagfulltext
@@ -152,7 +150,7 @@ FanClubText5:
 
 .receivedvouchertext
 	TX_FAR ReceivedBikeVoucherText
-	db $11
+	TX_SFX_KEY_ITEM
 	TX_FAR ExplainBikeVoucherText
 	db "@"
 
@@ -168,14 +166,14 @@ FanClubText5:
 	TX_FAR FanClubBagFullText
 	db "@"
 
-FanClubText6: ; 59c88 (16:5c88)
+FanClubText6:
 	TX_FAR _FanClubText6
 	db "@"
 
-FanClubText7: ; 59c8d (16:5c8d)
+FanClubText7:
 	TX_FAR _FanClubText7
 	db "@"
 
-FanClubText8: ; 59c92 (16:5c92)
+FanClubText8:
 	TX_FAR _FanClubText8
 	db "@"

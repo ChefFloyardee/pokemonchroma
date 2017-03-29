@@ -1,25 +1,24 @@
-_LavenderHouse2Text1:: ; 9a238 (26:6238)
-	text "CUBONE: Kyarugoo!@@"
+_LavenderHouse2Text1::
+	text "Cubone: Kyarugoo!@@"
 
-_LavenderHouse2Text_1d9dc:: ; 9a24c (26:624c)
+_LavenderHouse2Text_1d9dc::
 	text "I hate those"
-	line "horrible ROCKETs!"
+	line "horrible Rockets!"
 
-	para "That poor CUBONE's"
+	para "That poor Cubone's"
 	line "mother..."
 
 	para "It was killed"
 	line "trying to escape"
-	cont "from TEAM ROCKET!"
+	cont "from Team Rocket!"
 	done
 
-_LavenderHouse2Text_1d9e1:: ; 9a2b9 (26:62b9)
-	text "The GHOST of"
-	line "#MON TOWER is"
+_LavenderHouse2Text_1d9e1::
+	text "The Ghost of"
+	line "#mon Tower is"
 	cont "gone!"
 
 	para "Someone must have"
 	line "soothed its"
 	cont "restless soul!"
 	done
-

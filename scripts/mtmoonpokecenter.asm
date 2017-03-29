@@ -1,96 +1,95 @@
-MtMoonPokecenterScript: ; 492cf (12:52cf)
-	call Func_22fa
+MtMoonPokecenterScript:
+	call Serial_TryEstablishingExternallyClockedConnection
 	jp EnableAutoTextBoxDrawing
 
-MtMoonPokecenterTextPointers: ; 492d5 (12:52d5)
-	dw MtMoonPokecenterText1
+MtMoonPokecenterTextPointers:
+	dw MtMoonHealNurseText
 	dw MtMoonPokecenterText2
 	dw MtMoonPokecenterText3
-	dw MtMoonPokecenterText4
+	dw MagikarpSalesmanText
 	dw MtMoonPokecenterText5
-	dw MtMoonPokecenterText6
+	dw MtMoonTradeNurseText
 
-MtMoonPokecenterText1: ; 492e1 (12:52e1)
+MtMoonHealNurseText:
 	db $ff
 
-MtMoonPokecenterText2: ; 492e2 (12:52e2)
+MtMoonPokecenterText2:
 	TX_FAR _MtMoonPokecenterText1
 	db "@"
 
-MtMoonPokecenterText3: ; 492e7 (12:52e7)
+MtMoonPokecenterText3:
 	TX_FAR _MtMoonPokecenterText3
 	db "@"
 
-MtMoonPokecenterText4: ; 492ec (12:52ec)
-	db $08 ; asm
-	ld a, [wd7c6]
-	add a
-	jp c, .asm_49353
-	ld hl, MtMoonPokecenterText_4935c
+MagikarpSalesmanText:
+	TX_ASM
+	CheckEvent EVENT_BOUGHT_MAGIKARP, 1
+	jp c, .alreadyBoughtMagikarp
+	ld hl, .Text1
 	call PrintText
-	ld a, $13
-	ld [wd125], a
+	ld a, MONEY_BOX
+	ld [wTextBoxID], a
 	call DisplayTextBoxID
 	call YesNoChoice
 	ld a, [wCurrentMenuItem]
 	and a
-	jp nz, .asm_4934e
-	ldh [$9f], a
-	ldh [$a1], a
+	jp nz, .choseNo
+	ld [hMoney], a
+	ld [hMoney + 2], a
 	ld a, $5
-	ldh [$a0], a
+	ld [hMoney + 1], a
 	call HasEnoughMoney
-	jr nc, .asm_faa09 ; 0x49317
-	ld hl, MtMoonPokecenterText_49366
-	jr .asm_49356 ; 0x4931c
-.asm_faa09 ; 0x4931e
-	ld bc,(MAGIKARP << 8) | 5
+	jr nc, .enoughMoney
+	ld hl, .NoMoneyText
+	jr .printText
+.enoughMoney
+	ld de, MAGIKARP
+ 	ld c, 5
 	call GivePokemon
-	jr nc, .asm_49359 ; 0x49324
+	jr nc, .done
 	xor a
-	ld [wWhichTrade], a
-	ld [wTrainerFacingDirection], a
+	ld [wPriceTemp], a
+	ld [wPriceTemp + 2], a
 	ld a, $5
-	ld [wTrainerEngageDistance], a
-	ld hl, wTrainerFacingDirection
+	ld [wPriceTemp + 1], a
+	ld hl, wPriceTemp + 2
 	ld de, wPlayerMoney + 2
 	ld c, $3
 	predef SubBCDPredef
-	ld a, $13
-	ld [wd125], a
+	ld a, MONEY_BOX
+	ld [wTextBoxID], a
 	call DisplayTextBoxID
-	ld hl, wd7c6
-	set 7, [hl]
-	jr .asm_49359 ; 0x4934c
-.asm_4934e ; 0x4934e
-	ld hl, MtMoonPokecenterText_49361
-	jr .asm_49356 ; 0x49351
-.asm_49353 ; 0x49353
-	ld hl, MtMoonPokecenterText_4936b
-.asm_49356 ; 0x49356
+	SetEvent EVENT_BOUGHT_MAGIKARP
+	jr .done
+.choseNo
+	ld hl, .RefuseText
+	jr .printText
+.alreadyBoughtMagikarp
+	ld hl, .Text2
+.printText
 	call PrintText
-.asm_49359 ; 0x49359
+.done
 	jp TextScriptEnd
 
-MtMoonPokecenterText_4935c: ; 4935c (12:535c)
-	TX_FAR _MtMoonPokecenterText_4935c
+.Text1
+	TX_FAR _MagikarpSalesmanText1
 	db "@"
 
-MtMoonPokecenterText_49361: ; 49361 (12:5361)
-	TX_FAR _MtMoonPokecenterText_49361
+.RefuseText
+	TX_FAR _MagikarpSalesmanNoText
 	db "@"
 
-MtMoonPokecenterText_49366: ; 49366 (12:5366)
-	TX_FAR _MtMoonPokecenterText_49366
+.NoMoneyText
+	TX_FAR _MagikarpSalesmanNoMoneyText
 	db "@"
 
-MtMoonPokecenterText_4936b: ; 4936b (12:536b)
-	TX_FAR _MtMoonPokecenterText_4936b
+.Text2
+	TX_FAR _MagikarpSalesmanText2
 	db "@"
 
-MtMoonPokecenterText5: ; 49370 (12:5370)
+MtMoonPokecenterText5:
 	TX_FAR _MtMoonPokecenterText5
 	db "@"
 
-MtMoonPokecenterText6: ; 49375 (12:5375)
+MtMoonTradeNurseText:
 	db $f6
