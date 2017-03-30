@@ -7,7 +7,7 @@ ENDM
 
 box_struct_length EQU 26 + NUM_MOVES * 2
 box_struct: MACRO
-\1Species::    db
+\1Species::    dw
 \1HP::         dw
 \1BoxLevel::   db
 \1Status::     db
@@ -349,7 +349,6 @@ wSerialEnemyMonsPatchList:: ; c5d0
 
 	ds 80
 
-wTempMoveID::
 wTempPic::
 wOverworldMap:: ; c6e8
 	ds 1300
@@ -603,14 +602,35 @@ wNPCMovementDirections2:: ; cc97
 wSwitchPartyMonTempBuffer:: ; cc97
 ; temporary buffer when swapping party mon data
 wListScrollOffsetDex::
- 	ds 2
+	ds 2
 wLastMenuItemDex::
- 	ds 2
- 	ds 6
+	ds 2
+	ds 6
 
-wNumStepsToTake:: ; cca1
+wNumStepsToTake:: ; ccd1
 ; used in Pallet Town scripted movement
-	ds 49
+	ds 1
+wOaksAideNumMonsOwned::
+wBadgeNumberTile:: ; cd3d
+; tile ID of the badge number being drawn
+wBaseStatsData::
+wEvosMovesData::
+wLoadSpriteTemp2::
+wDexRatingNumMonsSeen2::
+	ds 1
+wBadgeNameTile:: ; cd3e
+; first tile ID of the name being drawn
+	ds 1
+wBadgeOrFaceTiles::
+; 8 bytes
+; a list of the first tile IDs of each badge or face (depending on whether the
+; badge is owned) to be drawn on the trainer screen
+wDexRatingNumMonsOwned2::
+	ds 1
+wOaksAideRequirement::
+	ds 45
+wBaseStatsData_End::
+wEvosMovesData_End::
 
 wRLEByteCount:: ; ccd2
 	ds 1
@@ -1273,7 +1293,7 @@ wHPBarMaxHP:: ; cee9
 	ds 1
 
 wNamingScreenSubmitName:: ; ceea
-    ds 1
+	ds 1
 
 wAlphabetCase:: ; ceeb
 ; 0 = upper case
@@ -2078,10 +2098,10 @@ wMonHGrowthRate:: ; d0cb
 
 wMonHLearnset:: ; d0cc
 ; bit field
-    flag_array 50 + 5
+	flag_array 50 + 5
 
 wMonHPicBank:: ; d0d3
-    ds 1
+	ds 1
 
 wSavedTilesetType:: ; d0d4
 ; saved at the start of a battle and then written back at the end of the battle
@@ -3202,7 +3222,7 @@ wChangeMonPicEnemyTurnSpecies:: ; cee9
 	ds 2
 wChangeMonPicPlayerTurnSpecies:: ; ceea
 wEvoNewSpecies:: ; ceea
- 	ds 2
+	ds 2
 
 wMainDataEnd::
 
@@ -3235,27 +3255,5 @@ wDeletableMoves::
 ; First byte is the number of moves in this list.
 ; List is terminated with $ff
 	ds 1
-	
-wOaksAideNumMonsOwned::
-wBadgeNumberTile:: ; cd3d
-; tile ID of the badge number being drawn
-wBaseStatsData::
-wEvosMovesData::
-wLoadSpriteTemp2::
-wDexRatingNumMonsSeen2::
-	ds 1
-wBadgeNameTile:: ; cd3e
-; first tile ID of the name being drawn
- 	ds 1
-wBadgeOrFaceTiles::
-; 8 bytes
-; a list of the first tile IDs of each badge or face (depending on whether the
-; badge is owned) to be drawn on the trainer screen
-wDexRatingNumMonsOwned2::
- 	ds 1
-wOaksAideRequirement::
-	ds 45
-wBaseStatsData_End::
-wEvosMovesData_End::
 
 INCLUDE "sram.asm"
