@@ -25,6 +25,8 @@ CeladonCityTextPointers:
 	dw CeladonCityText17
 	dw CeladonCityText18
 
+INCLUDE "data/martInventories/celadon.asm"
+
 CeladonCityText1:
 	TX_FAR _CeladonCityText1
 	db "@"

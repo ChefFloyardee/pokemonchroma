@@ -6,7 +6,7 @@ VermilionMartTextPointers:
 	dw VermilionMartText2
 	dw VermilionMartText3
 	
-INCLUDE "data/martInventories/saffron.asm"
+INCLUDE "data/martInventories/vermillion.asm"
 
 VermilionMartText2:
 	TX_FAR _VermilionMartText2
