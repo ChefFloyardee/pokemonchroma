@@ -608,9 +608,34 @@ wLastMenuItemDex::
 	ds 2
 	ds 6
 
-wNumStepsToTake:: ; ccd1
+wNumStepsToTake:: ; cca1
 ; used in Pallet Town scripted movement
-	ds 49
+	ds 1
+	
+wOaksAideNumMonsOwned::
+wBadgeNumberTile:: ; cd3d
+; tile ID of the badge number being drawn
+wBaseStatsData::
+wEvosMovesData::
+wLoadSpriteTemp2::
+wDexRatingNumMonsSeen2::
+	ds 1
+wBadgeNameTile:: ; cd3e
+; first tile ID of the name being drawn
+	ds 1
+wBadgeOrFaceTiles::
+; 8 bytes
+; a list of the first tile IDs of each badge or face (depending on whether the
+; badge is owned) to be drawn on the trainer screen
+wDexRatingNumMonsOwned2::
+	ds 1
+wOaksAideRequirement::
+	ds 45
+wBaseStatsData_End::
+wEvosMovesData_End::
+
+wRLEByteCount:: ; ccd2
+	ds 1
 
 wAddedToParty:: ; ccd3
 ; 0 = not added
@@ -721,13 +746,7 @@ wLowHealthAlarmDisabled:: ; ccf6
 wPlayerMonMinimized:: ; ccf7
 	ds 1
 
-	ds 2
-
-wEXPBarPixelLength::  ds 1 
-wEXPBarBaseEXP::      ds 3
-wEXPBarCurEXP::       ds 3
-wEXPBarNeededEXP::    ds 3
-wEXPBarKeepFullFlag:: ds 1
+	ds 13
 
 wLuckySlotHiddenObjectIndex:: ; cd05
 
@@ -3219,35 +3238,6 @@ wBoxMonNicksEnd:: ; dee2
 
 wBoxDataEnd::
 
-wOaksAideNumMonsOwned::
-wBadgeNumberTile:: ; cd3d
-; tile ID of the badge number being drawn
-wBaseStatsData::
-wEvosMovesData::
-wLoadSpriteTemp2::
-wDexRatingNumMonsSeen2::
-	ds 1
-wBadgeNameTile:: ; cd3e
-; first tile ID of the name being drawn
-	ds 1
-wBadgeOrFaceTiles::
-; 8 bytes
-; a list of the first tile IDs of each badge or face (depending on whether the
-; badge is owned) to be drawn on the trainer screen
-wDexRatingNumMonsOwned2::
-	ds 1
-wOaksAideRequirement::
-	ds 45
-wBaseStatsData_End::
-wEvosMovesData_End::
-
-wRLEByteCount:: ; ccd2
-	ds 1
-
-SECTION "Stack", WRAMX[$dfff], BANK[1]
-wStack:: ; dfff
-	ds -$100
-
 wRelearnableMoves::
 ; List of move ids that can be re-learend (Move Relearner)
 ; First byte is the number of moves in this list.
@@ -3257,5 +3247,15 @@ wDeletableMoves::
 ; First byte is the number of moves in this list.
 ; List is terminated with $ff
 	ds 1
+
+wEXPBarPixelLength::  ds 1 
+wEXPBarBaseEXP::      ds 3
+wEXPBarCurEXP::       ds 3
+wEXPBarNeededEXP::    ds 3
+wEXPBarKeepFullFlag:: ds 1
+
+SECTION "Stack", WRAMX[$dfff], BANK[1]
+wStack:: ; dfff
+	ds -$100	
 
 INCLUDE "sram.asm"
