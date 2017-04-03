@@ -1,3 +1,0 @@
-; Celadon
-CeladonCashierText::
-	TX_MART SUN_STONE, KINGS_ROCK, METAL_COAT, DRAGON_SCALE, UPGRADE
