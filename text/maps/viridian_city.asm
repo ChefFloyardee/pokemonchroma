@@ -1,6 +1,6 @@
 _ViridianCityText1::
 	text "Those # Balls"
-	line "at your waist!"
+	line "at your bag!"
 	cont "You have #mon!"
 
 	para "It's great that"
@@ -171,7 +171,7 @@ _ViridianCityText10::
 
 _ViridianCityText13::
 	text "Viridian City"
-	line "#MON GYM"
+	line "#mon Gym"
 	done
 
 _ViridianCityText14::

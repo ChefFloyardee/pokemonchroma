@@ -6,7 +6,7 @@ _CeruleanHouse2Text_74e77::
 	para "I see you have"
 	line "at least one."
 
-	para "Those BADGEs have"
+	para "Those Badges have"
 	line "amazing secrets!"
 	prompt
 

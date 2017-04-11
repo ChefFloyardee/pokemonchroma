@@ -106,7 +106,7 @@ _Route9BattleText7::
 	done
 
 _Route9EndBattleText7::
-	text "WHAT?"
+	text "What?"
 
 	para "What a total"
 	line "waste of time!"

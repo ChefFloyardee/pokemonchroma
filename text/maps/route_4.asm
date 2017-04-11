@@ -21,6 +21,7 @@ _Route4AfterBattleText1::
 
 	para "I think I got"
 	line "them all."
+	cont "in this region."
 	done
 
 _Route4Text5::

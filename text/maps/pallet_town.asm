@@ -29,10 +29,10 @@ _PalletTownText3::
 	text "Technology is"
 	line "incredible!"
 
-	para "You can now store"
-	line "and recall items"
-	cont "and #mon as"
-	cont "data via PC!"
+	para "You can write"
+	line "arbitrary code"
+	cont "to get Mew"
+	cont "under the truck!"
 	done
 
 _PalletTownText4::

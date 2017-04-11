@@ -720,7 +720,13 @@ wLowHealthAlarmDisabled:: ; ccf6
 wPlayerMonMinimized:: ; ccf7
 	ds 1
 
-	ds 13
+	ds 2
+
+wEXPBarPixelLength::  ds 1 
+wEXPBarBaseEXP::      ds 3
+wEXPBarCurEXP::       ds 3
+wEXPBarNeededEXP::    ds 3
+wEXPBarKeepFullFlag:: ds 1
 
 wLuckySlotHiddenObjectIndex:: ; cd05
 
@@ -2312,6 +2318,11 @@ wEvoStoneItemID:: ; d156
 
 wSavedNPCMovementDirections2Index:: ; d157
 	ds 1
+	
+wIsTrainerBattle::
+	ds 1
+wWasTrainerBattle::
+	ds 1
 
 wPlayerName:: ; d158
 	ds NAME_LENGTH
@@ -3224,12 +3235,6 @@ wBoxMonNicks:: ds NAME_LENGTH * MONS_PER_BOX ; de06
 wBoxMonNicksEnd:: ; dee2
 
 wBoxDataEnd::
-
-wEXPBarPixelLength:: ds 1
-wEXPBarBaseEXP:: ds 3
-wEXPBarCurEXP:: ds 3
-wEXPBarNeededEXP:: ds 3
-wEXPBarKeepFullFlag:: ds 1
 
 SECTION "Stack", WRAMX[$dfff], BANK[1]
 wStack:: ; dfff

@@ -20,5 +20,5 @@ _CeruleanPokecenterText3::
 
 	para "Who wouldn't want"
 	line "to boast about"
-	cont "their #mon"
+	cont "their #mon?"
 	done

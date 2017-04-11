@@ -39,7 +39,7 @@ _Route3EndBattleText2::
 _Route3AfterBattleText2::
 	text "Are you storing"
 	line "your #mon on"
-	cont "PC? Each BOX can"
+	cont "PC? Each Box can"
 	cont "hold 20 #mon!"
 	done
 
@@ -71,10 +71,10 @@ _Route3EndBattleText4::
 	prompt
 
 _Route3AfterBattleText4::
-	text "If a #mon BOX"
+	text "If a #mon Box"
 	line "on the PC gets"
 	cont "full, just switch"
-	cont "to another BOX!"
+	cont "to another Box!"
 	done
 
 _Route3BattleText5::

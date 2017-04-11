@@ -98,13 +98,13 @@ _PewterCityText7::
 
 _PewterCityText10::
 	text "Pewter Museum"
-	line "OF SCIENCE"
+	line "Of Science"
 	done
 
 _PewterCityText11::
 	text "Pewter City"
 	line "#mon Gym"
-	cont "LEADER: Brock"
+	cont "Leader: Brock"
 
 	para "The Rock Solid"
 	line "#mon Trainer!"

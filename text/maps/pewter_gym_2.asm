@@ -121,7 +121,7 @@ _PewterGymText_5c51f::
 	text "The 1st #mon"
 	line "out in a match is"
 	cont "at the top of the"
-	cont "#mon LIST!"
+	cont "#mon List!"
 
 	para "By changing the"
 	line "order of #mon,"

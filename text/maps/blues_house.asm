@@ -7,6 +7,8 @@ _DaisyInitialText::
 _DaisyOfferMapText::
 	text "Grandpa asked you"
 	line "to run an errand?"
+	cont "Gee, that's lazy"
+	cont "of him."
 	cont "Here, this will"
 	cont "help you!"
 	prompt
