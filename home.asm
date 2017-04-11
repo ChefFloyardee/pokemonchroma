@@ -2373,7 +2373,7 @@ EndTrainerBattle::
 	ld a, [wWasTrainerBattle]	
 	and a
 	jr nz, .skipRemoveSprite    ; test if trainer was fought (in that case skip removing the corresponding sprite)
-	ld a, [W_CURMAP]
+	ld a, [wCurMap]
 	cp POKEMONTOWER_7
 	jr z, .skipRemoveSprite ; the tower 7f scripts call EndTrainerBattle manually after
 	; wIsTrainerBattle has been unset

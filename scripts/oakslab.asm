@@ -1226,9 +1226,10 @@ OaksLabText25:
 OaksLabText26:
 	TX_FAR _OaksLabText26
 	TX_SFX_KEY_ITEM
-	jr nz, .asm_1d2e7
+	TX_ASM
 	lb bc, POKE_BALL, 5
 	call GiveItem
+    jp TextScriptEnd
 
 OaksLabText27:
 	TX_FAR _OaksLabText27
