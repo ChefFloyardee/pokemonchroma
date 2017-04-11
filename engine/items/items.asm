@@ -536,6 +536,9 @@ ItemUseBall:
 
 	ld hl,ItemUseBallText05
 	call PrintText
+	; added
+	callba GainExperience
+	; old code resumes here
 
 ; Add the caught Pokémon to the Pokédex.
 	predef IndexToPokedex
