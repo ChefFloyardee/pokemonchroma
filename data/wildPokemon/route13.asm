@@ -3,7 +3,7 @@ Route13Mons:
 		db $14
 		db 24,ODDISH
 		db 25,BELLSPROUT
-		db 27,PIDGEY
+		db 27,HOPPIP
 		db 24,VENONAT
 		db 22,WEEPINBELL
 		db 26,GLOOM

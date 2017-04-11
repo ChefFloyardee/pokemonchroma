@@ -1,0 +1,31 @@
+Get EXP From Catching Pokemon
+Add Shiny Pokemon
+Add Encounters for 200 Pokemon
+Trainers use 200 Pokemon
+Test Espeon and Umbreon evolutions.
+Test Move Deleter and Relearner.
+Make the Exp Bar Blue.
+Natu: Route 11
+Xatu: Evolve Natu
+Mareep: Route 3, Power Plant
+Flaaffy: Power Plant
+Ampharos: Evolve Flaaffy
+Bellossom: Evolve Gloom via Sun Stone
+Marill: Surfing
+Azumarill: Surfing, Evolve Marill
+Sudowoodo: Safari Zone
+Politoed: Evolve Poliwhirl via King's Rock
+Hoppip: Route 11, 13, 14, 15
+Skiploom: Route 14
+Jumpluff: Evolve Skiploom
+Aipom: Route 5
+Sunkern: Route 24
+Sunflora: Evolve Sunkern Via Sun Stone
+Yanma: Safari Zone
+Wooper: Surfing
+Quagsire: Surfing
+Espeon: Evolve Eevee Via Sun Stone
+Umbreon: Evolve Eevee Via Moon Stone
+Murkrow: Route 7, 16
+Slowking: Evolve Slowpoke Via King's Rock
+Misdreavus: Pokemon Tower

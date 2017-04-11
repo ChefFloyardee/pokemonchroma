@@ -7,8 +7,8 @@ ForestMons:
 		db 5,KAKUNA
 		db 4,KAKUNA
 		db 6,SPINARAK
-		db 6,PICHU
 		db 3,PICHU
+		db 6,PIKACHU
 	ENDC
 	IF DEF(_BLUE)
 		db 4,CATERPIE

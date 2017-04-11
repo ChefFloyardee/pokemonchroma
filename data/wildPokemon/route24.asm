@@ -6,7 +6,7 @@ Route24Mons:
 		db 12,PIDGEY
 		db 12,METAPOD
 		db 13,KAKUNA
-		db 10,ABRA
+		db 10,SUNKERN
 		db 14,ODDISH
 		db 13,BELLSPROUT
 		db 8,ABRA
