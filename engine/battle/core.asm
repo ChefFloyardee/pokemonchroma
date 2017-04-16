@@ -9054,7 +9054,7 @@ PrintEnemyMonShiny: ; show shiny symbol beside gender symbol
 .notShiny
 	ld a, " "
 .printSymbol
-	hlCoord 10, 1
+	coord hl, 10, 1
 	ld [hl], a
 	ret
 
@@ -9068,6 +9068,6 @@ PrintPlayerMonShiny: ; show shiny symbol beside gender symbol
 .notShiny
 	ld a, " "
 .printSymbol
-	hlCoord 18, 8
+	coord hl, 18, 8
 	ld [hl], a
 	ret

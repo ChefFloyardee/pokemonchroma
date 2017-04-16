@@ -1428,8 +1428,8 @@ IsMonShiny:
 
 ; Defense must be 2, 3, 7, or 11 (1 in 4)
 	ld a, [hli]
-
-	ld a, [hl]	and $f
+	ld a, [hl]	
+	and $f
 	cp 2
 	jr z, .MaybeShiny1
 	cp 3
@@ -1544,7 +1544,7 @@ PlayShinySparkleAnimation:
 	push bc
 	ld c,2
 	call DelayFrames
-	ld a, (SFX_08_77 - SFX_Headers_08) / 3
+	ld a, (SFX_Silph_Scope - SFX_Headers_2) / 3
 	call PlaySound
 	pop bc
 	jr .loop
