@@ -265,8 +265,8 @@ PrintShinySymbol:
 	call Bankswitch
 	ret z
 	; draw the shiny symbol
-	hlCoord 0, 0
-	ld a, "!"
+	coord hl, 0, 0
+	ld a, "[SHINY]"
 	ld [hl], a
 	ret
 

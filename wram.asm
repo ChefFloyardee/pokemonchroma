@@ -602,6 +602,9 @@ wNPCMovementDirections2:: ; cc97
 
 wSwitchPartyMonTempBuffer:: ; cc97
 ; temporary buffer when swapping party mon data
+wShinyMonFlag::
+; Bit 0 is set if the mon should be Shiny.
+; Bit 1 is set for enemy mon animation, reset for player mon animation
 	ds 10
 
 wNumStepsToTake:: ; cca1
@@ -2927,7 +2930,11 @@ wRoute18GateCurScript:: ; d669
 	ds 78
 wGameProgressFlagsEnd::
 
-	ds 56
+wChainFishingStreak::
+	ds 1
+
+
+	ds 55
 
 wObtainedHiddenItemsFlags::
 	ds 14
@@ -2935,6 +2942,10 @@ wObtainedHiddenItemsFlags::
 wObtainedHiddenCoinsFlags::
 	ds 2
 
+wExtraFlags::
+; bit 0 = Set means next Wildmon will be Shiny (Reset afterwards)
+ 	ds 1
+	
 wWalkBikeSurfState:: ; d700
 ; $00 = walking
 ; $01 = biking

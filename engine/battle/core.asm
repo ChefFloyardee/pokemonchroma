@@ -1539,6 +1539,18 @@ EnemySendOutFirstMon:
 	ld [hStartTileID],a
 	coord hl, 15, 6
 	predef AnimateSendingOutMon
+	; is mon shiny, play animation
+	ld b, Bank(IsMonShiny)
+	ld hl, IsMonShiny
+	ld de, wEnemyMonDVs
+	call Bankswitch
+	jr z, .playCry
+	ld hl, wShinyMonFlag
+	set 1, [hl]
+	ld hl, PlayShinySparkleAnimation
+	ld b, Bank(PlayShinySparkleAnimation)
+	call Bankswitch
+.playCry
 	ld a,[wEnemyMonSpecies2]
 	call PlayCry
 	call DrawEnemyHUDAndHPBar
@@ -1869,25 +1881,17 @@ SendOutMon:
 	call PlayMoveAnimation
 	coord hl, 4, 11
 	predef AnimateSendingOutMon
-	; is mon is shiny, flash the screen
+	; is mon is shiny, play animation
 	ld b, Bank(IsMonShiny)
 	ld hl, IsMonShiny
 	ld de, wBattleMonDVs
 	call Bankswitch
 	jr z, .playCry
-	; flash the screen
-	ld a, [rBGP]
-	push af
-	ld a,%00011011 ; 0, 1, 2, 3 (inverted colors)
-	ld [rBGP],a
-	ld c,2
-	call DelayFrames
-	xor a ; white out background
-	ld [rBGP],a
-	ld c,2
-	call DelayFrames
-	pop af
-	ld [rBGP],a ; restore initial palette
+	ld hl, wShinyMonFlag
+	res 1, [hl]
+ 	ld hl, PlayShinySparkleAnimation
+	ld b, Bank(PlayShinySparkleAnimation)
+	call Bankswitch
 .playCry
 	ld a, [wcf91]
 	call PlayCry
@@ -1953,6 +1957,7 @@ DrawPlayerHUDAndHPBar:
 	coord hl, 10, 7
 	call CenterMonName
 	call PlaceString
+	call PrintPlayerMonShiny
 	call PrintEXPBar
 	ld hl, wBattleMonSpecies
 	ld de, wLoadedMon
@@ -2013,6 +2018,7 @@ DrawEnemyHUDAndHPBar:
 	coord hl, 1, 0
 	call CenterMonName
 	call PlaceString
+	call PrintEnemyMonShiny
 	coord hl, 6, 1
 	push hl
 	inc hl
@@ -6310,6 +6316,21 @@ LoadEnemyMonData:
 	ld a, $98
 	ld b, $88
 	jr z, .storeDVs
+; forced shiny wildmon DVs
+	call BattleRandom
+	ld b, a
+	sla b
+	sla b
+	sla b
+	sla b
+	ld a, $0A
+	or a, b
+	set 5, a
+	ld b, $AA
+	ld hl, wExtraFlags
+	bit 0, [hl]
+	res 0, [hl]
+	jr nz, .storeDVs
 ; random DVs for wild mon
 	call BattleRandom
 	ld b, a
@@ -9021,4 +9042,32 @@ PhysicalSpecialSplit:
 	ld [wTempMoveID], a
 	callba _PhysicalSpecialSplit
 	ld a, [wTempMoveID]
+	ret
+	
+PrintEnemyMonShiny: ; show shiny symbol beside gender symbol
+	; check if mon is shiny
+	ld de, wEnemyMonDVs
+	callba IsMonShiny
+	jr z, .notShiny
+	ld a, "[SHINY]"
+	jr .printSymbol
+.notShiny
+	ld a, " "
+.printSymbol
+	hlCoord 10, 1
+	ld [hl], a
+	ret
+
+PrintPlayerMonShiny: ; show shiny symbol beside gender symbol
+	; check if mon is shiny
+	ld de, wBattleMonDVs
+	callba IsMonShiny
+	jr z, .notShiny
+	ld a, "[SHINY]"
+	jr .printSymbol
+.notShiny
+	ld a, " "
+.printSymbol
+	hlCoord 18, 8
+	ld [hl], a
 	ret

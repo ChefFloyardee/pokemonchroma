@@ -1894,9 +1894,42 @@ CoinCaseNumCoinsText:
 ItemUseOldRod:
 	call FishingInit
 	jp c, ItemUseNotTime
-	lb bc, 5, MAGIKARP
-	ld a, $1 ; set bite
+.RandomLoop ; choose which slot
+	call Random
+	srl a
+	jr nc, .potentialBite
+	ld a, [wChainFishingStreak]
+	and a
+	jp z, RodResponse
+.potentialBite
+	and %111
+	cp 6
+	jr nc, .RandomLoop
+; Determine if we need to load normal or sea route data
+    push af
+    ld a,[wCurMap]
+    ld hl,OldRodMons2 ; Sea Routes
+    cp ROUTE_19
+    jr z,.done
+    cp ROUTE_20
+    jr z,.done
+    cp ROUTE_21
+    jr z,.done
+	ld hl,OldRodMons1 ; Normal Routes
+.done
+; Set up the encounter
+    pop af
+	add a,a
+	ld c,a
+	ld b,0
+	add hl,bc
+	ld b,[hl]
+	inc hl
+	ld c,[hl]
+	ld a, 1
 	jr RodResponse
+    
+INCLUDE "data/old_rod.asm"
 
 ItemUseGoodRod:
 	call FishingInit
@@ -1904,9 +1937,13 @@ ItemUseGoodRod:
 .RandomLoop
 	call Random
 	srl a
-	jr c, .SetBite
-	and %11
-	cp 2
+	jr nc, .potentialBite
+	ld a, [wChainFishingStreak]
+	and a
+	jp z, RodResponse
+.potentialBite
+	and %111
+	cp 6
 	jr nc, .RandomLoop
 	; choose which monster appears
 	ld hl,GoodRodMons
@@ -1917,11 +1954,7 @@ ItemUseGoodRod:
 	ld b,[hl]
 	inc hl
 	ld c,[hl]
-	and a
-.SetBite
-	ld a,0
-	rla
-	xor 1
+	ld a, 1
 	jr RodResponse
 
 INCLUDE "data/good_rod.asm"
@@ -1936,6 +1969,9 @@ RodResponse:
 
 	dec a ; is there a bite?
 	jr nz, .next
+
+	call CheckChainFishingShiny
+
 	; if yes, store level and species data
 	ld a, 1
 	ld [wMoveMissed], a
@@ -1955,6 +1991,51 @@ RodResponse:
 	pop af
 	ld [hl], a
 	ret
+	
+; Checks if the hooked pokemon should be shiny, based on the current
+; chain the player has built up.
+; Sets the "force shiny" flag appropriately.
+; Probablities are based on this research: http://mrnbayoh.github.io/pkmn6gen/chain_fishing_shiny/
+; Once a chain of 20 is reached, it's approximately a 1/100 chance.
+CheckChainFishingShiny:
+	push de
+	push bc
+	ld a, [wChainFishingStreak]
+	cp 21
+	jr c, .ok
+	ld a, 20  ; maximum of 20 * 2 attempts at being shiny
+.ok
+	sla a
+	push af
+	; increase chain
+	ld a, [wChainFishingStreak]
+	cp $ff
+	jr z, .maxChain
+	inc a
+	ld [wChainFishingStreak], a
+.maxChain
+	pop af
+	ld e, a  ; e = number of rolls to try and get shiny
+	inc e
+.loop
+	dec e
+	jr z, .end
+	; Generate a random number and see if its shiny (1/256 now, since 1/1024 for normal wild)
+	call Random
+	; Check if a = $AA
+	cp a, $AA
+	jr nz, .loop
+; Force wild pokemon to be shiny
+	ld hl, wExtraFlags
+	set 0, [hl]
+	; Reset chain
+	xor a
+	ld [wChainFishingStreak], a
+.end
+	pop bc
+	pop de
+	ret
+
 
 ; checks if fishing is possible and if so, runs initialization code common to all rods
 ; unsets carry if fishing is possible, sets carry if not
@@ -2937,12 +3018,17 @@ ReadSuperRodData:
 .RandomLoop
 	call Random
 	srl a
-	ret c ; 50% chance of no battle
-
+	jr nc, .potentialHook ; 50% chance of no battle
+	ld c, a
+	ld a, [wChainFishingStreak]
+	and a
+	ld a, c
+	ret z
+.potentialHook
 	and %11 ; 2-bit random number
 	cp b
 	jr nc, .RandomLoop ; if a is greater than the number of mons, regenerate
-
+.hookedMon
 	; get the mon
 	add a
 	ld c, a
