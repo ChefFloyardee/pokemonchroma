@@ -30,13 +30,43 @@ SetPal_Battle:
 	ld de, wPalPacket
 	ld bc, $10
 	call CopyData
+	ld hl, wShinyMonFlag
+	res 0, [hl]
+	ld a, [wBattleMonSpecies]
+	and a
+	jr z, .getPALID
+	; is mon shiny?
+	ld b, BANK(IsMonShiny)
+	ld hl, IsMonShiny
+	ld de, wBattleMonDVs
+	call Bankswitch
+	jr z, .getPALID
+	ld hl, wShinyMonFlag
+	set 0, [hl]
+.getPALID
 	ld a, [wPlayerBattleStatus3]
 	ld hl, wBattleMonSpecies
 	call DeterminePaletteID
 	ld b, a
+	push bc
+	ld hl, wShinyMonFlag
+	res 0, [hl]
+	ld a, [wEnemyMonSpecies2]
+	and a
+	jr z, .getPALID2
+	; is mon shiny?
+	ld b, BANK(IsMonShiny)
+	ld hl, IsMonShiny
+	ld de, wEnemyMonDVs
+	call Bankswitch
+	jr z, .getPALID2
+	ld hl, wShinyMonFlag
+	set 0, [hl]
+.getPALID2
 	ld a, [wEnemyBattleStatus3]
 	ld hl, wEnemyMonSpecies2
 	call DeterminePaletteID
+	pop bc
 	ld c, a
 	ld hl, wPalPacket + 1
 	ld a, [wPlayerHPBarColor]
@@ -287,6 +317,21 @@ DeterminePaletteIDOutOfBattle:
 	ld hl, MonsterPalettes ; not just for Pokemon, Trainers use it too
 	add hl, de
 	ld a, [hl]
+	; more shanty shiny code
+	push bc
+	ld d, a
+	ld a, e
+	and a
+	ld a, d
+	jr z, .done
+	ld b, a
+	ld a, [wShinyMonFlag]
+	bit 0, a ; is mon supposed to be shiny?
+	ld a, b
+	jr z, .done
+	add (PAL_SHINY_MEWMON - PAL_MEWMON)
+.done
+	pop bc
 	ret
 
 InitPartyMenuBlkPacket:

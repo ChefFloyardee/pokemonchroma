@@ -123,6 +123,18 @@ StatusScreen:
 	predef DrawHP
 	ld hl, wStatusScreenHPBarColor
 	call GetHealthBarColor
+	; is mon supposed to be shiny?
+	ld b, Bank(IsMonShiny)
+	ld hl, IsMonShiny
+	ld de, wLoadedMonDVs
+	call Bankswitch
+	ld hl, wShinyMonFlag
+	jr nz, .shiny
+	res 0, [hl]
+	jr .setPAL
+.shiny
+	set 0, [hl]
+.setPAL
 	ld b, SET_PAL_STATUS_SCREEN
 	call RunPaletteCommand
 	coord hl, 16, 6
@@ -244,6 +256,19 @@ DrawLineBox:
 PTile: ; This is a single 1bpp "P" tile
 	INCBIN "gfx/p_tile.1bpp"
 PTileEnd:
+
+PrintShinySymbol:
+	; check if mon is shiny
+	ld b, Bank(IsMonShiny)
+	ld hl, IsMonShiny
+	ld de, wLoadedMonDVs
+	call Bankswitch
+	ret z
+	; draw the shiny symbol
+	hlCoord 0, 0
+	ld a, "!"
+	ld [hl], a
+	ret
 
 PrintStatsBox:
 	ld a, d

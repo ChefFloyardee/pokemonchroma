@@ -54,3 +54,13 @@ const_value = 0
 	const PAL_BADGE     ; $22
 	const PAL_CAVE      ; $23
 	const PAL_GAMEFREAK ; $24
+	const PAL_SHINY_MEWMON ; $25
+	const PAL_SHINY_BLUEMON ; $26
+	const PAL_SHINY_REDMON ; $27
+	const PAL_SHINY_CYANMON ; $28
+	const PAL_SHINY_PURPLEMON ; $29
+	const PAL_SHINY_BROWNMON ; $30
+	const PAL_SHINY_GREENMON ; $31
+	const PAL_SHINY_PINKMON ; $32
+	const PAL_SHINY_YELLOWMON ; $33
+	const PAL_SHINY_GREYMON ; $34
