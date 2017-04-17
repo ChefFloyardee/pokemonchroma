@@ -1,7 +1,0 @@
-GoodRodMons:
-	db 15,GOLDEEN
-	db 20,GOLDEEN
-	db 15,POLIWAG
-	db 20,POLIWAG
-	db 15,CHINCHOU
-	db 20,CHINCHOU
