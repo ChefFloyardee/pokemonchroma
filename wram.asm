@@ -2930,11 +2930,10 @@ wRoute18GateCurScript:: ; d669
 	ds 78
 wGameProgressFlagsEnd::
 
+	ds 56
+	
 wChainFishingStreak::
 	ds 1
-
-
-	ds 55
 
 wObtainedHiddenItemsFlags::
 	ds 14
@@ -2943,8 +2942,13 @@ wObtainedHiddenCoinsFlags::
 	ds 2
 
 wExtraFlags::
-; bit 0 = Set means next Wildmon will be Shiny (Reset afterwards)
- 	ds 1
+; TODO: Move these in with Event Flags and an EngineFlags array
+; bit 0 = Set means next Wildmon or Giftmon will be Shiny (Reset afterwards)
+; bit 1 = unused
+; bit 2 = Set means traded mons obey like normal mons
+; bit 3 = Set means you've received Eon Ticket in Celadon Mansion
+; bit 4 = Set means you've received Mystic Ticket in Cinnabar Lab
+	ds 1
 	
 wWalkBikeSurfState:: ; d700
 ; $00 = walking
