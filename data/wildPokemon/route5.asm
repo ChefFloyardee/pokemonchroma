@@ -8,9 +8,9 @@ Route5Mons:
 		db 12,MEOWTH
 		db 15,MANKEY
 		db 16,MEOWTH
-		db 16,AIPOM
-		db 14,TOGEPI
-		db 16,TOGEPI
+		db 16,ODDISH
+		db 14,BELLSPROUT
+		db 16,BELLSPROUT
 	ENDC
 	IF DEF(_BLUE)
 		db 13,BELLSPROUT

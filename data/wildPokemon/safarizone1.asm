@@ -2,7 +2,7 @@ ZoneMons1:
 	db $1E
 	IF DEF(_RED)
 		db 24,NIDORAN_M
-		db 26,YANMA
+		db 26,DODUO
 		db 22,PARAS
 		db 25,EXEGGCUTE
 		db 33,PARASECT

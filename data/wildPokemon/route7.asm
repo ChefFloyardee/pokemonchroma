@@ -6,7 +6,7 @@ Route7Mons:
 		db 17,BELLSPROUT
 		db 22,MANKEY
 		db 22,MEOWTH
-		db 18,MURKROW
+		db 18,PIDGEY
 		db 18,GROWLITHE
 		db 20,VULPIX
 		db 19,PIDGEOTTO
