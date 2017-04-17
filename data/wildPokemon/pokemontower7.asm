@@ -1,0 +1,13 @@
+TowerMons7:
+	db $0F
+	db 21,GASTLY
+	db 22,GASTLY
+	db 23,GASTLY
+	db 24,MISDREAVUS
+	db 20,HAUNTER
+	db 28,MISDREAVUS
+	db 22,CUBONE
+	db 24,CUBONE
+	db 28,HAUNTER
+	db 30,HAUNTER
+	db $00
