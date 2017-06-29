@@ -200,5 +200,56 @@ const_value = 1
 	const DEX_MURKROW    ; 198
 	const DEX_SLOWKING   ; 199
 	const DEX_MISDREAVUS ; 200
+	const DEX_UNOWN      ; 201
+	const DEX_WOBBUFFET  ; 202
+	const DEX_GIRAFARIG  ; 203
+	const DEX_PINECO     ; 204
+	const DEX_FORRETRESS ; 205
+	const DEX_DUNSPARCE  ; 206
+	const DEX_GLIGAR     ; 207
+	const DEX_STEELIX    ; 208
+	const DEX_SNUBBULL   ; 209
+	const DEX_GRANBULL   ; 210
+	const DEX_QWILFISH   ; 211
+	const DEX_SCIZOR     ; 212
+	const DEX_SHUCKLE    ; 213
+	const DEX_HERACROSS  ; 214
+	const DEX_SNEASEL    ; 215
+	const DEX_TEDDIURSA  ; 216
+	const DEX_URSARING   ; 217
+	const DEX_SLUGMA     ; 218
+	const DEX_MAGCARGO   ; 219
+	const DEX_SWINUB     ; 220
+	const DEX_PILOSWINE  ; 221
+	const DEX_CORSOLA    ; 222
+	const DEX_REMORAID   ; 223
+	const DEX_OCTILLERY  ; 224
+	const DEX_DELIBIRD   ; 225
+	const DEX_MANTINE    ; 226
+	const DEX_SKARMORY   ; 227
+	const DEX_HOUNDOUR   ; 228
+	const DEX_HOUNDOOM   ; 229
+	const DEX_KINGDRA    ; 230
+	const DEX_PHANPY     ; 231
+	const DEX_DONPHAN    ; 232
+	const DEX_PORYGON2   ; 233
+	const DEX_STANTLER   ; 234
+	const DEX_SMEARGLE   ; 235
+	const DEX_TYROGUE    ; 236
+	const DEX_HITMONTOP  ; 237
+	const DEX_SMOOCHUM   ; 238
+	const DEX_ELEKID     ; 239
+	const DEX_MAGBY      ; 240
+	const DEX_MILTANK    ; 241
+	const DEX_BLISSEY    ; 242
+	const DEX_RAIKOU     ; 243
+	const DEX_ENTEI      ; 244
+	const DEX_SUICUNE    ; 245
+	const DEX_LARVITAR   ; 246
+	const DEX_PUPITAR    ; 247
+	const DEX_TYRANITAR  ; 248
+	const DEX_LUGIA      ; 249
+	const DEX_HO_OH      ; 250
+	const DEX_CELEBI     ; 251
 
-NUM_POKEMON    EQU 200
+NUM_POKEMON    EQU 251

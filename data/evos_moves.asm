@@ -202,6 +202,56 @@ EvosMovesPointerTable:
 	dw Mon198_EvosMoves
 	dw Mon199_EvosMoves
 	dw Mon200_EvosMoves
+	dw Mon201_EvosMoves
+	dw Mon202_EvosMoves
+	dw Mon203_EvosMoves
+	dw Mon204_EvosMoves
+	dw Mon205_EvosMoves
+	dw Mon206_EvosMoves
+	dw Mon207_EvosMoves
+	dw Mon208_EvosMoves
+	dw Mon209_EvosMoves
+	dw Mon210_EvosMoves
+	dw Mon211_EvosMoves
+	dw Mon212_EvosMoves
+	dw Mon213_EvosMoves
+	dw Mon214_EvosMoves
+	dw Mon215_EvosMoves
+	dw Mon216_EvosMoves
+	dw Mon217_EvosMoves
+	dw Mon218_EvosMoves
+	dw Mon219_EvosMoves
+	dw Mon220_EvosMoves
+	dw Mon221_EvosMoves
+	dw Mon222_EvosMoves
+	dw Mon223_EvosMoves
+	dw Mon224_EvosMoves
+	dw Mon225_EvosMoves
+	dw Mon226_EvosMoves
+	dw Mon227_EvosMoves
+	dw Mon228_EvosMoves
+	dw Mon229_EvosMoves
+	dw Mon230_EvosMoves
+	dw Mon231_EvosMoves
+	dw Mon232_EvosMoves
+	dw Mon233_EvosMoves
+	dw Mon234_EvosMoves
+	dw Mon235_EvosMoves
+	dw Mon236_EvosMoves
+	dw Mon237_EvosMoves
+	dw Mon238_EvosMoves
+	dw Mon239_EvosMoves
+	dw Mon240_EvosMoves
+	dw Mon241_EvosMoves
+	dw Mon242_EvosMoves
+	dw Mon243_EvosMoves
+	dw Mon244_EvosMoves
+	dw Mon246_EvosMoves
+	dw Mon247_EvosMoves
+	dw Mon248_EvosMoves
+	dw Mon249_EvosMoves
+	dw Mon250_EvosMoves
+	dw Mon251_EvosMoves
 
 Mon112_EvosMoves:
 ;RHYDON
@@ -756,6 +806,7 @@ Mon092_EvosMoves:
 Mon123_EvosMoves:
 ;SCYTHER
 ;Evolutions
+	db EV_ITEM,METAL_COAT,1,SCIZOR
 	db 0
 ;Learnset
 	db 1,SCRATCH
@@ -938,6 +989,7 @@ Mon058_EvosMoves:
 Mon095_EvosMoves:
 ;ONIX
 ;Evolutions
+	db EV_ITEM,METAL_COAT,1,STEELIX
 	db 0
 ;Learnset
 	db 1,TACKLE
@@ -1073,6 +1125,7 @@ Mon075_EvosMoves:
 Mon113_EvosMoves:
 ;CHANSEY
 ;Evolutions
+	db EV_ITEM,SUN_STONE,1,BLISSEY
 	db 0
 ;Learnset
 	db 1,DOUBLE_EDGE
@@ -2256,6 +2309,7 @@ Mon116_EvosMoves:
 Mon117_EvosMoves:
 ;SEADRA
 ;Evolutions
+	db EV_ITEM,DRAGON_SCALE,1,KINGDRA
 	db 0
 ;Learnset
 	db 1,BUBBLE
@@ -2618,7 +2672,7 @@ Mon023_EvosMoves:
 	db 44,IRON_DEFENSE
 	db 49,GUNK_SHOT
 	db 0
-
+	
 Mon046_EvosMoves:
 ;PARAS
 ;Evolutions
@@ -3867,6 +3921,7 @@ Mon074_EvosMoves:
 Mon137_EvosMoves:
 ;PORYGON
 ;Evolutions
+	db EV_ITEM,UPGRADE,1,PORYGON2
 	db 0
 ;Learnset
 	db 1,TACKLE
@@ -4549,4 +4604,1116 @@ Mon200_EvosMoves:
 	db 46,NIGHT_SHADE
 	db 50,POWER_GEM
 	db 55,DARK_PULSE
+	db 0
+	
+Mon201_EvosMoves:
+;UNOWN
+;Evolutions
+	db 0
+;Learnset
+	db 1,AMNESIA
+	db 1,METRONOME
+	db 1,TACKLE
+	db 1,QUICK_ATTACK
+	db 30,SWIFT
+	db 35,BARRIER
+	db 40,ANCIENTPOWER
+	db 45,PSYBEAM
+	db 50,PSYCHIC_M
+	db 55,SHADOW_BALL
+	db 60,HEX
+	db 65,PSYCHO_CUT
+	db 70,DAZZLINGLEAM
+	db 80,DARK_PULSE
+	db 90,HYPER_BEAM
+	db 100,PSYSTRIKE
+	db 0
+
+Mon202_EvosMoves:
+;WOBBUFFET
+;Evolutions
+	db 0
+;Learnset
+	db 1,COUNTER
+	db 13,CONFUSE_RAY
+	db 18,MIRROR_MOVE
+	db 25,COUNTER
+	db 31,TACKLE
+	db 37,QUICK_ATTACK
+	db 0
+
+Mon203_EvosMoves:
+;GIRAFARIG
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,LEER
+	db 1,QUICK_ATTACK
+	db 15,METRONOME
+	db 20,SWIFT
+	db 27,BARRIER
+	db 35,ANCIENTPOWER
+	db 40,AMNESIA
+	db 50,PSYCHIC_M
+	db 60,HEX
+	db 70,DAZZLINGLEAM
+	db 80,DARK_PULSE
+	db 90,HYPER_BEAM
+	db 100,PSYSTRIKE
+	db 0
+
+Mon204_EvosMoves:
+;PINECO
+;Evolutions
+	db EV_LEVEL,31,FORRETRESS
+	db 0
+;Learnset
+	db 1,HARDEN
+	db 1,TACKLE
+	db 6,TACKLE
+	db 10,LEER
+	db 13,QUICK_ATTACK
+	db 18,BIDE
+	db 23,FOCUS_ENERGY
+	db 28,AGILITY
+	db 32,SELFDESTRUCT
+	db 35,SLAM
+	db 39,DOUBLE_EDGE
+	db 42,EXPLOSION
+	db 0
+	
+Mon205_EvosMoves:
+;FORRETRESS
+;Evolutions
+	db 0
+;Learnset
+	db 1,HARDEN
+	db 1,TACKLE
+	db 1,LEER
+	db 6,TACKLE
+	db 10,LEER
+	db 13,QUICK_ATTACK
+	db 18,BIDE
+	db 23,FOCUS_ENERGY
+	db 29,AGILITY
+	db 34,SELFDESTRUCT
+	db 36,SLAM
+	db 40,DOUBLE_EDGE
+	db 43,EXPLOSION
+	db 0
+	
+Mon206_EvosMoves:
+;DUNSPARCE
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,TAIL_WHIP
+	db 1,GROWL
+	db 10,QUICK_ATTACK
+	db 15,LEER
+	db 20,SLAM
+	db 25,SUPERSONIC
+	db 30,SLEEP_POWDER
+	db 35,BITE
+	db 40,ZEN_HEADBUTT
+	db 50,BUG_BUZZ
+	db 0
+
+Mon207_EvosMoves:
+;GLIGAR
+;Evolutions
+	db 0
+;Learnset
+	db 1,SUPERSONIC
+	db 1,QUICK_ATTACK
+	db 1,TACKLE
+	db 1,BITE
+	db 10,BITE
+	db 14,WING_ATTACK
+	db 18,CONFUSE_RAY
+	db 22,AIR_CUTTER
+	db 26,SWIFT
+	db 30,POISON_FANG
+	db 34,SCREECH
+	db 38,ACROBATICS
+	db 42,HAZE
+	db 46,AIR_SLASH
+	db 50,CRUNCH
+	db 0
+
+Mon208_EvosMoves:
+;STEELIX
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,HARDEN
+	db 7,BIND
+	db 10,LEER
+	db 14,ROCK_THROW
+	db 18,ROCK_POLISH
+	db 22,DEFENSE_CURL
+	db 26,ROCK_BLAST
+	db 30,SLAM
+	db 34,ROCK_SLIDE
+	db 38,CRUNCH
+	db 42,IRON_TAIL
+	db 46,DIG
+	db 50,SHARPEN
+	db 55,DOUBLE_EDGE
+	db 60,EARTH_POWER
+	db 0
+
+Mon209_EvosMoves:
+;SNUBBULL
+;Evolutions
+	db EV_LEVEL,23,GRANBULL
+	db 0
+;Learnset
+	db 1,SCRATCH
+	db 1,GROWL
+	db 1,TACKLE
+	db 7,QUICK_ATTACK
+	db 10,BITE
+	db 13,FEINT_ATTACK
+	db 16,FOCUS_ENERGY
+	db 19,DOUBLE_TEAM
+	db 22,BODY_SLAM
+	db 25,AGILITY
+	db 28,SUCKER_PUNCH
+	db 31,DOUBLE_EDGE
+	db 34,EXTREMESPEED
+	db 0
+	
+Mon210_EvosMoves:
+;GRANBULL
+;Evolutions
+	db 0
+;Learnset
+	db 1,SCRATCH
+	db 1,GROWL
+	db 1,TACKLE
+	db 1,QUICK_ATTACK
+	db 7,QUICK_ATTACK
+	db 10,BITE
+	db 13,FEINT_ATTACK
+	db 16,FOCUS_ENERGY
+	db 19,DOUBLE_TEAM
+	db 24,BODY_SLAM
+	db 27,AGILITY
+	db 30,SUCKER_PUNCH
+	db 33,DOUBLE_EDGE
+	db 36,EXTREMESPEED
+	db 0
+
+Mon211_EvosMoves:
+;QWILFISH
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,TAIL_WHIP
+	db 8,WATER_GUN
+	db 12,QUICK_ATTACK
+	db 16,LEER
+	db 20,POISON_STING
+	db 24,HARDEN
+	db 28,WATER_PULSE
+	db 33,DISABLE
+	db 39,BUBBLE
+	db 44,AGILITY
+	db 48,TOXIC
+	db 52,EXTRASENSORY
+	db 56,DOUBLE_TEAM
+	db 60,HYDRO_PUMP
+	db 0
+
+Mon212_EvosMoves:
+;SCIZOR
+;Evolutions
+	db 0
+;Learnset
+	db 1,SCRATCH
+	db 1,LEER
+	db 5,FOCUS_ENERGY
+	db 9,QUICK_ATTACK
+	db 13,SHARPEN
+	db 17,AGILITY
+	db 21,METAL_CLAW
+	db 25,AIR_CUTTER
+	db 29,SLASH
+	db 33,RAZOR_WIND
+	db 37,IRON_DEFENSE
+	db 41,X_SCISSOR
+	db 45,NIGHT_SLASH
+	db 49,EXTREMESPEED
+	db 50,AIR_SLASH
+	db 57,SWORDS_DANCE
+	db 0
+
+Mon213_EvosMoves:
+;SHUCKLE
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,HARDEN
+	db 1,QUICK_ATTACK
+	db 7,WATER_GUN
+	db 10,WITHDRAW
+	db 13,BUBBLE
+	db 16,BITE
+	db 19,ROCK_THROW
+	db 22,DOUBLE_TEAM
+	db 25,BUG_BUZZ
+	db 28,ROCK_BLAST
+	db 31,SKULL_BASH
+	db 34,IRON_DEFENSE
+	db 37,MIST
+	db 40,ROCK_SLIDE
+	db 0
+
+Mon214_EvosMoves:
+;HERACROSS
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,LEER
+	db 7,HORN_ATTACK
+	db 10,AERIAL_ACE
+	db 16,MEGA_PUNCH
+	db 19,COUNTER
+	db 25,FURY_ATTACK
+	db 28,CROSS_CHOP
+	db 31,PIN_MISSILE
+	db 34,TAKE_DOWN
+	db 37,MEGAHORN
+	db 43,LOW_SWEEP
+	db 46,X_SCISSOR
+	db 0
+
+Mon215_EvosMoves:
+;SNEASEL
+;Evolutions
+	db 0
+;Learnset
+	db 1,SCRATCH
+	db 1,LEER
+	db 8,QUICK_ATTACK
+	db 10,FEINT_ATTACK
+	db 14,ICY_WIND
+	db 16,FURY_SWIPES
+	db 20,AGILITY
+	db 22,ICE_SHARD
+	db 25,SHARPEN
+	db 28,SLASH
+	db 32,FOCUS_ENERGY
+	db 35,SCREECH
+	db 40,SHADOW_CLAW
+	db 44,NIGHT_SLASH
+	db 47,BLIZZARD
+    db 51,SUCKER_PUNCH
+	db 0
+
+Mon216_EvosMoves:
+;TEDDIURSA
+;Evolutions
+	db EV_LEVEL,30,URSARING
+	db 0
+;Learnset
+	db 1,SCRATCH
+	db 1,TACKLE
+	db 7,TACKLE
+	db 9,FOCUS_ENERGY
+	db 12,QUICK_ATTACK
+	db 15,DOUBLE_KICK
+	db 19,DOUBLESLAP
+	db 24,LICK
+	db 28,FURY_SWIPES
+	db 32,BITE
+	db 37,DOUBLE_TEAM
+	db 41,MEGA_PUNCH
+	db 46,TAKE_DOWN
+	db 52,MEGA_KICK
+	db 0
+	
+Mon217_EvosMoves:
+;URSARING
+;Evolutions
+	db 0
+;Learnset
+	db 1,SCRATCH
+	db 1,TACKLE
+	db 1,FOCUS_ENERGY
+	db 1,QUICK_ATTACK
+	db 7,TACKLE
+	db 9,FOCUS_ENERGY
+	db 12,QUICK_ATTACK
+	db 15,DOUBLE_KICK
+	db 19,DOUBLESLAP
+	db 24,LICK
+	db 29,FURY_SWIPES
+	db 33,BITE
+	db 38,DOUBLE_TEAM
+	db 41,MEGA_PUNCH
+	db 46,TAKE_DOWN
+	db 53,MEGA_KICK
+	db 0
+
+Mon218_EvosMoves:
+;SLUGMA
+;Evolutions
+    db EV_LEVEL,38,MAGCARGO
+    db 0
+;Learnset
+	db 1,SMOG
+    db 6,EMBER
+    db 8,ROCK_THROW
+    db 13,HARDEN
+    db 15,FIRE_SPIN
+    db 20,HAZE
+    db 22,ANCIENTPOWER
+    db 27,FLAME_WHEEL
+    db 29,ROCK_SLIDE
+    db 34,FLAMETHROWER
+    db 36,AMNESIA
+    db 41,BODY_SLAM
+    db 43,RECOVER
+    db 48,FIRE_BLAST
+    db 50,EARTH_POWER
+    db 0
+    
+Mon219_EvosMoves:
+;MAGCARGO
+;Evolutions
+    db 0
+;Learnset
+	db 1,SMOG
+	db 1,EMBER
+	db 1,ROCK_THROW
+    db 6,EMBER
+    db 8,ROCK_THROW
+    db 13,HARDEN
+    db 15,FIRE_SPIN
+    db 20,HAZE
+    db 22,ANCIENTPOWER
+    db 27,FLAME_WHEEL
+    db 29,ROCK_SLIDE
+    db 34,FLAMETHROWER
+    db 36,AMNESIA
+    db 43,BODY_SLAM
+    db 47,RECOVER
+    db 54,FIRE_BLAST
+    db 58,EARTH_POWER
+    db 0
+
+Mon220_EvosMoves:
+;SWINUB
+;Evolutions
+	db EV_LEVEL,33,PILOSWINE
+	db 0
+;Learnset
+	db 1,SCRATCH
+	db 1,SAND_ATTACK
+	db 7,TACKLE
+	db 11,SCREECH
+	db 15,GROWL
+	db 20,QUICK_ATTACK
+	db 23,SHARPEN
+	db 26,SLASH
+	db 30,LEER
+	db 36,DOUBLE_TEAM
+	db 42,FURY_SWIPES
+	db 48,NIGHT_SLASH
+	db 0
+	
+Mon221_EvosMoves:
+;PILOSWINE
+;Evolutions
+	db 0
+;Learnset
+	db 1,SCRATCH
+	db 1,SAND_ATTACK
+	db 1,TACKLE
+	db 1,SCREECH
+	db 7,TACKLE
+	db 11,SCREECH
+	db 15,GROWL
+	db 20,QUICK_ATTACK
+	db 23,SHARPEN
+	db 26,SLASH
+	db 31,LEER
+	db 37,DOUBLE_TEAM
+	db 43,FURY_SWIPES
+	db 49,NIGHT_SLASH
+	db 0
+
+Mon222_EvosMoves:
+;CORSOLA
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 7,WITHDRAW
+	db 11,BITE
+	db 15,LEER
+	db 18,WATER_GUN
+	db 21,QUICK_ATTACK
+	db 25,DOUBLE_TEAM
+	db 29,BUBBLE
+	db 34,WATER_PULSE
+	db 39,ICE_BEAM
+	db 45,WHIRLPOOL
+	db 51,BUBBLEBEAM
+	db 57,HYDRO_PUMP
+	db 0
+
+Mon223_EvosMoves:
+;REMORAID
+;Evolutions
+	db EV_LEVEL,25,OCTILLERY
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,FOCUS_ENERGY
+	db 8,LEER
+	db 11,QUICK_ATTACK
+	db 14,CONSTRICT
+	db 20,WATER_GUN
+	db 24,BUBBLE
+	db 28,WATER_PULSE
+	db 33,BUBBLEBEAM
+	db 38,TAKE_DOWN
+	db 44,WHIRLPOOL
+	db 51,HYDRO_PUMP
+	db 59,AURORA_BEAM
+	db 64,PSYBEAM
+	db 69,ICE_BEAM
+	db 73,HYPER_BEAM
+	db 0
+	
+Mon224_EvosMoves:
+;OCTILLERY
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,FOCUS_ENERGY
+	db 1,LEER
+	db 1,QUICK_ATTACK
+	db 8,LEER
+	db 11,QUICK_ATTACK
+	db 14,CONSTRICT
+	db 20,WATER_GUN
+	db 24,BUBBLE
+	db 28,WATER_PULSE
+	db 35,BUBBLEBEAM
+	db 40,TAKE_DOWN
+	db 46,WHIRLPOOL
+	db 53,HYDRO_PUMP
+	db 61,AURORA_BEAM
+	db 66,PSYBEAM
+	db 71,ICE_BEAM
+	db 74,HYPER_BEAM
+	db 0
+
+
+Mon225_EvosMoves:
+;DELIBIRD
+;Evolutions
+	db 0
+;Learnset
+	db 1,PECK
+	db 1,SAND_ATTACK
+	db 1,LEER
+	db 14,TACKLE
+	db 19,QUICK_ATTACK
+	db 23,FURY_ATTACK
+	db 25,ICY_WIND
+	db 30,AERIAL_ACE
+	db 35,MIRROR_MOVE
+	db 41,AGILITY
+	db 46,ICE_PUNCH
+	db 50,FEINT_ATTACK
+	db 55,AIR_CUTTER
+	db 60,ICE_SHARD
+	db 65,DRILL_PECK
+	db 71,AIR_SLASH
+	db 76,AURORA_BEAM
+	db 0
+	
+Mon226_EvosMoves:
+;MANTINE
+;Evolutions
+	db 0
+;Learnset
+	db 1,BITE
+	db 1,LEER
+	db 7,BUBBLE
+	db 11,TACKLE
+	db 15,SUPERSONIC
+	db 21,WATER_GUN
+	db 27,QUICK_ATTACK
+	db 32,BUBBLEBEAM
+	db 37,TAKE_DOWN
+	db 42,AGILITY
+	db 47,HEADBUTT
+	db 52,WING_ATTACK
+	db 57,WATER_PULSE
+	db 62,SLAM
+	db 67,HYDRO_PUMP
+	db 77,AIR_SLASH
+	db 0
+
+Mon227_EvosMoves:
+;SKARMORY
+;Evolutions
+	db 0
+;Learnset
+	db 1,PECK
+	db 1,LEER
+	db 6,SAND_ATTACK
+	db 9,METAL_CLAW
+	db 12,AIR_CUTTER
+	db 17,FURY_ATTACK
+	db 20,QUICK_ATTACK
+	db 23,SWIFT
+	db 28,MUD_SLAP
+	db 31,AGILITY
+	db 34,STEEL_WING
+	db 39,SLASH
+	db 42,IRON_DEFENSE
+	db 45,AIR_SLASH
+	db 50,AERIAL_ACE
+	db 53,NIGHT_SLASH
+	db 0
+
+Mon228_EvosMoves:
+;HOUNDOUR
+;Evolutions
+	db EV_LEVEL,24,HOUNDOOM
+	db 0
+;Learnset
+	db 1,EMBER
+	db 1,LEER
+	db 4,SMOKESCREEN
+	db 8,SMOG
+	db 13,ROAR
+	db 16,BITE
+	db 20,EMBER
+	db 25,FEINT_ATTACK
+	db 28,FIRE_FANG
+	db 32,HEX
+	db 37,CRUNCH
+	db 40,SHADOW_BALL
+	db 44,FLAMETHROWER
+	db 49,DARK_PULSE
+	db 52,AMNESIA
+	db 56,FLARE_BLITZ
+	db 0
+	
+Mon229_EvosMoves:
+;HOUNDOOM
+;Evolutions
+	db 0
+;Learnset
+	db 1,EMBER
+	db 1,LEER
+	db 1,ROAR
+	db 1,SMOG
+	db 4,SMOKESCREEN
+	db 8,SMOG
+	db 13,ROAR
+	db 16,BITE
+	db 20,EMBER
+	db 26,FEINT_ATTACK
+	db 30,FIRE_FANG
+	db 35,HEX
+	db 41,CRUNCH
+	db 45,SHADOW_BALL
+	db 50,FLAMETHROWER
+	db 56,DARK_PULSE
+	db 60,AMNESIA
+	db 65,FLARE_BLITZ
+	db 0
+
+Mon230_EvosMoves:
+;KINGDRA
+;Evolutions
+	db 0
+;Learnset
+	db 1,BUBBLE
+	db 1,SMOKESCREEN
+	db 5,SMOKESCREEN
+	db 9,LEER
+	db 13,WATER_GUN
+	db 17,TWISTER
+	db 21,BUBBLEBEAM
+	db 26,FOCUS_ENERGY
+	db 31,WHIRLPOOL
+	db 38,AGILITY
+	db 45,DRAGON_PULSE
+	db 52,WATER_PULSE
+	db 60,HYDRO_PUMP
+	db 0
+
+Mon231_EvosMoves:
+;PHANPY
+;Evolutions
+	db EV_LEVEL,25,DONPHAN
+	db 0
+;Learnset
+	db 1,GROWL
+	db 1,TACKLE
+	db 8,STOMP
+	db 12,DEFENSE_CURL
+	db 17,LEER
+	db 20,QUICK_ATTACK
+	db 25,SLAM
+	db 30,TAKE_DOWN
+	db 35,ROAR
+	db 41,BIND
+	db 49,DOUBLE_EDGE
+	db 56,FOCUS_ENERGY
+	db 60,BODY_SLAM
+	db 65,ANCIENTPOWER
+	db 0
+
+Mon232_EvosMoves:
+;DONPHAN
+;Evolutions
+	db 0
+;Learnset
+	db 1,GROWL
+	db 1,TACKLE
+	db 1,STOMP
+	db 1,DEFENSE_CURL
+	db 8,STOMP
+	db 12,DEFENSE_CURL
+	db 17,LEER
+	db 20,QUICK_ATTACK
+	db 25,SLAM
+	db 30,TAKE_DOWN
+	db 35,ROAR
+	db 41,BIND
+	db 49,DOUBLE_EDGE
+	db 56,FOCUS_ENERGY
+	db 60,BODY_SLAM
+	db 65,ANCIENTPOWER
+	db 0
+
+Mon233_EvosMoves:
+;PORYGON2
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,SHARPEN
+	db 1,CONVERSION
+	db 7,PSYBEAM
+	db 12,AGILITY
+	db 18,RECOVER
+	db 23,THUNDER_WAVE
+	db 29,SIGNAL_BEAM
+	db 34,COUNTER
+	db 40,DISCHARGE
+	db 45,FOCUS_ENERGY
+	db 50,TRI_ATTACK
+	db 56,FLASH_CANNON
+	db 62,THUNDER
+	db 67,HYPER_BEAM
+	db 0
+
+Mon234_EvosMoves:
+;STANTLER
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,TAIL_WHIP
+	db 1,BITE
+	db 1,QUICK_ATTACK
+	db 8,LEER
+	db 11,RAGE
+	db 14,HORN_ATTACK
+	db 21,HEADBUTT
+	db 28,STOMP
+	db 35,CONFUSE_RAY
+	db 40,FOCUS_ENERGY
+	db 45,ZEN_HEADBUTT
+	db 50,JUMP_KICK
+	db 55,TAKE_DOWN
+	db 61,SLAM
+	db 66,FISSURE
+	db 71,HYPNOSIS
+	db 77,GIGA_IMPACT
+	db 0
+
+Mon235_EvosMoves:
+;SMEARGLE
+;Evolutions
+	db 0
+;Learnset
+	db 1,SCRATCH
+	db 1,TAIL_WHIP
+	db 9,TACKLE
+	db 11,QUICK_ATTACK
+	db 15,GROWL
+	db 19,BITE
+	db 22,HEADBUTT
+	db 25,FOCUS_ENERGY
+	db 29,LEER
+	db 35,SLAM
+	db 42,ZEN_HEADBUTT
+	db 47,MEGA_KICK
+	db 50,MEGA_PUNCH
+	db 45,TAKE_DOWN
+	db 60,BODY_SLAM
+	db 0
+
+Mon236_EvosMoves:
+;TYROGUE
+;Evolutions
+    db 0
+;Learnset
+	db 1,TACKLE
+    db 7,MEDITATE
+    db 10,FOCUS_ENERGY
+    db 0
+
+Mon237_EvosMoves:
+;HITMONTOP
+;Evolutions
+    db 0
+;Learnset
+	db 1,DOUBLE_KICK
+	db 1,MEDITATE
+	db 5,MEDITATE
+	db 9,LOW_KICK
+	db 13,QUICK_ATTACK
+	db 17,FOCUS_ENERGY
+	db 21,ROLLING_KICK
+	db 25,DOUBLE_KICK
+	db 29,ACROBATICS
+	db 37,LOW_SWEEP
+	db 45,AGILITY
+	db 49,FEINT_ATTACK
+	db 53,MEGA_KICK
+	db 61,GIGA_IMPACT
+	db 0
+
+Mon238_EvosMoves:
+;SMOOCHUM
+;Evolutions
+    db EV_LEVEL,30,JYNX
+    db 0
+;Learnset
+	db 1,POUND
+	db 5,LICK
+	db 8,LOVELY_KISS
+	db 11,ICY_WIND
+	db 15,DOUBLESLAP
+	db 18,ICE_PUNCH
+	db 21,DRAININGKISS
+	db 25,SING
+	db 28,EXTRASENSORY
+	db 33,SCREECH
+	db 39,BLIZZARD
+	db 44,BODY_SLAM
+	db 49,FLASH
+	db 55,PSYCHIC_M
+	db 60,SHEER_COLD
+	db 0
+    
+Mon239_EvosMoves:
+;ELEKID
+;Evolutions
+    db EV_LEVEL,30,ELECTABUZZ
+    db 0
+;Learnset
+	db 1,QUICK_ATTACK
+	db 1,LEER
+	db 5,THUNDERSHOCK
+	db 8,LOW_KICK
+	db 12,SWIFT
+	db 15,SONICBOOM
+	db 19,THUNDER_WAVE
+	db 22,ELECTRO_BALL
+	db 26,LIGHT_SCREEN
+	db 29,THUNDERPUNCH
+	db 36,DISCHARGE
+	db 42,SCREECH
+	db 49,THUNDERBOLT
+	db 55,THUNDER
+	db 0
+    
+Mon240_EvosMoves:
+;MAGBY
+;Evolutions
+    db EV_LEVEL,30,MAGMAR
+    db 0
+;Learnset
+	db 1,SMOG
+	db 1,LEER
+	db 5,EMBER
+	db 8,SMOKESCREEN
+	db 12,FEINT_ATTACK
+	db 15,FIRE_SPIN
+	db 19,HAZE
+	db 22,FLAME_WHEEL
+	db 26,CONFUSE_RAY
+	db 29,FIRE_PUNCH
+	db 36,FLAMETHROWER
+	db 42,FOCUS_ENERGY
+	db 49,FIRE_BLAST
+	db 55,FLARE_BLITZ
+	db 0
+
+Mon241_EvosMoves:
+;MILTANK
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,GROWL
+	db 5,DEFENSE_CURL
+	db 8,STOMP
+	db 11,REST
+	db 15,BIDE
+	db 19,DOUBLE_KICK
+	db 24,BODY_SLAM
+	db 29,ZEN_HEADBUTT
+	db 35,FOCUS_ENERGY
+	db 41,SLAM
+	db 48,DOUBLE_TEAM
+	db 50,GIGA_IMPACT
+	db 0
+
+Mon242_EvosMoves:
+;BLISSEY
+;Evolutions
+	db 0
+;Learnset
+	db 1,GROWL
+	db 1,POUND
+	db 1,DEFENSE_CURL
+	db 1,DOUBLE_EDGE
+	db 5,TAIL_WHIP
+	db 9,HAZE
+	db 12,DOUBLESLAP
+	db 16,SOFTBOILED
+	db 20,IRON_DEFENSE
+	db 23,MINIMIZE
+	db 27,TAKE_DOWN
+	db 31,SING
+	db 34,SLAM
+	db 38,SOFTBOILED
+	db 42,EGG_BOMB
+	db 46,LIGHT_SCREEN
+	db 50,RECOVER
+	db 54,DOUBLE_EDGE
+	db 0
+
+Mon243_EvosMoves:
+;RAIKOU
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,GROWL
+	db 1,THUNDER_WAVE
+	db 51,BITE
+	db 54,LEER
+	db 58,THUNDERSHOCK
+	db 61,ROAR
+	db 64,QUICK_ATTACK
+	db 68,REFLECT
+	db 71,AGILITY
+	db 79,THUNDERBOLT
+	db 86,CRUNCH
+	db 92,THUNDER
+	db 0
+
+Mon244_EvosMoves:
+;ENTEI
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,GROWL
+	db 1,EMBER
+	db 51,BITE
+	db 54,LEER
+	db 58,FISSURE
+	db 61,ROAR
+	db 64,QUICK_ATTACK
+	db 68,FIRE_SPIN
+	db 71,FLAMETHROWER
+	db 75,STOMP
+	db 79,AGILITY
+	db 83,FIRE_FANG
+	db 86,FLARE_BLITZ
+	db 92,FIRE_BLAST
+	db 0
+
+Mon245_EvosMoves:
+;SUICUNE
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,GROWL
+	db 1,BUBBLE
+	db 51,BITE
+	db 54,LEER
+	db 57,WATER_GUN
+	db 60,ICE_FANG
+	db 63,ROAR
+	db 66,QUICK_ATTACK
+	db 69,GUST
+	db 72,BUBBLEBEAM
+	db 75,MIST
+	db 79,AGILITY
+	db 83,ICE_BEAM
+	db 86,BLIZZARD
+	db 92,HYDRO_PUMP
+	db 0
+
+Mon246_EvosMoves:
+;LARVITAR
+;Evolutions
+    db EV_LEVEL,30,PUPITAR
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,DEFENSE_CURL
+	db 5,BITE
+	db 8,LEER
+	db 13,SAND_ATTACK
+	db 18,QUICK_ATTACK
+	db 23,ROCK_SLIDE
+	db 28,ICE_FANG
+	db 33,STOMP
+	db 38,CRUNCH
+	db 43,THRASH
+	db 48,AGILITY
+	db 54,ANCIENTPOWER
+	db 60,EARTHQUAKE
+	db 66,HYPER_BEAM
+	db 72,GIGA_IMPACT
+	db 0
+
+Mon247_EvosMoves:
+;PUPITAR
+;Evolutions
+    db EV_LEVEL,50,TYRANITAR
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,DEFENSE_CURL
+	db 1,BITE
+	db 5,BITE
+	db 8,LEER
+	db 13,SAND_ATTACK
+	db 18,QUICK_ATTACK
+	db 23,ROCK_SLIDE
+	db 28,ICE_FANG
+	db 34,STOMP
+	db 39,CRUNCH
+	db 44,THRASH
+	db 49,AGILITY
+	db 55,ANCIENTPOWER
+	db 61,EARTHQUAKE
+	db 67,HYPER_BEAM
+	db 73,GIGA_IMPACT
+	db 0
+
+Mon248_EvosMoves:
+;TYRANITAR
+;Evolutions
+	db 0
+;Learnset
+	db 1,TACKLE
+	db 1,DEFENSE_CURL
+	db 1,BITE
+	db 1,LEER
+	db 5,BITE
+	db 8,LEER
+	db 13,SAND_ATTACK
+	db 18,QUICK_ATTACK
+	db 23,ROCK_SLIDE
+	db 28,ICE_FANG
+	db 34,STOMP
+	db 39,CRUNCH
+	db 44,THRASH
+	db 49,AGILITY
+	db 56,ANCIENTPOWER
+	db 62,EARTHQUAKE
+	db 68,HYPER_BEAM
+	db 74,GIGA_IMPACT
+	db 0
+
+Mon249_EvosMoves: 
+;LUGIA
+;Evolutions
+	db 0
+;Learnset
+	db 1,WATER_GUN
+	db 1,SKY_ATTACK
+	db 37,HYDRO_PUMP
+	db 43,AEROBLAST
+	db 50,DARK_PULSE
+	db 57,ANCIENTPOWER
+	db 65,MIST
+	db 71,RECOVER
+	db 79,PSYCHIC_M
+	db 85,HYPER_BEAM
+	db 93,AMNESIA
+	db 99,HURRICANE
+	db 0
+
+Mon250_EvosMoves: 
+;HO_OH
+;Evolutions
+	db 0
+;Learnset
+	db 1,EMBER
+	db 1,SKY_ATTACK
+	db 37,FLAMETHROWER
+	db 43,AEROBLAST
+	db 50,GUST
+	db 57,ANCIENTPOWER
+	db 65,FIRE_BLAST
+	db 71,RECOVER
+	db 79,SWIFT
+	db 85,HYPER_BEAM
+	db 93,AMNESIA
+	db 99,HURRICANE
+	db 0
+
+Mon251_EvosMoves:
+;CELEBI
+;Evolutions
+	db 0
+;Learnset
+	db 1,POUND
+	db 1,TRANSFORM
+	db 1,METRONOME
+	db 1,SWIFT
+	db 10,TACKLE
+	db 20,QUICK_ATTACK
+	db 30,RECOVER
+	db 35,CONFUSION
+	db 40,GIGA_DRAIN
+	db 45,DOUBLE_TEAM
+	db 50,SOLARBEAM
+	db 55,ANCIENTPOWER
+	db 60,NIGHT_SHADE
+	db 70,PSYCHIC_M
+	db 80,SHADOW_BALL
+	db 90,DAZZLINGLEAM
+	db 100,HYPER_BEAM
 	db 0

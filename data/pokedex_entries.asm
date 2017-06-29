@@ -202,6 +202,57 @@ PokedexEntryPointers:
 	dw MurkrowDexEntry
 	dw SlowkingDexEntry
 	dw MisdreavusDexEntry
+	dw UnownDexEntry
+	dw WobbuffetDexEntry
+	dw GirafarigDexEntry
+	dw PinecoDexEntry
+	dw ForretressDexEntry
+	dw DunsparceDexEntry
+	dw GligarDexEntry
+	dw SteelixDexEntry
+	dw SnubbullDexEntry
+	dw GranbullDexEntry
+	dw QwilfishDexEntry
+	dw ScizorDexEntry
+	dw ShuckleDexEntry
+	dw HeracrossDexEntry
+	dw SneaselDexEntry
+	dw TeddiursaDexEntry
+	dw UrsaringDexEntry
+	dw SlugmaDexEntry
+	dw MagcargoDexEntry
+	dw SwinubDexEntry
+	dw PiloswineDexEntry
+	dw CorsolaDexEntry
+	dw RemoraidDexEntry
+	dw OctilleryDexEntry
+	dw DelibirdDexEntry
+	dw MantineDexEntry
+	dw SkarmoryDexEntry
+	dw HoundourDexEntry
+	dw HoundoomDexEntry
+	dw KingdraDexEntry
+	dw PhanpyDexEntry
+	dw DonphanDexEntry
+	dw Porygon2DexEntry
+	dw StantlerDexEntry
+	dw SmeargleDexEntry
+	dw TyrogueDexEntry
+	dw HitmontopDexEntry
+	dw SmoochumDexEntry
+	dw ElekidDexEntry
+	dw MagbyDexEntry
+	dw MiltankDexEntry
+	dw BlisseyDexEntry
+	dw RaikouDexEntry
+	dw EnteiDexEntry
+	dw SuicuneDexEntry
+	dw LarvitarDexEntry
+	dw PupitarDexEntry
+	dw TyranitarDexEntry
+	dw LugiaDexEntry
+	dw Ho_OhDexEntry
+	dw CelebiDexEntry
 
 ; string: species name
 ; height in feet, inches
@@ -1612,4 +1663,361 @@ MisdreavusDexEntry:
 	db 2,4
 	dw 22
 	TX_FAR _MisdreavusDexEntry
+	db "@"
+	
+UnownDexEntry:
+	db "Symbol@"
+	db 1,8
+	dw 110
+	TX_FAR _UnownDexEntry
+	db "@"
+
+WobbuffetDexEntry:
+	db "Patient@"
+	db 4,3
+	dw 628
+	TX_FAR _WobbuffetDexEntry
+	db "@"
+
+GirafarigDexEntry:
+	db "Long Neck@"
+	db 4,11
+	dw 915
+	TX_FAR _GirafarigDexEntry
+	db "@"
+
+PinecoDexEntry:
+	db "Bagworm@"
+	db 2,0
+	dw 159
+	TX_FAR _PinecoDexEntry
+	db "@"
+
+ForretressDexEntry:
+	db "Bagworm@"
+	db 3,11
+	dw 2773
+	TX_FAR _ForretressDexEntry
+	db "@"
+
+DunsparceDexEntry:
+	db "Land Snake@"
+	db 4,11
+	dw 309
+	TX_FAR _DunsparceDexEntry
+	db "@"
+	
+GligarDexEntry:
+	db "FlyScorpio@"
+	db 3,7
+	dw 1429
+	TX_FAR _GligarDexEntry
+	db "@"
+	
+SteelixDexEntry:
+	db "Iron Snake@"
+	db 30,2
+	dw 8818
+	TX_FAR _SteelixDexEntry
+	db "@"
+	
+SnubbullDexEntry:
+	db "Fairy@"
+	db 2,0
+	dw 172
+	TX_FAR _SnubbullDexEntry
+	db "@"
+	
+GranbullDexEntry:
+	db "Fairy@"
+	db 4,7
+	dw 1074
+	TX_FAR _GranbullDexEntry
+	db "@"
+	
+QwilfishDexEntry:
+	db "Balloon@"
+	db 1,8
+	dw 86
+	TX_FAR _QwilfishDexEntry
+	db "@"
+
+ScizorDexEntry:
+	db "Pincer@"
+	db 5,11
+	dw 2601
+	TX_FAR _ScizorDexEntry
+	db "@"
+	
+ShuckleDexEntry:
+	db "Mold@"
+	db 2,0
+	dw 452
+	TX_FAR _ShuckleDexEntry
+	db "@"
+	
+HeracrossDexEntry:
+	db "Singlehorn@"
+	db 4,11
+	dw 1190
+	TX_FAR _HeracrossDexEntry
+	db "@"
+	
+SneaselDexEntry:
+	db "Sharp Claw@"
+	db 2,11
+	dw 617
+	TX_FAR _SneaselDexEntry
+	db "@"
+	
+TeddiursaDexEntry:
+	db "LittleBear@"
+	db 2,0
+	dw 194
+	TX_FAR _TeddiursaDexEntry
+	db "@"
+	
+UrsaringDexEntry:
+	db "Hibernator@"
+	db 5,11
+	dw 2773
+	TX_FAR _UrsaringDexEntry
+	db "@"
+	
+SlugmaDexEntry:
+	db "Lava@"
+	db 2,4
+	dw 772
+	TX_FAR _SlugmaDexEntry
+	db "@"
+	
+MagcargoDexEntry:
+	db "Lava@"
+	db 2,7
+	dw 1213
+	TX_FAR _MagcargoDexEntry
+	db "@"
+	
+SwinubDexEntry:
+	db "Pig@"
+	db 1,4
+	dw 143
+	TX_FAR _SwinubDexEntry
+	db "@"
+	
+PiloswineDexEntry:
+	db "Swine@"
+	db 3,7
+	dw 1230
+	TX_FAR _PiloswineDexEntry
+	db "@"
+	
+CorsolaDexEntry:
+	db "Coral@"
+	db 2,0
+	dw 110
+	TX_FAR _CorsolaDexEntry
+	db "@"
+	
+RemoraidDexEntry:
+	db "Jet@"
+	db 2,0
+	dw 265
+	TX_FAR _RemoraidDexEntry
+	db "@"
+	
+OctilleryDexEntry:
+	db "Jet@"
+	db 2,11
+	dw 628
+	TX_FAR _OctilleryDexEntry
+	db "@"
+	
+DelibirdDexEntry:
+	db "Delivery@"
+	db 2,11
+	dw 353
+	TX_FAR _DelibirdDexEntry
+	db "@"
+
+MantineDexEntry:
+	db "Kite@"
+	db 6,11
+	dw 4850
+	TX_FAR _MantineDexEntry
+	db "@"
+	
+SkarmoryDexEntry:
+	db "Armor Bird@"
+	db 5,7
+	dw 1113
+	TX_FAR _SkarmoryDexEntry
+	db "@"
+
+HoundourDexEntry:
+	db "Dark@"
+	db 2,0
+	dw 238
+	TX_FAR _HoundourDexEntry
+	db "@"
+
+HoundoomDexEntry:
+	db "Dark@"
+	db 4,7
+	dw 772
+	TX_FAR _HoundoomDexEntry
+	db "@"
+
+KingdraDexEntry:
+	db "Dragon@"
+	db 5,11
+	dw 3351
+	TX_FAR _KingdraDexEntry
+	db "@"
+
+PhanpyDexEntry:
+	db "Long Nose@"
+	db 1,8
+	dw 739
+	TX_FAR _PhanpyDexEntry
+	db "@"
+
+DonphanDexEntry:
+	db "Armor@"
+	db 3,7
+	dw 2646
+	TX_FAR _DonphanDexEntry
+	db "@"
+
+Porygon2DexEntry:
+	db "Virtual@"
+	db 2,0
+	dw 716
+	TX_FAR _Porygon2DexEntry
+	db "@"
+
+StantlerDexEntry:
+	db "Big Horn@"
+	db 4,7
+	dw 1570
+	TX_FAR _StantlerDexEntry
+	db "@"
+
+SmeargleDexEntry:
+	db "Painter@"
+	db 3,11
+	dw 1279
+	TX_FAR _SmeargleDexEntry
+	db "@"
+
+TyrogueDexEntry:
+	db "Scuffle@"
+	db 2,4
+	dw 463
+	TX_FAR _TyrogueDexEntry
+	db "@"
+
+HitmontopDexEntry:
+	db "Handstand@"
+	db 4,7
+	dw 1058
+	TX_FAR _HitmontopDexEntry
+	db "@"
+
+SmoochumDexEntry:
+	db "Kiss@"
+	db 1,4
+	dw 132
+	TX_FAR _SmoochumDexEntry
+	db "@"
+
+ElekidDexEntry:
+	db "Electric@"
+	db 2,0
+	dw 518
+	TX_FAR _ElekidDexEntry
+	db "@"
+
+MagbyDexEntry:
+	db "Live Coal@"
+	db 2,4
+	dw 472
+	TX_FAR _MagbyDexEntry
+	db "@"
+
+MiltankDexEntry:
+	db "Milk Cow@"
+	db 3,11
+	dw 1664
+	TX_FAR _MiltankDexEntry
+	db "@"
+
+BlisseyDexEntry:
+	db "Happiness@"
+	db 4,11
+	dw 1032
+	TX_FAR _BlisseyDexEntry
+	db "@"
+
+RaikouDexEntry:
+	db "Thunder@"
+	db 6,3
+	dw 3924
+	TX_FAR _RaikouDexEntry
+	db "@"
+
+EnteiDexEntry:
+	db "Volcano@"
+	db 6,11
+	dw 4365
+	TX_FAR _EnteiDexEntry
+	db "@"
+
+SuicuneDexEntry:
+	db "Aurora@"
+	db 6,7
+	dw 4123
+	TX_FAR _SuicuneDexEntry
+	db "@"
+
+LarvitarDexEntry:
+	db "Rock Skin@"
+	db 2,0
+	dw 1587
+	TX_FAR _LarvitarDexEntry
+	db "@"
+
+PupitarDexEntry:
+	db "Hard Shell@"
+	db 3,11
+	dw 3351
+	TX_FAR _PupitarDexEntry
+	db "@"
+
+TyranitarDexEntry:
+	db "Armor@"
+	db 6,7
+	dw 4453
+	TX_FAR _TyranitarDexEntry
+	db "@"
+
+LugiaDexEntry:
+	db "Diving@"
+	db 17,1
+	dw 4762
+	TX_FAR _LugiaDexEntry
+	db "@"
+
+Ho_OhDexEntry:
+	db "Rainbow@"
+	db 12,6
+	dw 4387
+	TX_FAR _Ho_OhDexEntry
+	db "@"
+
+CelebiDexEntry:
+	db "Time@"
+	db 2,0
+	dw 110
+	TX_FAR _CelebiDexEntry
 	db "@"

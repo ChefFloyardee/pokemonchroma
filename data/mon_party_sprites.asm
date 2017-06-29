@@ -99,3 +99,29 @@ MonPartyData:
 	dn SPRITE_WATER, SPRITE_QUADRUPED		;Quagsire/Espeon
 	dn SPRITE_QUADRUPED, SPRITE_BIRD_M		;Umbreon/Murkrow
 	dn SPRITE_MON, SPRITE_MON				;Slowking/Misdreavus
+	dn SPRITE_MON, SPRITE_MON				;Unown/Wobbuffet
+	dn SPRITE_QUADRUPED, SPRITE_BUG			;Girafarig/Pineco
+	dn SPRITE_SNAKE, SPRITE_SNAKE			;Forretress/Dunsparce
+	dn SPRITE_BUG, SPRITE_SNAKE				;Gligar/Steelix
+	dn SPRITE_FAIRY, SPRITE_FAIRY			;Snubbull/Granbull
+	dn SPRITE_WATER, SPRITE_BUG				;Qwilfish/Scizor
+	dn SPRITE_BUG, SPRITE_BUG				;Shuckle/Heracross
+	dn SPRITE_MON, SPRITE_MON				;Sneasel/Teddiursa
+	dn SPRITE_MON, SPRITE_SNAKE				;Ursaring/Slugma
+	dn SPRITE_SNAKE, SPRITE_QUADRUPED		;Magcargo/Swinub
+	dn SPRITE_QUADRUPED, SPRITE_WATER		;Piloswine/Corsola
+	dn SPRITE_WATER, SPRITE_WATER			;Remoraid/Octillery
+	dn SPRITE_MON, SPRITE_WATER				;Delibird/Mantine
+	dn SPRITE_BIRD_M, SPRITE_QUADRUPED		;Skarmory/Houndour
+	dn SPRITE_QUADRUPED, SPRITE_WATER		;Houndoom/Kingdra
+	dn SPRITE_QUADRUPED, SPRITE_QUADRUPED	;Phanpy/Donphan
+	dn SPRITE_MON, SPRITE_QUADRUPED			;Porygon2/Stantler
+	dn SPRITE_MON, SPRITE_MON				;Smeargle/Tyrogue
+	dn SPRITE_MON, SPRITE_MON				;Hitmontop/Smoochum
+	dn SPRITE_MON, SPRITE_MON				;Elekid/Magby
+	dn SPRITE_QUADRUPED, SPRITE_FAIRY		;Miltank/Blissey
+	dn SPRITE_QUADRUPED, SPRITE_QUADRUPED	;Raikou/Entei
+	dn SPRITE_QUADRUPED, SPRITE_MON			;Suicune/Larvitar
+	dn SPRITE_MON, SPRITE_MON				;Pupitar/Tyranitar
+	dn SPRITE_BIRD_M, SPRITE_BIRD_M			;Lugia/Ho-Oh
+	dn SPRITE_GRASS, SPRITE_GRASS			;Celebi/Treecko
