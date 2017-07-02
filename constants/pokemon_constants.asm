@@ -252,5 +252,5 @@ const_value = 1
 	const PUPITAR      ; $FA
 	const TYRANITAR    ; $FB
 	const LUGIA        ; $FC
-	const HO_OH        ; $FD
+	const HOOH        ; $FD
 	const CELEBI       ; $FE

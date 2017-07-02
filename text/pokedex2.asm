@@ -970,7 +970,7 @@ _LugiaDexEntry::
 	next "storm"
 	dex
 
-_Ho_OhDexEntry::
+_HoOhDexEntry::
 	text "A legend says"
 	next "that its body"
 	next "glows in seven"

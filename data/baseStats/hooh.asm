@@ -1,4 +1,4 @@
-db DEX_HO_OH ; pokedex id
+db DEX_HOOH ; pokedex id
 db 106 ; base hp
 db 130 ; base attack
 db 90 ; base defense
@@ -9,8 +9,8 @@ db FLYING  ; species type 2
 db 3 ; catch rate
 db 220 ; base exp yield
 INCBIN "pic/bmon/ho_oh.pic",0,1 ; 77, sprite dimensions
-dw Ho_OhPicFront
-dw Ho_OhPicBack
+dw HoOhPicFront
+dw HoOhPicBack
 ; attacks known at lvl 0
 db EMBER
 db SKY_ATTACK
@@ -25,4 +25,4 @@ db 3 ; growth rate
 	tmlearn 33,34,38,39
 	tmlearn 42,43,44,45
 	tmlearn 50,52,54,55
-db BANK(Ho_OhPicFront)
+db BANK(HoOhPicFront)

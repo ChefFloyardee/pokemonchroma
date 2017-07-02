@@ -251,7 +251,7 @@ PokedexEntryPointers:
 	dw PupitarDexEntry
 	dw TyranitarDexEntry
 	dw LugiaDexEntry
-	dw Ho_OhDexEntry
+	dw HoOhDexEntry
 	dw CelebiDexEntry
 
 ; string: species name
@@ -2008,11 +2008,11 @@ LugiaDexEntry:
 	TX_FAR _LugiaDexEntry
 	db "@"
 
-Ho_OhDexEntry:
+HoOhDexEntry:
 	db "Rainbow@"
 	db 12,6
 	dw 4387
-	TX_FAR _Ho_OhDexEntry
+	TX_FAR _HoOhDexEntry
 	db "@"
 
 CelebiDexEntry:

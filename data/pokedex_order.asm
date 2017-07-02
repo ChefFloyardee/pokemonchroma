@@ -251,5 +251,5 @@ PokedexOrder:
 	db DEX_PUPITAR
 	db DEX_TYRANITAR
 	db DEX_LUGIA
-	db DEX_HO_OH
+	db DEX_HOOH
 	db DEX_CELEBI
