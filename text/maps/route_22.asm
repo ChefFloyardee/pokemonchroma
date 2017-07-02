@@ -13,19 +13,18 @@ _Route22RivalBeforeBattleText1::
 	line "let you through!"
 
 	para "By the way, did"
-	line "you get any"
-	cont "new #mon?"
+	line "your #mon"
+	cont "get any stronger?"
 	done
 
 _Route22RivalAfterBattleText1::
 	text "I heard #mon"
-	line "Chroma has many"
-	cont "new #mon"
-	cont "from Johto!"
+	line "League has many"
+	cont "tough trainers!"
 
 	para "I have to figure"
 	line "out how to get"
-	cont "all of them!"
+	cont "past them!"
 
 	para "You should quit"
 	line "dawdling and get"
