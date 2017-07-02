@@ -249,7 +249,7 @@ const_value = 1
 	const DEX_PUPITAR    ; 247
 	const DEX_TYRANITAR  ; 248
 	const DEX_LUGIA      ; 249
-	const DEX_HOOH      ; 250
+	const DEX_HOOH       ; 250
 	const DEX_CELEBI     ; 251
 
 NUM_POKEMON    EQU 251
